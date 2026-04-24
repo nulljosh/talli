@@ -212,8 +212,8 @@ private struct DashboardScreen: View {
                 paymentCard
                 paidToggle
                 dateCard
-                pwdTimeline
-                dtcTimeline
+                TimelineCard(title: "PWD APPLICATION", steps: pwdSteps)
+                TimelineCard(title: "DTC APPLICATION", steps: dtcSteps)
                 craPayments
 
                 if !appState.statusMessages.isEmpty {
@@ -301,34 +301,6 @@ private struct DashboardScreen: View {
         .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(.ultraThinMaterial))
     }
 
-    private var pwdTimeline: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("PWD APPLICATION")
-                .font(.system(size: 11, weight: .semibold))
-                .tracking(1.5)
-                .foregroundStyle(.secondary)
-
-            ForEach(pwdSteps, id: \.label) { step in
-                HStack(alignment: .top, spacing: 12) {
-                    Circle()
-                        .fill(step.done ? Color.primary : Color.secondary.opacity(0.3))
-                        .frame(width: 10, height: 10)
-                        .padding(.top, 4)
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(step.label)
-                            .font(.subheadline.weight(.medium))
-                        Text(step.date)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
-        }
-        .padding()
-        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(.ultraThinMaterial))
-    }
-
     private var pwdSteps: [(label: String, date: String, done: Bool)] {
         [
             ("Application submitted", "March 4, 2026", true),
@@ -336,34 +308,6 @@ private struct DashboardScreen: View {
             ("Decision", "Pending", false),
             ("Payment adjustment", "Pending", false)
         ]
-    }
-
-    private var dtcTimeline: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("DTC APPLICATION")
-                .font(.system(size: 11, weight: .semibold))
-                .tracking(1.5)
-                .foregroundStyle(.secondary)
-
-            ForEach(dtcSteps, id: \.label) { step in
-                HStack(alignment: .top, spacing: 12) {
-                    Circle()
-                        .fill(step.done ? Color.primary : Color.secondary.opacity(0.3))
-                        .frame(width: 10, height: 10)
-                        .padding(.top, 4)
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(step.label)
-                            .font(.subheadline.weight(.medium))
-                        Text(step.date)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
-        }
-        .padding()
-        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(.ultraThinMaterial))
     }
 
     private var dtcSteps: [(label: String, date: String, done: Bool)] {
