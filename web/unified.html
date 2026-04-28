@@ -274,17 +274,31 @@
     (function() {
       var container = document.getElementById('cra-payments');
       if (!container) return;
+      var payments = [
+        { label: 'GST/HST Credit', date: 'July 4, 2026', amount: 174.50 },
+        { label: 'Canada Carbon Rebate', date: 'July 15, 2026', amount: 122.50 },
+        { label: 'Canada Workers Benefit', date: 'July 11, 2026', amount: 311.75 },
+        { label: 'BC Climate Action Tax Credit', date: 'July 4, 2026', amount: 56.00 }
+      ];
+      var max = Math.max.apply(null, payments.map(function(p) { return p.amount; }));
       var title = document.createElement('div'); title.className = 'pwd-tracker-title'; title.textContent = 'CRA Benefits'; container.appendChild(title);
-      var row = document.createElement('div');
-      row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:4px 0;';
-      var left = document.createElement('div');
-      var lbl = document.createElement('div'); lbl.className = 'step-label'; lbl.textContent = 'GST/HST Credit'; left.appendChild(lbl);
-      var dt = document.createElement('div'); dt.className = 'step-date'; dt.textContent = 'June 5, 2026'; left.appendChild(dt);
-      var amt = document.createElement('span'); amt.style.cssText = 'font-size:14px;font-weight:600;'; amt.textContent = '$174.50';
-      row.appendChild(left); row.appendChild(amt); container.appendChild(row);
+      payments.forEach(function(p) {
+        var row = document.createElement('div');
+        row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:4px 0 2px;';
+        var left = document.createElement('div'); left.style.flex = '1';
+        var lbl = document.createElement('div'); lbl.className = 'step-label'; lbl.textContent = p.label; left.appendChild(lbl);
+        var dt = document.createElement('div'); dt.className = 'step-date'; dt.textContent = p.date; left.appendChild(dt);
+        var amt = document.createElement('span'); amt.style.cssText = 'font-size:14px;font-weight:600;white-space:nowrap;margin-left:12px;'; amt.textContent = '$' + p.amount.toFixed(2);
+        row.appendChild(left); row.appendChild(amt); container.appendChild(row);
+        var barTrack = document.createElement('div');
+        barTrack.style.cssText = 'width:100%;height:3px;background:var(--border);border-radius:1.5px;margin-bottom:8px;';
+        var barFill = document.createElement('div');
+        barFill.style.cssText = 'height:3px;background:#2472b2;border-radius:1.5px;width:' + Math.round((p.amount / max) * 100) + '%;';
+        barTrack.appendChild(barFill); container.appendChild(barTrack);
+      });
       var note = document.createElement('div');
-      note.style.cssText = 'font-size:11px;color:var(--text-secondary);margin-top:8px;';
-      note.textContent = '4 payments/yr. Not all CRA credits shown.';
+      note.style.cssText = 'font-size:11px;color:var(--text-secondary);margin-top:4px;';
+      note.textContent = 'Quarterly estimates. Not all CRA credits shown.';
       container.appendChild(note);
     })();
 
