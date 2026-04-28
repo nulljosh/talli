@@ -1,5 +1,12 @@
 # Tally Roadmap
 
+## 2026-04-28
+- [ ] Sync Claude design
+- [ ] Print QR stickers for app
+- [ ] Publish it ($100/m)
+- [ ] Stabilize -- Snow Leopard-style huge overhaul (stability, no new features)
+- [ ] First published app in 10 years
+
 ## 2026-04-24
 - [x] DTC application tracker (web + iOS) -- Applied April 2026, CRA processing
 - [x] CRA upcoming payments section -- GST/HST $174.50 due June 5, 2026

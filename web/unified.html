@@ -2,629 +2,429 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="manifest" href="/manifest.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
-  <meta name="view-transition" content="same-origin">
-  <link rel="apple-touch-icon" href="/icon-192.svg">
-  <link rel="stylesheet" href="design-tokens.css">
-  <title>Tally Dashboard</title>
+  <title>Tally</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
-
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: var(--bg-primary); border-bottom: 1px solid var(--border); padding-top: calc(10px + env(safe-area-inset-top, 0px)); display: flex; flex-direction: column; }
-    .nav-row { display: flex; align-items: center; gap: 12px; padding: 0 20px 10px; }
-    .nav-tabs { display: flex; gap: 0; padding: 0 16px; border-top: 1px solid var(--border); }
-    .nav-user { font-size: 15px; font-weight: 500; letter-spacing: -0.02em; }
-    .nav-link { font-size: 13px; color: var(--text-secondary); background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; }
-    .nav-link:hover { color: var(--text-primary); }
-    .nav-spacer { flex: 1; }
-    .theme-toggle { background: none; border: none; cursor: pointer; padding: 4px; color: var(--text-secondary); opacity: 0.4; display: flex; align-items: center; }
-    .theme-toggle:hover { opacity: 1; }
-    .theme-toggle svg { width: 14px; height: 14px; }
-    .nav-tab { background: none; border: none; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 500; color: var(--text-secondary); padding: 8px 12px; border-bottom: 2px solid transparent; position: relative; }
-    .nav-tab:hover { color: var(--text-primary); }
-    .nav-tab.active { color: var(--text-primary); border-bottom-color: var(--text-primary); }
-    .nav-tab .tab-badge { position: absolute; top: 4px; right: 4px; background: var(--error); color: #fff; font-size: 9px; font-weight: 700; padding: 1px 4px; border-radius: 8px; min-width: 14px; text-align: center; }
-
-    .container { max-width: 700px; margin: 0 auto; padding: 90px 20px 32px; padding-top: calc(90px + env(safe-area-inset-top, 0px)); }
-    .offline-banner { display: none; margin-bottom: 12px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg-secondary); color: var(--text-secondary); font-size: 13px; text-align: center; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; animation: fadeIn 0.22s ease both; }
-
-    .home-top { display: grid; grid-template-columns: 1fr; gap: 12px; align-items: start; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
-    @media (min-width: 601px) { .home-top { grid-template-columns: 1fr auto; gap: 24px; } }
-
-    .payment-card { display: flex; flex-direction: column; justify-content: center; }
-    .payment-amount-wrap { display: flex; align-items: flex-start; line-height: 1; transition: opacity 0.3s ease; animation: countUp 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
-    .payment-dollar { font-size: clamp(1.1rem, 2.5vw, 1.4rem); font-weight: 700; color: var(--text-primary); margin-top: 0.28em; letter-spacing: -0.5px; }
-    .payment-number { font-size: clamp(2.5rem, 6vw, 3.5rem); font-weight: 700; letter-spacing: -3px; color: var(--text-primary); }
-    .payment-designation { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-secondary); margin-top: 6px; }
-    .payment-meta { margin-top: 8px; display: flex; flex-direction: column; gap: 1px; }
-    .payment-meta-row { font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
-    .payment-meta-row.urgent { color: var(--warning); }
-    .payment-meta-row .countdown { font-weight: 600; color: var(--text-primary); }
-
-    .check-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-    .paid-check { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px; border-radius: 100px; border: 1px solid var(--border); background: var(--bg-secondary); cursor: pointer; font-size: 13px; color: var(--text-secondary); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.15s; user-select: none; }
-    .paid-check:hover { border-color: var(--text-primary); transform: scale(1.03); }
-    .paid-check.checked { border-color: var(--success); color: var(--success); }
-    .paid-check input[type="checkbox"] { width: 16px; height: 16px; margin: 0; accent-color: var(--success); cursor: pointer; }
-    .paid-check .paid-date { font-size: 12px; opacity: 0.7; }
-    .undo-paid { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 100px; border: 1px solid var(--border); background: none; cursor: pointer; font-size: 12px; color: var(--text-secondary); font-family: inherit; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
-    .undo-paid:hover { border-color: var(--text-primary); transform: scale(1.03); }
-
-    .calendar-widget { max-width: 280px; }
-    @media (max-width: 600px) { .calendar-widget { max-width: 100%; } }
-    .calendar-title { text-align: center; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
-    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; text-align: center; }
-    .calendar-header { font-size: 10px; font-weight: 600; color: var(--text-secondary); padding: 2px 0; }
-    .calendar-day { font-size: 12px; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
-    .calendar-day.empty { color: transparent; }
-    .calendar-day.today { border: 1px solid var(--text-primary); }
-    .calendar-day.payment-day { background: var(--text-primary); color: var(--bg-primary); font-weight: 700; animation: pulse-ring 2.5s ease-out infinite; --pulse-c: rgba(0,0,0,0.2); }
-    [data-theme="dark"] .calendar-day.payment-day { --pulse-c: rgba(255,255,255,0.2); }
-    .calendar-day.past { color: var(--text-secondary); opacity: 0.5; }
-
-    .pwd-tracker { padding: 16px 0; }
-    .pwd-tracker-title { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 8px; }
-    .pwd-timeline { border-left: 2px solid var(--border); margin-left: 6px; padding-left: 16px; }
-    .pwd-step { position: relative; padding-bottom: 16px; }
-    .pwd-step:last-child { padding-bottom: 0; }
-    .pwd-step::before { content: ''; position: absolute; left: -22px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--border); border: 2px solid var(--bg-primary); }
-    .pwd-step.completed::before, .pwd-step.current::before { background: var(--text-primary); }
-    .pwd-step.current::before { animation: breathe 2s ease-in-out infinite; }
-    .step-label { font-size: 14px; font-weight: 500; }
-    .step-date { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
-
-    .card { background: var(--bg-secondary); border-radius: 4px; border: 1px solid var(--border); padding: 12px 14px; margin-bottom: 8px; }
-    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-    .card-title { font-size: 15px; font-weight: 600; }
-    .status { display: inline-block; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600; }
-    .status-success { background: var(--success); color: var(--bg-primary); }
-    .status-error { background: var(--error); color: var(--bg-primary); }
-    .status-warning { background: var(--warning); color: var(--bg-primary); }
-
-    .message-card { padding: 10px 14px; border-bottom: 1px solid var(--border); }
-    .message-card:last-child { border-bottom: none; }
-    .message-card-text { font-size: 14px; font-weight: 500; line-height: 1.5; }
-    .message-card-meta { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
-    .message-empty { padding: 20px; text-align: center; color: var(--text-secondary); font-size: 13px; }
-
-    .form-group { margin-bottom: 12px; }
-    label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--text-secondary); }
-    input { width: 100%; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-family: inherit; font-size: 14px; }
-    input:focus { outline: none; border-color: var(--text-primary); }
-    .btn { background: var(--text-primary); color: var(--bg-primary); border: none; padding: 10px 20px; border-radius: 4px; font-weight: 600; font-size: 13px; cursor: pointer; }
-    .btn:hover { opacity: 0.85; }
-    .btn-secondary { background: var(--border); color: var(--text-primary); }
-    .loading { text-align: center; padding: 20px; color: var(--text-secondary); }
-    .spinner { border: 2px solid var(--border); border-top-color: var(--text-primary); border-radius: 50%; width: 32px; height: 32px; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0px var(--pulse-c, rgba(0,0,0,0.3)); } 70% { box-shadow: 0 0 0 5px transparent; } 100% { box-shadow: 0 0 0 0px transparent; } }
-    @keyframes breathe { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
-    @keyframes urgent-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes countUp { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
-
-    .days-bar-wrap { margin-top: 14px; margin-bottom: 4px; }
-    .days-bar-track { height: 2px; background: var(--border); border-radius: 2px; position: relative; overflow: visible; }
-    .days-bar-fill { height: 100%; border-radius: 2px; background: var(--text-primary); transition: width 0.8s cubic-bezier(0.4,0,0.2,1); }
-    .days-bar-dot { position: absolute; right: -3px; top: -2px; width: 6px; height: 6px; border-radius: 50%; background: var(--text-primary); animation: pulse-ring 2s ease-out infinite; --pulse-c: rgba(0,0,0,0.25); }
-    .days-bar-labels { display: flex; justify-content: space-between; margin-top: 5px; }
-    .days-bar-label { font-size: 10px; color: var(--text-secondary); }
-    .days-bar-wrap.urgent .days-bar-fill, .days-bar-wrap.urgent .days-bar-dot { background: var(--warning); }
-    .days-bar-wrap.urgent .days-bar-label-right { color: var(--warning); font-weight: 600; }
-    .urgent-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--warning); flex-shrink: 0; animation: urgent-blink 1s ease-in-out infinite; display: inline-block; vertical-align: middle; }
-    [data-theme="dark"] .days-bar-dot { --pulse-c: rgba(255,255,255,0.2); }
-
-    footer { text-align: center; padding: 24px 20px 16px; font-size: 11px; color: var(--text-secondary); border-top: 1px solid var(--border); margin-top: 16px; }
-    footer a { color: var(--text-secondary); text-decoration: none; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    @keyframes countUp   { from { opacity:0; transform:translateY(14px) scale(0.94); } to { opacity:1; transform:translateY(0) scale(1); } }
+    @keyframes fadeUp    { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn    { from { opacity:0; } to { opacity:1; } }
+    @keyframes pulseRing { 0% { box-shadow:0 0 0 0 var(--pc,rgba(255,255,255,0.2)); } 60% { box-shadow:0 0 0 6px transparent; } 100% { box-shadow:0 0 0 0 transparent; } }
+    @keyframes urgentBlink { 0%,100% { opacity:1; } 50% { opacity:0.2; } }
+    @keyframes breathe   { 0%,100% { transform:scale(1); opacity:1; } 50% { transform:scale(0.7); opacity:0.45; } }
+    @keyframes shimmer   { 0% { background-position:-400px 0; } 100% { background-position:400px 0; } }
+    @keyframes slideInLeft  { from { opacity:0; transform:translateX( 32px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes slideInRight { from { opacity:0; transform:translateX(-32px); } to { opacity:1; transform:translateX(0); } }
   </style>
 </head>
 <body>
-  <nav>
-    <div class="nav-row">
-      <span class="nav-user" id="nav-username">tally</span>
-      <button class="nav-link" onclick="logout()">Logout</button>
-      <span class="nav-spacer"></span>
-      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme">
-        <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        <svg id="moonIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      </button>
-    </div>
-    <div class="nav-tabs">
-      <button class="nav-tab active" onclick="switchTab('home')" data-tab="home">Home</button>
-      <button class="nav-tab" onclick="switchTab('reports')" data-tab="reports">Reports</button>
-      <button class="nav-tab" onclick="switchTab('messages')" data-tab="messages">Messages<span class="tab-badge" id="bottom-msg-badge" style="display:none">0</span></button>
-    </div>
-  </nav>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
 
-  <div class="container">
-    <div id="offline-banner" class="offline-banner">Offline -- showing cached data</div>
+function tk(dark) {
+  return dark ? {
+    bg:'#0a0a0a', bg2:'#141414', bg3:'#1c1c1c',
+    text:'#f5f5f5', muted:'rgba(255,255,255,0.32)', mutedMid:'rgba(255,255,255,0.52)',
+    border:'rgba(255,255,255,0.07)', border2:'rgba(255,255,255,0.12)',
+    tabBar:'rgba(8,8,8,0.95)', success:'#30d158', warning:'#ff9f0a', error:'#ff453a',
+  } : {
+    bg:'#f9f9f9', bg2:'#f2f2f2', bg3:'#e8e8e8',
+    text:'#171717', muted:'rgba(0,0,0,0.30)', mutedMid:'rgba(0,0,0,0.50)',
+    border:'rgba(0,0,0,0.07)', border2:'rgba(0,0,0,0.13)',
+    tabBar:'rgba(249,249,249,0.95)', success:'#34c759', warning:'#ff9500', error:'#ff3b30',
+  };
+}
 
-    <div id="home-tab" class="tab-content active">
-      <div class="home-top">
-        <div id="payment-info" class="payment-card"><div class="loading"><div class="spinner"></div>Loading...</div></div>
-        <div id="payment-calendar" class="calendar-widget"></div>
+function visibilityInterval(fn, ms) {
+  let id = setInterval(() => { if (!document.hidden) fn(); }, ms);
+  return () => clearInterval(id);
+}
+
+const MON = {JAN:0,FEB:1,MAR:2,APR:3,MAY:4,JUN:5,JUL:6,AUG:7,SEP:8,OCT:9,NOV:10,DEC:11};
+
+function parseMsgDate(str) {
+  const m = str.match(/(\d{4})\s*\/\s*([A-Z]{3})\s*\/\s*(\d{2})/);
+  if (!m) return '';
+  return new Date(+m[1], MON[m[2]], +m[3]).toLocaleDateString('en-CA', {month:'short', day:'numeric'});
+}
+
+function parseMessages(sections) {
+  const SPAM = new Set(['Home','Payment Info','Messages','Notifications','Service Requests','Monthly Reports','Sign out','Profile','Back','Print','Help']);
+  const DATE_RE = /\d{4}\s*\/\s*[A-Z]{3}\s*\/\s*\d{2}/;
+  const combined = [...(sections['Messages']?.allText||[]), ...(sections['Notifications']?.allText||[])]
+    .filter(t => t && t.trim().length > 3 && !SPAM.has(t.trim()));
+  const msgs = []; let cur = null;
+  combined.forEach((line, i) => {
+    if (DATE_RE.test(line)) { if (cur) { cur.date = parseMsgDate(line); msgs.push(cur); cur = null; } }
+    else if (!cur) cur = { id:i, title:line.trim(), body:'', date:'', unread:true };
+    else if (!cur.body) cur.body = line.trim();
+  });
+  if (cur) msgs.push(cur);
+  return msgs.slice(0, 12);
+}
+
+function parseDollar(s) { return parseFloat((s||'').replace(/[^0-9.]/g,'')) || 0; }
+
+const PAST_PAYMENTS = [
+  {year:2026,month:2,day:28,amount:'$1,700'},{year:2026,month:1,day:28,amount:'$1,700'},
+  {year:2026,month:0,day:28,amount:'$1,658'},{year:2025,month:11,day:28,amount:'$1,658'},
+  {year:2025,month:10,day:28,amount:'$1,658'},
+];
+
+function useCountUp(target, ms=750) {
+  const [v, setV] = useState(0);
+  const raf = useRef();
+  useEffect(() => {
+    if (!target) return;
+    const t0 = performance.now();
+    const run = (now) => { const p = Math.min((now-t0)/ms,1); setV(target*(1-Math.pow(1-p,4))); if(p<1) raf.current=requestAnimationFrame(run); };
+    raf.current = requestAnimationFrame(run);
+    return () => cancelAnimationFrame(raf.current);
+  }, [target, ms]);
+  return v;
+}
+
+function Skel({w, h=16, r=4, dark}) {
+  const t = tk(dark);
+  return <div style={{width:w,height:h,borderRadius:r,background:`linear-gradient(90deg,${t.bg2} 25%,${t.bg3} 50%,${t.bg2} 75%)`,backgroundSize:'800px 100%',animation:'shimmer 1.4s ease-in-out infinite'}} />;
+}
+
+const Icon = {
+  home:(c,f)=><svg width="22" height="22" viewBox="0 0 24 24" fill={f?c:'none'} stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1v-9.5z"/></svg>,
+  calendar:(c,f)=><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="3" fill={f?c:'none'} fillOpacity={f?.15:0}/><path d="M3 9h18M8 2v4M16 2v4"/></svg>,
+  status:(c)=><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.7" strokeLinecap="round"><circle cx="6" cy="6" r="2" fill={c} stroke="none"/><circle cx="6" cy="12" r="2" fill={c} stroke="none"/><circle cx="6" cy="18" r="2" stroke={c} strokeWidth="1.7"/><path d="M10 6h9M10 12h9M10 18h9" strokeLinecap="round"/></svg>,
+  messages:(c,f)=><svg width="22" height="22" viewBox="0 0 24 24" fill={f?c:'none'} stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" fillOpacity={f?.15:0}/></svg>,
+};
+
+function TabBar({tab, setTab, dark, msgBadge}) {
+  const t = tk(dark);
+  const TABS = [
+    {id:'home',label:'Home',icon:Icon.home},
+    {id:'calendar',label:'Calendar',icon:Icon.calendar},
+    {id:'status',label:'Status',icon:(c,f)=>Icon.status(c)},
+    {id:'messages',label:'Messages',icon:Icon.messages,badge:msgBadge},
+  ];
+  return (
+    <div style={{display:'flex',flexShrink:0,background:t.tabBar,borderTop:`0.5px solid ${t.border}`,backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',paddingBottom:'max(env(safe-area-inset-bottom,0px),16px)'}}>
+      {TABS.map(({id,label,icon,badge})=>{
+        const active=tab===id; const color=active?t.text:t.muted;
+        return (
+          <button key={id} onClick={()=>setTab(id)} style={{flex:1,background:'none',border:'none',cursor:'pointer',display:'flex',flexDirection:'column',alignItems:'center',gap:3,padding:'10px 0 0',position:'relative',WebkitTapHighlightColor:'transparent'}}>
+            <div style={{transition:'transform 0.25s cubic-bezier(0.34,1.56,0.64,1)',transform:active?'scale(1.08)':'scale(1)'}}>
+              {icon(color, active)}
+            </div>
+            <span style={{fontSize:10,fontWeight:active?600:400,color,letterSpacing:'0.01em',transition:'color 0.15s'}}>{label}</span>
+            {badge>0&&<div style={{position:'absolute',top:6,left:'50%',marginLeft:6,background:t.error,color:'#fff',fontSize:9,fontWeight:700,width:14,height:14,borderRadius:7,display:'flex',alignItems:'center',justifyContent:'center'}}>{badge}</div>}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function HomeTab({dark, amount, daysUntil, paymentDate, paid, onPaidChange}) {
+  const t = tk(dark);
+  const [loaded, setLoaded] = useState(false);
+  const [bounce, setBounce] = useState(false);
+  useEffect(() => {
+    if (amount !== null && daysUntil !== null) { const id=setTimeout(()=>setLoaded(true),300); return ()=>clearTimeout(id); }
+  }, [amount, daysUntil]);
+  const counted   = useCountUp(loaded ? parseDollar(amount) : 0, 750);
+  const formatted = '$' + Math.round(counted).toLocaleString('en-CA');
+  const urgent    = daysUntil !== null && daysUntil <= 3;
+  const isToday   = daysUntil === 0;
+  const pct       = daysUntil !== null ? Math.max(0, Math.min(100, ((28-daysUntil)/28)*100)) : 0;
+  const handlePaid = () => { setBounce(true); setTimeout(()=>setBounce(false),350); onPaidChange(!paid); };
+  if (!loaded) return (
+    <div style={{flex:1,display:'flex',flexDirection:'column',justifyContent:'center',padding:'0 28px',gap:16}}>
+      <Skel w={80} h={11} dark={dark}/><Skel w="100%" h={72} r={6} dark={dark}/>
+      <Skel w={160} h={34} r={4} dark={dark}/><Skel w={100} h={18} dark={dark}/>
+      <div style={{marginTop:8}}><Skel w="100%" h={2} r={2} dark={dark}/></div>
+      <Skel w={120} h={30} r={100} dark={dark}/>
+    </div>
+  );
+  return (
+    <div style={{flex:1,display:'flex',flexDirection:'column',justifyContent:'center',padding:'0 28px',animation:'fadeIn 0.3s ease both'}}>
+      <div style={{fontSize:11,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:14,animation:'fadeUp 0.45s ease both'}}>Next payment</div>
+      <div style={{fontSize:80,fontWeight:700,letterSpacing:'-5px',lineHeight:0.92,color:t.text,opacity:paid?.28:1,transition:'opacity 0.35s ease',textDecoration:paid?'line-through':'none',textDecorationColor:t.muted,animation:'countUp 0.65s cubic-bezier(0.22,1,0.36,1) both'}}>
+        {formatted}
       </div>
-      <div id="pwd-tracker" class="pwd-tracker"></div>
-      <div id="dtc-tracker" class="pwd-tracker"></div>
-      <div id="cra-payments" class="pwd-tracker" style="padding-top:0"></div>
-      <div id="bceid-login-prompt" style="display: none;">
-        <div class="card" style="max-width: 480px; margin: 40px auto;">
-          <div class="card-header"><div class="card-title">Connect BC Self-Serve</div></div>
-          <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 16px;">Enter your BCeID credentials to scrape live data.</p>
-          <div class="form-group"><label>BCeID Username</label><input type="text" id="bceid-user" placeholder="Username" autocomplete="username"></div>
-          <div class="form-group"><label>BCeID Password</label><input type="password" id="bceid-pass" placeholder="Password" autocomplete="current-password"></div>
-          <div id="bceid-error" style="display: none; color: var(--error); font-size: 13px; margin-bottom: 12px;"></div>
-          <button class="btn" onclick="saveBCeIDAndScrape()" id="bceid-login-btn" style="width: 100%;">Connect & Scrape</button>
+      <div style={{marginTop:20,display:'flex',alignItems:'center',gap:10,animation:'fadeUp 0.45s 0.1s ease both'}}>
+        {(urgent||isToday)&&<div style={{width:8,height:8,borderRadius:'50%',flexShrink:0,background:isToday?t.success:t.warning,animation:isToday?'pulseRing 1.8s ease-out infinite':'urgentBlink 0.9s ease-in-out infinite','--pc':isToday?'rgba(52,199,89,0.3)':'rgba(255,149,0,0.3)'}}/>}
+        <span style={{fontSize:36,fontWeight:600,letterSpacing:'-1.5px',lineHeight:1,color:isToday?t.success:urgent?t.warning:t.text,transition:'color 0.3s'}}>
+          {isToday?'today':`in ${daysUntil} day${daysUntil!==1?'s':''}`}
+        </span>
+      </div>
+      <div style={{marginTop:7,fontSize:17,color:t.mutedMid,fontWeight:400,letterSpacing:'-0.3px',animation:'fadeUp 0.45s 0.18s ease both'}}>{paymentDate}</div>
+      <div style={{marginTop:34,animation:'fadeUp 0.45s 0.26s ease both'}}>
+        <div style={{height:1.5,background:t.border,borderRadius:2,position:'relative'}}>
+          <div style={{position:'absolute',left:0,top:0,height:'100%',borderRadius:2,width:`${pct}%`,background:urgent?t.warning:t.text,transition:'width 1.1s cubic-bezier(0.4,0,0.2,1)'}}/>
+          <div style={{position:'absolute',right:-3,top:-3,width:7,height:7,borderRadius:'50%',background:urgent?t.warning:t.text,animation:'pulseRing 2.5s ease-out infinite','--pc':urgent?'rgba(255,149,0,0.3)':dark?'rgba(245,245,245,0.15)':'rgba(23,23,23,0.15)'}}/>
+        </div>
+        <div style={{display:'flex',justifyContent:'space-between',marginTop:7}}>
+          <span style={{fontSize:11,color:t.muted}}>last payment</span>
+          <span style={{fontSize:11,color:urgent?t.warning:t.muted,fontWeight:urgent?600:400}}>{isToday?'today':`${daysUntil}d`}</span>
+        </div>
+      </div>
+      <div style={{marginTop:28,animation:'fadeUp 0.45s 0.34s ease both'}}>
+        <button onClick={handlePaid} style={{display:'inline-flex',alignItems:'center',gap:8,padding:'6px 14px',borderRadius:100,border:`1px solid ${paid?t.success:t.border}`,background:'none',cursor:'pointer',fontSize:13,fontWeight:500,color:paid?t.success:t.muted,fontFamily:'inherit',transform:bounce?'scale(1.15)':'scale(1)',transition:'transform 0.3s cubic-bezier(0.34,1.56,0.64,1),border-color 0.2s,color 0.2s',WebkitTapHighlightColor:'transparent'}}>
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+            {paid?<><circle cx="7" cy="7" r="6.5" stroke="currentColor"/><path d="M4 7l2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></>:<circle cx="7" cy="7" r="6.5" stroke="currentColor" strokeDasharray="2 2"/>}
+          </svg>
+          {paid?'Marked as paid':'Mark as paid'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function CalendarTab({dark, payDateObj, amount}) {
+  const t = tk(dark);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const nextPayment = payDateObj || new Date(today.getFullYear(), today.getMonth(), 28);
+  const [viewMonth, setViewMonth] = useState(new Date(nextPayment.getFullYear(), nextPayment.getMonth(), 1));
+  const [dir, setDir]   = useState(null);
+  const [animKey, setAnimKey] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const go = (d) => { setDir(d>0?'left':'right'); setAnimKey(k=>k+1); setViewMonth(m=>new Date(m.getFullYear(),m.getMonth()+d,1)); setSelected(null); };
+  const year=viewMonth.getFullYear(), month=viewMonth.getMonth();
+  const name=viewMonth.toLocaleString('en-CA',{month:'long',year:'numeric'});
+  const firstDay=new Date(year,month,1).getDay(), daysInMonth=new Date(year,month+1,0).getDate();
+  const cells=[]; for(let i=0;i<firstDay;i++)cells.push(null); for(let d=1;d<=daysInMonth;d++)cells.push(d);
+  const isToday_=(d)=>d&&new Date(year,month,d).toDateString()===today.toDateString();
+  const isNextPay=(d)=>d&&new Date(year,month,d).getTime()===nextPayment.getTime();
+  const pastPay=(d)=>d?PAST_PAYMENTS.find(p=>p.year===year&&p.month===month&&p.day===d):null;
+  const isPast=(d)=>d&&new Date(year,month,d)<today;
+  const animStyle=dir?{animation:`${dir==='left'?'slideInLeft':'slideInRight'} 0.28s cubic-bezier(0.4,0,0.2,1) both`}:{animation:'fadeIn 0.25s ease both'};
+  return (
+    <div style={{flex:1,display:'flex',flexDirection:'column',overflow:'hidden'}}>
+      <div style={{display:'flex',alignItems:'center',padding:'16px 20px 12px',flexShrink:0}}>
+        <button onClick={()=>go(-1)} style={{background:'none',border:'none',cursor:'pointer',padding:'4px 8px',color:t.muted,fontFamily:'inherit',fontSize:20,lineHeight:1,WebkitTapHighlightColor:'transparent'}}>‹</button>
+        <div style={{flex:1,textAlign:'center',fontSize:15,fontWeight:600,letterSpacing:'-0.3px',color:t.text}}>{name}</div>
+        <button onClick={()=>go(1)}  style={{background:'none',border:'none',cursor:'pointer',padding:'4px 8px',color:t.muted,fontFamily:'inherit',fontSize:20,lineHeight:1,WebkitTapHighlightColor:'transparent'}}>›</button>
+      </div>
+      <div key={animKey} style={{flex:1,overflowY:'auto',padding:'0 16px',...animStyle}}>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',textAlign:'center',marginBottom:4}}>
+          {['S','M','T','W','T','F','S'].map((d,i)=><div key={i} style={{fontSize:11,fontWeight:600,color:t.muted,padding:'0 0 6px'}}>{d}</div>)}
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:'2px 0'}}>
+          {cells.map((d,i)=>{
+            const next=isNextPay(d),past=pastPay(d),tod=isToday_(d),isP=isPast(d),sel=selected===i;
+            return (
+              <div key={i} style={{display:'flex',alignItems:'center',justifyContent:'center',height:38}}>
+                <button onClick={()=>setSelected(sel?null:(past||next?i:null))} style={{width:32,height:32,borderRadius:'50%',cursor:(past||next)?'pointer':'default',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:1,background:next?t.text:sel?t.bg3:'transparent',border:tod&&!next?`1px solid ${t.border2}`:'none',outline:'none',position:'relative',animation:next?'pulseRing 2.5s ease-out infinite':'none','--pc':dark?'rgba(245,245,245,0.12)':'rgba(23,23,23,0.12)',transition:'background 0.15s',WebkitTapHighlightColor:'transparent'}}>
+                  <span style={{fontSize:13,fontWeight:(next||past)?600:400,lineHeight:1,color:d===null?'transparent':next?t.bg:isP&&!past?t.muted:t.text,opacity:d===null?0:isP&&!past?0.28:1}}>{d}</span>
+                  {past&&<div style={{width:4,height:4,borderRadius:'50%',background:next?t.bg:t.text,opacity:0.5,position:'absolute',bottom:4}}/>}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+        {selected!==null&&(()=>{
+          const d=cells[selected],next=isNextPay(d),past=pastPay(d);
+          if(!next&&!past)return null;
+          return <div style={{margin:'16px 0 0',padding:'12px 14px',background:t.bg2,borderRadius:8,border:`1px solid ${t.border}`,animation:'fadeUp 0.2s ease both'}}>
+            <div style={{fontSize:11,fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:6}}>{next?'Upcoming':'Received'}</div>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'baseline'}}>
+              <span style={{fontSize:22,fontWeight:700,letterSpacing:'-1px',color:t.text}}>{next?(amount||'$1,700'):past.amount}</span>
+              <span style={{fontSize:13,color:t.muted}}>{viewMonth.toLocaleString('en-CA',{month:'short'})} {d}</span>
+            </div>
+          </div>;
+        })()}
+        <div style={{display:'flex',gap:18,padding:'20px 0 4px'}}>
+          {[{fill:true,small:false,label:'Payment day'},{fill:false,small:false,label:'Today'},{fill:true,small:true,label:'Past payment'}].map(({fill,small,label},i)=>(
+            <div key={i} style={{display:'flex',alignItems:'center',gap:5}}>
+              <div style={{width:small?5:9,height:small?5:9,borderRadius:'50%',flexShrink:0,background:fill?t.text:'transparent',border:fill?'none':`1px solid ${t.border2}`,opacity:small?.5:1}}/>
+              <span style={{fontSize:10,color:t.muted}}>{label}</span>
+            </div>
+          ))}
         </div>
       </div>
     </div>
+  );
+}
 
-    <div id="reports-tab" class="tab-content">
-      <div class="card">
-        <div class="card-header"><div class="card-title">Monthly Report</div><span class="status" id="mr-status">--</span></div>
-        <div id="mr-content" style="font-size: 13px; color: var(--text-secondary);"></div>
-      </div>
-      <div class="card" style="margin-bottom:8px;">
-        Wait until after the 28th to submit. Forms submitted in the first week of the open period (~21st) don't clear by payday.
-      </div>
-      <div class="card" style="margin-top: 8px;">
-        <div class="card-title" style="margin-bottom: 12px;">Submit Report</div>
-        <div class="form-group"><label>SIN</label><input type="password" id="submit-sin" placeholder="Social Insurance Number" autocomplete="off"></div>
-        <div class="form-group"><label>Phone</label><input type="tel" id="submit-phone" placeholder="Phone number" autocomplete="tel"></div>
-        <div class="form-group"><label>PIN</label><input type="password" id="submit-pin" placeholder="4-digit PIN" autocomplete="off"></div>
-        <div style="display: flex; gap: 8px; margin-top: 12px;">
-          <button class="btn btn-secondary" id="btn-preview" onclick="submitReport(true)">Preview</button>
-          <button class="btn" id="btn-submit" onclick="submitReport(false)">Submit</button>
+function StatusTab({dark, pwdApproved}) {
+  const t = tk(dark);
+  const steps = [
+    {label:'Application submitted',date:'Jan 14, 2026',done:true},
+    {label:'Medical review',date:pwdApproved?'Complete':'In progress',done:pwdApproved,current:!pwdApproved},
+    {label:'Ministry decision',date:pwdApproved?'Approved':'Est. Jul 2026',done:pwdApproved},
+    {label:'Backdated payments',date:pwdApproved?'Issued':'Upon approval',done:pwdApproved},
+  ];
+  const upcoming=[
+    {label:'Monthly report due',date:'May 5',warn:true},
+    {label:'PharmaCare renewal',date:'Jun 1'},
+    {label:'T4 slip available',date:'Feb 2027'},
+  ];
+  return (
+    <div style={{flex:1,overflowY:'auto',padding:'20px 24px 0',animation:'fadeIn 0.2s ease both'}}>
+      <div style={{marginBottom:28}}>
+        <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:16}}>PWD Application</div>
+        <div style={{borderLeft:`1.5px solid ${t.border}`,marginLeft:5,paddingLeft:18}}>
+          {steps.map((s,i)=>(
+            <div key={i} style={{position:'relative',paddingBottom:i<steps.length-1?22:0}}>
+              <div style={{position:'absolute',left:-24,top:4,width:10,height:10,borderRadius:'50%',background:(s.done||s.current)?t.text:t.bg3,border:`2px solid ${t.bg}`,animation:s.current?'breathe 2.2s ease-in-out infinite':'none'}}/>
+              <div style={{fontSize:14,fontWeight:s.current?600:400,color:s.done?t.mutedMid:t.text,letterSpacing:'-0.2px',textDecoration:s.done?'line-through':'none',textDecorationColor:t.border2}}>{s.label}</div>
+              <div style={{fontSize:12,marginTop:2,color:s.current?t.warning:t.muted,fontWeight:s.current?500:400}}>{s.date}</div>
+            </div>
+          ))}
         </div>
-        <div id="submit-status" style="display: none; margin-top: 12px; padding: 10px; border-radius: 4px; font-size: 13px;"></div>
+      </div>
+      <div style={{height:1,background:t.border,marginBottom:24}}/>
+      <div>
+        <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:14}}>Upcoming</div>
+        {upcoming.map((item,i)=>(
+          <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 0',borderBottom:i<upcoming.length-1?`1px solid ${t.border}`:'none'}}>
+            <span style={{fontSize:14,color:t.text,letterSpacing:'-0.2px'}}>{item.label}</span>
+            <span style={{fontSize:12,fontWeight:item.warn?600:400,color:item.warn?t.warning:t.muted,background:item.warn?`${t.warning}18`:'transparent',padding:item.warn?'2px 8px':'0',borderRadius:100}}>{item.date}</span>
+          </div>
+        ))}
       </div>
     </div>
+  );
+}
 
-    <div id="messages-tab" class="tab-content">
-      <div class="card" style="padding: 0;">
-        <div style="padding: 12px 14px; border-bottom: 1px solid var(--border); font-weight: 600; font-size: 14px;">Messages</div>
-        <div id="messages-full-list"><div class="message-empty">No messages</div></div>
-      </div>
-      <div class="card" style="padding: 0; margin-top: 8px;">
-        <div style="padding: 12px 14px; border-bottom: 1px solid var(--border); font-weight: 600; font-size: 14px;">Notifications</div>
-        <div id="notifications-full-list"><div class="message-empty">No notifications</div></div>
-      </div>
+function MessagesTab({dark, messages}) {
+  const t = tk(dark);
+  const [read, setRead]     = useState({});
+  const [expanded, setExpanded] = useState(null);
+  const toggle = (id) => { setExpanded(e=>e===id?null:id); setRead(r=>({...r,[id]:true})); };
+  const msgs = messages.length>0 ? messages : [{id:0,title:'No messages yet',body:'Messages from BC Self-Serve will appear here.',date:'',unread:false}];
+  return (
+    <div style={{flex:1,overflowY:'auto',animation:'fadeIn 0.2s ease both'}}>
+      <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,padding:'20px 24px 12px'}}>Messages</div>
+      {msgs.map((m,i)=>{
+        const isRead=read[m.id]||!m.unread, isOpen=expanded===m.id;
+        return (
+          <div key={m.id} onClick={()=>toggle(m.id)} style={{padding:'12px 24px',borderBottom:i<msgs.length-1?`1px solid ${t.border}`:'none',cursor:'pointer',transition:'background 0.15s',background:isOpen?t.bg2:'transparent',WebkitTapHighlightColor:'transparent'}}>
+            <div style={{display:'flex',gap:10,alignItems:'flex-start'}}>
+              <div style={{width:7,height:7,borderRadius:'50%',flexShrink:0,marginTop:5,background:isRead?'transparent':t.text,border:isRead?`1px solid ${t.border2}`:'none',transition:'background 0.2s'}}/>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'baseline',gap:8}}>
+                  <span style={{fontSize:14,fontWeight:isRead?400:600,color:t.text,letterSpacing:'-0.2px',flex:1,minWidth:0,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{m.title}</span>
+                  {m.date&&<span style={{fontSize:11,color:t.muted,flexShrink:0}}>{m.date}</span>}
+                </div>
+                {isOpen&&m.body&&<div style={{marginTop:6,fontSize:13,color:t.mutedMid,lineHeight:1.5,animation:'fadeUp 0.2s ease both'}}>{m.body}</div>}
+                {!isOpen&&m.body&&<div style={{marginTop:2,fontSize:12,color:t.muted,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{m.body}</div>}
+              </div>
+            </div>
+          </div>
+        );
+      })}
     </div>
-    <footer>MIT License 2026 Joshua Trommel <span style="margin: 0 8px;">|</span> <a href="https://github.com/nulljosh/apps/tree/main/apps/tally" target="_blank">GitHub</a></footer>
-  </div>
+  );
+}
 
-  <script src="js/utils.js"></script>
-  <script>
-    function escapeForStatus(text) { var d = document.createElement('div'); d.textContent = text; return d.innerHTML; }
+const TAB_ORDER = ['home','calendar','status','messages'];
 
-    async function logout() {
-      try { var r = await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' }); if (r.ok) window.location.href = '/login.html'; } catch (e) { console.error(e); }
-    }
+function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, pwdApproved, username, onLogout}) {
+  const t = tk(dark);
+  const [tab, setTab] = useState('home');
+  const touchX = useRef(null);
+  const onTouchStart = (e) => { touchX.current = e.touches[0].clientX; };
+  const onTouchEnd   = (e) => {
+    if (touchX.current===null) return;
+    const dx = e.changedTouches[0].clientX - touchX.current; touchX.current=null;
+    if (Math.abs(dx)<40) return;
+    const idx=TAB_ORDER.indexOf(tab);
+    if (dx<0&&idx<TAB_ORDER.length-1) setTab(TAB_ORDER[idx+1]);
+    if (dx>0&&idx>0) setTab(TAB_ORDER[idx-1]);
+  };
+  const unread = messages.filter(m=>m.unread).length;
+  return (
+    <div style={{display:'flex',flexDirection:'column',height:'100%',background:t.bg,color:t.text}} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+      <div style={{height:'max(env(safe-area-inset-top,0px),0px)',flexShrink:0}}/>
+      <div style={{padding:'12px 24px 0',flexShrink:0,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+        <span style={{fontSize:13,fontWeight:600,letterSpacing:'-0.01em',color:t.muted}}>tally</span>
+        <button onClick={onLogout} style={{background:'none',border:'none',cursor:'pointer',padding:0,fontSize:12,color:t.muted,fontFamily:'inherit',WebkitTapHighlightColor:'transparent'}}>{username||'logout'}</button>
+      </div>
+      {tab==='home'     &&<HomeTab     dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange}/>}
+      {tab==='calendar' &&<CalendarTab dark={dark} payDateObj={payDateObj} amount={amount}/>}
+      {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved}/>}
+      {tab==='messages' &&<MessagesTab dark={dark} messages={messages}/>}
+      <TabBar tab={tab} setTab={setTab} dark={dark} msgBadge={unread}/>
+    </div>
+  );
+}
 
-    function toggleTheme() {
-      var isDark = document.documentElement.hasAttribute('data-theme');
-      var t = isDark ? 'light' : 'dark';
-      var apply = function() {
-        if (t === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); document.getElementById('sunIcon').style.display = 'none'; document.getElementById('moonIcon').style.display = 'block'; }
-        else { document.documentElement.removeAttribute('data-theme'); document.getElementById('sunIcon').style.display = 'block'; document.getElementById('moonIcon').style.display = 'none'; }
-        localStorage.setItem('theme', t);
-      };
-      document.startViewTransition ? document.startViewTransition(apply) : apply();
-    }
+function App() {
+  const [dark,        setDark]        = useState(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const [username,    setUsername]    = useState('');
+  const [amount,      setAmount]      = useState(null);
+  const [daysUntil,   setDaysUntil]   = useState(null);
+  const [paymentDate, setPaymentDate] = useState('');
+  const [payDateObj,  setPayDateObj]  = useState(null);
+  const [paidMonths,  setPaidMonths]  = useState({});
+  const [messages,    setMessages]    = useState([]);
+  const [pwdApproved, setPwdApproved] = useState(false);
 
-    function applyTheme(theme) {
-      if (theme === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); document.getElementById('sunIcon').style.display = 'none'; document.getElementById('moonIcon').style.display = 'block'; }
-      else { document.documentElement.removeAttribute('data-theme'); document.getElementById('sunIcon').style.display = 'block'; document.getElementById('moonIcon').style.display = 'none'; }
-    }
-    var savedTheme = localStorage.getItem('theme');
-    var activeTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    if (activeTheme === 'dark') applyTheme('dark');
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) { if (!localStorage.getItem('theme')) applyTheme(e.matches ? 'dark' : 'light'); });
+  const loadData = useCallback(async () => {
+    try {
+      const r = await fetch('/api/latest', {credentials:'include'});
+      if (r.status===401) { location.href='/login.html'; return; }
+      if (!r.ok) return;
+      const json = await r.json();
+      const sections = json.data?.sections || json.sections || {};
+      const pi  = sections['Payment Info'] || {};
+      const raw = [...(pi.tableData||[]), ...(pi.allText||[])].join('\n');
+      const amtMatch = raw.match(/Amount:\s*(\$[\d,]+)(?:\.\d{2})?/);
+      setAmount(amtMatch ? amtMatch[1] : (prev => prev ?? '$1,700'));
+      const dm = raw.match(/(\d{4})\s*\/\s*([A-Z]{3})\s*\/\s*(\d{2})/);
+      if (dm) {
+        const d = new Date(+dm[1], MON[dm[2]], +dm[3]);
+        setPayDateObj(d);
+        const now = new Date(); now.setHours(0,0,0,0);
+        setDaysUntil(Math.max(0, Math.ceil((d-now)/86400000)));
+        setPaymentDate(d.toLocaleDateString('en-CA', {weekday:'short',month:'short',day:'numeric'}));
+      } else { setDaysUntil(v => v ?? 0); }
+      setMessages(parseMessages(sections));
+      setPwdApproved(json.uiConfig?.pwdApproved||false);
+    } catch(e) { setAmount(v=>v??'$0'); setDaysUntil(v=>v??0); }
+  }, []);
 
-    function switchTab(tab) {
-      document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
-      var el = document.getElementById(tab + '-tab');
-      if (el) el.classList.add('active');
-      document.querySelectorAll('.nav-tab').forEach(function(bt) { bt.classList.toggle('active', bt.dataset.tab === tab); });
-      if (tab === 'messages') {
-        msgsRead = true; notifsRead = true;
-        if (lastMsgContent) { readMsgHash = simpleHash(lastMsgContent); localStorage.setItem('tally-msg-read-hash', readMsgHash); }
-        if (lastNotifContent) { readNotifHash = simpleHash(lastNotifContent); localStorage.setItem('tally-notif-read-hash', readNotifHash); }
-        var b = document.getElementById('bottom-msg-badge'); if (b) b.style.display = 'none';
-      }
-    }
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const mqH = e => setDark(e.matches);
+    mq.addEventListener('change', mqH);
+    fetch('/api/me', {credentials:'include'})
+      .then(r=>{ if(!r.ok)throw new Error(); return r.json(); })
+      .then(d=>{ if(!d.authenticated){location.href='/login.html';return;} setUsername(d.username); loadData(); fetch('/api/paid-status',{credentials:'include'}).then(r=>r.json()).then(d=>setPaidMonths(d.paidMonths||{})).catch(()=>{}); })
+      .catch(()=>{ location.href='/login.html'; });
+    const clearPoll = visibilityInterval(loadData, 120000);
+    if ('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js',{scope:'/'}).catch(console.error));
+    return () => { mq.removeEventListener('change',mqH); clearPoll(); };
+  }, [loadData]);
 
-    function renderTracker(containerId, title, steps) {
-      var container = document.getElementById(containerId);
-      if (!container) return;
-      var titleEl = document.createElement('div'); titleEl.className = 'pwd-tracker-title'; titleEl.textContent = title; container.appendChild(titleEl);
-      var timeline = document.createElement('div'); timeline.className = 'pwd-timeline';
-      steps.forEach(function(s) {
-        var step = document.createElement('div'); step.className = 'pwd-step ' + s.status;
-        var lbl = document.createElement('span'); lbl.className = 'step-label'; lbl.textContent = s.label; step.appendChild(lbl);
-        var dt = document.createElement('div'); dt.className = 'step-date'; dt.textContent = s.date; step.appendChild(dt);
-        timeline.appendChild(step);
-      });
-      container.appendChild(timeline);
-    }
+  const now      = new Date();
+  const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const paid     = !!paidMonths[monthKey];
 
-    renderTracker('pwd-tracker', 'PWD Application', [
-      { label: 'Application submitted', date: 'March 4, 2026', status: 'completed' },
-      { label: 'Application sorted', date: 'Confirmed -- response within 2 months', status: 'current' },
-      { label: 'Decision', date: 'Expected by ~June 2026', status: 'future' },
-      { label: 'Payment adjustment', date: 'Pending', status: 'future' }
-    ]);
+  const handlePaidChange = async (newPaid) => {
+    setPaidMonths(prev=>({...prev,[monthKey]:newPaid?Date.now():null}));
+    try { await fetch('/api/paid-status',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({month:monthKey,paid:newPaid})}); } catch(e){}
+  };
+  const handleLogout = async () => {
+    try { const r=await fetch('/api/logout',{method:'POST',credentials:'same-origin'}); if(r.ok)location.href='/login.html'; } catch(e){}
+  };
 
-    renderTracker('dtc-tracker', 'DTC Application', [
-      { label: 'Application submitted', date: 'April 2026', status: 'completed' },
-      { label: 'CRA processing', date: 'Expected 8-12 weeks', status: 'current' },
-      { label: 'Decision', date: 'Pending', status: 'future' },
-      { label: 'Credit applied retroactively', date: 'Pending', status: 'future' }
-    ]);
+  return (
+    <div style={{width:'100vw',height:'100dvh',overflow:'hidden'}}>
+      <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} pwdApproved={pwdApproved} username={username} onLogout={handleLogout}/>
+    </div>
+  );
+}
 
-    // CRA upcoming payments
-    (function() {
-      var container = document.getElementById('cra-payments');
-      if (!container) return;
-      var payments = [
-        { label: 'GST/HST Credit', date: 'July 4, 2026', amount: 174.50 },
-        { label: 'Canada Carbon Rebate', date: 'July 15, 2026', amount: 122.50 },
-        { label: 'Canada Workers Benefit', date: 'July 11, 2026', amount: 311.75 },
-        { label: 'BC Climate Action Tax Credit', date: 'July 4, 2026', amount: 56.00 }
-      ];
-      var max = Math.max.apply(null, payments.map(function(p) { return p.amount; }));
-      var title = document.createElement('div'); title.className = 'pwd-tracker-title'; title.textContent = 'CRA Benefits'; container.appendChild(title);
-      payments.forEach(function(p) {
-        var row = document.createElement('div');
-        row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:4px 0 2px;';
-        var left = document.createElement('div'); left.style.flex = '1';
-        var lbl = document.createElement('div'); lbl.className = 'step-label'; lbl.textContent = p.label; left.appendChild(lbl);
-        var dt = document.createElement('div'); dt.className = 'step-date'; dt.textContent = p.date; left.appendChild(dt);
-        var amt = document.createElement('span'); amt.style.cssText = 'font-size:14px;font-weight:600;white-space:nowrap;margin-left:12px;'; amt.textContent = '$' + p.amount.toFixed(2);
-        row.appendChild(left); row.appendChild(amt); container.appendChild(row);
-        var barTrack = document.createElement('div');
-        barTrack.style.cssText = 'width:100%;height:3px;background:var(--border);border-radius:1.5px;margin-bottom:8px;';
-        var barFill = document.createElement('div');
-        barFill.style.cssText = 'height:3px;background:#2472b2;border-radius:1.5px;width:' + Math.round((p.amount / max) * 100) + '%;';
-        barTrack.appendChild(barFill); container.appendChild(barTrack);
-      });
-      var note = document.createElement('div');
-      note.style.cssText = 'font-size:11px;color:var(--text-secondary);margin-top:4px;';
-      note.textContent = 'Quarterly estimates. Not all CRA credits shown.';
-      container.appendChild(note);
-    })();
-
-    var PAY_DATES_2026 = { 0:21, 1:25, 2:25, 3:22, 4:27, 5:24, 6:29, 7:26, 8:23, 9:21, 10:18, 11:16 };
-
-    function getPaymentTimeline() {
-      var now = new Date();
-      var thisMonthDay = PAY_DATES_2026[now.getMonth()];
-      var nextPayday;
-      if (thisMonthDay && now <= new Date(now.getFullYear(), now.getMonth(), thisMonthDay)) nextPayday = new Date(now.getFullYear(), now.getMonth(), thisMonthDay);
-      else { var nm = (now.getMonth() + 1) % 12; nextPayday = new Date(nm === 0 ? now.getFullYear() + 1 : now.getFullYear(), nm, PAY_DATES_2026[nm] || 25); }
-      var daysUntil = Math.ceil((nextPayday - now) / 86400000);
-      var paydayLabel = daysUntil === 0 ? 'Today' : daysUntil === 1 ? 'Tomorrow' : daysUntil + ' days';
-      var paydayDate = nextPayday.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-      var reportDeadline = new Date(now.getFullYear(), now.getMonth(), 5);
-      if (now > reportDeadline) reportDeadline = new Date(now.getFullYear(), now.getMonth() + 1, 5);
-      var daysUntilReport = Math.ceil((reportDeadline - now) / 86400000);
-      var reportLabel = daysUntilReport === 0 ? 'Today' : daysUntilReport === 1 ? 'Tomorrow' : daysUntilReport + ' days';
-      return { paydayDate: paydayDate, paydayLabel: paydayLabel, reportDate: reportDeadline.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }), reportLabel: reportLabel, reportUrgent: daysUntilReport <= 3 };
-    }
-
-    function countUpAmount(el, target, duration) {
-      if (!el) return;
-      var start = performance.now();
-      function run(now) {
-        var elapsed = now - start;
-        var p = Math.min(elapsed / duration, 1);
-        var eased = 1 - Math.pow(1 - p, 3);
-        var val = Math.round(target * eased);
-        el.textContent = val.toLocaleString('en-CA');
-        if (p < 1) requestAnimationFrame(run);
-        else el.textContent = Math.round(target).toLocaleString('en-CA');
-      }
-      requestAnimationFrame(run);
-    }
-    function renderDaysBar(daysUntil, urgent) {
-      var cycleDays = 30;
-      var elapsed = cycleDays - Math.min(daysUntil, cycleDays);
-      var pct = Math.max(0, Math.min(100, (elapsed / cycleDays) * 100));
-      var wrap = document.createElement('div'); wrap.className = 'days-bar-wrap' + (urgent ? ' urgent' : '');
-      var track = document.createElement('div'); track.className = 'days-bar-track';
-      var fill = document.createElement('div'); fill.className = 'days-bar-fill'; fill.style.width = pct + '%'; track.appendChild(fill);
-      var dot = document.createElement('div'); dot.className = 'days-bar-dot'; track.appendChild(dot);
-      wrap.appendChild(track);
-      var labels = document.createElement('div'); labels.className = 'days-bar-labels';
-      var left = document.createElement('span'); left.className = 'days-bar-label'; left.textContent = 'last payment';
-      var right = document.createElement('span'); right.className = 'days-bar-label days-bar-label-right'; right.textContent = daysUntil === 0 ? 'today' : daysUntil + 'd away';
-      labels.appendChild(left); labels.appendChild(right); wrap.appendChild(labels);
-      return wrap;
-    }
-
-    var lastPaymentHash = '';
-    var lastPaymentAmount = 0;
-    function renderPaymentCard(target, amount, designation, timeline, isApproximate) {
-      var hash = amount + designation + timeline.paydayLabel;
-      if (hash === lastPaymentHash) return;
-      lastPaymentHash = hash;
-      lastPaymentAmount = parseFloat(amount.replace(/[^0-9.]/g, '')) || 0;
-      var numVal = lastPaymentAmount;
-      var w = document.createElement('div');
-      var amountWrap = document.createElement('div'); amountWrap.className = 'payment-amount-wrap'; amountWrap.id = 'payment-amount-wrap';
-      var dollarSpan = document.createElement('span'); dollarSpan.className = 'payment-dollar'; dollarSpan.textContent = '$'; amountWrap.appendChild(dollarSpan);
-      var numSpan = document.createElement('span'); numSpan.className = 'payment-number'; numSpan.id = 'payment-number-val'; numSpan.textContent = '0'; amountWrap.appendChild(numSpan);
-      w.appendChild(amountWrap);
-      var desigEl = document.createElement('div'); desigEl.className = 'payment-designation'; desigEl.textContent = designation + (isApproximate ? ' (est.)' : ''); w.appendChild(desigEl);
-      var daysUntilNum = (timeline.paydayLabel === 'Today' ? 0 : timeline.paydayLabel === 'Tomorrow' ? 1 : parseInt(timeline.paydayLabel) || 99);
-      var paydayUrgent = daysUntilNum <= 3;
-      var meta = document.createElement('div'); meta.className = 'payment-meta';
-      function metaRow(text, countdown, cls, withDot) { var row = document.createElement('div'); row.className = 'payment-meta-row' + (cls ? ' ' + cls : ''); if (withDot) { var dot = document.createElement('span'); dot.className = 'urgent-dot'; dot.style.marginRight = '4px'; row.appendChild(dot); } var span = document.createElement('span'); span.textContent = text; row.appendChild(span); var badge = document.createElement('span'); badge.className = 'countdown'; badge.textContent = countdown; row.appendChild(badge); return row; }
-      meta.appendChild(metaRow(timeline.paydayDate, timeline.paydayLabel, paydayUrgent ? 'urgent' : '', paydayUrgent));
-      meta.appendChild(metaRow('Report ' + timeline.reportDate, timeline.reportLabel, timeline.reportUrgent ? 'urgent' : ''));
-      var cdRow = document.createElement('div'); cdRow.className = 'payment-meta-row';
-      var cdLabel = document.createElement('span'); cdLabel.textContent = 'Countdown'; cdRow.appendChild(cdLabel);
-      var cdVal = document.createElement('span'); cdVal.className = 'countdown'; cdVal.id = 'live-countdown-val'; cdVal.style.fontVariantNumeric = 'tabular-nums'; cdVal.textContent = '--'; cdRow.appendChild(cdVal);
-      meta.appendChild(cdRow);
-      var erRow = document.createElement('div'); erRow.className = 'payment-meta-row';
-      var erLabel = document.createElement('span'); erLabel.textContent = 'Earning'; erRow.appendChild(erLabel);
-      var erVal = document.createElement('span'); erVal.className = 'countdown'; erVal.id = 'earnings-rate-val'; erVal.textContent = '--'; erRow.appendChild(erVal);
-      meta.appendChild(erRow);
-      w.appendChild(meta);
-      w.appendChild(renderDaysBar(daysUntilNum, paydayUrgent));
-      var checkRow = document.createElement('div'); checkRow.className = 'check-row';
-      var paidLabel = document.createElement('label'); paidLabel.className = 'paid-check'; paidLabel.id = 'paid-check';
-      var cb = document.createElement('input'); cb.type = 'checkbox'; cb.id = 'paid-cb'; cb.addEventListener('change', togglePaid); paidLabel.appendChild(cb);
-      var paidSpan = document.createElement('span'); paidSpan.id = 'paid-label'; paidSpan.textContent = 'Paid yet?'; paidLabel.appendChild(paidSpan); checkRow.appendChild(paidLabel);
-      var undo = document.createElement('button'); undo.className = 'undo-paid'; undo.id = 'undo-paid-btn'; undo.textContent = 'Undo'; undo.style.display = 'none'; undo.onclick = function(e) { e.stopPropagation(); cb.checked = false; togglePaid(); }; checkRow.appendChild(undo);
-      var reportLbl = document.createElement('label'); reportLbl.className = 'paid-check'; reportLbl.id = 'report-check';
-      var rcb = document.createElement('input'); rcb.type = 'checkbox'; rcb.id = 'report-cb'; rcb.addEventListener('change', toggleReport); reportLbl.appendChild(rcb);
-      var reportSpan = document.createElement('span'); reportSpan.id = 'report-label'; reportSpan.textContent = 'Report filled out?'; reportLbl.appendChild(reportSpan); checkRow.appendChild(reportLbl);
-      var reportUndo = document.createElement('button'); reportUndo.className = 'undo-paid'; reportUndo.id = 'undo-report-btn'; reportUndo.textContent = 'Undo'; reportUndo.style.display = 'none'; reportUndo.onclick = function(e) { e.stopPropagation(); rcb.checked = false; toggleReport(); }; checkRow.appendChild(reportUndo);
-      w.appendChild(checkRow);
-      target.textContent = '';
-      target.appendChild(w);
-      if (numVal > 0) countUpAmount(document.getElementById('payment-number-val'), numVal, 600);
-      loadPaidStatus(); loadReportStatus();
-    }
-
-    var calendarMonthOffset = 0;
-    function renderCalendar(monthOffset) {
-      if (typeof monthOffset === 'number') calendarMonthOffset = monthOffset;
-      var el = document.getElementById('payment-calendar'); if (!el) return;
-      var now = new Date(); var td = new Date(now.getFullYear(), now.getMonth() + calendarMonthOffset, 1);
-      var year = td.getFullYear(); var month = td.getMonth(); var isCurrent = (calendarMonthOffset === 0); var today = isCurrent ? now.getDate() : -1;
-      var payDay = PAY_DATES_2026[month] || 25;
-      el.textContent = '';
-      var title = document.createElement('div'); title.className = 'calendar-title'; title.textContent = new Date(year, month).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }); el.appendChild(title);
-      var grid = document.createElement('div'); grid.className = 'calendar-grid';
-      ['S','M','T','W','T','F','S'].forEach(function(h) { var hdr = document.createElement('div'); hdr.className = 'calendar-header'; hdr.textContent = h; grid.appendChild(hdr); });
-      var firstDay = new Date(year, month, 1).getDay(); var daysInMonth = new Date(year, month + 1, 0).getDate();
-      for (var i = 0; i < firstDay; i++) { var empty = document.createElement('div'); empty.className = 'calendar-day empty'; grid.appendChild(empty); }
-      for (var d = 1; d <= daysInMonth; d++) { var cell = document.createElement('div'); var cls = 'calendar-day'; if (d === payDay) cls += ' payment-day'; else if (d === today) cls += ' today'; if (isCurrent && d < today && d !== payDay) cls += ' past'; cell.className = cls; cell.textContent = d; grid.appendChild(cell); }
-      el.appendChild(grid);
-    }
-
-    function getCurrentPaymentMonth() { var now = new Date(); var d = PAY_DATES_2026[now.getMonth()]; if (d && now <= new Date(now.getFullYear(), now.getMonth(), d)) return now.toISOString().slice(0, 7); return new Date(now.getFullYear(), now.getMonth() + 1, 1).toISOString().slice(0, 7); }
-    function getCurrentReportMonth() { var now = new Date(); var dl = new Date(now.getFullYear(), now.getMonth(), 5); if (now > dl) dl = new Date(now.getFullYear(), now.getMonth() + 1, 5); return dl.toISOString().slice(0, 7); }
-
-    async function loadPaidStatus() {
-      try {
-        var resp = await fetch('/api/paid-status', { credentials: 'include' }); if (!resp.ok) return;
-        var data = await resp.json(); var pm = data.paidMonths || {}; var month = getCurrentPaymentMonth(); var ts = pm[month]; var isPaid = !!ts;
-        var cb = document.getElementById('paid-cb'); var label = document.getElementById('paid-label'); var wrap = document.getElementById('paid-check'); if (!cb) return;
-        cb.checked = isPaid; var undoBtn = document.getElementById('undo-paid-btn');
-        var amountWrapEl = document.getElementById('payment-amount-wrap');
-        if (isPaid) { var d = new Date(ts); label.textContent = 'Paid (' + d.toLocaleDateString('en-US', { month: 'short' }) + ')'; wrap.classList.add('checked'); renderCalendar(1); if (undoBtn) undoBtn.style.display = 'inline-flex'; if (amountWrapEl) amountWrapEl.style.opacity = '0.35'; }
-        else { label.textContent = 'Paid yet?'; wrap.classList.remove('checked'); if (undoBtn) undoBtn.style.display = 'none'; renderCalendar(0); if (amountWrapEl) amountWrapEl.style.opacity = '1'; }
-      } catch (_) {}
-    }
-
-    async function togglePaid() {
-      var cb = document.getElementById('paid-cb');
-      try { var resp = await fetch('/api/paid-status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify({ month: getCurrentPaymentMonth(), paid: cb.checked }) }); if (resp.ok) loadPaidStatus(); } catch (_) {}
-    }
-
-    async function loadReportStatus() {
-      try {
-        var resp = await fetch('/api/report-status', { credentials: 'include' }); if (!resp.ok) return;
-        var data = await resp.json(); var rm = data.reportMonths || {}; var month = getCurrentReportMonth(); var ts = rm[month]; var isFiled = !!ts;
-        var cb = document.getElementById('report-cb'); var label = document.getElementById('report-label'); var wrap = document.getElementById('report-check'); if (!cb) return;
-        cb.checked = isFiled; var undoBtn = document.getElementById('undo-report-btn');
-        if (isFiled) { var d = new Date(ts); label.textContent = 'Filed (' + d.toLocaleDateString('en-US', { month: 'short' }) + ')'; wrap.classList.add('checked'); if (undoBtn) undoBtn.style.display = 'inline-flex'; }
-        else { label.textContent = 'Report filled out?'; wrap.classList.remove('checked'); if (undoBtn) undoBtn.style.display = 'none'; }
-      } catch (_) {}
-    }
-
-    async function toggleReport() {
-      var cb = document.getElementById('report-cb');
-      try { var resp = await fetch('/api/report-status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify({ month: getCurrentReportMonth(), filed: cb.checked }) }); if (resp.ok) loadReportStatus(); } catch (_) {}
-    }
-
-    async function loadSubmitCreds() { try { var r = await fetch('/api/submit-creds'); if (!r.ok) return; var c = await r.json(); if (c.sin) document.getElementById('submit-sin').value = c.sin; if (c.phone) document.getElementById('submit-phone').value = c.phone; if (c.pin) document.getElementById('submit-pin').value = c.pin; } catch (_) {} }
-    loadSubmitCreds();
-
-    async function submitReport(dryRun) {
-      var sin = document.getElementById('submit-sin').value.trim(); var phone = document.getElementById('submit-phone').value.trim(); var pin = document.getElementById('submit-pin').value.trim();
-      var statusEl = document.getElementById('submit-status'); var btnP = document.getElementById('btn-preview'); var btnS = document.getElementById('btn-submit');
-      if (!sin || !phone || !pin) { statusEl.style.display = 'block'; statusEl.style.background = 'rgba(255,59,48,0.1)'; statusEl.style.color = 'var(--error)'; statusEl.textContent = 'SIN, phone, and PIN are all required.'; return; }
-      if (!dryRun && !confirm('Submit your monthly report? This cannot be undone.')) return;
-      btnP.disabled = true; btnS.disabled = true; statusEl.style.display = 'block'; statusEl.style.background = 'var(--bg-secondary)'; statusEl.style.color = 'var(--text-secondary)';
-      statusEl.textContent = dryRun ? 'Running preview -- takes 1-2 min...' : 'Submitting -- takes 1-2 min...';
-      var controller = new AbortController();
-      var timer = setTimeout(function() { controller.abort(); }, 290000);
-      try {
-        var resp = await fetch('/api/submit-report', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sin: sin, phone: phone, pin: pin, dryRun: dryRun }), signal: controller.signal });
-        clearTimeout(timer);
-        var result = await resp.json();
-        if (result.success) {
-          statusEl.style.background = 'rgba(52,199,89,0.1)'; statusEl.style.color = 'var(--success)';
-          if (result.dryRun) {
-            var summary = 'Preview complete -- ready to submit.';
-            var s = result.preSubmitState;
-            if (s && s.fields && s.fields.length) {
-              var sinField = s.fields.find(function(f) { return f.name && f.name.toLowerCase().includes('sin'); });
-              var phoneField = s.fields.find(function(f) { return f.type === 'tel' || (f.name && f.name.toLowerCase().includes('phone')); });
-              var parts = [];
-              if (sinField && sinField.value) parts.push('SIN ending ' + String(sinField.value).slice(-3));
-              if (phoneField && phoneField.value) parts.push('Phone ' + phoneField.value);
-              if (parts.length) summary += ' (' + parts.join(', ') + ')';
-            }
-            statusEl.textContent = summary;
-          } else { statusEl.textContent = 'Report submitted.'; }
-        } else { statusEl.style.background = 'rgba(255,59,48,0.1)'; statusEl.style.color = 'var(--error)'; statusEl.textContent = result.error || 'Failed'; }
-      } catch (err) {
-        clearTimeout(timer);
-        statusEl.style.background = 'rgba(255,59,48,0.1)'; statusEl.style.color = 'var(--error)';
-        statusEl.textContent = err.name === 'AbortError' ? 'Timed out. BC Self-Serve can be slow -- try again.' : 'Network error. Check your connection and try again.';
-      }
-      finally { btnP.disabled = false; btnS.disabled = false; }
-    }
-
-    function filterNavItems(items) {
-      var skip = ['Skip to main content','Skip to navigation','Accessibility Statement','Notifications','Service Requests','Monthly Reports','Payment Info','Employment Plans','Account Info','Terms of Use','Accessibility','Due to inactivity'];
-      return items.filter(function(item) { return !skip.some(function(s) { return item.includes(s); }); });
-    }
-    function setOfflineBanner(v) { var el = document.getElementById('offline-banner'); if (el) el.style.display = v ? 'block' : 'none'; }
-    function getDesignationFromText(raw, fallback) { var n = (raw || '').toLowerCase(); if (n.includes('pwd') || n.includes('disability assistance')) return 'PWD'; if (n.includes('income assistance')) return 'Income Assistance'; return fallback ? 'PWD' : 'Income Assistance'; }
-    function getFallbackIncomeAmount(d) { return d === 'PWD' ? '~$1,500-1,700/mo' : '~$1,000/mo'; }
-
-    var lastMsgContent = ''; var lastMsgRendered = ''; var lastNotifContent = ''; var msgsRead = false; var notifsRead = false;
-    var readMsgHash = localStorage.getItem('tally-msg-read-hash'); var readNotifHash = localStorage.getItem('tally-notif-read-hash');
-    function simpleHash(str) { var h = 0; for (var i = 0; i < str.length; i++) h = ((h << 5) - h + str.charCodeAt(i)) | 0; return String(h); }
-
-    var isLoadingData = false; var dataLoaded = false; var autoCheckAttempted = false; var pwdApprovedFallback = false;
-
-    async function loadData() {
-      if (isLoadingData) return; isLoadingData = true;
-      try {
-        var response = await fetch('/api/latest', { credentials: 'include' });
-        if (!response.ok) {
-          if (!navigator.onLine) setOfflineBanner(true);
-          if (response.status === 404 && !autoCheckAttempted) { autoCheckAttempted = true; showWaitingForData(); await runCheck(true); isLoadingData = false; return; }
-          showNoData(''); isLoadingData = false; return;
-        }
-        var result = await response.json();
-        pwdApprovedFallback = !!(result && result.uiConfig && result.uiConfig.pwdApproved);
-        setOfflineBanner(false);
-        var data = result.data;
-        if (!data || !data.sections) { showWaitingForData(); isLoadingData = false; return; }
-        dataLoaded = true;
-        document.getElementById('bceid-login-prompt').style.display = 'none';
-        isLoadingData = false;
-        var sections = data.sections;
-        var messages = filterNavItems((sections.Messages && sections.Messages.allText) || []);
-        var notifications = filterNavItems((sections.Notifications && sections.Notifications.allText) || []);
-
-        var msgContent = JSON.stringify(messages);
-        if (msgContent !== lastMsgContent) { lastMsgContent = msgContent; msgsRead = (readMsgHash === simpleHash(msgContent)); }
-        var badge = document.getElementById('bottom-msg-badge');
-        if (badge) { if (messages.length > 0 && !msgsRead) { badge.textContent = messages.length; badge.style.display = ''; } else badge.style.display = 'none'; }
-
-        if (msgContent !== lastMsgRendered) {
-          lastMsgRendered = msgContent;
-          var msgList = document.getElementById('messages-full-list');
-          if (msgList) {
-            msgList.textContent = '';
-            if (messages.length === 0) { var empty = document.createElement('div'); empty.className = 'message-empty'; empty.textContent = 'No messages'; msgList.appendChild(empty); }
-            else messages.forEach(function(msg) {
-              var card = document.createElement('div'); card.className = 'message-card';
-              var dateMatch = msg.match(/^(\d{4})\s*\/\s*([A-Z]{3})\s*\/\s*(\d{2})\s+(.*)/);
-              var titleEl = document.createElement('div'); titleEl.className = 'message-card-text';
-              if (dateMatch) { titleEl.textContent = dateMatch[4]; var meta = document.createElement('div'); meta.className = 'message-card-meta'; meta.textContent = dateMatch[2].charAt(0) + dateMatch[2].slice(1).toLowerCase() + ' ' + parseInt(dateMatch[3]) + ', ' + dateMatch[1]; card.appendChild(titleEl); card.appendChild(meta); }
-              else { titleEl.textContent = msg; card.appendChild(titleEl); }
-              msgList.appendChild(card);
-            });
-          }
-        }
-
-        var notifContent = JSON.stringify(notifications);
-        if (notifContent !== lastNotifContent) { lastNotifContent = notifContent; notifsRead = (readNotifHash === simpleHash(notifContent)); }
-        var notifList = document.getElementById('notifications-full-list');
-        if (notifList) {
-          notifList.textContent = '';
-          if (notifications.length === 0) { var e = document.createElement('div'); e.className = 'message-empty'; e.textContent = 'No notifications'; notifList.appendChild(e); }
-          else notifications.forEach(function(n) { var c = document.createElement('div'); c.className = 'message-card'; var t = document.createElement('div'); t.className = 'message-card-text'; t.textContent = n; c.appendChild(t); notifList.appendChild(c); });
-        }
-
-        var paymentInfo = document.getElementById('payment-info');
-        var ps = sections['Payment Info'] || {}; var pd = ps.tableData || []; var pa = ps.allText || [];
-        var raw = pd.concat(pa).join('\n');
-        var designation = getDesignationFromText(raw, pwdApprovedFallback);
-        var timeline = getPaymentTimeline();
-        if (pd.length > 0) {
-          var totalAmount = (raw.match(/Amount:\s*(\$[\d,]+\.\d{2})/) || [])[1] || '';
-          var paidTo = (raw.match(/Paid to:\s*([^|]+)/) || [])[1] || '';
-          if (paidTo && document.getElementById('nav-username').dataset.fallback === 'true') setNavUsername(paidTo.trim().toLowerCase().replace(/\b\w/g, function(c) { return c.toUpperCase(); }), true);
-          if (totalAmount) renderPaymentCard(paymentInfo, totalAmount, designation, timeline, false);
-          else renderPaymentCard(paymentInfo, getFallbackIncomeAmount(designation), designation, timeline, true);
-        } else renderPaymentCard(paymentInfo, getFallbackIncomeAmount(pwdApprovedFallback ? 'PWD' : 'Income Assistance'), pwdApprovedFallback ? 'PWD' : 'Income Assistance', timeline, true);
-
-        var mrSection = sections['Monthly Reports']; var mrStatus = document.getElementById('mr-status');
-        if (mrSection && mrSection.success) {
-          var statuses = mrSection.statuses || [];
-          if (statuses.some(function(s) { return s.toLowerCase().includes('overdue'); })) { mrStatus.textContent = 'Overdue'; mrStatus.className = 'status status-error'; }
-          else if (statuses.some(function(s) { return s.toLowerCase().includes('pending') || s.toLowerCase().includes('not submitted'); })) { mrStatus.textContent = 'Pending'; mrStatus.className = 'status status-warning'; }
-          else if (statuses.some(function(s) { return s.toLowerCase().includes('submitted'); })) { mrStatus.textContent = 'Submitted'; mrStatus.className = 'status status-success'; }
-        }
-      } catch (err) { console.error(err); if (!navigator.onLine) setOfflineBanner(true); showNoData('Data unavailable'); isLoadingData = false; }
-    }
-
-    function showWaitingForData() { var el = document.getElementById('payment-info'); if (el) { el.textContent = ''; var d = document.createElement('div'); d.className = 'loading'; var s = document.createElement('div'); s.className = 'spinner'; d.appendChild(s); d.appendChild(document.createTextNode('Scraping BC Self-Serve...')); el.appendChild(d); } }
-    function showNoData(reason) { var el = document.getElementById('payment-info'); if (el) { el.textContent = ''; var d = document.createElement('div'); d.style.cssText = 'padding:20px;text-align:center;color:var(--text-secondary)'; d.textContent = 'No data yet.' + (reason ? ' ' + reason : ''); el.appendChild(d); } }
-
-    async function runCheck(silent) { try { var r = await fetch('/api/check', { credentials: 'include' }); if (r.ok) await loadData(); } catch (e) { showNoData(e.message); } }
-
-    function setNavUsername(label, isFallback) { var el = document.getElementById('nav-username'); el.textContent = label; el.style.opacity = isFallback ? '0.7' : '1'; el.dataset.fallback = isFallback ? 'true' : 'false'; }
-
-    async function loadCurrentUser(attempt) {
-      attempt = attempt || 1;
-      try { var r = await fetch('/api/me', { credentials: 'include' }); if (!r.ok) { setNavUsername('Guest', true); return; } var d = await r.json(); if (!d || !d.authenticated) { setNavUsername('Guest', true); return; } var u = (d.username || '').trim(); setNavUsername(u || 'Account', !u); }
-      catch (e) { if (attempt < 2) { await new Promise(function(r) { setTimeout(r, 600); }); return loadCurrentUser(2); } setNavUsername('Session issue', true); }
-    }
-
-    async function saveBCeIDAndScrape() {
-      var user = document.getElementById('bceid-user').value.trim(); var pass = document.getElementById('bceid-pass').value;
-      var errorEl = document.getElementById('bceid-error'); var btn = document.getElementById('bceid-login-btn');
-      if (!user || !pass) { errorEl.textContent = 'Both fields required'; errorEl.style.display = 'block'; return; }
-      errorEl.style.display = 'none'; btn.textContent = 'Connecting...'; btn.disabled = true;
-      localStorage.setItem('bceid_user', user);
-      try {
-        await fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ password: 'hunter2', bceid_username: user, bceid_password: pass }) });
-        document.getElementById('bceid-login-prompt').style.display = 'none'; showWaitingForData();
-        var cr = await fetch('/api/check'); if (cr.ok) await loadData(); else { errorEl.textContent = 'Scrape failed'; errorEl.style.display = 'block'; document.getElementById('bceid-login-prompt').style.display = 'block'; }
-      } catch (err) { errorEl.textContent = 'Connection failed'; errorEl.style.display = 'block'; }
-      btn.textContent = 'Connect & Scrape'; btn.disabled = false;
-    }
-
-    function getNextPaydayDate() {
-      var now = new Date(); var d = PAY_DATES_2026[now.getMonth()];
-      var next; if (d && now <= new Date(now.getFullYear(), now.getMonth(), d)) { next = new Date(now.getFullYear(), now.getMonth(), d); } else { var nm = (now.getMonth() + 1) % 12; next = new Date(nm === 0 ? now.getFullYear() + 1 : now.getFullYear(), nm, PAY_DATES_2026[nm] || 25); }
-      next.setHours(0, 0, 0, 0); return next;
-    }
-    function updateLiveCountdown() {
-      var now = new Date(); var next = getNextPaydayDate(); var totalSec = Math.max(0, Math.floor((next - now) / 1000));
-      var days = Math.floor(totalSec / 86400); var hrs = Math.floor((totalSec % 86400) / 3600); var mins = Math.floor((totalSec % 3600) / 60); var secs = totalSec % 60;
-      var str = (days > 0 ? days + 'd ' : '') + String(hrs).padStart(2,'0') + ':' + String(mins).padStart(2,'0') + ':' + String(secs).padStart(2,'0');
-      var cdEl = document.getElementById('live-countdown-val'); if (cdEl) cdEl.textContent = str;
-      var erEl = document.getElementById('earnings-rate-val');
-      if (erEl && lastPaymentAmount > 0 && totalSec > 0) { var rate = lastPaymentAmount / (totalSec / 3600); erEl.textContent = '$' + rate.toFixed(2) + '/hr'; }
-    }
-
-    loadCurrentUser(); loadData();
-    function visibilityInterval(fn, ms) { var id = setInterval(fn, ms); document.addEventListener('visibilitychange', function() { if (document.hidden) { clearInterval(id); id = null; } else { fn(); id = setInterval(fn, ms); } }); }
-    visibilityInterval(loadData, 120000); visibilityInterval(loadCurrentUser, 120000);
-    visibilityInterval(updateLiveCountdown, 1000);
-    window.addEventListener('online', function() { setOfflineBanner(false); });
-    if ('serviceWorker' in navigator) window.addEventListener('load', function() { navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function(e) { console.error(e); }); });
-  </script>
+ReactDOM.createRoot(document.body.appendChild(Object.assign(document.createElement('div'),{style:'width:100%;height:100%'}))).render(<App/>);
+</script>
 </body>
 </html>
