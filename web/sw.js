@@ -1,17 +1,8 @@
-const STATIC_CACHE = 'tally-static-v2';
+const STATIC_CACHE = 'tally-static-v3';
 const API_CACHE = 'tally-api-v2';
 
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
   '/landing.html',
-  '/login.html',
-  '/unified.html',
-  '/dashboard.html',
-  '/benefits.html',
-
-  '/dca.html',
-  '/screen.html',
   '/manifest.json',
   '/design-tokens.css',
   '/css/styles.css',
@@ -43,9 +34,9 @@ function isStaticAssetRequest(url, request) {
   if (request.method !== 'GET') return false;
   if (url.origin !== self.location.origin) return false;
   if (url.pathname.startsWith('/api/')) return false;
-  if (url.pathname === '/' || url.pathname === '/app') return true;
-
-  return /\.(html|css|js|svg|png|jpg|jpeg|webp|ico|json)$/i.test(url.pathname);
+  // Never cache auth-gated pages or HTML navigations
+  if (url.pathname === '/app') return false;
+  return /\.(css|js|svg|png|jpg|jpeg|webp|ico|json)$/i.test(url.pathname);
 }
 
 async function cacheFirst(request) {
@@ -58,6 +49,19 @@ async function cacheFirst(request) {
     cache.put(request, response.clone());
   }
   return response;
+}
+
+async function networkFirstNavigate(request) {
+  try {
+    return await fetch(request);
+  } catch (_) {
+    const cached = await caches.match('/landing.html');
+    if (cached) return cached;
+    return new Response('Offline — please reconnect and reload.', {
+      status: 503,
+      headers: { 'Content-Type': 'text/plain' }
+    });
+  }
 }
 
 async function networkFirstApi(request) {
@@ -95,6 +99,12 @@ self.addEventListener('fetch', (event) => {
 
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(networkFirstApi(event.request));
+    return;
+  }
+
+  // All HTML navigations go network-first — never serve stale auth-gated pages
+  if (event.request.mode === 'navigate') {
+    event.respondWith(networkFirstNavigate(event.request));
     return;
   }
 

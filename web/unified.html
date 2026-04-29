@@ -24,9 +24,27 @@
   </style>
 </head>
 <body>
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<div id="root" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:-apple-system,sans-serif;color:#737373;font-size:0.9rem;">Loading...</div>
+<script>
+function _tallyScriptError() {
+  var r = document.getElementById('root');
+  if (!r) return;
+  r.style.flexDirection = 'column';
+  r.style.gap = '1rem';
+  var msg = document.createElement('div');
+  msg.textContent = 'Failed to load. Please retry.';
+  var btn = document.createElement('button');
+  btn.textContent = 'Reload';
+  btn.style.cssText = 'padding:0.5rem 1.25rem;border:1px solid #e5e5e5;border-radius:6px;background:#fff;cursor:pointer;font-size:0.875rem;';
+  btn.onclick = function() { location.reload(); };
+  r.textContent = '';
+  r.appendChild(msg);
+  r.appendChild(btn);
+}
+</script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous" onerror="_tallyScriptError()"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous" onerror="_tallyScriptError()"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous" onerror="_tallyScriptError()"></script>
 <script type="text/babel">
 const { useState, useEffect, useRef, useCallback } = React;
 
@@ -424,7 +442,23 @@ function App() {
   );
 }
 
-ReactDOM.createRoot(document.body.appendChild(Object.assign(document.createElement('div'),{style:'width:100%;height:100%'}))).render(<App/>);
+class ErrorBoundary extends React.Component {
+  constructor(props) { super(props); this.state = { error: null }; }
+  static getDerivedStateFromError(e) { return { error: e }; }
+  render() {
+    if (this.state.error) {
+      return React.createElement('div', {style:{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',height:'100dvh',gap:'1rem',fontFamily:'-apple-system,sans-serif',color:'#737373',fontSize:'0.9rem'}},
+        React.createElement('div', null, 'Something went wrong. Please reload.'),
+        React.createElement('button', {onClick:()=>location.reload(),style:{padding:'0.5rem 1.25rem',border:'1px solid #e5e5e5',borderRadius:'6px',background:'#fff',cursor:'pointer',fontSize:'0.875rem'}}, 'Reload')
+      );
+    }
+    return this.props.children;
+  }
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  React.createElement(ErrorBoundary, null, React.createElement(App))
+);
 </script>
 </body>
 </html>

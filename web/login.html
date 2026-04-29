@@ -301,7 +301,11 @@
     (async () => {
       try {
         const res = await fetch('/api/session-check');
-        if (res.ok) window.location.href = '/app';
+        if (res.ok) {
+          successMsg.textContent = 'Resuming session...';
+          successMsg.style.display = 'block';
+          window.location.href = '/app';
+        }
       } catch {}
     })();
 

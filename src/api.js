@@ -918,6 +918,7 @@ app.get('/app', async (req, res) => {
   if (!req.session || !req.session.authenticated) {
     return res.redirect('/login.html');
   }
+  res.setHeader('Cache-Control', 'no-store');
   res.sendFile(path.join(__dirname, '../web/unified.html'));
 });
 
