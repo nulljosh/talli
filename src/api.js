@@ -452,7 +452,7 @@ app.use((req, res, next) => {
 });
 
 // Security headers (precomputed at startup)
-const CSP_HEADER = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://myselfserve.gov.bc.ca; frame-ancestors 'none'";
+const CSP_HEADER = "default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://myselfserve.gov.bc.ca; frame-ancestors 'none'";
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
