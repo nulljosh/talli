@@ -2,9 +2,10 @@
 
 ## Rules
 - No emojis anywhere
-- Monochrome aesthetic cloned from heyitsmejosh.com portfolio
-- Color: Light (#ffffff/#171717/#737373/#e5e5e5), Dark (#0a0a0a/#fafafa/#a3a3a3/#262626)
-- System font stack only -- no Google Fonts
+- Warm parchment aesthetic: Light (#faf7f4 bg / #1a1612 text), Dark (#0d0c0b bg / #f2ede8 text)
+- Accent: #FF851B (clrs.cc orange)
+- Font: Space Grotesk (Google Fonts) + system fallback
+- 430px max-width shell centered on desktop
 - 640px max-width, single-column, text-first
 - Theme toggle: sun/moon SVG, View Transitions API, `[data-theme="dark"]`
 - No glass morphism, no noise texture, no gradients -- solid colors only
@@ -28,6 +29,7 @@ npm run upload-blob # upload to Vercel Blob
 - `tools/dtc_apply.py` -- T2201/DTC helper
 
 ## Changelog
+- v3.1.0: New design from claude.ai/design. Space Grotesk, warm parchment palette, #FF851B orange accent. HomeTab: streak badge, YTD stats, bar chart. CalendarTab: payment card + upcoming schedule. StatusTab: benefits summary badge. MessagesTab: initials avatars + unread hierarchy. Desktop: 430px centered shell. PAY_SCHEDULE fallback prevents stale scrape dates showing "today". Messages spam filter blocks BC accessibility boilerplate.
 - v3.0.0: Enormous UI/UX simplification. Dashboard: income-centered with PWD timeline, 3 bottom tabs (Reports, Benefits, Messages). Deleted: DTC Navigator, CRA workspace, RDSP guide, Dispute analyzer, Contacts, Settings. Removed web/dashboard.html, web/benefits.html, web/dispute.html, js/dtc.js, js/dispute.js, js/legal.js. iOS: 4-tab layout, simplified BenefitsView, removed 9 view/model files. macOS: removed Settings sidebar section.
 - v2.7.1: Month check-off with undo, dark mode auto-detect, compact UI. macOS companion app + WidgetKit widgets. watchOS companion (payment countdown, benefits, messages).
 - v2.6.0: Persistent paid status (Vercel Blob per account, survives session expiry). Message read state tracked server-side. Generic loadUserBlob/saveUserBlob helpers. iOS paid toggle + unread badge. Concurrent async loads.

@@ -2,22 +2,27 @@
 
 # Tally
 
-![version](https://img.shields.io/badge/version-v3.0.0-blue)
+![version](https://img.shields.io/badge/version-v3.1.0-orange)
+
+BC Self-Serve scraper and benefits dashboard. Tracks income, payment dates, PWD application status, and government messages.
 
 ## Features
 
 - BC Self-Serve scraper with session-encrypted credentials
-- Income tracking, payment dates, DTC navigator
-- General benefits guide (grocery rebate, GST/HST, climate credit, CWB, CCB, SAFER, PharmaCare)
-- CRA workspace -- tax-year tasks, slips/notices checklist, T2201 draft generation
-- PWA with offline mode
-- iOS companion app with native benefits guide
+- 4-tab dashboard: Home, Calendar, Status, Messages
+- Income tracking with payment date countdown and streak
+- Bar chart of recent payments + YTD stats
+- PWD application timeline tracker
+- Calendar view with upcoming payment schedule
+- Messages from BC Self-Serve (spam-filtered)
 - Persistent paid status and message read state (Vercel Blob)
-- Month check-off with undo
 - Dark mode auto-detect
-- Compact UI layout
-- macOS companion app + WidgetKit widgets
-- watchOS companion (payment countdown, benefits, messages)
+- PWA with offline mode
+- iOS companion app
+
+## Design
+
+Space Grotesk font, warm parchment palette (`#faf7f4` light / `#0d0c0b` dark), clrs.cc orange (`#FF851B`) accent. 430px centered shell on desktop.
 
 ## Run
 
@@ -27,15 +32,7 @@ npm install && npm start
 
 Open http://localhost:3000. Copy `.env.example` to `.env`.
 
-Deploy: Vercel (Puppeteer via `@sparticuz/chromium`, Blob cache for scrape results).
-
-## Roadmap
-
-- [ ] Payment history chart (sparkline/bar)
-- [ ] PWD approval status tracker
-- [ ] CRA phase 2 (T4/T5 slip import)
-- [ ] Document vault (encrypted Blob storage)
-- [ ] Multi-province support
+Deploy: `cd apps/tally && npx vercel --prod`
 
 ## License
 

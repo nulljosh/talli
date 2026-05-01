@@ -87,6 +87,24 @@ function visibilityInterval(fn, ms) {
 
 const MON = {JAN:0,FEB:1,MAR:2,APR:3,MAY:4,JUN:5,JUL:6,AUG:7,SEP:8,OCT:9,NOV:10,DEC:11};
 
+// Known BC pay dates — fallback when scraper returns a stale past date
+const PAY_SCHEDULE = {
+  2026:{0:21,1:25,2:25,3:23,4:27,5:25,6:23,7:26,8:24,9:28,10:25,11:16}
+};
+function nextScheduledPayDate(from) {
+  const now = new Date(); now.setHours(0,0,0,0);
+  let y = from.getFullYear(), m = from.getMonth();
+  for (let i = 0; i < 24; i++) {
+    const sched = PAY_SCHEDULE[y];
+    if (sched && sched[m] != null) {
+      const d = new Date(y, m, sched[m]);
+      if (d >= now) return d;
+    }
+    m++; if (m > 11) { m = 0; y++; }
+  }
+  return new Date(from.getFullYear(), from.getMonth() + 1, from.getDate());
+}
+
 function parseMsgDate(str) {
   const m = str.match(/(\d{4})\s*\/\s*([A-Z]{3})\s*\/\s*(\d{2})/);
   if (!m) return '';
@@ -94,10 +112,11 @@ function parseMsgDate(str) {
 }
 
 function parseMessages(sections) {
-  const SPAM = new Set(['Home','Payment Info','Messages','Notifications','Service Requests','Monthly Reports','Sign out','Profile','Back','Print','Help']);
+  const SPAM = new Set(['Home','Payment Info','Messages','Notifications','Service Requests','Monthly Reports','Sign out','Profile','Back','Print','Help','My Self Serve']);
+  const SPAM_RX = /^skip to|inactiv|logged out|javascript|^my self serve$|^service canada$/i;
   const DATE_RE = /\d{4}\s*\/\s*[A-Z]{3}\s*\/\s*\d{2}/;
   const combined = [...(sections['Messages']?.allText||[]), ...(sections['Notifications']?.allText||[])]
-    .filter(t => t && t.trim().length > 3 && !SPAM.has(t.trim()));
+    .filter(t => t && t.trim().length > 8 && !SPAM.has(t.trim()) && !SPAM_RX.test(t.trim()));
   const msgs = []; let cur = null;
   combined.forEach((line, i) => {
     if (DATE_RE.test(line)) { if (cur) { cur.date = parseMsgDate(line); msgs.push(cur); cur = null; } }
@@ -597,15 +616,18 @@ function App() {
       if (amtMatch) setAmount(amtMatch[1]);
       else setAmount(prev => prev ?? '$1,700');
       const dm = raw.match(/(\d{4})\s*\/\s*([A-Z]{3})\s*\/\s*(\d{2})/);
+      const _now = new Date(); _now.setHours(0,0,0,0);
+      let payDate;
       if (dm) {
-        const d = new Date(+dm[1], MON[dm[2]], +dm[3]);
-        setPayDateObj(d);
-        const now = new Date(); now.setHours(0,0,0,0);
-        setDaysUntil(Math.max(0, Math.ceil((d-now)/86400000)));
-        setPaymentDate(d.toLocaleDateString('en-CA', {weekday:'short',month:'short',day:'numeric'}));
+        let d = new Date(+dm[1], MON[dm[2]], +dm[3]);
+        if (d < _now) d = nextScheduledPayDate(d);
+        payDate = d;
       } else {
-        setDaysUntil(v => v ?? 0);
+        payDate = nextScheduledPayDate(_now);
       }
+      setPayDateObj(payDate);
+      setDaysUntil(Math.max(0, Math.ceil((payDate - _now) / 86400000)));
+      setPaymentDate(payDate.toLocaleDateString('en-CA', {weekday:'short',month:'short',day:'numeric'}));
       setMessages(parseMessages(sections));
       setPwdApproved(json.uiConfig?.pwdApproved||false);
     } catch(e) { setAmount(v=>v??'$0'); setDaysUntil(v=>v??0); }
