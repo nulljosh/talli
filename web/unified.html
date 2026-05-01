@@ -16,16 +16,10 @@
     body {
       font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
-      display: flex; align-items: center; justify-content: center;
-      min-height: 100vh; background: #d4cfc9;
+      overflow: hidden;
     }
-    @media (prefers-color-scheme: dark) { body { background: #0a0908; } }
     #app-shell {
-      width: 100%; max-width: 430px; height: 100dvh; max-height: 100dvh;
-      position: relative; overflow: hidden;
-    }
-    @media (min-width: 500px) {
-      #app-shell { height: min(900px, 100dvh); border-radius: 16px; overflow: hidden; }
+      width: 100%; height: 100dvh; overflow: hidden;
     }
     @keyframes countUp   { from { opacity:0; transform:translateY(14px) scale(0.94); } to { opacity:1; transform:translateY(0) scale(1); } }
     @keyframes fadeUp    { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
@@ -131,11 +125,11 @@ function parseDollar(s) { return parseFloat((s||'').replace(/[^0-9.]/g,'')) || 0
 
 // ── static past payments ──────────────────────────────
 const PAST_PAYMENTS = [
-  {year:2026,month:2,day:28,amount:'$1,700'},
-  {year:2026,month:1,day:28,amount:'$1,700'},
-  {year:2026,month:0,day:28,amount:'$1,658'},
-  {year:2025,month:11,day:28,amount:'$1,658'},
-  {year:2025,month:10,day:28,amount:'$1,658'},
+  {year:2026,month:2,day:28,amount:'$1,060'},
+  {year:2026,month:1,day:25,amount:'$1,060'},
+  {year:2026,month:0,day:21,amount:'$1,060'},
+  {year:2025,month:11,day:16,amount:'$1,060'},
+  {year:2025,month:10,day:25,amount:'$1,060'},
 ];
 
 // ── count-up ──────────────────────────────────────────
@@ -346,7 +340,9 @@ function CalendarTab({dark, payDateObj, amount, daysUntil}) {
   const schedule=[];
   for(let i=1;i<=4;i++){
     const d=new Date(nextPayment.getFullYear(),nextPayment.getMonth()+i,nextPayment.getDate());
-    schedule.push({label:d.toLocaleString('en-CA',{month:'short',year:'numeric'}),date:d.toLocaleString('en-CA',{month:'short',day:'numeric'}),amount:'$1,700'});
+    // PWD expected ~June 2026: estimate bumps to ~$1,500 from June onward
+    const isPostPWD = d >= new Date(2026, 5, 1);
+    schedule.push({label:d.toLocaleString('en-CA',{month:'short',year:'numeric'}),date:d.toLocaleString('en-CA',{month:'short',day:'numeric'}),amount:isPostPWD?'~$1,500':'$1,060'});
   }
 
   return (
