@@ -22,6 +22,7 @@ if (IS_PRODUCTION && !process.env.SESSION_SECRET) {
 const ENCRYPTION_KEY = process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex');
 const DEBUG = process.env.DEBUG === 'true' || process.env.NODE_ENV === 'development';
 const PWD_APPROVED = process.env.PWD_APPROVED === 'true';
+const PWD_MEDICAL_DONE = process.env.PWD_MEDICAL_DONE === 'true';
 const DEFAULT_SESSION_MAX_AGE_MS = 2 * 60 * 60 * 1000; // 2 hours
 const REMEMBER_ME_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 const SESSION_IDLE_TIMEOUT_MS = 60 * 60 * 1000; // 1 hour
@@ -1146,7 +1147,7 @@ async function fetchOrLoadData(req) {
 app.get('/api/latest', requireAuth, async (req, res) => {
   try {
     log('[API] /api/latest called');
-    const uiConfig = { pwdApproved: PWD_APPROVED };
+    const uiConfig = { pwdApproved: PWD_APPROVED, pwdMedicalDone: PWD_MEDICAL_DONE };
 
     const result = await fetchOrLoadData(req);
     if (result) {

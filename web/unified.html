@@ -121,10 +121,12 @@ function parseMessages(sections) {
   combined.forEach((line, i) => {
     if (DATE_RE.test(line)) { if (cur) { cur.date = parseMsgDate(line); msgs.push(cur); cur = null; } }
     else if (!cur) cur = { id:i, title:line.trim(), body:'', date:'', unread:true };
-    else if (!cur.body) cur.body = line.trim();
+    else cur.body = cur.body ? cur.body + '\n' + line.trim() : line.trim();
   });
   if (cur) msgs.push(cur);
-  return msgs.slice(0, 12);
+  // deduplicate by title+body
+  const seen = new Set();
+  return msgs.filter(m => { const k = m.title+'|'+m.body; if (seen.has(k)) return false; seen.add(k); return true; }).slice(0, 12);
 }
 
 function parseDollar(s) { return parseFloat((s||'').replace(/[^0-9.]/g,'')) || 0; }
@@ -436,12 +438,12 @@ function CalendarTab({dark, payDateObj, amount, daysUntil}) {
 // ════════════════════════════════════════════════════
 // STATUS TAB
 // ════════════════════════════════════════════════════
-function StatusTab({dark, pwdApproved}) {
+function StatusTab({dark, pwdApproved, pwdMedicalDone}) {
   const t = tk(dark);
   const steps = [
     {label:'Application submitted',date:'Jan 14, 2026',done:true},
-    {label:'Medical review',date:pwdApproved?'Complete':'In progress',done:pwdApproved,current:!pwdApproved},
-    {label:'Ministry decision',date:pwdApproved?'Approved':'Est. Jul 2026',done:pwdApproved},
+    {label:'Medical review',date:pwdApproved?'Complete':(pwdMedicalDone?'Complete':'In progress'),done:pwdApproved||pwdMedicalDone,current:!pwdApproved&&!pwdMedicalDone},
+    {label:'Ministry decision',date:pwdApproved?'Approved':'Est. Jul 2026',done:pwdApproved,current:!pwdApproved&&pwdMedicalDone},
     {label:'Backdated payments',date:pwdApproved?'Issued':'Upon approval',done:pwdApproved},
   ];
   const upcoming=[
@@ -458,9 +460,9 @@ function StatusTab({dark, pwdApproved}) {
         </div>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:13,fontWeight:700,color:t.text,letterSpacing:'-0.2px'}}>Active — Receiving benefits</div>
-          <div style={{fontSize:12,color:t.mutedMid,marginTop:2}}>PWD application in progress · Step 2 of 4</div>
+          <div style={{fontSize:12,color:t.mutedMid,marginTop:2}}>PWD application in progress · Step {pwdApproved?'4':pwdMedicalDone?'3':'2'} of 4</div>
         </div>
-        <div style={{fontSize:11,fontWeight:600,color:t.accent,background:`${t.accent}18`,padding:'3px 9px',borderRadius:100,flexShrink:0}}>In review</div>
+        <div style={{fontSize:11,fontWeight:600,color:t.accent,background:`${t.accent}18`,padding:'3px 9px',borderRadius:100,flexShrink:0}}>{pwdApproved?'Approved':pwdMedicalDone?'With ministry':'In review'}</div>
       </div>
 
       <div style={{marginBottom:28}}>
@@ -551,7 +553,7 @@ function MessagesTab({dark, messages}) {
 // ════════════════════════════════════════════════════
 const TAB_ORDER = ['home','calendar','status','messages'];
 
-function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, pwdApproved, username, onLogout}) {
+function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, pwdApproved, pwdMedicalDone, username, onLogout}) {
   const t = tk(dark);
   const [tab, setTab] = useState('home');
   const touchX = useRef(null);
@@ -564,7 +566,7 @@ function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidC
     if (dx<0&&idx<TAB_ORDER.length-1) setTab(TAB_ORDER[idx+1]);
     if (dx>0&&idx>0) setTab(TAB_ORDER[idx-1]);
   };
-  const unread=messages.filter(m=>m.unread).length;
+  const unread=tab==='messages' ? 0 : messages.filter(m=>m.unread).length;
   const initial=(username||'J').slice(0,1).toUpperCase();
 
   return (
@@ -583,7 +585,7 @@ function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidC
 
       {tab==='home'     &&<HomeTab     dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange}/>}
       {tab==='calendar' &&<CalendarTab dark={dark} payDateObj={payDateObj} amount={amount} daysUntil={daysUntil}/>}
-      {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved}/>}
+      {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone}/>}
       {tab==='messages' &&<MessagesTab dark={dark} messages={messages}/>}
 
       <TabBar tab={tab} setTab={setTab} dark={dark} msgBadge={unread}/>
@@ -604,6 +606,7 @@ function App() {
   const [paidMonths,  setPaidMonths]  = useState({});
   const [messages,    setMessages]    = useState([]);
   const [pwdApproved, setPwdApproved] = useState(false);
+  const [pwdMedicalDone, setPwdMedicalDone] = useState(false);
 
   const loadData = useCallback(async () => {
     try {
@@ -632,6 +635,7 @@ function App() {
       setPaymentDate(payDate.toLocaleDateString('en-CA', {weekday:'short',month:'short',day:'numeric'}));
       setMessages(parseMessages(sections));
       setPwdApproved(json.uiConfig?.pwdApproved||false);
+      setPwdMedicalDone(json.uiConfig?.pwdMedicalDone||false);
     } catch(e) { setAmount(v=>v??'$0'); setDaysUntil(v=>v??0); }
   }, []);
 
@@ -666,7 +670,7 @@ function App() {
   };
 
   return (
-    <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} pwdApproved={pwdApproved} username={username} onLogout={handleLogout}/>
+    <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} username={username} onLogout={handleLogout}/>
   );
 }
 
