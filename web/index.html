@@ -124,10 +124,6 @@
   </div>
 
   <script>
-    function esc(s) {
-      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-    }
-
     // Dark mode toggle
     function toggleDarkMode() {
       const html = document.documentElement;
@@ -217,9 +213,12 @@
           if (notifications.length === 0 || notifications.some(n => n.includes('no notifications'))) {
             notificationsList.innerHTML = '<p class="text-gray-500 dark:text-gray-500">No notifications at this time</p>';
           } else {
-            notificationsList.innerHTML = notifications.map(msg =>
-              `<div class="p-3 bg-gray-100 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-gray-100">${esc(msg)}</div>`
-            ).join('');
+            notificationsList.replaceChildren(...notifications.map(msg => {
+              const div = document.createElement('div');
+              div.className = 'p-3 bg-gray-100 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-gray-100';
+              div.textContent = msg;
+              return div;
+            }));
           }
         }
 
