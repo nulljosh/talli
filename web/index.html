@@ -124,6 +124,10 @@
   </div>
 
   <script>
+    function esc(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+
     // Dark mode toggle
     function toggleDarkMode() {
       const html = document.documentElement;
@@ -186,10 +190,13 @@
           if (messages.length === 0) {
             messagesList.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-600">No messages</p>';
           } else {
-            messagesList.innerHTML = messages.map(msg => {
+            messagesList.replaceChildren(...messages.map(msg => {
               const isDate = msg.match(/^\d{4} \/ [A-Z]{3} \/ \d{2}/);
-              return `<div class="text-sm py-1 ${isDate ? 'text-gray-900 dark:text-white font-medium mt-2' : 'text-gray-600 dark:text-gray-400 ml-4'}">${msg}</div>`;
-            }).join('');
+              const div = document.createElement('div');
+              div.className = 'text-sm py-1 ' + (isDate ? 'text-gray-900 dark:text-white font-medium mt-2' : 'text-gray-600 dark:text-gray-400 ml-4');
+              div.textContent = msg;
+              return div;
+            }));
           }
         }
 
@@ -211,7 +218,7 @@
             notificationsList.innerHTML = '<p class="text-gray-500 dark:text-gray-500">No notifications at this time</p>';
           } else {
             notificationsList.innerHTML = notifications.map(msg =>
-              `<div class="p-3 bg-gray-100 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-gray-100">${msg}</div>`
+              `<div class="p-3 bg-gray-100 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-gray-100">${esc(msg)}</div>`
             ).join('');
           }
         }
@@ -232,45 +239,45 @@
             document.getElementById('payment-count').textContent = total ? '1 payment' : tableRows.length + ' items';
 
             // Clean and format payment details
-            const paymentHTML = tableRows
+            const paymentElements = tableRows
               .filter(row => {
-                // Skip header row
                 if (row.trim() === 'Assistance') return false;
-                // Skip rows with empty values (e.g., "Name of Bank:" with no value)
                 if (row.match(/:\s*\|?\s*$/)) return false;
                 return true;
               })
               .map(row => {
-                // Clean up the row
                 let cleaned = row
-                  .replace(/\|\s*$/g, '')  // Remove trailing pipes
-                  .replace(/\s*\|\s*/g, ' • ')  // Replace pipes with bullets
-                  .replace(/\s+/g, ' ')  // Normalize whitespace
+                  .replace(/\|\s*$/g, '')
+                  .replace(/\s*\|\s*/g, ' • ')
+                  .replace(/\s+/g, ' ')
                   .trim();
 
-                // Highlight dollar amounts
                 const hasDollar = cleaned.includes('$');
                 const isTotal = cleaned.includes('Amount:');
+                const div = document.createElement('div');
 
-                // Format the row with proper styling
                 if (isTotal) {
-                  // Total amount - make it prominent
                   const amount = cleaned.match(/\$[\d,]+\.\d{2}/)?.[0];
-                  return `<div class="p-4 bg-green-100 dark:bg-green-950 rounded border-2 border-green-500 dark:border-green-600 text-gray-900 dark:text-gray-100">
-                    <div class="text-sm text-gray-600 dark:text-gray-400">Total Payment</div>
-                    <div class="text-2xl font-bold text-green-700 dark:text-green-400">${amount}</div>
-                  </div>`;
+                  div.className = 'p-4 bg-green-100 dark:bg-green-950 rounded border-2 border-green-500 dark:border-green-600 text-gray-900 dark:text-gray-100';
+                  const label = document.createElement('div');
+                  label.className = 'text-sm text-gray-600 dark:text-gray-400';
+                  label.textContent = 'Total Payment';
+                  const amountEl = document.createElement('div');
+                  amountEl.className = 'text-2xl font-bold text-green-700 dark:text-green-400';
+                  amountEl.textContent = amount || cleaned;
+                  div.appendChild(label);
+                  div.appendChild(amountEl);
                 } else if (hasDollar) {
-                  // Payment breakdown items
-                  return `<div class="p-3 bg-gray-100 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800 text-green-700 dark:text-green-400 font-medium">${cleaned}</div>`;
+                  div.className = 'p-3 bg-gray-100 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800 text-green-700 dark:text-green-400 font-medium';
+                  div.textContent = cleaned;
                 } else {
-                  // Other info
-                  return `<div class="p-3 bg-gray-100 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-gray-100">${cleaned}</div>`;
+                  div.className = 'p-3 bg-gray-100 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-gray-100';
+                  div.textContent = cleaned;
                 }
-              })
-              .join('');
+                return div;
+              });
 
-            paymentList.innerHTML = paymentHTML;
+            paymentList.replaceChildren(...paymentElements);
           } else {
             // Fallback to allText if no tableData
             const payment = (paymentData.allText || []).filter(msg =>
@@ -287,9 +294,12 @@
             if (payment.length === 0) {
               paymentList.innerHTML = '<p class="text-gray-500 dark:text-gray-500">No payment information</p>';
             } else {
-              paymentList.innerHTML = payment.map(msg =>
-                `<div class="p-3 bg-gray-100 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-gray-100">${msg}</div>`
-              ).join('');
+              paymentList.replaceChildren(...payment.map(msg => {
+                const div = document.createElement('div');
+                div.className = 'p-3 bg-gray-100 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-gray-100';
+                div.textContent = msg;
+                return div;
+              }));
             }
           }
         }
@@ -311,9 +321,12 @@
           if (requests.length === 0) {
             requestsList.innerHTML = '<p class="text-gray-500 dark:text-gray-500">No service requests</p>';
           } else {
-            requestsList.innerHTML = requests.map(msg =>
-              `<div class="p-3 bg-gray-100 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-gray-100">${msg}</div>`
-            ).join('');
+            requestsList.replaceChildren(...requests.map(msg => {
+              const div = document.createElement('div');
+              div.className = 'p-3 bg-gray-100 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-gray-100';
+              div.textContent = msg;
+              return div;
+            }));
           }
 
           // Load table data if available
@@ -331,10 +344,15 @@
               .filter(row => row.length > 0);  // Remove empty rows
 
             if (cleanedRows.length > 0) {
-              tableDiv.innerHTML = '<h3 class="font-semibold mb-2 mt-3 text-gray-900 dark:text-white">Details:</h3>' +
-                cleanedRows.map(row =>
-                  `<div class="p-3 bg-blue-50 dark:bg-blue-950 rounded border border-blue-200 dark:border-blue-900 text-gray-900 dark:text-gray-100">${row}</div>`
-                ).join('');
+              const h3 = document.createElement('h3');
+              h3.className = 'font-semibold mb-2 mt-3 text-gray-900 dark:text-white';
+              h3.textContent = 'Details:';
+              tableDiv.replaceChildren(h3, ...cleanedRows.map(row => {
+                const div = document.createElement('div');
+                div.className = 'p-3 bg-blue-50 dark:bg-blue-950 rounded border border-blue-200 dark:border-blue-900 text-gray-900 dark:text-gray-100';
+                div.textContent = row;
+                return div;
+              }));
             }
           }
         }
