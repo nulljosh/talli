@@ -60,6 +60,35 @@ function _tallyScriptError() {
 <script type="text/babel">
 const { useState, useEffect, useRef, useCallback } = React;
 
+// ── pixel art avatar ──────────────────────────────────
+function generatePixelArtSVG() {
+  const palettes = [
+    ['#e63946','#457b9d','#1d3557'],
+    ['#7b2d8b','#c77dff','#e0aaff'],
+    ['#0077b6','#00b4d8','#90e0ef'],
+    ['#d62828','#f77f00','#fcbf49'],
+    ['#2d6a4f','#52b788','#b7e4c7'],
+    ['#FF851B','#f2ede8','#1a1612'],
+  ];
+  const bgs = ['#111','#0d0c0b','#1a1a1a','#0f0f1a','#0a1a0a','#0d0c0b'];
+  const palette = palettes[Math.floor(Math.random() * palettes.length)];
+  const bg = bgs[Math.floor(Math.random() * bgs.length)];
+  const px = 8; const size = 8; const total = size * px;
+  const grid = Array.from({length:size}, () =>
+    Array.from({length:Math.ceil(size/2)}, () =>
+      Math.random() > 0.45 ? Math.floor(Math.random() * 3) : -1
+    )
+  );
+  let rects = '';
+  for (let row = 0; row < size; row++) {
+    for (let col = 0; col < size; col++) {
+      const ci = grid[row][col < size/2 ? col : size-1-col];
+      if (ci >= 0) rects += `<rect x="${col*px}" y="${row*px}" width="${px}" height="${px}" fill="${palette[ci]}"/>`;
+    }
+  }
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" width="${total}" height="${total}" shape-rendering="crispEdges"><rect width="${total}" height="${total}" fill="${bg}"/>${rects}</svg>`;
+}
+
 // ── tokens ────────────────────────────────────────────
 function tk(dark) {
   return dark ? {
@@ -436,9 +465,90 @@ function CalendarTab({dark, payDateObj, amount, daysUntil}) {
 }
 
 // ════════════════════════════════════════════════════
+// SUBMIT REPORT MODAL
+// ════════════════════════════════════════════════════
+function SubmitReportModal({dark, onClose, skn}) {
+  const t = tk(dark);
+  const [pin, setPin] = useState('');
+  const [hasIncome, setHasIncome] = useState(false);
+  const [incomeNote, setIncomeNote] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null);
+
+  const submit = async (dryRun) => {
+    if (!pin || pin.length < 4) return;
+    setLoading(true); setResult(null);
+    try {
+      const body = { pin, dryRun };
+      if (hasIncome && incomeNote) body.incomeNote = incomeNote;
+      const r = await fetch('/api/submit-report', {method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+      const d = await r.json();
+      setResult(d);
+    } catch { setResult({success:false, error:'Network error'}); }
+    setLoading(false);
+  };
+
+  const inp = {width:'100%',padding:'10px 12px',fontSize:16,fontFamily:'inherit',background:t.bg2,border:`1px solid ${t.border2}`,borderRadius:8,color:t.text,outline:'none',letterSpacing:'0.2em',boxSizing:'border-box'};
+  const overlay = {position:'fixed',inset:0,background:'rgba(0,0,0,0.6)',display:'flex',alignItems:'flex-end',justifyContent:'center',zIndex:1000,backdropFilter:'blur(4px)'};
+  const sheet = {width:'100%',maxWidth:430,background:t.bg,borderRadius:'16px 16px 0 0',padding:'24px 24px max(24px,env(safe-area-inset-bottom))',animation:'fadeUp 0.25s ease both'};
+
+  return (
+    <div style={overlay} onClick={e=>{if(e.target===e.currentTarget)onClose()}}>
+      <div style={sheet}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:20}}>
+          <span style={{fontSize:16,fontWeight:700,color:t.text,letterSpacing:'-0.3px'}}>Submit Monthly Report</span>
+          <button onClick={onClose} style={{background:'none',border:'none',cursor:'pointer',color:t.muted,fontSize:20,lineHeight:1,padding:4}}>×</button>
+        </div>
+
+        {skn&&<div style={{fontSize:12,color:t.muted,marginBottom:16}}>Client #: <span style={{color:t.text,fontWeight:600}}>{skn}</span></div>}
+
+        <div style={{marginBottom:16}}>
+          <label style={{display:'block',fontSize:11,fontWeight:600,letterSpacing:'0.08em',textTransform:'uppercase',color:t.muted,marginBottom:6}}>PIN</label>
+          <input type="password" inputMode="numeric" maxLength={6} placeholder="••••" value={pin} onChange={e=>setPin(e.target.value.replace(/\D/g,''))} style={inp} autoFocus/>
+          <div style={{fontSize:11,color:t.muted,marginTop:4}}>Your KeyPlayer PIN for BC Self-Serve</div>
+        </div>
+
+        <div style={{marginBottom:20,display:'flex',alignItems:'center',gap:10,cursor:'pointer'}} onClick={()=>setHasIncome(h=>!h)}>
+          <div style={{width:18,height:18,borderRadius:4,border:`1.5px solid ${hasIncome?t.accent:t.border2}`,background:hasIncome?t.accent:'transparent',flexShrink:0,display:'flex',alignItems:'center',justifyContent:'center'}}>
+            {hasIncome&&<svg width="10" height="10" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+          </div>
+          <span style={{fontSize:13,color:t.text}}>I have income to declare this month</span>
+        </div>
+
+        {hasIncome&&(
+          <div style={{marginBottom:16,padding:'12px',background:t.bg2,borderRadius:8,border:`1px solid ${t.border}`}}>
+            <div style={{fontSize:12,color:t.warning,fontWeight:600,marginBottom:6}}>Important</div>
+            <div style={{fontSize:12,color:t.muted,lineHeight:1.5}}>If you have employment or self-employment income beyond your BC assistance, you must complete Section 2 of the report manually on the BC Self-Serve portal. This tool submits with $0 for all income fields.</div>
+            <input type="text" placeholder="Income note (for your records)" value={incomeNote} onChange={e=>setIncomeNote(e.target.value)} style={{...inp,marginTop:10,fontSize:13,letterSpacing:0}}/>
+          </div>
+        )}
+
+        {result&&(
+          <div style={{marginBottom:16,padding:'12px 14px',borderRadius:8,background:result.success?`${t.success}18`:`${t.error}18`,border:`1px solid ${result.success?t.success:t.error}30`}}>
+            <div style={{fontSize:13,fontWeight:600,color:result.success?t.success:t.error}}>{result.success?'Submitted successfully':'Submission failed'}</div>
+            {result.message&&<div style={{fontSize:12,color:t.muted,marginTop:3}}>{result.message}</div>}
+            {result.error&&<div style={{fontSize:12,color:t.error,marginTop:3}}>{result.error}</div>}
+            {result.dryRun&&<div style={{fontSize:11,color:t.muted,marginTop:3}}>Dry run -- nothing was submitted</div>}
+          </div>
+        )}
+
+        <div style={{display:'flex',gap:8}}>
+          <button onClick={()=>submit(false)} disabled={pin.length<4||loading} style={{flex:1,padding:'12px',borderRadius:10,background:pin.length>=4&&!loading?t.accent:'transparent',color:pin.length>=4&&!loading?'#fff':t.muted,border:`1px solid ${pin.length>=4&&!loading?'transparent':t.border}`,fontSize:14,fontWeight:600,fontFamily:'inherit',cursor:pin.length>=4&&!loading?'pointer':'default',transition:'all 0.15s'}}>
+            {loading?'Submitting...':'Submit'}
+          </button>
+          <button onClick={()=>submit(true)} disabled={pin.length<4||loading} style={{padding:'12px 14px',borderRadius:10,background:'transparent',color:t.muted,border:`1px solid ${t.border}`,fontSize:13,fontWeight:500,fontFamily:'inherit',cursor:pin.length>=4&&!loading?'pointer':'default',transition:'all 0.15s',whiteSpace:'nowrap'}}>
+            Dry run
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════
 // STATUS TAB
 // ════════════════════════════════════════════════════
-function StatusTab({dark, pwdApproved, pwdMedicalDone}) {
+function StatusTab({dark, pwdApproved, pwdMedicalDone, skn, onSubmitReport}) {
   const t = tk(dark);
   const steps = [
     {label:'Application submitted',date:'Jan 14, 2026',done:true},
@@ -447,7 +557,7 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone}) {
     {label:'Backdated payments',date:pwdApproved?'Issued':'Upon approval',done:pwdApproved},
   ];
   const upcoming=[
-    {label:'Monthly report due',date:'May 5',warn:true},
+    {label:'Monthly report due',date:'May 5',warn:true,action:true},
     {label:'PharmaCare renewal',date:'Jun 1'},
     {label:'T4 slip available',date:'Feb 2027'},
   ];
@@ -494,7 +604,10 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone}) {
         {upcoming.map((item,i)=>(
           <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 0',borderBottom:i<upcoming.length-1?`1px solid ${t.border}`:'none'}}>
             <span style={{fontSize:14,color:t.text,letterSpacing:'-0.2px'}}>{item.label}</span>
-            <span style={{fontSize:12,fontWeight:item.warn?600:400,color:item.warn?t.warning:t.muted,background:item.warn?`${t.warning}18`:'transparent',padding:item.warn?'2px 8px':'0',borderRadius:100}}>{item.date}</span>
+            <div style={{display:'flex',alignItems:'center',gap:8}}>
+              <span style={{fontSize:12,fontWeight:item.warn?600:400,color:item.warn?t.warning:t.muted,background:item.warn?`${t.warning}18`:'transparent',padding:item.warn?'2px 8px':'0',borderRadius:100}}>{item.date}</span>
+              {item.action&&<button onClick={onSubmitReport} style={{padding:'3px 10px',borderRadius:100,background:t.accent,color:'#fff',border:'none',fontSize:11,fontWeight:700,fontFamily:'inherit',cursor:'pointer',WebkitTapHighlightColor:'transparent'}}>Submit</button>}
+            </div>
           </div>
         ))}
       </div>
@@ -553,9 +666,10 @@ function MessagesTab({dark, messages}) {
 // ════════════════════════════════════════════════════
 const TAB_ORDER = ['home','calendar','status','messages'];
 
-function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, pwdApproved, pwdMedicalDone, username, onLogout}) {
+function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, pwdApproved, pwdMedicalDone, username, onLogout, avatarUrl, onAvatarClick, skn}) {
   const t = tk(dark);
   const [tab, setTab] = useState('home');
+  const [showSubmit, setShowSubmit] = useState(false);
   const touchX = useRef(null);
   const onTouchStart = (e) => { touchX.current = e.touches[0].clientX; };
   const onTouchEnd   = (e) => {
@@ -578,17 +692,21 @@ function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidC
         <span style={{fontSize:15,fontWeight:700,letterSpacing:'-0.04em',color:t.text}}>
           tally<span style={{color:t.accent}}>.</span>
         </span>
-        <button onClick={onLogout} style={{width:28,height:28,borderRadius:'50%',background:t.accent,display:'flex',alignItems:'center',justifyContent:'center',border:'none',cursor:'pointer',WebkitTapHighlightColor:'transparent'}}>
-          <span style={{fontSize:11,fontWeight:700,color:'#fff',letterSpacing:'0.02em'}}>{initial}</span>
+        <button onClick={onAvatarClick} title="Tap to regenerate avatar" style={{width:28,height:28,borderRadius:'50%',background:avatarUrl?'transparent':t.accent,overflow:'hidden',display:'flex',alignItems:'center',justifyContent:'center',border:'none',cursor:'pointer',WebkitTapHighlightColor:'transparent',padding:0}}>
+          {avatarUrl
+            ? <img src={avatarUrl} width={28} height={28} style={{display:'block',imageRendering:'pixelated',borderRadius:'50%'}} alt="avatar"/>
+            : <span style={{fontSize:11,fontWeight:700,color:'#fff',letterSpacing:'0.02em'}}>{initial}</span>
+          }
         </button>
       </div>
 
       {tab==='home'     &&<HomeTab     dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange}/>}
       {tab==='calendar' &&<CalendarTab dark={dark} payDateObj={payDateObj} amount={amount} daysUntil={daysUntil}/>}
-      {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone}/>}
+      {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} skn={skn} onSubmitReport={()=>setShowSubmit(true)}/>}
       {tab==='messages' &&<MessagesTab dark={dark} messages={messages}/>}
 
       <TabBar tab={tab} setTab={setTab} dark={dark} msgBadge={unread}/>
+      {showSubmit&&<SubmitReportModal dark={dark} skn={skn} onClose={()=>setShowSubmit(false)}/>}
     </div>
   );
 }
@@ -607,6 +725,8 @@ function App() {
   const [messages,    setMessages]    = useState([]);
   const [pwdApproved, setPwdApproved] = useState(false);
   const [pwdMedicalDone, setPwdMedicalDone] = useState(false);
+  const [avatarUrl,   setAvatarUrl]   = useState(null);
+  const [skn,         setSkn]         = useState(null);
 
   const loadData = useCallback(async () => {
     try {
@@ -649,7 +769,21 @@ function App() {
     mq.addEventListener('change', mqH);
     fetch('/api/me', {credentials:'include'})
       .then(r=>{ if(!r.ok)throw new Error(); return r.json(); })
-      .then(d=>{ if(!d.authenticated){location.href='/login.html';return;} setUsername(d.username); loadData(); fetch('/api/paid-status',{credentials:'include'}).then(r=>r.json()).then(d=>setPaidMonths(d.paidMonths||{})).catch(()=>{}); })
+      .then(d=>{
+        if(!d.authenticated){location.href='/login.html';return;}
+        setUsername(d.username);
+        loadData();
+        fetch('/api/paid-status',{credentials:'include'}).then(r=>r.json()).then(d=>setPaidMonths(d.paidMonths||{})).catch(()=>{});
+        fetch('/api/profile',{credentials:'include'}).then(r=>r.json()).then(p=>{
+          if(p.avatarUrl) { setAvatarUrl(p.avatarUrl); return; }
+          // No avatar yet -- generate and save one silently
+          const svg = generatePixelArtSVG();
+          const b64 = btoa(unescape(encodeURIComponent(svg)));
+          fetch('/api/avatar',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({svgBase64:b64})})
+            .then(r=>r.json()).then(res=>{ if(res.avatarUrl) setAvatarUrl(res.avatarUrl); }).catch(()=>{});
+          if(p.skn) setSkn(p.skn);
+        }).catch(()=>{});
+      })
       .catch(()=>{ location.href='/login.html'; });
     const clearPoll = visibilityInterval(loadData, 120000);
     if ('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js',{scope:'/'}).catch(console.error));
@@ -669,8 +803,18 @@ function App() {
     try { const r=await fetch('/api/logout',{method:'POST',credentials:'same-origin'}); if(r.ok)location.href='/login.html'; } catch(e){}
   };
 
+  const handleAvatarClick = async () => {
+    const svg = generatePixelArtSVG();
+    const b64 = btoa(unescape(encodeURIComponent(svg)));
+    try {
+      const r = await fetch('/api/avatar',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({svgBase64:b64})});
+      const d = await r.json();
+      if(d.avatarUrl) setAvatarUrl(d.avatarUrl);
+    } catch {}
+  };
+
   return (
-    <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} username={username} onLogout={handleLogout}/>
+    <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} skn={skn}/>
   );
 }
 

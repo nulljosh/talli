@@ -1662,6 +1662,63 @@ app.post('/api/read-messages', requireAuth, async (req, res) => {
   }
 });
 
+// User profile -- avatar URL + SKN
+app.get('/api/profile', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    const profile = await loadUserBlob(userId, 'profile', {});
+    res.json({
+      username: req.session.bceidUsername,
+      skn: profile.skn || null,
+      avatarUrl: profile.avatarUrl || null,
+    });
+  } catch (err) {
+    log('[PROFILE] GET error:', err.message);
+    res.json({ username: req.session?.bceidUsername, skn: null, avatarUrl: null });
+  }
+});
+
+// Avatar -- pixel art SVG stored in Vercel Blob
+app.get('/api/avatar', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    const profile = await loadUserBlob(userId, 'profile', {});
+    res.json({ avatarUrl: profile.avatarUrl || null });
+  } catch (err) {
+    log('[AVATAR] GET error:', err.message);
+    res.json({ avatarUrl: null });
+  }
+});
+
+app.post('/api/avatar', requireAuth, async (req, res) => {
+  try {
+    const { svgBase64 } = req.body || {};
+    if (!svgBase64) return res.status(400).json({ error: 'svgBase64 required' });
+    const userId = req.session?.userId;
+    if (!userId) return res.status(401).json({ error: 'No user ID' });
+
+    const svgBuffer = Buffer.from(svgBase64, 'base64');
+    if (svgBuffer.length > 100 * 1024) return res.status(400).json({ error: 'SVG too large' });
+
+    const profile = await loadUserBlob(userId, 'profile', {});
+    if (IS_PRODUCTION) {
+      const { put } = require('@vercel/blob');
+      const pathname = `${blobPrefix(userId)}/avatar.svg`;
+      const { url } = await put(pathname, svgBuffer, { access: 'public', addRandomSuffix: false, contentType: 'image/svg+xml' });
+      profile.avatarUrl = url;
+    } else {
+      // Dev: return data URL so the UI still works locally
+      profile.avatarUrl = `data:image/svg+xml;base64,${svgBase64}`;
+    }
+    profile.avatarUpdatedAt = new Date().toISOString();
+    await saveUserBlob(userId, 'profile', profile);
+    res.json({ ok: true, avatarUrl: profile.avatarUrl });
+  } catch (err) {
+    log('[AVATAR] POST error:', err.message);
+    res.status(500).json({ error: 'Failed to save avatar' });
+  }
+});
+
 // Dev-only: serve .env submission credentials for auto-fill
 app.get('/api/submit-creds', requireAuth, (req, res) => {
   res.json({});
@@ -1678,15 +1735,15 @@ app.post('/api/submit-report', scrapeLimiter, requireAuth, async (req, res) => {
   try {
     const { sin, phone, pin, dryRun } = req.body || {};
 
-    // Resolve values: body > .env fallback
-    const resolvedSin = sin || process.env.BC_SIN;
-    const resolvedPhone = phone || process.env.BC_PHONE;
+    // PIN is required; SIN and phone are pre-filled by BC portal (Section 5)
     const resolvedPin = pin || process.env.BC_PIN;
-
-    if (!resolvedSin || !resolvedPhone || !resolvedPin) {
+    if (!resolvedPin) {
       isSubmitting = false;
-      return res.status(400).json({ error: 'SIN, phone, and PIN are required' });
+      return res.status(400).json({ error: 'PIN is required to submit your monthly report' });
     }
+    // Pass SIN/phone only if explicitly provided -- BC portal uses its own pre-filled values
+    const resolvedSin = sin || null;
+    const resolvedPhone = phone || null;
 
     // Get login credentials from session
     let username, password;
@@ -1706,8 +1763,8 @@ app.post('/api/submit-report', scrapeLimiter, requireAuth, async (req, res) => {
     const result = await runSubmitMonthlyReport({
       username,
       password,
-      sin: resolvedSin,
-      phone: resolvedPhone,
+      ...(resolvedSin && { sin: resolvedSin }),
+      ...(resolvedPhone && { phone: resolvedPhone }),
       pin: resolvedPin,
       dryRun: !!dryRun,
       headless: true
