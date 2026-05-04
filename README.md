@@ -2,7 +2,7 @@
 
 # Tally
 
-![version](https://img.shields.io/badge/version-v3.1.0-orange)
+![version](https://img.shields.io/badge/version-v3.2.0-orange)
 
 BC Self-Serve scraper and benefits dashboard. Tracks income, payment dates, PWD application status, and government messages.
 
@@ -12,10 +12,12 @@ BC Self-Serve scraper and benefits dashboard. Tracks income, payment dates, PWD 
 - 4-tab dashboard: Home, Calendar, Status, Messages
 - Income tracking with payment date countdown and streak
 - Bar chart of recent payments + YTD stats
-- PWD application timeline tracker
+- PWD application timeline tracker with report submission history
 - Calendar view with upcoming payment schedule
-- Messages from BC Self-Serve (spam-filtered)
-- Persistent paid status and message read state (Vercel Blob)
+- Messages from BC Self-Serve (improved sync, date-aware parsing)
+- Account info panel (BCeID, SIN masked, program)
+- Monthly report submission with stored PIN
+- Persistent paid/report status and message read state (Vercel Blob)
 - Dark mode auto-detect
 - PWA with offline mode
 - iOS companion app
