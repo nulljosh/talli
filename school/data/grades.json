@@ -1,10 +1,10 @@
 {
-  "retrieved_at": "2026-04-10T22:43:14.669270",
+  "retrieved_at": "2026-05-04T01:42:23.410583",
   "courses": [
     {
       "course": "LEC Pre-Calculus 12 25-26 JR, PREC12 OL 25-26 RATCLIFFE - LEC",
       "course_ou": "184298",
-      "retrieved_at": "2026-04-10T22:43:10.352639",
+      "retrieved_at": "2026-05-04T01:42:18.126926",
       "categories": [
         {
           "category": "Learning Guides",
@@ -158,13 +158,13 @@
         },
         {
           "category": "Module Exams",
-          "grade_pct": null,
+          "grade_pct": 20.0,
           "items": [
             {
               "name": "Module 1 Exam",
-              "score": null,
+              "score": 20.0,
               "out_of": 100.0,
-              "percentage": null
+              "percentage": 20.0
             },
             {
               "name": "Module 2 Exam",
@@ -194,13 +194,13 @@
         },
         {
           "category": "Quizzes",
-          "grade_pct": 98.0,
+          "grade_pct": 99.0,
           "items": [
             {
               "name": "U1-Quiz #2",
-              "score": 83.0,
+              "score": 100.0,
               "out_of": 100.0,
-              "percentage": 83.0
+              "percentage": 100.0
             },
             {
               "name": "U2-Quiz #1",
@@ -287,7 +287,7 @@
     {
       "course": "LEC Anatomy & Physiology 12 25-26 AD, ATPH12 OL 25-26 DHIMAN - LEC",
       "course_ou": "153403",
-      "retrieved_at": "2026-04-10T22:43:14.668642",
+      "retrieved_at": "2026-05-04T01:42:23.409419",
       "categories": [
         {
           "category": "Course Plan",
@@ -296,60 +296,60 @@
         },
         {
           "category": "Learning Guides",
-          "grade_pct": 77.0,
+          "grade_pct": 58.0,
           "items": [
             {
-              "name": "U1 Learning Guide",
-              "score": 1.0,
-              "out_of": 1.0,
-              "percentage": 100.0
+              "name": "U1 Learning Guide(exempted)",
+              "score": null,
+              "out_of": null,
+              "percentage": null
             },
             {
-              "name": "U2 Learning Guide",
-              "score": 1.0,
-              "out_of": 1.0,
-              "percentage": 100.0
+              "name": "U2 Learning Guide(exempted)",
+              "score": null,
+              "out_of": null,
+              "percentage": null
             },
             {
-              "name": "U3 Learning Guide",
-              "score": 1.0,
-              "out_of": 1.0,
-              "percentage": 100.0
+              "name": "U3 Learning Guide(exempted)",
+              "score": null,
+              "out_of": null,
+              "percentage": null
             },
             {
-              "name": "U4 Learning Guide",
-              "score": 1.0,
-              "out_of": 1.0,
-              "percentage": 85.0
+              "name": "U4 Learning Guide(exempted)",
+              "score": null,
+              "out_of": null,
+              "percentage": null
             },
             {
-              "name": "U5 Learning Guide",
-              "score": 1.0,
-              "out_of": 1.0,
-              "percentage": 80.0
+              "name": "U5 Learning Guide(exempted)",
+              "score": null,
+              "out_of": null,
+              "percentage": null
             },
             {
               "name": "U6 Learning Guide",
-              "score": 1.0,
-              "out_of": 1.0,
+              "score": 2.0,
+              "out_of": 3.0,
               "percentage": 65.0
             },
             {
               "name": "U7 Learning Guide",
               "score": 1.0,
-              "out_of": 1.0,
+              "out_of": 3.0,
               "percentage": 55.0
             },
             {
               "name": "U8 Learning Guide",
               "score": 1.0,
-              "out_of": 1.0,
+              "out_of": 3.0,
               "percentage": 55.0
             },
             {
               "name": "U9 Learning Guide",
               "score": 1.0,
-              "out_of": 1.0,
+              "out_of": 3.0,
               "percentage": 55.0
             }
           ]
@@ -380,55 +380,55 @@
         },
         {
           "category": "Unit Exams",
-          "grade_pct": 97.0,
+          "grade_pct": 93.0,
           "items": [
             {
-              "name": "1.1 Quiz",
-              "score": 2.0,
-              "out_of": 2.0,
-              "percentage": 100.0
+              "name": "1.1 Quiz(exempted)",
+              "score": null,
+              "out_of": null,
+              "percentage": null
             },
             {
-              "name": "U1 Test",
-              "score": 2.0,
-              "out_of": 2.0,
-              "percentage": 100.0
+              "name": "U1 Test(exempted)",
+              "score": null,
+              "out_of": null,
+              "percentage": null
             },
             {
-              "name": "U2 Test",
-              "score": 2.0,
-              "out_of": 2.0,
-              "percentage": 90.0
+              "name": "U2 Test(exempted)",
+              "score": null,
+              "out_of": null,
+              "percentage": null
             },
             {
-              "name": "U3 Test",
-              "score": 2.0,
-              "out_of": 2.0,
-              "percentage": 100.0
+              "name": "U3 Test(exempted)",
+              "score": null,
+              "out_of": null,
+              "percentage": null
             },
             {
-              "name": "U4 Test",
-              "score": 2.0,
-              "out_of": 2.0,
-              "percentage": 95.0
+              "name": "U4 Test(exempted)",
+              "score": null,
+              "out_of": null,
+              "percentage": null
             },
             {
               "name": "U5 Test",
-              "score": null,
-              "out_of": null,
-              "percentage": null
+              "score": 3.0,
+              "out_of": 3.0,
+              "percentage": 95.0
             },
             {
               "name": "U6 Test",
-              "score": null,
-              "out_of": null,
-              "percentage": null
+              "score": 3.0,
+              "out_of": 3.0,
+              "percentage": 85.0
             },
             {
               "name": "U7 Test",
-              "score": null,
-              "out_of": null,
-              "percentage": null
+              "score": 3.0,
+              "out_of": 3.0,
+              "percentage": 100.0
             },
             {
               "name": "U8 Test",
@@ -446,7 +446,7 @@
         },
         {
           "category": "Module Exams",
-          "grade_pct": 27.0,
+          "grade_pct": 33.0,
           "items": [
             {
               "name": "Module 1 Exam",
@@ -456,21 +456,21 @@
             },
             {
               "name": "Module 2 Exam",
-              "score": 4.0,
+              "score": 7.0,
               "out_of": 20.0,
-              "percentage": 22.0
+              "percentage": 35.0
             }
           ]
         },
         {
           "category": "Final Exam",
-          "grade_pct": 22.0,
+          "grade_pct": 40.0,
           "items": [
             {
               "name": "Final Exam",
-              "score": 5.0,
+              "score": 10.0,
               "out_of": 25.0,
-              "percentage": 22.0
+              "percentage": 40.0
             }
           ]
         },
