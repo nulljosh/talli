@@ -1671,10 +1671,25 @@ app.get('/api/profile', requireAuth, async (req, res) => {
       username: req.session.bceidUsername,
       skn: profile.skn || null,
       avatarUrl: profile.avatarUrl || null,
+      pinSet: !!(profile.encryptedPin),
     });
   } catch (err) {
     log('[PROFILE] GET error:', err.message);
-    res.json({ username: req.session?.bceidUsername, skn: null, avatarUrl: null });
+    res.json({ username: req.session?.bceidUsername, skn: null, avatarUrl: null, pinSet: false });
+  }
+});
+
+app.post('/api/profile/pin', requireAuth, async (req, res) => {
+  try {
+    const { pin } = req.body || {};
+    if (!/^\d{4,6}$/.test(pin)) return res.status(400).json({ error: 'PIN must be 4-6 digits' });
+    const userId = req.session?.userId;
+    const existing = await loadUserBlob(userId, 'profile', {});
+    await saveUserBlob(userId, 'profile', { ...existing, encryptedPin: encrypt(pin) });
+    res.json({ pinSet: true });
+  } catch (err) {
+    log('[PROFILE] PIN save error:', err.message);
+    res.status(500).json({ error: 'Failed to save PIN' });
   }
 });
 
@@ -1735,11 +1750,15 @@ app.post('/api/submit-report', scrapeLimiter, requireAuth, async (req, res) => {
   try {
     const { sin, phone, pin, dryRun } = req.body || {};
 
-    // PIN is required; SIN and phone are pre-filled by BC portal (Section 5)
-    const resolvedPin = pin || process.env.BC_PIN;
+    // PIN is required; load from user's encrypted Blob profile if not provided in request
+    let resolvedPin = pin;
+    if (!resolvedPin) {
+      const profile = await loadUserBlob(req.session?.userId, 'profile', {});
+      if (profile.encryptedPin) resolvedPin = decrypt(profile.encryptedPin);
+    }
     if (!resolvedPin) {
       isSubmitting = false;
-      return res.status(400).json({ error: 'PIN is required to submit your monthly report' });
+      return res.status(400).json({ error: 'PIN required — save your PIN in Account settings' });
     }
     // Pass SIN/phone only if explicitly provided -- BC portal uses its own pre-filled values
     const resolvedSin = sin || null;
