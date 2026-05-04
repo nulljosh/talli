@@ -691,6 +691,23 @@ function extractSectionData(html, url) {
     }
   });
 
+  $('main, article, section, h1, h2, h3, h4').each((_, el) => {
+    const text = $(el).text().replace(/\s+/g, ' ').trim();
+    if (text.length > 10) allText.push(text);
+  });
+
+  $('dt, dd').each((_, el) => {
+    const text = $(el).text().replace(/\s+/g, ' ').trim();
+    if (text.length > 5) allText.push(text);
+  });
+
+  $('div[class], span[class]').each((_, el) => {
+    if ($(el).children('div, p, ul, ol, table').length === 0) {
+      const text = $(el).text().replace(/\s+/g, ' ').trim();
+      if (text.length > 20) allText.push(text);
+    }
+  });
+
   $('table tr').each((_, row) => {
     const cells = [];
     $(row)
@@ -703,6 +720,15 @@ function extractSectionData(html, url) {
       tableData.push(cells.join(' | '));
     }
   });
+
+  // Full body text fallback when structured extraction yields nothing
+  if (allText.length === 0 && bodyText.length > 200) {
+    const NAV_RX = /^(home|sign out|back|print|help|skip to|accessibility|terms of use|privacy|logout|my self serve)$/i;
+    bodyText.split(/\s{2,}/).forEach(chunk => {
+      const t = chunk.trim();
+      if (t.length > 15 && !NAV_RX.test(t)) allText.push(t);
+    });
+  }
 
   const matches = bodyText.match(KEYWORD_REGEX) || [];
   keywords.push(...matches.map(match => match.trim()));

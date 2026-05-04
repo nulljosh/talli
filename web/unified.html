@@ -146,14 +146,25 @@ function parseMessages(sections) {
   const DATE_RE = /\d{4}\s*\/\s*[A-Z]{3}\s*\/\s*\d{2}/;
   const combined = [...(sections['Messages']?.allText||[]), ...(sections['Notifications']?.allText||[])]
     .filter(t => t && t.trim().length > 8 && !SPAM.has(t.trim()) && !SPAM_RX.test(t.trim()));
-  const msgs = []; let cur = null;
+  const msgs = []; let cur = null; let pendingDate = '';
   combined.forEach((line, i) => {
-    if (DATE_RE.test(line)) { if (cur) { cur.date = parseMsgDate(line); msgs.push(cur); cur = null; } }
-    else if (!cur) cur = { id:i, title:line.trim(), body:'', date:'', unread:true };
-    else cur.body = cur.body ? cur.body + '\n' + line.trim() : line.trim();
+    if (DATE_RE.test(line)) {
+      if (cur) {
+        cur.date = parseMsgDate(line);
+        msgs.push(cur);
+        cur = null;
+        pendingDate = '';
+      } else {
+        pendingDate = parseMsgDate(line);
+      }
+    } else if (!cur) {
+      cur = { id:i, title:line.trim(), body:'', date:pendingDate, unread:true };
+      pendingDate = '';
+    } else {
+      cur.body = cur.body ? cur.body + '\n' + line.trim() : line.trim();
+    }
   });
   if (cur) msgs.push(cur);
-  // deduplicate by title+body
   const seen = new Set();
   return msgs.filter(m => { const k = m.title+'|'+m.body; if (seen.has(k)) return false; seen.add(k); return true; }).slice(0, 12);
 }
@@ -548,8 +559,11 @@ function SubmitReportModal({dark, onClose, skn}) {
 // ════════════════════════════════════════════════════
 // STATUS TAB
 // ════════════════════════════════════════════════════
-function StatusTab({dark, pwdApproved, pwdMedicalDone, skn, onSubmitReport}) {
+function StatusTab({dark, pwdApproved, pwdMedicalDone, skn, onSubmitReport, reportMonths, username}) {
   const t = tk(dark);
+  const now = new Date();
+  const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const reportFiled = !!(reportMonths && reportMonths[monthKey]);
   const steps = [
     {label:'Application submitted',date:'Jan 14, 2026',done:true},
     {label:'Medical review',date:pwdApproved?'Complete':(pwdMedicalDone?'Complete':'In progress'),done:pwdApproved||pwdMedicalDone,current:!pwdApproved&&!pwdMedicalDone},
@@ -557,10 +571,11 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone, skn, onSubmitReport}) {
     {label:'Backdated payments',date:pwdApproved?'Issued':'Upon approval',done:pwdApproved},
   ];
   const upcoming=[
-    {label:'Monthly report due',date:'May 5',warn:true,action:true},
+    {label:'Monthly report due',date:'May 5',warn:!reportFiled,action:!reportFiled,done:reportFiled},
     {label:'PharmaCare renewal',date:'Jun 1'},
     {label:'T4 slip available',date:'Feb 2027'},
   ];
+  const filedList = reportMonths ? Object.entries(reportMonths).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,6) : [];
   return (
     <div style={{flex:1,overflowY:'auto',padding:'20px 24px 32px',animation:'fadeIn 0.2s ease both'}}>
       {/* Summary badge */}
@@ -603,13 +618,45 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone, skn, onSubmitReport}) {
         <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:14}}>Upcoming</div>
         {upcoming.map((item,i)=>(
           <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 0',borderBottom:i<upcoming.length-1?`1px solid ${t.border}`:'none'}}>
-            <span style={{fontSize:14,color:t.text,letterSpacing:'-0.2px'}}>{item.label}</span>
+            <span style={{fontSize:14,color:item.done?t.muted:t.text,letterSpacing:'-0.2px',textDecoration:item.done?'line-through':'none',textDecorationColor:t.border2}}>{item.label}</span>
             <div style={{display:'flex',alignItems:'center',gap:8}}>
-              <span style={{fontSize:12,fontWeight:item.warn?600:400,color:item.warn?t.warning:t.muted,background:item.warn?`${t.warning}18`:'transparent',padding:item.warn?'2px 8px':'0',borderRadius:100}}>{item.date}</span>
+              <span style={{fontSize:12,fontWeight:item.warn?600:400,color:item.done?t.muted:item.warn?t.warning:t.muted,background:item.warn&&!item.done?`${t.warning}18`:'transparent',padding:item.warn&&!item.done?'2px 8px':'0',borderRadius:100}}>{item.done?'Filed':item.date}</span>
               {item.action&&<button onClick={onSubmitReport} style={{padding:'3px 10px',borderRadius:100,background:t.accent,color:'#fff',border:'none',fontSize:11,fontWeight:700,fontFamily:'inherit',cursor:'pointer',WebkitTapHighlightColor:'transparent'}}>Submit</button>}
             </div>
           </div>
         ))}
+      </div>
+
+      {filedList.length > 0 && <>
+        <div style={{height:1,background:t.border,margin:'24px 0'}}/>
+        <div>
+          <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:14}}>Reports Filed</div>
+          {filedList.map(([month, ts])=>(
+            <div key={month} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 0',borderBottom:`1px solid ${t.border}`}}>
+              <span style={{fontSize:14,color:t.text,letterSpacing:'-0.2px'}}>{month}</span>
+              <span style={{fontSize:12,color:t.muted}}>{new Date(ts).toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'})}</span>
+            </div>
+          ))}
+        </div>
+      </>}
+
+      <div style={{height:1,background:t.border,margin:'24px 0'}}/>
+      <div>
+        <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:14}}>Account</div>
+        <div style={{display:'flex',flexDirection:'column',gap:8}}>
+          {username&&<div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 0',borderBottom:`1px solid ${t.border}`}}>
+            <span style={{fontSize:13,color:t.muted}}>BCeID</span>
+            <span style={{fontSize:13,color:t.text,fontWeight:500}}>{username}</span>
+          </div>}
+          {skn&&<div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 0',borderBottom:`1px solid ${t.border}`}}>
+            <span style={{fontSize:13,color:t.muted}}>SIN</span>
+            <span style={{fontSize:13,color:t.text,fontWeight:500,fontFamily:'monospace',letterSpacing:'0.05em'}}>***-***-{skn.toString().slice(-3)}</span>
+          </div>}
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 0'}}>
+            <span style={{fontSize:13,color:t.muted}}>Program</span>
+            <span style={{fontSize:13,color:t.text,fontWeight:500}}>BC Income Assistance</span>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -702,7 +749,7 @@ function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidC
 
       {tab==='home'     &&<HomeTab     dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange}/>}
       {tab==='calendar' &&<CalendarTab dark={dark} payDateObj={payDateObj} amount={amount} daysUntil={daysUntil}/>}
-      {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} skn={skn} onSubmitReport={()=>setShowSubmit(true)}/>}
+      {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} skn={skn} onSubmitReport={()=>setShowSubmit(true)} reportMonths={reportMonths} username={username}/>}
       {tab==='messages' &&<MessagesTab dark={dark} messages={messages}/>}
 
       <TabBar tab={tab} setTab={setTab} dark={dark} msgBadge={unread}/>
@@ -727,6 +774,7 @@ function App() {
   const [pwdMedicalDone, setPwdMedicalDone] = useState(false);
   const [avatarUrl,   setAvatarUrl]   = useState(null);
   const [skn,         setSkn]         = useState(null);
+  const [reportMonths, setReportMonths] = useState({});
 
   const loadData = useCallback(async () => {
     try {
@@ -774,6 +822,7 @@ function App() {
         setUsername(d.username);
         loadData();
         fetch('/api/paid-status',{credentials:'include'}).then(r=>r.json()).then(d=>setPaidMonths(d.paidMonths||{})).catch(()=>{});
+        fetch('/api/report-status',{credentials:'include'}).then(r=>r.json()).then(d=>setReportMonths(d.reportMonths||{})).catch(()=>{});
         fetch('/api/profile',{credentials:'include'}).then(r=>r.json()).then(p=>{
           if(p.avatarUrl) { setAvatarUrl(p.avatarUrl); return; }
           // No avatar yet -- generate and save one silently
