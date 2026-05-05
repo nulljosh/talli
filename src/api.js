@@ -1652,7 +1652,9 @@ app.post('/api/read-messages', requireAuth, async (req, res) => {
       return res.status(400).json({ error: 'readIds must be an array' });
     }
     const userId = req.session?.userId;
-    const data = { readIds, updatedAt: new Date().toISOString() };
+    const existing = await loadUserBlob(userId, 'read-messages', { readIds: [] });
+    const merged = Array.from(new Set([...(existing.readIds || []), ...readIds]));
+    const data = { readIds: merged, updatedAt: new Date().toISOString() };
     req.session.readMessages = data;
     await saveUserBlob(userId, 'read-messages', data);
     res.json(data);

@@ -229,41 +229,11 @@ private struct DashboardScreen: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button { appState.selectedTabIndex = 4 } label: {
-                    avatarThumb
+                    AvatarView(size: 32)
                 }
                 .buttonStyle(.plain)
             }
         }
-    }
-
-    private var avatarThumb: some View {
-        Group {
-            if let data = appState.avatarImageData, let uiImage = UIImage(data: data) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .interpolation(.none)
-                    .scaledToFill()
-                    .frame(width: 28, height: 28)
-                    .clipShape(Circle())
-            } else {
-                Circle()
-                    .fill(Color.tallyOrange.opacity(0.15))
-                    .frame(width: 28, height: 28)
-                    .overlay {
-                        Text(appState.username.flatMap { $0.first.map(String.init) }?.uppercased() ?? "?")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(Color.tallyOrange)
-                    }
-            }
-        }
-    }
-
-    private var daysUntilPayment: Int? {
-        guard let date = appState.parsedNextPaymentDate else { return nil }
-        let start = Calendar.current.startOfDay(for: now)
-        let end = Calendar.current.startOfDay(for: date)
-        let days = Calendar.current.dateComponents([.day], from: start, to: end).day ?? 0
-        return days > 0 ? days : nil
     }
 
     private var paymentCard: some View {
@@ -279,7 +249,7 @@ private struct DashboardScreen: View {
                 .lineLimit(1)
                 .contentTransition(.numericText())
 
-            if let days = daysUntilPayment {
+            if let days = appState.daysUntilPayment {
                 Text("in \(days) days")
                     .font(.system(size: 22, weight: .semibold))
                     .foregroundStyle(Color.tallyOrange)

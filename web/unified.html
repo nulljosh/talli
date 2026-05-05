@@ -726,9 +726,11 @@ function MessagesTab({dark, messages}) {
       .then(r=>r.json())
       .then(d => {
         if (d.readIds?.length) {
-          const s = {};
-          d.readIds.forEach(id => { s[id] = true; });
-          setRead(s);
+          setRead(r => {
+            const merged = {...r};
+            d.readIds.forEach(id => { merged[id] = true; });
+            return merged;
+          });
         }
       })
       .catch(() => {});

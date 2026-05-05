@@ -66,18 +66,21 @@ final class AppState {
         return Double(cleaned)
     }
 
+    var daysUntilPayment: Int? {
+        guard let date = parsedNextPaymentDate else { return nil }
+        let start = Calendar.current.startOfDay(for: Date())
+        let end = Calendar.current.startOfDay(for: date)
+        let days = Calendar.current.dateComponents([.day], from: start, to: end).day ?? 0
+        return days > 0 ? days : nil
+    }
+
     var countdownText: String {
         guard let date = parsedNextPaymentDate else { return "--" }
         let start = Calendar.current.startOfDay(for: Date())
         let end = Calendar.current.startOfDay(for: date)
         let days = Calendar.current.dateComponents([.day], from: start, to: end).day ?? 0
-
-        if days < 0 {
-            return "Payment date passed"
-        }
-        if days == 0 {
-            return "Today"
-        }
+        if days < 0 { return "Payment date passed" }
+        if days == 0 { return "Today" }
         return "\(days) day\(days == 1 ? "" : "s")"
     }
 

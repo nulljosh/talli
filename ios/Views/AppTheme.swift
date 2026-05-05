@@ -4,7 +4,6 @@ import SwiftUI
 extension Color {
     static let appleBlue = Color(red: 0, green: 0.44, blue: 0.89)
     static let tallyOrange = Color(hex: "FF851B")
-    static let parchment   = Color(hex: "FAF7F4")
     static let gradeGreen = Color.green
     static let gradeRed = Color.red
     static let gradeAmber = Color.orange
@@ -34,13 +33,6 @@ extension UIColor {
 // Card modifier — solid grouped background (no blur artifact)
 extension View {
     func glassCard() -> some View {
-        self
-            .padding()
-            .background(RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(Color(.secondarySystemGroupedBackground)))
-    }
-
-    func accentGlassCard() -> some View {
         self
             .padding()
             .background(RoundedRectangle(cornerRadius: 12, style: .continuous)

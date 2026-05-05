@@ -53,21 +53,7 @@ struct SettingsView: View {
             Task { await generateAvatar() }
         } label: {
             ZStack {
-                if let data = appState.avatarImageData, let uiImage = UIImage(data: data) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .interpolation(.none)
-                        .scaledToFill()
-                        .frame(width: 56, height: 56)
-                        .clipShape(Circle())
-                } else {
-                    Circle()
-                        .fill(Color.accentColor.opacity(0.15))
-                        .frame(width: 56, height: 56)
-                    Text(avatarInitial)
-                        .font(.title2.weight(.semibold))
-                        .foregroundStyle(Color.accentColor)
-                }
+                AvatarView(size: 56)
                 if isGeneratingAvatar {
                     Circle()
                         .fill(.black.opacity(0.4))
@@ -77,11 +63,6 @@ struct SettingsView: View {
             }
         }
         .buttonStyle(.plain)
-    }
-
-    private var avatarInitial: String {
-        guard let u = appState.username, let first = u.first else { return "?" }
-        return String(first).uppercased()
     }
 
     @MainActor

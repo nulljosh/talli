@@ -1,17 +1,23 @@
 # Tally iOS
 
-v2.3.0
+v2.4.0
 
 ## Rules
 
 - Portrait-only
-- BC gov blue palette: #1a5a96 primary, #2472b2 mid, #4e9cd7 light, navy bg #0c1220
-- Apple Liquid Glass UI, SF Pro typography
+- Warm parchment palette: matches web (#faf7f4 bg / #1a1612 text / #FF851B orange accent)
+- Solid cards: `Color(.secondarySystemGroupedBackground)` -- no ultraThinMaterial
+- `Color.tallyOrange` for all accent uses (calendar, paid toggle, tab tint, avatar fallback)
+- Shared `AvatarView(size:)` for all avatar rendering (ContentView toolbar + SettingsView)
+- Avatar: 8x8 mirrored pixel-art grid (Core Graphics), 6 palettes, matches web generatePixelArtSVG()
+- SF Pro typography
 - No emojis
 - Session cookies via HTTPCookieStorage.shared; on 401, prompt re-auth
 - Features: 4-tab layout: Home, Reports, Benefits, Messages; Dashboard with large income amount, PWD timeline, payment calendar; Benefits tab: simple active benefits list; Monthly report submission; BC Self-Serve login; Offline caching with instant launch
 - Roadmap Done: iOS companion app with full dashboard; BC Self-Serve auth + biometric sign-in; Payment calendar widget; DTC navigator (12-step screener); CRA workspace (profile, tasks, T2201 draft); RDSP guide with eligibility + resources; Dispute analyzer (legal issue analysis); Monthly report submission; Offline caching with instant launch; CSV export
 - Roadmap Next: Payment history chart (sparkline/bar); PWD approval status tracker; CRA phase 2 (T4/T5 slip import); Document vault (encrypted storage); Budget planner; Push notifications for payment dates; Multi-province support; PDF report export; Accessibility audit (WCAG 2.1 AA)
+- Changelog v2.4.0 (2026-05-05): tallyOrange accent throughout. Solid cards replace glass. Pixel-art avatar (Core Graphics, 6 palettes). Top-right avatar button → Settings. "in X days" hero text + earning rate footnote. Shared AvatarView. daysUntilPayment moved to AppState. Removed accentGlassCard/parchment dead code.
+- Changelog v2.3.0: SettingsView with avatar generation (node-graph, now replaced). TabView tint updated.
 - Changelog v2.2.0 (2026-03-25): Persistent paid toggle on dashboard (syncs with server). Unread message badge clears on tab open, read state persisted via API. Models refactored to Models/ directory. Concurrent async loads on login.
 - Changelog v2.1.0 (2026-03-24): General benefits guide (grocery rebate, GST/HST, climate credit, CWB, CCB, SAFER, PharmaCare, BC Bus Pass). Native SwiftUI cards. Default tab on Benefits.
 - Changelog v2.0.1 (2026-03-20): Redesigned app icon: dark terminal aesthetic, proper 1024x1024 scaling; Centered clipboard + checklist design with BC gov blue palette
