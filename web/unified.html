@@ -765,7 +765,7 @@ function MessagesTab({dark, messages}) {
 // ════════════════════════════════════════════════════
 const TAB_ORDER = ['home','calendar','status','messages'];
 
-function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, pwdApproved, pwdMedicalDone, username, onLogout, avatarUrl, onAvatarClick, skn}) {
+function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, pwdApproved, pwdMedicalDone, username, onLogout, avatarUrl, onAvatarClick, skn, reportMonths, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
   const t = tk(dark);
   const [tab, setTab] = useState('home');
   const [showSubmit, setShowSubmit] = useState(false);
@@ -919,7 +919,7 @@ function App() {
   };
 
   return (
-    <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} skn={skn}/>
+    <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} skn={skn} reportMonths={reportMonths} pinSet={pinSet} setPinSet={setPinSet} showPinSheet={showPinSheet} setShowPinSheet={setShowPinSheet}/>
   );
 }
 
