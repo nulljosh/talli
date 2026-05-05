@@ -721,7 +721,27 @@ function MessagesTab({dark, messages}) {
   const t = tk(dark);
   const [read, setRead]     = useState({});
   const [expanded, setExpanded] = useState(null);
-  const toggle = (id) => { setExpanded(e=>e===id?null:id); setRead(r=>({...r,[id]:true})); };
+  useEffect(() => {
+    fetch('/api/read-messages', {credentials:'include'})
+      .then(r=>r.json())
+      .then(d => {
+        if (d.readIds?.length) {
+          const s = {};
+          d.readIds.forEach(id => { s[id] = true; });
+          setRead(s);
+        }
+      })
+      .catch(() => {});
+  }, []);
+  const toggle = (id) => {
+    setExpanded(e => e===id ? null : id);
+    setRead(r => {
+      const next = {...r, [id]: true};
+      const ids = Object.keys(next).filter(k => next[k]).map(Number);
+      fetch('/api/read-messages', {method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({readIds: ids})}).catch(()=>{});
+      return next;
+    });
+  };
   const msgs = messages.length>0 ? messages : [{id:0,title:'No messages yet',body:'Messages from BC Self-Serve will appear here.',date:'',unread:false}];
   const unreadCount = msgs.filter(m=>!read[m.id]&&m.unread).length;
   return (

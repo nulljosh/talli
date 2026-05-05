@@ -56,6 +56,7 @@ struct SettingsView: View {
                 if let data = appState.avatarImageData, let uiImage = UIImage(data: data) {
                     Image(uiImage: uiImage)
                         .resizable()
+                        .interpolation(.none)
                         .scaledToFill()
                         .frame(width: 56, height: 56)
                         .clipShape(Circle())
@@ -87,75 +88,52 @@ struct SettingsView: View {
     private func generateAvatar() async {
         isGeneratingAvatar = true
         defer { isGeneratingAvatar = false }
-        let image = Self.generateNodeGraphImage()
-        guard let data = image.jpegData(compressionQuality: 0.9) else { return }
+        let image = Self.generatePixelArtImage()
+        guard let data = image.pngData() else { return }
         appState.saveAvatarData(data)
     }
 
-    private static func generateNodeGraphImage() -> UIImage {
-        let palettes: [UIColor] = [
-            UIColor(red: 0.10, green: 0.35, blue: 0.59, alpha: 1), // BC blue
-            UIColor(red: 0.14, green: 0.45, blue: 0.70, alpha: 1),
-            UIColor(red: 0.31, green: 0.61, blue: 0.84, alpha: 1),
-            UIColor(red: 0.36, green: 0.56, blue: 0.79, alpha: 1),
-            UIColor(red: 0.48, green: 0.67, blue: 0.84, alpha: 1),
+    // Pixel-art avatar: 8x8 mirrored grid, matches web generatePixelArtSVG() exactly
+    private static func generatePixelArtImage() -> UIImage {
+        let palettes: [[UIColor]] = [
+            [UIColor(hex: "e63946"), UIColor(hex: "457b9d"), UIColor(hex: "1d3557")],
+            [UIColor(hex: "7b2d8b"), UIColor(hex: "c77dff"), UIColor(hex: "e0aaff")],
+            [UIColor(hex: "0077b6"), UIColor(hex: "00b4d8"), UIColor(hex: "90e0ef")],
+            [UIColor(hex: "d62828"), UIColor(hex: "f77f00"), UIColor(hex: "fcbf49")],
+            [UIColor(hex: "2d6a4f"), UIColor(hex: "52b788"), UIColor(hex: "b7e4c7")],
+            [UIColor(hex: "FF851B"), UIColor(hex: "f2ede8"), UIColor(hex: "1a1612")],
         ]
-        let nodeColor = palettes.randomElement()!
-        let size: CGFloat = 200
-        let cx: CGFloat = 100, cy: CGFloat = 100
-
-        typealias Offsets = [(CGFloat, CGFloat)]
-        typealias Edges = [(Int, Int)]
-        let topologies: [(Offsets, Edges)] = [
-            (
-                [(0,-58),(46,-30),(55,18),(20,56),(-20,56),(-55,18),(-46,-30),(0,0)],
-                [(7,0),(7,1),(7,2),(7,3),(7,4),(7,5),(7,6),(0,1),(1,2),(2,3),(3,4),(4,5),(5,6),(6,0)]
-            ),
-            (
-                [(0,-55),(48,-27),(48,27),(0,55),(-48,27),(-48,-27),(0,-22),(22,11),(-22,11)],
-                [(0,1),(1,2),(2,3),(3,4),(4,5),(5,0),(6,7),(7,8),(8,6),(0,6),(2,7),(4,8),(1,6),(3,7),(5,8)]
-            ),
-            (
-                [(-38,-50),(18,-52),(52,-10),(44,42),(0,55),(-44,34),(-54,-10),(0,-10),(30,12),(-25,18)],
-                [(0,1),(1,2),(2,3),(3,4),(4,5),(5,6),(6,0),(0,7),(1,7),(2,8),(3,8),(4,9),(5,9),(6,9),(7,8),(8,9),(7,9)]
-            ),
+        let bgs: [UIColor] = [
+            UIColor(hex: "111111"), UIColor(hex: "0d0c0b"), UIColor(hex: "1a1a1a"),
+            UIColor(hex: "0f0f1a"), UIColor(hex: "0a1a0a"), UIColor(hex: "0d0c0b"),
         ]
+        let palette = palettes.randomElement()!
+        let bg      = bgs.randomElement()!
+        let gridSize = 8
+        let px = 8
+        let total = gridSize * px   // 64pt canvas
 
-        let (baseOffsets, allEdges) = topologies.randomElement()!
-        let jitter: CGFloat = CGFloat.random(in: 10...20)
-        let nodes = baseOffsets.map { dx, dy in
-            CGPoint(
-                x: cx + dx + CGFloat.random(in: -jitter...jitter),
-                y: cy + dy + CGFloat.random(in: -jitter...jitter)
-            )
-        }
-        let edgeDensity = Double.random(in: 0.45...0.85)
-        let activeEdges = allEdges.filter { _ in Double.random(in: 0...1) < edgeDensity }
-
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: size, height: size))
-        return renderer.image { ctx in
-            let cgCtx = ctx.cgContext
-            UIColor(red: 0.06, green: 0.09, blue: 0.14, alpha: 1).setFill()
-            UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: size, height: size)).fill()
-
-            cgCtx.setStrokeColor(UIColor(white: 1, alpha: 0.2).cgColor)
-            cgCtx.setLineWidth(1.5)
-            cgCtx.setLineCap(.round)
-            for (a, b) in activeEdges where a < nodes.count && b < nodes.count {
-                cgCtx.move(to: nodes[a])
-                cgCtx.addLine(to: nodes[b])
+        // Build half-grid (8 rows x 4 cols), mirrored left-to-right
+        var half = [[Int]]()
+        for _ in 0..<gridSize {
+            var row = [Int]()
+            for _ in 0..<(gridSize / 2) {
+                row.append(Double.random(in: 0...1) > 0.45 ? Int.random(in: 0...2) : -1)
             }
-            cgCtx.strokePath()
+            half.append(row)
+        }
 
-            nodeColor.setFill()
-            for (i, node) in nodes.enumerated() {
-                let r = CGFloat.random(in: 5...11)
-                UIBezierPath(ovalIn: CGRect(x: node.x - r, y: node.y - r, width: r*2, height: r*2)).fill()
-                if i == 0 || i == nodes.count / 2 {
-                    UIColor(white: 1, alpha: 0.35).setFill()
-                    let dot: CGFloat = 3
-                    UIBezierPath(ovalIn: CGRect(x: node.x - dot, y: node.y - dot, width: dot*2, height: dot*2)).fill()
-                    nodeColor.setFill()
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: total, height: total))
+        return renderer.image { ctx in
+            bg.setFill()
+            ctx.fill(CGRect(x: 0, y: 0, width: total, height: total))
+            for row in 0..<gridSize {
+                for col in 0..<gridSize {
+                    let halfCol = col < gridSize / 2 ? col : gridSize - 1 - col
+                    let ci = half[row][halfCol]
+                    guard ci >= 0 else { continue }
+                    palette[ci].setFill()
+                    ctx.fill(CGRect(x: col * px, y: row * px, width: px, height: px))
                 }
             }
         }

@@ -74,7 +74,7 @@ private struct AuthenticatedTabShell: View {
                 }
                 .tag(4)
         }
-        .tint(.primary)
+        .tint(Color.tallyOrange)
         .onChange(of: appState.selectedTabIndex) { _, newTab in
             if newTab == 3, appState.unreadMessageCount > 0 {
                 Task { await appState.markAllMessagesRead() }
@@ -171,7 +171,7 @@ private struct TimelineCard: View {
             }
         }
         .padding()
-        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(.ultraThinMaterial))
+        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
     }
 }
 
@@ -226,19 +226,67 @@ private struct DashboardScreen: View {
         .task { await appState.loadDashboardIfNeeded() }
         .onReceive(ticker) { now = $0 }
         .navigationTitle("Home")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button { appState.selectedTabIndex = 4 } label: {
+                    avatarThumb
+                }
+                .buttonStyle(.plain)
+            }
+        }
+    }
+
+    private var avatarThumb: some View {
+        Group {
+            if let data = appState.avatarImageData, let uiImage = UIImage(data: data) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .interpolation(.none)
+                    .scaledToFill()
+                    .frame(width: 28, height: 28)
+                    .clipShape(Circle())
+            } else {
+                Circle()
+                    .fill(Color.tallyOrange.opacity(0.15))
+                    .frame(width: 28, height: 28)
+                    .overlay {
+                        Text(appState.username.flatMap { $0.first.map(String.init) }?.uppercased() ?? "?")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(Color.tallyOrange)
+                    }
+            }
+        }
+    }
+
+    private var daysUntilPayment: Int? {
+        guard let date = appState.parsedNextPaymentDate else { return nil }
+        let start = Calendar.current.startOfDay(for: now)
+        let end = Calendar.current.startOfDay(for: date)
+        let days = Calendar.current.dateComponents([.day], from: start, to: end).day ?? 0
+        return days > 0 ? days : nil
     }
 
     private var paymentCard: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("NEXT PAYMENT")
+                .font(.system(size: 11, weight: .semibold))
+                .tracking(1.5)
+                .foregroundStyle(.secondary)
+
             Text(appState.paymentAmountText)
-                .font(.system(size: 48, weight: .bold))
+                .font(.system(size: 52, weight: .bold))
                 .minimumScaleFactor(0.7)
                 .lineLimit(1)
                 .contentTransition(.numericText())
 
-            Text("INCOME ASSISTANCE")
-                .font(.system(size: 11, weight: .semibold))
-                .tracking(1.5)
+            if let days = daysUntilPayment {
+                Text("in \(days) days")
+                    .font(.system(size: 22, weight: .semibold))
+                    .foregroundStyle(Color.tallyOrange)
+            }
+
+            Text(appState.nextPaymentDateText)
+                .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
     }
@@ -250,14 +298,14 @@ private struct DashboardScreen: View {
             } label: {
                 HStack(spacing: 8) {
                     Image(systemName: appState.isPaid ? "checkmark.circle.fill" : "circle")
-                        .foregroundStyle(appState.isPaid ? .green : .secondary)
+                        .foregroundStyle(appState.isPaid ? Color.tallyOrange : .secondary)
                     Text(appState.isPaid ? "Paid" : "Paid yet?")
                         .font(.subheadline.weight(.medium))
-                        .foregroundStyle(appState.isPaid ? .green : .primary)
+                        .foregroundStyle(appState.isPaid ? Color.tallyOrange : .primary)
                 }
                 .padding(.horizontal, 18)
                 .padding(.vertical, 10)
-                .background(Capsule().strokeBorder(appState.isPaid ? .green.opacity(0.5) : Color.secondary.opacity(0.3), lineWidth: 1))
+                .background(Capsule().strokeBorder(appState.isPaid ? Color.tallyOrange.opacity(0.5) : Color.secondary.opacity(0.3), lineWidth: 1))
             }
             .buttonStyle(.plain)
         }
@@ -294,10 +342,15 @@ private struct DashboardScreen: View {
                         .font(.subheadline.weight(.bold))
                         .contentTransition(.numericText())
                 }
+                Text("payment amount / hours remaining -- increases as date approaches")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
         .padding()
-        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(.ultraThinMaterial))
+        .background(RoundedRectangle(cornerRadius: 12, style: .continuous)
+            .fill(Color(.secondarySystemGroupedBackground)))
     }
 
     private var pwdSteps: [(label: String, date: String, done: Bool)] {
@@ -343,7 +396,7 @@ private struct DashboardScreen: View {
                 .foregroundStyle(.tertiary)
         }
         .padding()
-        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(.ultraThinMaterial))
+        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
     }
 
     private var messagesPreview: some View {
@@ -358,7 +411,7 @@ private struct DashboardScreen: View {
             }
         }
         .padding()
-        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(.ultraThinMaterial))
+        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
     }
 }
 

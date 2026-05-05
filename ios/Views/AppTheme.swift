@@ -3,6 +3,8 @@ import SwiftUI
 // Minimal color extensions used across views
 extension Color {
     static let appleBlue = Color(red: 0, green: 0.44, blue: 0.89)
+    static let tallyOrange = Color(hex: "FF851B")
+    static let parchment   = Color(hex: "FAF7F4")
     static let gradeGreen = Color.green
     static let gradeRed = Color.red
     static let gradeAmber = Color.orange
@@ -15,18 +17,34 @@ extension Color {
     }
 }
 
-// Glass card modifier
+extension UIColor {
+    convenience init(hex: String) {
+        let scanner = Scanner(string: hex.trimmingCharacters(in: CharacterSet(charactersIn: "#")))
+        var rgb: UInt64 = 0
+        scanner.scanHexInt64(&rgb)
+        self.init(
+            red:   CGFloat((rgb >> 16) & 0xFF) / 255,
+            green: CGFloat((rgb >> 8)  & 0xFF) / 255,
+            blue:  CGFloat( rgb        & 0xFF) / 255,
+            alpha: 1
+        )
+    }
+}
+
+// Card modifier — solid grouped background (no blur artifact)
 extension View {
     func glassCard() -> some View {
         self
             .padding()
-            .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(.ultraThinMaterial))
+            .background(RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color(.secondarySystemGroupedBackground)))
     }
 
     func accentGlassCard() -> some View {
         self
             .padding()
-            .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(.ultraThinMaterial))
+            .background(RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color(.secondarySystemGroupedBackground)))
     }
 
     func sectionLabel() -> some View {

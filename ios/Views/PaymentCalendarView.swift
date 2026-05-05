@@ -63,9 +63,9 @@ struct PaymentCalendarView: View {
                             .frame(width: 30, height: 30)
                             .background {
                                 if cell.isPaymentDay {
-                                    Circle().fill(Color.appleBlue)
+                                    Circle().fill(Color.tallyOrange)
                                 } else if cell.isToday {
-                                    Circle().strokeBorder(Color.appleBlue.opacity(0.4), lineWidth: 1)
+                                    Circle().strokeBorder(Color.tallyOrange.opacity(0.5), lineWidth: 1.5)
                                 }
                             }
                             .foregroundStyle(cell.isPaymentDay ? .white : .primary)
