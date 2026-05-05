@@ -221,7 +221,6 @@ private struct DashboardScreen: View {
                 }
             }
             .padding()
-            .containerRelativeFrame(.vertical, alignment: .top)
         }
         .refreshable { await appState.refreshDashboard() }
         .task { await appState.loadDashboardIfNeeded() }

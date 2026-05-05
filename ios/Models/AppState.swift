@@ -20,6 +20,7 @@ final class AppState {
     var lastSyncDate: Date? = nil
     var paidStatus: PaidStatus? = nil
     var readMessageIds: Set<String> = []
+    var avatarImageData: Data? = nil
 
     private let monitor = NWPathMonitor()
     private let monitorQueue = DispatchQueue(label: "com.heyitsmejosh.tally.network")
@@ -35,6 +36,7 @@ final class AppState {
         dashboard = Self.loadCached(DashboardData.self, forKey: Constants.dashboardCacheKey)
         lastSyncDate = UserDefaults.standard.object(forKey: Constants.lastSyncKey) as? Date
         storedCredentials = KeychainHelper.loadCredentials()
+        avatarImageData = UserDefaults.standard.data(forKey: "avatar-image")
     }
 
     deinit {
@@ -141,7 +143,17 @@ final class AppState {
         }
     }
 
+    func saveAvatarData(_ data: Data) {
+        avatarImageData = data
+        UserDefaults.standard.set(data, forKey: "avatar-image")
+    }
+
     func bootstrap() async {
+        // Optimistic: show cached dashboard immediately while session check runs
+        if storedCredentials != nil, dashboard != nil {
+            isAuthenticated = true
+        }
+
         // Fast path: check if server session is still alive (no BC Self-Serve roundtrip)
         if let _ = storedCredentials {
             if let sessionValid = try? await APIClient.shared.sessionCheck(), sessionValid {
@@ -153,6 +165,9 @@ final class AppState {
                 return
             }
         }
+
+        // Session expired — revoke optimistic auth and do full re-auth
+        isAuthenticated = false
 
         // Slow path: full login against BC Self-Serve
         if let credentials = storedCredentials {
