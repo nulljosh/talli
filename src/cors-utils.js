@@ -37,6 +37,11 @@ function createCorsOptionsDelegate(allowedOrigins) {
     const origin = req.headers.origin;
     const requestHost = getRequestHost(req);
 
+    // No Origin header = direct navigation or same-origin — not a CORS request, allow through
+    if (!origin) {
+      return callback(null, { origin: false });
+    }
+
     if (isOriginAllowed(origin, requestHost, allowedOrigins)) {
       return callback(null, { origin: true });
     }
