@@ -69,53 +69,67 @@ struct SettingsView: View {
     private func generateAvatar() async {
         isGeneratingAvatar = true
         defer { isGeneratingAvatar = false }
-        let image = Self.generatePixelArtImage()
+        let image = Self.generateNodeGraphImage()
         guard let data = image.pngData() else { return }
         appState.saveAvatarData(data)
     }
 
-    // Pixel-art avatar: 8x8 mirrored grid, matches web generatePixelArtSVG() exactly
-    private static func generatePixelArtImage() -> UIImage {
-        let palettes: [[UIColor]] = [
-            [UIColor(hex: "e63946"), UIColor(hex: "457b9d"), UIColor(hex: "1d3557")],
-            [UIColor(hex: "7b2d8b"), UIColor(hex: "c77dff"), UIColor(hex: "e0aaff")],
-            [UIColor(hex: "0077b6"), UIColor(hex: "00b4d8"), UIColor(hex: "90e0ef")],
-            [UIColor(hex: "d62828"), UIColor(hex: "f77f00"), UIColor(hex: "fcbf49")],
-            [UIColor(hex: "2d6a4f"), UIColor(hex: "52b788"), UIColor(hex: "b7e4c7")],
-            [UIColor(hex: "FF851B"), UIColor(hex: "f2ede8"), UIColor(hex: "1a1612")],
-        ]
-        let bgs: [UIColor] = [
-            UIColor(hex: "111111"), UIColor(hex: "0d0c0b"), UIColor(hex: "1a1a1a"),
-            UIColor(hex: "0f0f1a"), UIColor(hex: "0a1a0a"), UIColor(hex: "0d0c0b"),
-        ]
-        let palette = palettes.randomElement()!
-        let bg      = bgs.randomElement()!
-        let gridSize = 8
-        let px = 8
-        let total = gridSize * px   // 64pt canvas
+    // Node-graph avatar: random dots connected by proximity lines, Anthropic aesthetic
+    private static func generateNodeGraphImage() -> UIImage {
+        let size: CGFloat = 64
+        let count = 18 + Int.random(in: 0...4)
 
-        // Build half-grid (8 rows x 4 cols), mirrored left-to-right
-        var half = [[Int]]()
-        for _ in 0..<gridSize {
-            var row = [Int]()
-            for _ in 0..<(gridSize / 2) {
-                row.append(Double.random(in: 0...1) > 0.45 ? Int.random(in: 0...2) : -1)
-            }
-            half.append(row)
+        struct Node {
+            var x, y, r: CGFloat
+            var hub: Bool
+            var accent: Bool
         }
 
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: total, height: total))
-        return renderer.image { ctx in
-            bg.setFill()
-            ctx.fill(CGRect(x: 0, y: 0, width: total, height: total))
-            for row in 0..<gridSize {
-                for col in 0..<gridSize {
-                    let halfCol = col < gridSize / 2 ? col : gridSize - 1 - col
-                    let ci = half[row][halfCol]
-                    guard ci >= 0 else { continue }
-                    palette[ci].setFill()
-                    ctx.fill(CGRect(x: col * px, y: row * px, width: px, height: px))
+        let nodes: [Node] = (0..<count).map { _ in
+            Node(
+                x: 4 + CGFloat.random(in: 0...56),
+                y: 4 + CGFloat.random(in: 0...56),
+                r: 1 + CGFloat.random(in: 0...1.5),
+                hub: Double.random(in: 0...1) < 0.15,
+                accent: Double.random(in: 0...1) < 0.3
+            )
+        }
+
+        let orange = UIColor(hex: "FF851B")
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: size, height: size))
+        return renderer.image { _ in
+            let ctx = UIGraphicsGetCurrentContext()!
+            UIColor(hex: "0d0c0b").setFill()
+            ctx.fill(CGRect(x: 0, y: 0, width: size, height: size))
+
+            ctx.setLineWidth(0.5)
+            ctx.setLineCap(.round)
+            for i in 0..<nodes.count {
+                for j in (i+1)..<nodes.count {
+                    let dx = nodes[i].x - nodes[j].x
+                    let dy = nodes[i].y - nodes[j].y
+                    let dist = sqrt(dx*dx + dy*dy)
+                    if dist < 22 {
+                        let alpha = (1 - dist / 22) * 0.45
+                        ctx.setStrokeColor(orange.withAlphaComponent(alpha).cgColor)
+                        ctx.move(to: CGPoint(x: nodes[i].x, y: nodes[i].y))
+                        ctx.addLine(to: CGPoint(x: nodes[j].x, y: nodes[j].y))
+                        ctx.strokePath()
+                    }
                 }
+            }
+
+            for n in nodes {
+                if n.hub {
+                    ctx.setLineWidth(0.75)
+                    ctx.setStrokeColor(orange.withAlphaComponent(0.15).cgColor)
+                    let ringR = n.r + 4
+                    ctx.addEllipse(in: CGRect(x: n.x - ringR, y: n.y - ringR, width: ringR * 2, height: ringR * 2))
+                    ctx.strokePath()
+                }
+                let fill: UIColor = n.accent ? orange : UIColor.white.withAlphaComponent(0.65)
+                fill.setFill()
+                ctx.fillEllipse(in: CGRect(x: n.x - n.r, y: n.y - n.r, width: n.r * 2, height: n.r * 2))
             }
         }
     }

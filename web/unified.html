@@ -60,33 +60,34 @@ function _tallyScriptError() {
 <script type="text/babel">
 const { useState, useEffect, useRef, useCallback } = React;
 
-// ── pixel art avatar ──────────────────────────────────
-function generatePixelArtSVG() {
-  const palettes = [
-    ['#e63946','#457b9d','#1d3557'],
-    ['#7b2d8b','#c77dff','#e0aaff'],
-    ['#0077b6','#00b4d8','#90e0ef'],
-    ['#d62828','#f77f00','#fcbf49'],
-    ['#2d6a4f','#52b788','#b7e4c7'],
-    ['#FF851B','#f2ede8','#1a1612'],
-  ];
-  const bgs = ['#111','#0d0c0b','#1a1a1a','#0f0f1a','#0a1a0a','#0d0c0b'];
-  const palette = palettes[Math.floor(Math.random() * palettes.length)];
-  const bg = bgs[Math.floor(Math.random() * bgs.length)];
-  const px = 8; const size = 8; const total = size * px;
-  const grid = Array.from({length:size}, () =>
-    Array.from({length:Math.ceil(size/2)}, () =>
-      Math.random() > 0.45 ? Math.floor(Math.random() * 3) : -1
-    )
-  );
-  let rects = '';
-  for (let row = 0; row < size; row++) {
-    for (let col = 0; col < size; col++) {
-      const ci = grid[row][col < size/2 ? col : size-1-col];
-      if (ci >= 0) rects += `<rect x="${col*px}" y="${row*px}" width="${px}" height="${px}" fill="${palette[ci]}"/>`;
+// ── node-graph avatar ─────────────────────────────────
+function generateNodeGraphSVG() {
+  const s = 64;
+  const count = 18 + Math.floor(Math.random() * 5);
+  const nodes = Array.from({length: count}, () => ({
+    x: 4 + Math.random() * 56,
+    y: 4 + Math.random() * 56,
+    r: 1 + Math.random() * 1.5,
+    hub: Math.random() < 0.15,
+    accent: Math.random() < 0.3,
+  }));
+  let out = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${s} ${s}" width="${s}" height="${s}"><rect width="${s}" height="${s}" fill="#0d0c0b"/>`;
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 22) {
+        const a = ((1 - dist / 22) * 0.45).toFixed(2);
+        out += `<line x1="${nodes[i].x.toFixed(1)}" y1="${nodes[i].y.toFixed(1)}" x2="${nodes[j].x.toFixed(1)}" y2="${nodes[j].y.toFixed(1)}" stroke="rgba(255,133,27,${a})" stroke-width="0.5" stroke-linecap="round"/>`;
+      }
     }
   }
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" width="${total}" height="${total}" shape-rendering="crispEdges"><rect width="${total}" height="${total}" fill="${bg}"/>${rects}</svg>`;
+  nodes.forEach(n => {
+    if (n.hub) out += `<circle cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${(n.r+4).toFixed(1)}" fill="none" stroke="rgba(255,133,27,0.15)" stroke-width="0.75"/>`;
+    const fill = n.accent ? '#FF851B' : 'rgba(242,237,232,0.65)';
+    out += `<circle cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${n.r.toFixed(1)}" fill="${fill}"/>`;
+  });
+  return out + '</svg>';
 }
 
 // ── tokens ────────────────────────────────────────────
@@ -903,7 +904,7 @@ function App() {
         fetch('/api/profile',{credentials:'include'}).then(r=>r.json()).then(p=>{
           if(p.avatarUrl) { setAvatarUrl(p.avatarUrl); return; }
           // No avatar yet -- generate and save one silently
-          const svg = generatePixelArtSVG();
+          const svg = generateNodeGraphSVG();
           const b64 = btoa(unescape(encodeURIComponent(svg)));
           fetch('/api/avatar',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({svgBase64:b64})})
             .then(r=>r.json()).then(res=>{ if(res.avatarUrl) setAvatarUrl(res.avatarUrl); }).catch(()=>{});
@@ -931,7 +932,7 @@ function App() {
   };
 
   const handleAvatarClick = async () => {
-    const svg = generatePixelArtSVG();
+    const svg = generateNodeGraphSVG();
     const b64 = btoa(unescape(encodeURIComponent(svg)));
     try {
       const r = await fetch('/api/avatar',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({svgBase64:b64})});

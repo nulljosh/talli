@@ -210,6 +210,8 @@ private struct DashboardScreen: View {
                 }
 
                 paymentCard
+                paymentProgress
+                statsGrid
                 paidToggle
                 dateCard
                 TimelineCard(title: "PWD APPLICATION", steps: pwdSteps)
@@ -259,6 +261,47 @@ private struct DashboardScreen: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
+    }
+
+    private var paymentProgress: some View {
+        GeometryReader { geo in
+            let days = Double(appState.daysUntilPayment ?? 28)
+            let pct = CGFloat(max(0, min(1, (28 - days) / 28)))
+            let fillW = geo.size.width * pct
+            ZStack(alignment: .leading) {
+                Capsule().fill(Color(.tertiarySystemFill)).frame(height: 3)
+                Capsule().fill(Color.tallyOrange).frame(width: max(0, fillW), height: 3)
+                Circle()
+                    .fill(Color.tallyOrange)
+                    .frame(width: 7, height: 7)
+                    .offset(x: max(0, fillW - 3.5), y: 0)
+            }
+        }
+        .frame(height: 7)
+    }
+
+    private var statsGrid: some View {
+        HStack(spacing: 12) {
+            statCell(label: "MONTHLY", value: appState.paymentAmountText)
+            statCell(label: "NEXT PAYMENT", value: appState.nextPaymentDateText)
+        }
+    }
+
+    private func statCell(label: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(label)
+                .font(.system(size: 10, weight: .semibold))
+                .tracking(1.2)
+                .foregroundStyle(.secondary)
+            Text(value)
+                .font(.system(size: 16, weight: .semibold))
+                .minimumScaleFactor(0.8)
+                .lineLimit(1)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
     }
 
     private var paidToggle: some View {
