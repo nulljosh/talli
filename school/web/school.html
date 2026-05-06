@@ -349,6 +349,12 @@
       font-weight: 400;
     }
 
+    .status-name-sub {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 1px;
+    }
+
     .status-badge {
       font-size: 0.75rem;
       font-weight: 500;
@@ -689,7 +695,8 @@
 
     // Completed courses not in D2L
     const COMPLETED_COURSES = [
-      { name: 'English 12', grade: 'A+', status: 'done' }
+      { name: 'English 12', grade: 'A+', status: 'done' },
+      { name: 'Structured Math', schedule: 'Mon / Wed 3:30–6:30', note: '6 wks → UVic', status: 'active' }
     ];
 
     // Short course names
@@ -965,17 +972,25 @@
         }
       }
 
-      // Completed courses
+      // Completed / in-progress courses not in D2L
       for (const c of COMPLETED_COURSES) {
         const row = document.createElement('div');
         row.className = 'status-row';
+        const nameWrap = document.createElement('div');
         const nameSpan = document.createElement('span');
         nameSpan.className = 'status-name';
         nameSpan.textContent = c.name;
+        nameWrap.appendChild(nameSpan);
+        if (c.schedule) {
+          const sub = document.createElement('div');
+          sub.className = 'status-name-sub';
+          sub.textContent = c.schedule + (c.note ? ' · ' + c.note : '');
+          nameWrap.appendChild(sub);
+        }
         const badge = document.createElement('span');
-        badge.className = 'status-badge done';
-        badge.textContent = c.grade;
-        row.appendChild(nameSpan);
+        badge.className = 'status-badge ' + (c.status || 'done');
+        badge.textContent = c.status === 'active' ? 'active' : c.grade;
+        row.appendChild(nameWrap);
         row.appendChild(badge);
         rows.push(row);
       }

@@ -728,5 +728,14 @@
         }
       ]
     }
-  ]
+  ],
+  "structured_math": {
+    "name": "Structured Math",
+    "schedule": "Mon / Wed 3:30–6:30",
+    "duration_weeks": 6,
+    "start_date": "2026-05-05",
+    "end_date": "2026-06-16",
+    "status": "active",
+    "note": "In-person completion course. Finishes ~June 16 — then ready for UVic."
+  }
 }
