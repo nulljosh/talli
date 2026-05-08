@@ -25,8 +25,9 @@ struct Course: Codable, Sendable, Identifiable {
     let categories: [GradeCategory]
 
     var shortName: String {
-        if course.contains("Pre-Calculus") { return "Pre-Calculus 12" }
-        if course.contains("Anatomy") { return "Anatomy & Physiology 12" }
+        if course.contains("Spring Blended") || course.contains("SPBL") { return "Pre-Calc 12 (Blended)" }
+        if course.contains("Pre-Calculus") { return "Pre-Calc 12 (Online)" }
+        if course.contains("Anatomy") { return "A&P 12" }
         return course.components(separatedBy: ",").first ?? course
     }
 }
@@ -44,6 +45,12 @@ struct GradeItem: Codable, Sendable, Identifiable {
     let score: Double?
     let out_of: Double?
     let percentage: Double?
+}
+
+func averagePct(_ items: [GradeItem]) -> Double? {
+    let pcts = items.compactMap(\.percentage)
+    guard !pcts.isEmpty else { return nil }
+    return pcts.reduce(0, +) / Double(pcts.count)
 }
 
 // MARK: - Quizzes

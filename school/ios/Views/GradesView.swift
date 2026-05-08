@@ -43,12 +43,6 @@ struct GradesView: View {
 struct CourseSection: View {
     let course: Course
 
-    var average: Double? {
-        let pcts = course.categories.flatMap(\.items).compactMap(\.percentage)
-        guard !pcts.isEmpty else { return nil }
-        return pcts.reduce(0, +) / Double(pcts.count)
-    }
-
     var body: some View {
         Section {
             ForEach(course.categories) { cat in
@@ -60,7 +54,7 @@ struct CourseSection: View {
             HStack {
                 Text(course.shortName)
                 Spacer()
-                if let avg = average {
+                if let avg = averagePct(course.categories.flatMap(\.items)) {
                     Text("\(Int(avg.rounded()))%")
                         .foregroundStyle(gradeColor(avg))
                         .fontWeight(.semibold)
@@ -73,12 +67,6 @@ struct CourseSection: View {
 struct CategoryRow: View {
     let category: GradeCategory
     @State private var expanded = false
-
-    var avg: Double? {
-        let pcts = category.items.compactMap(\.percentage)
-        guard !pcts.isEmpty else { return nil }
-        return pcts.reduce(0, +) / Double(pcts.count)
-    }
 
     var body: some View {
         DisclosureGroup(isExpanded: $expanded) {
@@ -97,7 +85,7 @@ struct CategoryRow: View {
             HStack {
                 Text(category.category)
                 Spacer()
-                if let avg {
+                if let avg = averagePct(category.items) {
                     Text("\(Int(avg.rounded()))%").foregroundStyle(gradeColor(avg)).font(.subheadline)
                 }
             }
