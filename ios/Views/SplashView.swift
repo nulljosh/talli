@@ -5,13 +5,13 @@ struct SplashView: View {
         VStack(spacing: 16) {
             Image(systemName: "chart.bar.doc.horizontal")
                 .font(.system(size: 64))
-                .foregroundStyle(Color.appleBlue)
+                .foregroundStyle(Color.tallyOrange)
 
             Text("Tally")
                 .font(.system(size: 38, weight: .bold))
                 .foregroundStyle(.primary)
 
-            Text("Know what you're owed")
+            Text("Your benefits. No bureaucracy.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }

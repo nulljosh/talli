@@ -92,24 +92,35 @@ private struct LoginScreen: View {
         VStack(spacing: 20) {
             Spacer()
 
-            VStack(spacing: 10) {
+            VStack(spacing: 8) {
+                Image(systemName: "chart.bar.doc.horizontal")
+                    .font(.system(size: 48))
+                    .foregroundStyle(Color.tallyOrange)
                 Text("Tally")
                     .font(.system(size: 42, weight: .bold))
-                Text("Sign in to see what you're owed")
+                Text("Your benefits. No bureaucracy.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
 
-            VStack(spacing: 12) {
-                TextField("Username", text: $username)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                    .padding()
-                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("BCEID USERNAME")
+                        .sectionLabel()
+                    TextField("your.username", text: $username)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                        .padding()
+                        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                }
 
-                SecureField("Password", text: $password)
-                    .padding()
-                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("PASSWORD")
+                        .sectionLabel()
+                    SecureField("••••••••", text: $password)
+                        .padding()
+                        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                }
             }
 
             Button {
@@ -117,12 +128,12 @@ private struct LoginScreen: View {
             } label: {
                 HStack {
                     if appState.isLoading { ProgressView().tint(.white) }
-                    Text("Login").fontWeight(.semibold)
+                    Text("Sign In").fontWeight(.semibold)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
-                .background(Color.primary, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                .foregroundStyle(Color(uiColor: .systemBackground))
+                .background(Color.tallyOrange, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .foregroundStyle(.white)
             }
             .disabled(username.isEmpty || password.isEmpty || appState.isLoading)
             .opacity((username.isEmpty || password.isEmpty || appState.isLoading) ? 0.6 : 1)
@@ -137,8 +148,6 @@ private struct LoginScreen: View {
             Spacer()
         }
         .padding(24)
-        .navigationTitle("Sign In")
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
