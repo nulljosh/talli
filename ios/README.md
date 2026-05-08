@@ -1,7 +1,7 @@
 <img src="icon.svg" width="80">
 
 # Tally iOS
-![version](https://img.shields.io/badge/version-v2.4.0-orange)
+![version](https://img.shields.io/badge/version-v2.4.1-orange)
 
 <p align="center"><img src="Resources/preview.png" width="300"></p>
 
@@ -36,6 +36,10 @@ Requires Xcode 26.2 beta, iOS 17+ simulator.
 - [ ] PDF report export
 
 ## Changelog
+
+### v2.4.1 (2026-05-07)
+- Fixed app icon: SVG was rasterized without scaling, placing the design in the top-left 200px of a 1024x1024 canvas. Regenerated light, dark, and tinted variants via cairosvg at full scale.
+- Splash screen: tally marks on dark background (#1a1612) via UILaunchScreen + named color/image assets.
 
 ### v2.4.0 (2026-05-07)
 - tallyOrange accent throughout (button, tabs, calendar, avatar)
