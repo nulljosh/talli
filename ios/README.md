@@ -1,21 +1,24 @@
-![Project Name](icon.svg)
+<img src="icon.svg" width="80">
+
 # Tally iOS
-![version](https://img.shields.io/badge/version-v2.3.0-blue)
+![version](https://img.shields.io/badge/version-v2.4.0-orange)
 
 <p align="center"><img src="Resources/preview.png" width="300"></p>
-iOS companion for [Tally](https://github.com/nulljosh/tally), the BC benefits tracker, built with SwiftUI (iOS 17+, Swift 6), @Observable state management, URLSession cookie jar auth, xcodegen, backend https://tally.heyitsmejosh.com (Vercel + Puppeteer), architecture: SwiftUI Views -> AppState (@Observable) -> APIClient (URLSession) -> Vercel Backend -> BC Self-Serve, requires Xcode 16+ (Swift 6).
+
+iOS companion for [Tally](https://tally.heyitsmejosh.com), the BC benefits tracker. SwiftUI (iOS 17+, Swift 6), `@Observable` state, URLSession cookie jar auth, xcodegen. Backend: Vercel + Puppeteer at tally.heyitsmejosh.com.
+
 [Architecture](architecture.svg)
 
 ## Features
 
-- 5-tab layout: Home, Benefits, Reports, Messages, Settings
-- Dashboard with payment amount, countdown to 25th, payment calendar
-- Benefits tab: DTC navigator, CRA workspace, RDSP guide, dispute analyzer
+- 4-tab layout: Home, Reports, Benefits, Messages
+- Dashboard with payment amount, countdown, payment calendar, PWD/DTC timelines
 - Monthly report submission
-- BC Self-Serve login with 2-hour session + biometric sign-in
+- BC Self-Serve login with biometric sign-in
 - Offline caching with instant launch
-- CSV export of dashboard data
-- Apple Liquid Glass UI
+- CSV export
+- Pixel-art avatar (Core Graphics, 6 palettes)
+- Warm parchment palette, tallyOrange accent, solid cards
 
 ## Run
 
@@ -24,13 +27,23 @@ xcodegen generate
 open Tally.xcodeproj
 ```
 
+Requires Xcode 26.2 beta, iOS 17+ simulator.
+
 ## Roadmap
 
 - [ ] Payment history chart (sparkline/bar)
-- [ ] Document vault (encrypted storage)
 - [ ] Push notifications for payment dates
+- [ ] PDF report export
 
 ## Changelog
+
+### v2.4.0 (2026-05-07)
+- tallyOrange accent throughout (button, tabs, calendar, avatar)
+- Solid cards replace glass (no ultraThinMaterial)
+- Pixel-art avatar via Core Graphics (6 palettes, mirrors web generatePixelArtSVG)
+- Login screen: orange icon, BCEID section labels, solid fields, orange Sign In button
+- App icon updated to orange tally-mark design
+- Splash tagline aligned with web: "Your benefits. No bureaucracy."
 
 ### v2.3.0 (2026-03-28)
 - Contacts sync
@@ -52,11 +65,6 @@ open Tally.xcodeproj
 ### v2.0.0 (2026-03-18)
 - Added RDSP guide (eligibility, key features, CRA resource links)
 - Synced with tally web v2.4.0
-- Major version bump
-
-### v2.0.1 (2026-03-20)
-- Redesigned app icon: dark terminal aesthetic, proper 1024x1024 scaling
-- Centered clipboard + checklist design with BC gov blue palette
 
 ## License
 
