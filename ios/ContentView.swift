@@ -93,9 +93,10 @@ private struct LoginScreen: View {
             Spacer()
 
             VStack(spacing: 8) {
-                Image(systemName: "chart.bar.doc.horizontal")
-                    .font(.system(size: 48))
-                    .foregroundStyle(Color.tallyOrange)
+                Image("LaunchIcon")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 72, height: 72)
                 Text("Tally")
                     .font(.system(size: 42, weight: .bold))
                 Text("Your benefits. No bureaucracy.")
@@ -148,6 +149,9 @@ private struct LoginScreen: View {
             Spacer()
         }
         .padding(24)
+        .background(Color(hex: "1a1612").ignoresSafeArea())
+        .preferredColorScheme(.dark)
+        .toolbar(.hidden, for: .navigationBar)
     }
 }
 
