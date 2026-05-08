@@ -696,14 +696,14 @@
     // Completed courses not in D2L
     const COMPLETED_COURSES = [
       { name: 'English 12', grade: 'A+', status: 'done' },
-      { name: 'Structured Math', schedule: 'Mon / Wed 3:30–6:30', note: '6 wks → UVic', status: 'active' }
     ];
 
     // Short course names
     function shortName(full) {
       if (!full || typeof full !== 'string') return 'Course';
-      if (full.includes('Pre-Calculus')) return 'Pre-Calculus 12';
-      if (full.includes('Anatomy')) return 'Anatomy & Physiology 12';
+      if (full.includes('Spring Blended') || full.includes('SPBL')) return 'Pre-Calc 12 (Blended)';
+      if (full.includes('Pre-Calculus')) return 'Pre-Calc 12 (Online)';
+      if (full.includes('Anatomy')) return 'A&P 12';
       return full.split(',')[0];
     }
 

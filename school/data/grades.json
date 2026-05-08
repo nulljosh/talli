@@ -1,56 +1,290 @@
 {
-  "retrieved_at": "2026-05-04T02:10:14.308753",
+  "retrieved_at": "2026-05-07T18:29:07.800221",
   "courses": [
     {
-      "course": "LEC Pre-Calculus 12 25-26 JR, PREC12 OL 25-26 RATCLIFFE - LEC",
-      "course_ou": "184298",
-      "retrieved_at": "2026-05-04T02:10:09.897345",
+      "course": "LEC Pre-Calculus 12 Spring Blended 2026 AD, PREC12 SPBL 26 DHIMAN- LEC",
+      "course_ou": "198889",
+      "retrieved_at": "2026-05-07T18:28:58.668132",
       "categories": [
         {
-          "category": "Learning Guides",
+          "category": "Course Plan - Must be submitted to start the course",
+          "grade_pct": null,
+          "items": []
+        },
+        {
+          "category": "Projects",
           "grade_pct": null,
           "items": [
             {
-              "name": "U1 Learning Guide",
+              "name": "U1 Projects",
               "score": null,
-              "out_of": 100.0,
+              "out_of": null,
               "percentage": null
+            },
+            {
+              "name": "U2 Projects",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U3 Projects",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U4 Projects",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U5 Projects",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U6 Projects",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U7 Projects",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            }
+          ]
+        },
+        {
+          "category": "Unit Tests",
+          "grade_pct": null,
+          "items": [
+            {
+              "name": "U1-Quiz #1",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U1 Exam",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U2 Exam",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U3 Exam",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U4 Exam",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U5 Exam",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U6 Exam",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U7 Exam",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            }
+          ]
+        },
+        {
+          "category": "Module Exams",
+          "grade_pct": null,
+          "items": [
+            {
+              "name": "Module 1 Exam",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "Module 2 Exam",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "Module 3 Exam",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            }
+          ]
+        },
+        {
+          "category": "Final Exam",
+          "grade_pct": null,
+          "items": [
+            {
+              "name": "Final Exam",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            }
+          ]
+        },
+        {
+          "category": "Quizzes - Mark Not Counted",
+          "grade_pct": null,
+          "items": [
+            {
+              "name": "U1-Quiz #2",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U2-Quiz #1",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U2-Quiz #2",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U3-Quiz #1",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U3-Quiz #2",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U4-Quiz #1",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U4-Quiz #2",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U5-Quiz #1",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U5-Quiz #2",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U6-Quiz #1",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U6-Quiz #2",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U7-Quiz #1",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            },
+            {
+              "name": "U7-Quiz #2",
+              "score": null,
+              "out_of": null,
+              "percentage": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "course": "LEC Pre-Calculus 12 25-26 JR, PREC12 OL 25-26 RATCLIFFE - LEC",
+      "course_ou": "184298",
+      "retrieved_at": "2026-05-07T18:29:02.752909",
+      "categories": [
+        {
+          "category": "Learning Guides",
+          "grade_pct": 57.0,
+          "items": [
+            {
+              "name": "U1 Learning Guide",
+              "score": 100.0,
+              "out_of": 100.0,
+              "percentage": 100.0
             },
             {
               "name": "U2 Learning Guide",
-              "score": null,
+              "score": 50.0,
               "out_of": 100.0,
-              "percentage": null
+              "percentage": 50.0
             },
             {
               "name": "U3 Learning Guide",
-              "score": null,
+              "score": 0.0,
               "out_of": 100.0,
-              "percentage": null
+              "percentage": 0.0
             },
             {
               "name": "U4 Learning Guide",
-              "score": null,
+              "score": 0.0,
               "out_of": 100.0,
-              "percentage": null
+              "percentage": 0.0
             },
             {
               "name": "U5 Learning Guide",
-              "score": null,
+              "score": 67.0,
               "out_of": 100.0,
-              "percentage": null
+              "percentage": 67.0
             },
             {
               "name": "U6 Learning Guide",
-              "score": null,
+              "score": 80.0,
               "out_of": 100.0,
-              "percentage": null
+              "percentage": 80.0
             },
             {
               "name": "U7 Learning Guide",
-              "score": null,
+              "score": 100.0,
               "out_of": 100.0,
-              "percentage": null
+              "percentage": 100.0
             },
             {
               "name": "FIN Review",
@@ -287,7 +521,7 @@
     {
       "course": "LEC Anatomy & Physiology 12 25-26 AD, ATPH12 OL 25-26 DHIMAN - LEC",
       "course_ou": "153403",
-      "retrieved_at": "2026-05-04T02:10:14.307805",
+      "retrieved_at": "2026-05-07T18:29:07.798965",
       "categories": [
         {
           "category": "Course Plan",
@@ -728,14 +962,5 @@
         }
       ]
     }
-  ],
-  "structured_math": {
-    "name": "Structured Math",
-    "schedule": "Mon / Wed 3:30–6:30",
-    "duration_weeks": 6,
-    "start_date": "2026-05-05",
-    "end_date": "2026-06-16",
-    "status": "active",
-    "note": "In-person completion course. Finishes ~June 16 — then ready for UVic."
-  }
+  ]
 }
