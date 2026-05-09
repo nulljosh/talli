@@ -911,6 +911,8 @@
         throw new Error('Missing grades payload');
       }
       setMeta(payload.meta, GRADES.retrieved_at);
+      // A&P 12 passed (Pass) — hide from dashboard
+      GRADES.courses = (GRADES.courses || []).filter(c => !shortName(c.course).includes('A&P'));
 
       if (!Array.isArray(GRADES.courses) || GRADES.courses.length === 0) {
         tabsEl.innerHTML = '';
@@ -1058,18 +1060,6 @@
       let count = 10;
 
       const mathUnits = Object.keys(QUIZZES.math || {}).map(Number).sort((a,b) => a-b);
-      const sciUnits  = Object.keys(QUIZZES.science || {}).map(Number).sort((a,b) => a-b);
-
-      // Subject row
-      wrap.appendChild(mkEl('h2', null, 'Subject'));
-      let unitRowEl;
-      const subjectRow = quizPillRow(
-        ['math', 'science'],
-        s => s === 'math' ? 'Pre-Calculus 12' : 'Anatomy & Physiology 12',
-        s => s === subject,
-        s => { subject = s; unit = 'all'; wrap.removeChild(unitRowEl); unitRowEl = buildUnitRow(); wrap.insertBefore(unitRowEl, countLabel); }
-      );
-      wrap.appendChild(subjectRow);
 
       // Unit row
       const unitLabel = mkEl('h2', null, 'Unit');
@@ -1077,16 +1067,14 @@
       wrap.appendChild(unitLabel);
 
       function buildUnitRow() {
-        const units = subject === 'math' ? mathUnits : sciUnits;
-        const allLabel = subject === 'math' ? 'All Pre-Calc' : 'All A&P';
         return quizPillRow(
-          ['all', ...units],
-          u => u === 'all' ? allLabel : 'Unit ' + u,
+          ['all', ...mathUnits],
+          u => u === 'all' ? 'All Pre-Calc' : 'Unit ' + u,
           u => String(u) === String(unit),
           u => { unit = u; }
         );
       }
-      unitRowEl = buildUnitRow();
+      const unitRowEl = buildUnitRow();
       wrap.appendChild(unitRowEl);
 
       // Count row
