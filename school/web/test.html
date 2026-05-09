@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biology 12 Test</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a0a;color:#fafafa;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+.wrap{width:100%;max-width:640px;padding:20px}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.header h1{font-size:1.1rem;font-weight:600;letter-spacing:-0.02em}
+.header span{font-size:0.8rem;color:#a3a3a3}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.unit-btn{background:#171717;border:1px solid #262626;color:#a3a3a3;padding:6px 12px;border-radius:6px;font-size:0.75rem;cursor:pointer;transition:all 0.15s ease}
+.unit-btn:hover{border-color:#525252;color:#fafafa}
+.unit-btn.active{background:#fafafa;color:#0a0a0a;border-color:#fafafa}
+.start-wrap{display:flex;flex-direction:column;align-items:center;gap:20px;margin-top:60px}
+.start-wrap p{color:#a3a3a3;font-size:0.9rem}
+.btn{background:#fafafa;color:#0a0a0a;border:none;padding:12px 32px;border-radius:8px;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1)}
+.btn:hover{transform:translateY(-2px)}
+.btn:disabled{opacity:0.3;cursor:default;transform:none}
+.btn-outline{background:transparent;color:#fafafa;border:1px solid #262626}
+.btn-outline:hover{border-color:#525252}
+.progress-bar{width:100%;height:3px;background:#1a1a1a;border-radius:2px;overflow:hidden;margin-bottom:8px}
+.progress-fill{height:100%;background:#fafafa;transition:width 0.3s ease;border-radius:2px}
+.progress-info{display:flex;justify-content:space-between;font-size:0.7rem;color:#525252;margin-bottom:16px}
+.timer{font-size:0.8rem;color:#a3a3a3;font-variant-numeric:tabular-nums}
+.question-card{background:#171717;border:1px solid #262626;border-radius:12px;padding:24px;margin-bottom:16px}
+.q-unit{font-size:0.7rem;color:#525252;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:12px}
+.q-text{font-size:1rem;line-height:1.6;margin-bottom:20px}
+.q-num{font-size:0.75rem;color:#525252;margin-bottom:8px}
+.options{display:flex;flex-direction:column;gap:8px}
+.option{background:#0a0a0a;border:1px solid #262626;border-radius:8px;padding:12px 16px;cursor:pointer;transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);display:flex;align-items:flex-start;gap:12px;font-size:0.9rem;line-height:1.5}
+.option:hover{border-color:#525252;transform:translateX(2px)}
+.option.selected{border-color:#fafafa;background:#1a1a1a}
+.option .key{color:#525252;font-weight:600;flex-shrink:0;min-width:16px}
+.option.selected .key{color:#fafafa}
+.option.correct{border-color:#22c55e;background:rgba(34,197,94,0.08)}
+.option.correct .key{color:#22c55e}
+.option.wrong{border-color:#ef4444;background:rgba(239,68,68,0.08)}
+.option.wrong .key{color:#ef4444}
+.option.missed{border-color:#22c55e;border-style:dashed;background:transparent}
+.option.missed .key{color:#22c55e}
+.option.review-neutral{cursor:default;transform:none}
+.option.review-neutral:hover{transform:none;border-color:#262626}
+.nav-row{display:flex;gap:12px;justify-content:center;align-items:center;margin-top:8px}
+.nav-row button{background:#171717;border:1px solid #262626;color:#fafafa;padding:10px 24px;border-radius:8px;font-size:0.85rem;cursor:pointer;transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1)}
+.nav-row button:hover{transform:translateY(-1px);border-color:#525252}
+.nav-row button:disabled{opacity:0.3;cursor:default;transform:none}
+.flag-btn{font-size:0.75rem !important;padding:8px 14px !important;background:transparent !important;border-color:#363636 !important}
+.flag-btn.flagged{color:#f59e0b !important;border-color:#f59e0b !important}
+.submit-row{text-align:center;margin-top:24px}
+.results{text-align:center;margin-top:40px}
+.grade-big{font-size:4rem;font-weight:700;letter-spacing:-0.04em;margin-bottom:4px}
+.grade-pct{font-size:1.2rem;color:#a3a3a3;margin-bottom:24px}
+.grade-A{color:#22c55e}.grade-B{color:#a3e635}.grade-Cp{color:#facc15}.grade-C{color:#f59e0b}.grade-Cm{color:#f97316}.grade-F{color:#ef4444}
+.unit-scores{margin:24px 0;text-align:left}
+.unit-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #1a1a1a;font-size:0.85rem}
+.unit-row .label{color:#a3a3a3}
+.unit-row .score{font-variant-numeric:tabular-nums}
+.bar-wrap{flex:1;margin:0 12px;height:4px;background:#1a1a1a;border-radius:2px;overflow:hidden}
+.bar-fill{height:100%;border-radius:2px;transition:width 0.5s ease}
+.review-header{display:flex;justify-content:space-between;align-items:center;margin:32px 0 16px}
+.review-header h2{font-size:1rem;font-weight:600}
+.review-tag{font-size:0.7rem;padding:3px 8px;border-radius:4px;font-weight:600}
+.review-correct{background:rgba(34,197,94,0.15);color:#22c55e}
+.review-wrong{background:rgba(239,68,68,0.15);color:#ef4444}
+.review-skip{background:rgba(163,163,163,0.15);color:#a3a3a3}
+.kb-hint{position:fixed;bottom:12px;right:16px;font-size:0.65rem;color:#333}
+kbd{display:inline-block;background:#1a1a1a;border:1px solid #333;border-radius:3px;padding:1px 5px;font-size:0.65rem;color:#666;font-family:inherit}
+.hidden{display:none}
+.warn-box{background:#171717;border:1px solid #262626;border-radius:8px;padding:16px;margin:16px 0;font-size:0.85rem;color:#a3a3a3}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div id="start-screen">
+  <div class="header">
+    <h1>Biology 12 Test</h1>
+    <span id="q-count"></span>
+  </div>
+  <div class="controls" id="controls"></div>
+  <div class="start-wrap">
+    <p>Select units and begin. Questions and options are shuffled each attempt.</p>
+    <button class="btn" onclick="startTest()">Start Test</button>
+    <a href="flashcards.html" style="font-size:0.75rem;color:#525252;text-decoration:none">Back to flashcards</a>
+  </div>
+</div>
+
+<div id="test-screen" class="hidden">
+  <div class="header">
+    <div class="timer" id="timer">00:00</div>
+    <span id="flag-count"></span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+  <div class="progress-info"><span id="q-pos"></span><span id="answered-count"></span></div>
+  <div class="question-card">
+    <div class="q-unit" id="q-unit"></div>
+    <div class="q-num" id="q-num"></div>
+    <div class="q-text" id="q-text"></div>
+    <div class="options" id="options"></div>
+  </div>
+  <div class="nav-row">
+    <button onclick="prevQ()" id="prev-btn" disabled>&larr;</button>
+    <button class="flag-btn" onclick="toggleFlag()" id="flag-btn">Flag</button>
+    <button onclick="nextQ()" id="next-btn">&rarr;</button>
+  </div>
+  <div class="submit-row" id="submit-row">
+    <div class="warn-box hidden" id="warn-box"></div>
+    <button class="btn" onclick="submitTest()">Submit Test</button>
+  </div>
+</div>
+
+<div id="results-screen" class="hidden">
+  <div class="header">
+    <h1>Results</h1>
+  </div>
+  <div class="results">
+    <div class="grade-big" id="grade-letter"></div>
+    <div class="grade-pct" id="grade-pct"></div>
+  </div>
+  <div class="unit-scores" id="unit-scores"></div>
+  <div style="display:flex;gap:12px;justify-content:center;margin:24px 0">
+    <button class="btn-outline btn" onclick="retryMissed()" id="retry-btn">Retry Missed</button>
+    <button class="btn" onclick="location.reload()">New Test</button>
+  </div>
+  <div class="review-header"><h2>Review</h2></div>
+  <div id="review-list"></div>
+</div>
+
+</div>
+
+<div class="kb-hint" id="kb-hint"><kbd>1-4</kbd> select <kbd>&larr;</kbd><kbd>&rarr;</kbd> nav <kbd>F</kbd> flag</div>
+
+<script>
+var unitNames={1:'Homeostasis & Biochemistry',2:'Cell Structure & Membrane',3:'DNA, Protein Synthesis & Enzymes',4:'Digestive System',5:'Respiratory System',6:'Circulatory System',7:'Nervous System',8:'Urinary System',9:'Reproductive System'};
+
+var allQ=[
+{u:1,q:"What is homeostasis?",opts:["The tendency of the body to maintain a balanced internal environment","The process of converting food into energy","The body's immune response to foreign pathogens","The regulation of body temperature only"],ans:0},
+{u:1,q:"What are the three components of a homeostatic feedback loop?",opts:["Receptors, control center, effectors","Stimulus, hormone, target organ","Sensor, amplifier, output","Dendrite, axon, synapse"],ans:0},
+{u:1,q:"How does negative feedback work?",opts:["The output reverses the original stimulus to maintain normalcy","The output amplifies the original stimulus toward an extreme","The body shuts down all metabolic processes temporarily","Hormones are released in a constant, unchanging rate"],ans:0},
+{u:1,q:"Which is an example of positive feedback?",opts:["Blood glucose regulation by insulin","Childbirth contractions amplified by oxytocin","Body temperature regulation by sweating","Blood pressure regulation by baroreceptors"],ans:1},
+{u:1,q:"Why are elderly people with poor circulation at greater risk of heatstroke?",opts:["They have higher metabolic rates generating more heat","Poor circulation, damaged skin, and inefficient sweat glands impair heat adjustment","Their hypothalamus no longer detects temperature changes","They produce excess thyroxin which raises body temperature"],ans:1},
+{u:1,q:"Why does spraying water on skin in front of a fan lower body temperature?",opts:["The water conducts heat into the air by convection alone","Evaporation is endothermic -- water absorbs body heat as it evaporates, and the fan speeds this up","The fan pushes cold air molecules onto the skin surface","Water blocks infrared radiation from escaping the body"],ans:1},
+{u:1,q:"What type of bond holds hydrogen and oxygen atoms WITHIN a water molecule?",opts:["Covalent bond","Hydrogen bond","Ionic bond","Van der Waals forces"],ans:0},
+{u:1,q:"What type of bond forms BETWEEN water molecules?",opts:["Covalent bond","Ionic bond","Hydrogen bond","Peptide bond"],ans:2},
+{u:1,q:"How many water molecules can hydrogen bond with a single water molecule?",opts:["2","3","4","6"],ans:2},
+{u:1,q:"Why is water essential to life?",opts:["It is a universal solvent, moderates temperature, and acts as a lubricant/transport medium","It provides energy directly to cells through hydrolysis","It stores genetic information in its molecular structure","It catalyzes all biochemical reactions without enzymes"],ans:0},
+{u:1,q:"What is water intoxication?",opts:["Poisoning from contaminated drinking water","Excessive water dilutes solutes, creating a hypotonic environment that causes cells to swell","Dehydration from drinking saltwater","An allergic reaction to minerals dissolved in water"],ans:1},
+{u:1,q:"Which statement about acids and bases is correct?",opts:["Acids release OH- ions; bases release H+ ions","Acids release H+ ions; bases release OH- ions","Both acids and bases release H+ ions","Acids have a pH above 7; bases below 7"],ans:1},
+{u:1,q:"The pH scale measures:",opts:["Oxygen concentration in solution","H+ ion concentration on a negative log scale (0-14)","The ratio of water to solute molecules","Electron density around hydrogen atoms"],ans:1},
+{u:1,q:"If pH changes from 6 to 4, how much does H+ concentration change?",opts:["2-fold increase","10-fold increase","100-fold increase","1000-fold increase"],ans:2},
+{u:1,q:"What is a buffer?",opts:["A molecule that speeds up chemical reactions","A substance that resists changes in pH despite addition of acid or base","A protein that transports ions across membranes","An enzyme that breaks down excess hydrogen ions"],ans:1},
+{u:1,q:"What is the approximate pH of blood?",opts:["2.0","5.5","7.4","9.0"],ans:2},
+{u:1,q:"What are the 4 major classes of biomolecules?",opts:["Carbohydrates, proteins, lipids, nucleic acids","Glucose, amino acids, fatty acids, DNA","Sugars, enzymes, steroids, chromosomes","Monosaccharides, polypeptides, triglycerides, ribosomes"],ans:0},
+{u:1,q:"Dehydration synthesis:",opts:["Breaks polymers by adding water","Bonds monomers by removing water","Dissolves monomers in an acidic solution","Converts lipids into carbohydrates"],ans:1},
+{u:1,q:"Hydrolysis:",opts:["Bonds monomers by removing water","Breaks polymers by adding water","Removes oxygen from organic molecules","Converts proteins into nucleic acids"],ans:1},
+{u:1,q:"What is the empirical formula for carbohydrates?",opts:["C6H6O6","CH2O","CHO2","C2H4O"],ans:1},
+{u:1,q:"Which is a disaccharide?",opts:["Glucose","Glycogen","Maltose","Cellulose"],ans:2},
+{u:1,q:"What is the storage form of glucose in animals?",opts:["Starch","Cellulose","Glycogen","Sucrose"],ans:2},
+{u:1,q:"Why is cellulose considered roughage?",opts:["It is too large to be absorbed by the intestine","Humans lack the enzyme to break cellulose bonds, so it passes through as fiber","It contains toxic compounds that the body rejects","Cellulose is a lipid that cannot dissolve in water"],ans:1},
+{u:1,q:"What are the 3 major types of lipids?",opts:["Glucose, fructose, galactose","Triglycerides (neutral fats), phospholipids, steroids","Saturated fats, trans fats, omega-3s","Waxes, oils, detergents"],ans:1},
+{u:1,q:"How do saturated and unsaturated fatty acids differ?",opts:["Saturated have double bonds; unsaturated have single bonds","Saturated have all single bonds and maximum hydrogen; unsaturated have one or more double bonds","Saturated are liquid at room temperature; unsaturated are solid","Saturated come from plants; unsaturated come from animals"],ans:1},
+{u:1,q:"A phospholipid has a hydrophilic ___ and hydrophobic ___.",opts:["Tail; head","Fatty acid chain; sugar group","Phosphate head; fatty acid tails","Steroid ring; glycerol backbone"],ans:2},
+{u:1,q:"What is the monomer of proteins?",opts:["Nucleotides","Monosaccharides","Fatty acids","Amino acids"],ans:3},
+{u:1,q:"Amino acids are joined by what type of bond?",opts:["Hydrogen bond","Ionic bond","Peptide bond","Glycosidic bond"],ans:2},
+{u:1,q:"What are the 4 parts of an amino acid?",opts:["Phosphate, sugar, base, hydrogen","Amino group, carboxyl group, hydrogen, R group","Carbon ring, hydroxyl group, methyl group, sulfur","Head group, tail, backbone, side chain"],ans:1},
+{u:1,q:"The tertiary structure of a protein refers to its:",opts:["Linear chain of amino acids","Alpha helix pattern","3D globular shape held by multiple bond types","Assembly of multiple polypeptide subunits"],ans:2},
+{u:1,q:"What causes protein denaturation?",opts:["Adding more substrate to the enzyme","High temperature or extreme pH destroying the 3D shape","Increasing the concentration of the protein in solution","Binding of the correct substrate to the active site"],ans:1},
+{u:1,q:"Keratin and collagen are examples of:",opts:["Enzymes","Structural proteins","Nucleic acids","Lipids"],ans:1},
+{u:1,q:"What is the monomer of nucleic acids?",opts:["Amino acids","Monosaccharides","Nucleotides","Fatty acids"],ans:2},
+{u:1,q:"A nucleotide consists of:",opts:["Amino group, carboxyl group, R group","Phosphate group, pentose sugar, nitrogenous base","Glycerol, fatty acids, phosphate head","Carbon ring, hydrogen, oxygen"],ans:1},
+{u:1,q:"ATP releases energy when:",opts:["A phosphate bond is broken during hydrolysis","It binds to DNA during replication","It gains a fourth phosphate group","It is converted to glucose in the mitochondria"],ans:0},
+{u:2,q:"What is a key principle of cell theory?",opts:["All cells arise spontaneously from non-living matter","All cells come from pre-existing cells","Only eukaryotic cells are true living cells","Cells can function without genetic material"],ans:1},
+{u:2,q:"How do prokaryotic and eukaryotic cells differ?",opts:["Prokaryotes have a nucleus; eukaryotes do not","Prokaryotes lack a true nucleus and membrane-bound organelles; eukaryotes have both","Eukaryotes are smaller and simpler than prokaryotes","Prokaryotes have mitochondria; eukaryotes do not"],ans:1},
+{u:2,q:"Which organelles do animal cells have that plant cells do not?",opts:["Chloroplasts and cell walls","Ribosomes and mitochondria","Centrioles and lysosomes","Vacuoles and Golgi apparatus"],ans:2},
+{u:2,q:"What is the function of the nucleus?",opts:["Produces ATP for the cell","Controls gene expression and mediates DNA replication","Digests foreign particles and old organelles","Synthesizes lipids for the cell membrane"],ans:1},
+{u:2,q:"Mitochondria:",opts:["Produce lipids for the cell membrane","Convert glucose to ATP","Store genetic information","Package proteins for secretion"],ans:1},
+{u:2,q:"Rough ER differs from smooth ER because rough ER:",opts:["Produces lipids and detoxifies drugs","Has ribosomes attached and makes/processes proteins","Is found only in plant cells","Stores calcium ions for muscle contraction"],ans:1},
+{u:2,q:"Why do testes, liver, and adrenal glands have extensive smooth ER?",opts:["They need extra protein synthesis capacity","They produce steroids, detoxify substances, or produce steroid hormones respectively","They require large amounts of ATP from glucose metabolism","They store excess glycogen for energy release"],ans:1},
+{u:2,q:"Ribosomes function as:",opts:["Energy-producing organelles","Protein factories that catalyze peptide bond formation","Lipid synthesis centers","DNA replication machinery"],ans:1},
+{u:2,q:"The Golgi apparatus:",opts:["Produces ATP from glucose","Processes, sorts, and packages proteins for delivery","Replicates DNA before cell division","Breaks down worn-out organelles"],ans:1},
+{u:2,q:"Lysosomes contain ___ enzymes that digest ___.",opts:["Oxidative; glucose into ATP","Hydrolytic; food, damaged organelles, and pathogens","Synthetic; amino acids into proteins","Catalytic; DNA into RNA"],ans:1},
+{u:2,q:"The nucleolus produces:",opts:["ATP and glucose","mRNA and ribosomal subunits","Lipids and steroids","Lysosomes and peroxisomes"],ans:1},
+{u:2,q:"How do ribosomes and Golgi bodies work together?",opts:["Ribosomes package proteins that the Golgi produces","Ribosomes produce proteins; Golgi processes, sorts, and packages them","Golgi produces ribosomes that then make proteins","They function independently with no interaction"],ans:1},
+{u:2,q:"The fluid mosaic model describes the cell membrane as:",opts:["A rigid protein shell surrounding the cell","A semi-fluid phospholipid bilayer with proteins floating within it","A single layer of lipids with embedded carbohydrates","A double layer of proteins with lipids between them"],ans:1},
+{u:2,q:"Glycoproteins and glycolipids have carbohydrate chains on the ___ surface of the membrane.",opts:["Inner","Outer","Both inner and outer","Neither -- they are dissolved in the cytoplasm"],ans:1},
+{u:2,q:"Intrinsic (integral) proteins:",opts:["Sit loosely on the membrane surface","Span the entire phospholipid bilayer","Are found only in the nucleus","Float freely in the cytoplasm"],ans:1},
+{u:2,q:"Diffusion is the movement of particles from:",opts:["Low concentration to high concentration using ATP","High concentration to low concentration without energy or carrier","Across a membrane using carrier proteins","Inside the cell to outside via exocytosis"],ans:1},
+{u:2,q:"Osmosis is specifically the movement of:",opts:["Solute molecules across any barrier","Water molecules from high to low water concentration across a semi-permeable membrane","Ions through channel proteins","Glucose into cells via active transport"],ans:1},
+{u:2,q:"Facilitated transport differs from diffusion because it:",opts:["Requires ATP energy","Uses a carrier or channel protein but still moves with the gradient","Moves substances against the concentration gradient","Only transports lipid-soluble molecules"],ans:1},
+{u:2,q:"Active transport requires ___ and moves substances ___ the concentration gradient.",opts:["No energy; with","ATP; against","Osmotic pressure; with","Enzymes; against"],ans:1},
+{u:2,q:"Which correctly matches substance to transport method?",opts:["Oxygen: active transport","Water: facilitated diffusion","Sodium ions: diffusion only","Glucose: facilitated or active transport"],ans:3},
+{u:2,q:"Which factor does NOT increase diffusion rate?",opts:["Greater surface area","Higher temperature","Larger particle size","Steeper concentration gradient"],ans:2},
+{u:2,q:"In a hypertonic solution, a cell will:",opts:["Swell and possibly burst","Shrink as water leaves by osmosis","Remain unchanged","Divide more rapidly"],ans:1},
+{u:2,q:"In a hypotonic solution, a cell will:",opts:["Shrink (crenation)","Swell and possibly burst (lysis)","Remain unchanged","Lose its nucleus"],ans:1},
+{u:2,q:"Winter road salt damages plants because:",opts:["Salt is directly toxic to plant cells","Salt creates a hypertonic environment, drawing water out of plant cells by osmosis","Salt blocks sunlight from reaching the leaves","Salt raises soil pH to lethal levels"],ans:1},
+{u:2,q:"Endocytosis includes:",opts:["Exocytosis and osmosis","Phagocytosis (cell eating) and pinocytosis (cell drinking)","Diffusion and facilitated transport","Mitosis and meiosis"],ans:1},
+{u:2,q:"Exocytosis is when:",opts:["The cell engulfs large particles","Vesicles move substances out of the cell","Water enters by osmosis","The nucleus divides"],ans:1},
+{u:3,q:"DNA and RNA are polymers of:",opts:["Amino acids","Monosaccharides","Nucleotides","Fatty acids"],ans:2},
+{u:3,q:"In DNA, adenine pairs with ___ and guanine pairs with ___.",opts:["Cytosine; thymine","Uracil; cytosine","Thymine; cytosine","Guanine; adenine"],ans:2},
+{u:3,q:"If a DNA strand has 34% adenine, what percentage is guanine?",opts:["34%","32%","16%","17%"],ans:2},
+{u:3,q:"Which is NOT a difference between DNA and RNA?",opts:["DNA has deoxyribose; RNA has ribose","DNA is double-stranded; RNA is single-stranded","DNA uses thymine; RNA uses uracil","DNA has 3 strands; RNA has 2 strands"],ans:3},
+{u:3,q:"DNA replication is called semi-conservative because:",opts:["Only half the DNA is copied each time","Each new helix has one parent strand and one new daughter strand","The process uses half the normal amount of energy","Only one of the two daughter cells gets DNA"],ans:1},
+{u:3,q:"The correct order of enzymes in DNA replication is:",opts:["Polymerase, helicase, ligase","Ligase, polymerase, helicase","Helicase, polymerase, ligase","Polymerase, ligase, helicase"],ans:2},
+{u:3,q:"Transcription produces ___ from a ___ template.",opts:["DNA; RNA","Protein; mRNA","mRNA; DNA","tRNA; ribosome"],ans:2},
+{u:3,q:"Translation occurs:",opts:["In the nucleus on DNA","In the cytosol on ribosomes","In the mitochondria","In the Golgi apparatus"],ans:1},
+{u:3,q:"During translation, which carries amino acids to the ribosome?",opts:["mRNA","rRNA","tRNA","DNA polymerase"],ans:2},
+{u:3,q:"The start codon is:",opts:["UAG","AUG","UGA","UAA"],ans:1},
+{u:3,q:"The correct order of translation is:",opts:["Termination, elongation, initiation","Elongation, initiation, termination","Initiation, elongation, termination","Initiation, termination, elongation"],ans:2},
+{u:3,q:"The genetic code is universal because:",opts:["All organisms use DNA as their genetic material","The same codons code for the same amino acids in all living things","Every codon codes for exactly one amino acid","All organisms have the same number of genes"],ans:1},
+{u:3,q:"An enzyme with 687 amino acids requires an mRNA of ___ bases.",opts:["687","1374","2061","229"],ans:2},
+{u:3,q:"A mutagen is:",opts:["A gene that causes cancer","An agent that causes a base pair to be removed, added, or replaced","A protein that repairs DNA damage","An enzyme that increases mutation rate"],ans:1},
+{u:3,q:"A nonsense mutation creates:",opts:["A silent change with no effect","An early stop codon producing a truncated protein","A different amino acid that may still function","A frameshift in the reading frame"],ans:1},
+{u:3,q:"A frameshift mutation is caused by:",opts:["Substitution of one base for another","Deletion or insertion of a base, shifting all downstream codons","Duplication of an entire chromosome","Reversal of a DNA segment"],ans:1},
+{u:3,q:"The lock-and-key model describes:",opts:["How DNA fits into chromosomes","How an enzyme's active site is complementary to its specific substrate","How antibodies bind to any foreign particle","How water molecules bond to each other"],ans:1},
+{u:3,q:"Competitive inhibition occurs when:",opts:["An inhibitor binds to an allosteric site, changing the enzyme shape","An inhibitor binds to the active site, blocking the substrate","The substrate concentration is too low","The enzyme is denatured by heat"],ans:1},
+{u:3,q:"Non-competitive inhibition occurs when:",opts:["An inhibitor binds the active site directly","An inhibitor binds an allosteric site, changing the enzyme shape so substrate cannot fit","More substrate outcompetes the inhibitor","The enzyme gains a second active site"],ans:1},
+{u:3,q:"Adding more substrate to an enzyme reaction will:",opts:["Always increase the rate indefinitely","Increase rate initially, then plateau when all active sites are saturated","Decrease the rate by inhibiting the enzyme","Have no effect on reaction rate"],ans:1},
+{u:3,q:"Two environmental factors that change enzyme shape are:",opts:["Light intensity and oxygen levels","pH changes and temperature increases","Gravity and air pressure","Salinity and altitude"],ans:1},
+{u:3,q:"Hypothyroidism (too little thyroxin) causes:",opts:["Fast metabolism, nervous energy, weight loss","Slow metabolism, lethargy, weight gain","Increased heart rate and bulging eyes","Excessive calcium release from bones"],ans:1},
+{u:3,q:"The first step in creating a GMO is to:",opts:["Insert a random gene into the organism","Identify the trait of interest and isolate that gene","Clone the entire organism first","Remove all existing genes from the host"],ans:1},
+{u:4,q:"The correct order of digestive organs is:",opts:["Mouth, stomach, esophagus, small intestine, large intestine","Mouth, pharynx, esophagus, stomach, small intestine, large intestine","Mouth, esophagus, pharynx, large intestine, small intestine","Pharynx, mouth, stomach, esophagus, intestines"],ans:1},
+{u:4,q:"Salivary amylase in the mouth digests:",opts:["Proteins into peptides","Lipids into fatty acids","Starches into maltose","Nucleic acids into nucleotides"],ans:2},
+{u:4,q:"The epiglottis:",opts:["Produces digestive enzymes","Closes the trachea opening to prevent food entering the lungs","Absorbs nutrients from food","Moves food by peristalsis"],ans:1},
+{u:4,q:"Peristalsis is:",opts:["Chemical breakdown of food by enzymes","Rhythmic wave-like muscle contractions that move food","The absorption of nutrients through villi","The mixing of food with bile in the stomach"],ans:1},
+{u:4,q:"The cardiac sphincter prevents:",opts:["Food from entering the small intestine too quickly","Acid reflux from the stomach into the esophagus","Bile from entering the stomach","Air from entering the digestive tract"],ans:1},
+{u:4,q:"In the stomach, HCl:",opts:["Digests fats into glycerol and fatty acids","Kills bacteria and activates pepsin at pH ~2","Neutralizes acidic chyme from the esophagus","Emulsifies lipids into smaller droplets"],ans:1},
+{u:4,q:"Pepsin breaks down:",opts:["Starches into maltose","Proteins into peptides","Lipids into fatty acids","Maltose into glucose"],ans:1},
+{u:4,q:"The duodenum is:",opts:["The last section of the large intestine","The first ~30 cm of the small intestine receiving pancreatic juices and bile","A sphincter between stomach and esophagus","The muscular wall of the stomach"],ans:1},
+{u:4,q:"Bile is produced by the ___ and stored in the ___.",opts:["Pancreas; stomach","Liver; gall bladder","Gall bladder; liver","Small intestine; appendix"],ans:1},
+{u:4,q:"Bile's function is to:",opts:["Chemically digest proteins into amino acids","Emulsify (mechanically break up) lipids into smaller droplets","Neutralize stomach acid in the duodenum","Kill bacteria in the small intestine"],ans:1},
+{u:4,q:"The pancreas releases bicarbonate to:",opts:["Activate pepsin in the stomach","Neutralize acidic chyme entering the small intestine","Emulsify fats for lipase","Break down cellulose in plant foods"],ans:1},
+{u:4,q:"Trypsin acts on ___ in the ___ at pH ___.",opts:["Starches; mouth; 7","Proteins; small intestine; 7.5-8","Lipids; stomach; 2","Maltose; large intestine; 6"],ans:1},
+{u:4,q:"Lipase breaks fats into:",opts:["Amino acids and peptides","Glycerol and fatty acids","Glucose and fructose","Nucleotides and phosphate"],ans:1},
+{u:4,q:"In a villus, blood vessels absorb ___ while lacteals absorb ___.",opts:["Fats; proteins","Amino acids and glucose; glycerol and fatty acids","Water; minerals","Starch; cellulose"],ans:1},
+{u:4,q:"Insulin is released when blood glucose is ___ and causes cells to ___.",opts:["Low; release stored glucose","High; absorb glucose from blood","High; release glucose into blood","Low; convert fat to glucose"],ans:1},
+{u:4,q:"Glucagon causes the liver to:",opts:["Store glucose as glycogen","Convert glycogen to glucose, releasing it into blood","Produce bile for fat digestion","Secrete insulin into the bloodstream"],ans:1},
+{u:4,q:"The large intestine's main functions are:",opts:["Chemical digestion of proteins and carbohydrates","Absorption of salt, water, vitamins; storage and elimination of waste","Production of digestive enzymes and hormones","Emulsification of lipids and neutralization of acid"],ans:1},
+{u:5,q:"The correct path of air is:",opts:["Nose, trachea, pharynx, bronchi, alveoli","Nose, pharynx, trachea, bronchi, bronchioles, alveoli","Nose, bronchi, trachea, pharynx, alveoli","Mouth, larynx, bronchioles, bronchi, alveoli"],ans:1},
+{u:5,q:"The nasal cavity:",opts:["Exchanges O2 and CO2 with the blood","Warms, moistens, and filters incoming air","Produces mucus that digests airborne bacteria","Controls the rate of breathing"],ans:1},
+{u:5,q:"Gas exchange occurs in the:",opts:["Trachea","Bronchi","Bronchioles","Alveoli"],ans:3},
+{u:5,q:"The respiratory center is located in the:",opts:["Cerebrum","Cerebellum","Medulla oblongata","Hypothalamus"],ans:2},
+{u:5,q:"Increased ___ and ___ in the blood stimulate increased breathing rate.",opts:["O2; glucose","CO2; H+ concentration","Red blood cells; platelets","Hemoglobin; bicarbonate"],ans:1},
+{u:5,q:"Oxygen moves from alveoli to blood by:",opts:["Active transport using ATP","Osmosis through aquaporins","Diffusion from high to low O2 concentration","Facilitated transport via carrier proteins"],ans:2},
+{u:5,q:"Oxyhemoglobin (HbO2) is hemoglobin bound to:",opts:["Carbon dioxide","Oxygen","Hydrogen ions","Carbon monoxide"],ans:1},
+{u:5,q:"Most CO2 is transported in blood as:",opts:["Dissolved CO2 gas in plasma","Bound to hemoglobin only","Bicarbonate ions (HCO3-)","Free carbon atoms"],ans:2},
+{u:5,q:"Reduced hemoglobin (HHb) has bound excess:",opts:["Oxygen","Carbon dioxide","Hydrogen ions (H+) to buffer the blood","Bicarbonate"],ans:2},
+{u:5,q:"During inhalation, the diaphragm:",opts:["Relaxes and domes upward","Contracts and flattens, increasing thoracic volume","Remains stationary while intercostals do all work","Pushes air out by compressing the lungs"],ans:1},
+{u:5,q:"At the alveoli (external respiration), hemoglobin:",opts:["Loads O2 and unloads CO2","Loads CO2 and unloads O2","Loads both O2 and CO2","Unloads both O2 and CO2"],ans:0},
+{u:5,q:"At the tissues (internal respiration), hemoglobin:",opts:["Loads O2 and unloads CO2","Unloads O2 and loads CO2","Loads both O2 and CO2","Remains unchanged"],ans:1},
+{u:5,q:"Carbonic anhydrase converts CO2 + H2O into:",opts:["Oxyhemoglobin","Carbonic acid (H2CO3), which dissociates into H+ and HCO3-","ATP and water","Glucose and oxygen"],ans:1},
+{u:6,q:"The pulmonary circuit carries blood between the:",opts:["Heart and body tissues","Heart and lungs","Brain and spinal cord","Liver and intestines"],ans:1},
+{u:6,q:"Arteries carry blood ___ the heart; veins carry blood ___ the heart.",opts:["Toward; away from","Away from; toward","Above; below","Into; out of"],ans:1},
+{u:6,q:"The aorta carries:",opts:["Deoxygenated blood to the lungs","Oxygenated blood from the left ventricle to the body","Blood from the body to the right atrium","Nutrient-rich blood from the intestines to the liver"],ans:1},
+{u:6,q:"What is unique about pulmonary arteries?",opts:["They carry oxygenated blood like all arteries","They carry deoxygenated blood from the right ventricle to the lungs","They have valves like veins","They connect directly to the aorta"],ans:1},
+{u:6,q:"The hepatic portal vein carries:",opts:["Deoxygenated blood from the liver to the heart","Nutrient-rich blood from the small intestine to the liver","Oxygenated blood from the lungs to the liver","Waste products from the kidneys to the bladder"],ans:1},
+{u:6,q:"In fetal circulation, the foramen ovale allows blood to pass from:",opts:["Left ventricle to aorta","Right atrium directly to left atrium, bypassing the lungs","Umbilical vein to umbilical artery","Pulmonary vein to pulmonary artery"],ans:1},
+{u:6,q:"A 'blue baby' results from:",opts:["Excess red blood cells causing cyanosis","The foramen ovale failing to close, mixing deoxygenated and oxygenated blood","A blocked coronary artery at birth","Insufficient white blood cells"],ans:1},
+{u:6,q:"At the placenta, maternal and fetal blood:",opts:["Mix directly to share nutrients","Do NOT mix, but exchange nutrients, O2, CO2, and waste across the membrane","Flow in the same direction through shared vessels","Are separated by bone tissue"],ans:1},
+{u:6,q:"Red blood cells are characterized by:",opts:["Having a nucleus and fighting infections","Being biconcave discs without nuclei that transport O2/CO2 via hemoglobin","Being cell fragments that assist clotting","Producing antibodies for immunity"],ans:1},
+{u:6,q:"Plasma is approximately ___% water and contains:",opts:["50; only red blood cells","90; proteins, dissolved gases, nutrients, salts, and waste","75; exclusively hemoglobin","99; pure water with no dissolved substances"],ans:1},
+{u:6,q:"In blood clotting, thrombin converts:",opts:["Prothrombin to thromboplastin","Inactive fibrinogen to active fibrin","Platelets to red blood cells","Hemoglobin to bilirubin"],ans:1},
+{u:6,q:"Type O blood is the universal donor because:",opts:["It has both A and B antigens","It has no A or B antigens on its red blood cells","It has no antibodies in its plasma","It contains special clotting factors"],ans:1},
+{u:6,q:"Type AB blood is the universal recipient because:",opts:["It has no antigens on its red blood cells","It has both A and B antigens but no anti-A or anti-B antibodies","It can produce any blood type's antibodies","It has the strongest immune response"],ans:1},
+{u:6,q:"An Rh- mother carrying an Rh+ fetus is at risk because:",opts:["The fetus will reject the mother's blood","The mother may produce antibodies against Rh+ blood, causing agglutination","Rh factors prevent placental development","The fetus cannot produce its own red blood cells"],ans:1},
+{u:6,q:"The lymphatic system does NOT:",opts:["Recover excess tissue fluid","Produce lymphocytes","Absorb fats via lacteals","Produce red blood cells"],ans:3},
+{u:6,q:"At the arteriole end of a capillary bed:",opts:["Osmotic pressure exceeds blood pressure, pulling wastes in","Blood pressure exceeds osmotic pressure, forcing nutrients out","No exchange occurs","Blood flow stops completely"],ans:1},
+{u:6,q:"Blood velocity is slowest in capillaries because:",opts:["The heart pumps less blood to capillaries","Slow velocity gives time for substances to diffuse across thin walls","Capillaries have the thickest walls","Valves in capillaries restrict flow"],ans:1},
+{u:6,q:"The left ventricle pumps blood to the:",opts:["Lungs via pulmonary artery","Body via the aorta","Right atrium via vena cava","Brain via carotid artery only"],ans:1},
+{u:6,q:"'Lub' is caused by ___ closing; 'dub' by ___ closing.",opts:["Semilunar valves; AV valves","AV valves; semilunar valves","Aortic valve; mitral valve","Tricuspid valve; bicuspid valve"],ans:1},
+{u:6,q:"Systolic blood pressure is measured during:",opts:["Ventricular relaxation (diastole)","Ventricular contraction (systole)","Atrial relaxation","Complete heart rest"],ans:1},
+{u:6,q:"The SA node is called the pacemaker because it:",opts:["Receives signals from the brain to start each heartbeat","Initiates atrial contraction independently every ~0.8 seconds","Only fires when stimulated by adrenaline","Controls blood pressure in the arteries"],ans:1},
+{u:6,q:"The parasympathetic nervous system ___ heart rate via the ___ nerve.",opts:["Increases; accelerator","Slows; vagus","Increases; vagus","Slows; phrenic"],ans:1},
+{u:6,q:"Hypertension can be caused by:",opts:["Low salt diet and excessive exercise","High salt diet causing water retention and arterial plaques narrowing vessels","Drinking too much water","Having too few red blood cells"],ans:1},
+{u:7,q:"The dendrite of a neuron:",opts:["Transmits signals away from the cell body","Receives signals and conducts them to the cell body","Releases neurotransmitters into the synaptic cleft","Insulates the axon to speed conduction"],ans:1},
+{u:7,q:"The axon terminal converts electrical signals to chemical signals by:",opts:["Absorbing ions from the synaptic cleft","Releasing neurotransmitter into the synaptic cleft","Generating action potentials in the dendrite","Producing myelin around the nerve fiber"],ans:1},
+{u:7,q:"Schwann cells and Nodes of Ranvier enable:",opts:["Chemical signaling at synapses","Myelination and saltatory conduction for faster signal speed","Nutrient delivery to the neuron","DNA replication in nerve cells"],ans:1},
+{u:7,q:"A reflex arc's purpose is:",opts:["Conscious decision-making","Fastest possible reaction time, independent of brain processing","Long-term memory storage","Hormone regulation"],ans:1},
+{u:7,q:"The correct reflex arc pathway is:",opts:["Motor neuron, interneuron, sensory neuron","Receptor, sensory neuron, interneuron, motor neuron, effector","Effector, motor neuron, receptor, sensory neuron","Brain, spinal cord, muscle, skin"],ans:1},
+{u:7,q:"'All-or-nothing' means:",opts:["Neurons fire at varying intensities depending on stimulus strength","A neuron either fires completely at threshold or not at all -- no partial firing","All neurons in a pathway must fire simultaneously","The brain processes all stimuli or ignores them entirely"],ans:1},
+{u:7,q:"Resting potential (~-70 mV) is maintained by:",opts:["Equal distribution of all ions on both sides","The sodium-potassium pump actively pumping 3 Na+ out and 2 K+ in","Passive diffusion of chloride ions","Calcium channels in the cell membrane"],ans:1},
+{u:7,q:"During depolarization:",opts:["K+ channels open and K+ rushes out","Na+ channels open and Na+ rushes in, raising potential to +30 mV","The neuron returns to -70 mV","The sodium-potassium pump activates"],ans:1},
+{u:7,q:"At a synapse, Ca2+ entering the axon terminal causes:",opts:["The postsynaptic membrane to depolarize directly","Synaptic vesicles to fuse with the presynaptic membrane and release neurotransmitter","Myelin to form around the axon","The action potential to reverse direction"],ans:1},
+{u:7,q:"The somatic nervous system controls:",opts:["Heart rate, digestion, and pupil response","Voluntary skeletal muscles and sensory organs","Only smooth muscle and glands","Blood pressure and respiratory rate"],ans:1},
+{u:7,q:"The sympathetic nervous system ('fight or flight') uses the neurotransmitter:",opts:["Acetylcholine","Dopamine","Norepinephrine","Serotonin"],ans:2},
+{u:7,q:"The parasympathetic nervous system ('rest and digest'):",opts:["Increases heart rate and dilates pupils","Decreases heart rate, enhances digestion, constricts pupils","Sends blood to skeletal muscles","Releases adrenaline from the adrenal glands"],ans:1},
+{u:7,q:"The medulla oblongata controls:",opts:["Conscious thought and voluntary movement","Respiratory and cardiac control, involuntary responses like coughing","Balance and coordinated movement","Vision and hearing"],ans:1},
+{u:7,q:"The cerebellum is responsible for:",opts:["Homeostasis, hunger, thirst, and sleep","Balance and coordinated movement","Language processing and memory","Executive function and personality"],ans:1},
+{u:7,q:"The hypothalamus controls:",opts:["Voluntary muscle movement","Homeostasis (temperature, hunger, thirst, sleep) and the pituitary gland","Vision processing","Hearing and language comprehension"],ans:1},
+{u:7,q:"The frontal lobe of the cerebrum handles:",opts:["Vision","Sensory perception and spatial awareness","Executive function, thinking, planning, emotions, and motor cortex","Memory and language"],ans:2},
+{u:7,q:"The occipital lobe processes:",opts:["Hearing","Vision","Touch and pain","Smell"],ans:1},
+{u:8,q:"Excretion is:",opts:["The ingestion of food and nutrients","Removal of metabolic wastes from the body","The breakdown of food in the digestive tract","Movement of blood through the circulatory system"],ans:1},
+{u:8,q:"The kidneys produce urine. Sweat glands excrete:",opts:["Only excess water","Water, salt, and urea","Carbon dioxide and oxygen","Bile and bilirubin"],ans:1},
+{u:8,q:"The presence of ___ in urine indicates disease.",opts:["Water and salt","Urea and pigments","Proteins and glucose","Sodium and potassium"],ans:2},
+{u:8,q:"The glomerulus is:",opts:["A collecting duct for concentrated urine","A knot of capillaries where pressure filtration forces water, nutrients, and waste into Bowman's capsule","The outer region of the kidney","A hormone-producing gland in the kidney"],ans:1},
+{u:8,q:"The proximal convoluted tubule (PCT) selectively reabsorbs:",opts:["Only water","Glucose, amino acids, vitamins, minerals, salts, and water back into blood","Urea and metabolic waste","Red blood cells and platelets"],ans:1},
+{u:8,q:"Tubular excretion in the distal convoluted tubule (DCT) moves:",opts:["Glucose and amino acids from blood to tubule","Excess H+, histamine, creatine, and ammonia from blood into the tubule","Water from the tubule back to blood","Proteins from the tubule to the collecting duct"],ans:1},
+{u:8,q:"The renal arteriole carries ___ blood; the renal venule carries ___ blood.",opts:["Filtered; unfiltered","Unfiltered (dirty); filtered (clean)","Oxygenated; deoxygenated","Venous; arterial"],ans:1},
+{u:8,q:"Dehydration causes urine that is:",opts:["More dilute and greater in volume","Less in volume and more concentrated","Unchanged in volume or concentration","Greater in volume but more concentrated"],ans:1},
+{u:8,q:"Alcohol increases urine volume because it:",opts:["Stimulates ADH release","Inhibits ADH, reducing water reabsorption","Increases aldosterone production","Directly damages the kidneys"],ans:1},
+{u:8,q:"High blood salt causes the blood to become ___ to urine, so water is ___.",opts:["Hypotonic; excreted more","Hypertonic; reabsorbed from urine into blood by osmosis","Isotonic; unchanged","Acidic; filtered out faster"],ans:1},
+{u:8,q:"ADH is released when the hypothalamus detects:",opts:["Low blood salt concentration (high blood volume)","High blood salt concentration (low blood volume/pressure)","High blood glucose levels","Low body temperature"],ans:1},
+{u:8,q:"ADH targets the ___ to reabsorb more ___.",opts:["Glomerulus; proteins","DCT and collecting duct; water","PCT; glucose","Loop of Henle; sodium"],ans:1},
+{u:8,q:"Aldosterone increases ___ reabsorption, which pulls more ___ into blood.",opts:["Glucose; insulin","Salt; water","Urea; red blood cells","Potassium; calcium"],ans:1},
+{u:8,q:"The renin-angiotensin pathway is triggered by:",opts:["High blood pressure detected by the brain","Low blood pressure detected by the kidneys","Excess water in the blood","High blood glucose after eating"],ans:1},
+{u:9,q:"The testes produce:",opts:["Estrogen and progesterone","Sperm and testosterone","Eggs and FSH","Seminal fluid only"],ans:1},
+{u:9,q:"Testes are held in the scrotum because:",opts:["There is no room in the abdominal cavity","The scrotum maintains slightly below body temperature for healthy sperm","Gravity helps sperm mature faster","The scrotum produces testosterone"],ans:1},
+{u:9,q:"Spermatogenesis occurs in the:",opts:["Epididymis","Prostate gland","Seminiferous tubules within the testes","Vas deferens"],ans:2},
+{u:9,q:"Interstitial (Leydig) cells produce:",opts:["Sperm","Testosterone","Estrogen","FSH"],ans:1},
+{u:9,q:"The acrosomal cap on a sperm head contains:",opts:["Mitochondria for energy","Enzymes to penetrate the egg","DNA for a second set of chromosomes","Flagella proteins for movement"],ans:1},
+{u:9,q:"The mid-piece of a sperm is packed with ___ to provide ___.",opts:["Ribosomes; proteins","Mitochondria; ATP for flagella movement","Lysosomes; digestive enzymes","Golgi bodies; secretory vesicles"],ans:1},
+{u:9,q:"In male hormonal regulation, LH stimulates ___ to produce ___.",opts:["Sertoli cells; sperm","Leydig cells; testosterone","The hypothalamus; GnRH","The pituitary; FSH"],ans:1},
+{u:9,q:"Rising testosterone levels create ___ feedback on the hypothalamus/pituitary.",opts:["Positive","Negative","No","Delayed"],ans:1},
+{u:9,q:"The oviduct (fallopian tube) is the site of:",opts:["Egg production","Fertilization","Implantation","Menstruation"],ans:1},
+{u:9,q:"Which is NOT an effect of estrogen?",opts:["Stimulates breast development","Prepares uterus to nourish a fetus","Directly triggers ovulation","Helps maintain bone density"],ans:2},
+{u:9,q:"FSH from the pituitary causes the ovaries to:",opts:["Release a mature egg (ovulate)","Mature a follicle/egg","Produce testosterone","Shed the endometrial lining"],ans:1},
+{u:9,q:"Ovulation on day 14 is triggered by:",opts:["A drop in estrogen levels","A surge of LH","Rising progesterone from the corpus luteum","FSH inhibition by the hypothalamus"],ans:1},
+{u:9,q:"During the luteal phase (days 15-28), the corpus luteum secretes:",opts:["Only FSH and LH","Estrogen and progesterone","Only testosterone","GnRH and oxytocin"],ans:1},
+{u:9,q:"During menstruation (days 1-5):",opts:["Estrogen and progesterone are high, building the endometrium","Estrogen and progesterone are low, and the endometrium breaks down","The follicle is maturing under FSH stimulation","The corpus luteum is at peak function"],ans:1},
+{u:9,q:"During the secretory phase (days 15-28), progesterone:",opts:["Thins the endometrium for menstruation","Doubles endometrium thickness, vascularizes it, produces mucus for implantation","Triggers ovulation","Inhibits all other reproductive hormones"],ans:1},
+{u:9,q:"HCG is released by:",opts:["The pituitary gland after ovulation","The membrane surrounding the embryo after implantation","The corpus luteum before fertilization","The hypothalamus during the menstrual cycle"],ans:1},
+{u:9,q:"HCG prevents the corpus luteum from degenerating in order to:",opts:["Trigger menstruation","Maintain estrogen and progesterone levels to sustain the endometrial lining","Stimulate a second ovulation","Increase FSH and LH production"],ans:1},
+{u:9,q:"Pregnancy tests detect:",opts:["Elevated estrogen levels","HCG in urine or blood","Progesterone from the corpus luteum","LH surge indicating ovulation"],ans:1},
+{u:9,q:"If estrogen and progesterone drop during pregnancy:",opts:["The fetus grows faster","The endometrial lining sheds, potentially causing miscarriage","Labor begins immediately","The placenta produces more HCG to compensate"],ans:1},
+{u:9,q:"Oxytocin during labor is an example of ___ feedback.",opts:["Negative","Positive","Neutral","Inhibitory"],ans:1},
+{u:9,q:"The placenta:",opts:["Directly mixes maternal and fetal blood for nutrient transfer","Transfers nutrients and waste between mother and fetus without mixing their blood","Only provides oxygen, not nutrients","Is formed entirely from maternal tissue"],ans:1}
+];
+
+var activeUnits=new Set([1,2,3,4,5,6,7,8,9]);
+var testQs=[];
+var idx=0;
+var answers={};
+var flags=new Set();
+var submitted=false;
+var timerStart=0;
+var timerInterval=null;
+
+function init(){
+  var ctrl=document.getElementById('controls');
+  var allBtn=document.createElement('button');
+  allBtn.className='unit-btn active';allBtn.textContent='All';allBtn.id='all-btn';
+  allBtn.onclick=function(){toggleAll();};ctrl.appendChild(allBtn);
+  for(var i=1;i<=9;i++){
+    var btn=document.createElement('button');
+    btn.className='unit-btn active';btn.textContent='U'+i;btn.id='u-btn-'+i;
+    btn.onclick=(function(u){return function(){toggleUnit(u);};})(i);
+    ctrl.appendChild(btn);
+  }
+  updateCount();
+}
+
+function toggleAll(){
+  if(activeUnits.size===9)activeUnits.clear();else for(var i=1;i<=9;i++)activeUnits.add(i);
+  updateBtns();updateCount();
+}
+function toggleUnit(u){
+  if(activeUnits.has(u))activeUnits.delete(u);else activeUnits.add(u);
+  updateBtns();updateCount();
+}
+function updateBtns(){
+  document.getElementById('all-btn').className='unit-btn'+(activeUnits.size===9?' active':'');
+  for(var i=1;i<=9;i++)document.getElementById('u-btn-'+i).className='unit-btn'+(activeUnits.has(i)?' active':'');
+}
+function updateCount(){
+  var n=allQ.filter(function(q){return activeUnits.has(q.u);}).length;
+  document.getElementById('q-count').textContent=n+' questions';
+}
+
+function shuffleArr(arr){
+  for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}
+}
+
+function startTest(){
+  testQs=allQ.filter(function(q){return activeUnits.has(q.u);});
+  if(testQs.length===0)return;
+  shuffleArr(testQs);
+  testQs=testQs.map(function(q){
+    var indices=[0,1,2,3];
+    shuffleArr(indices);
+    return{u:q.u,q:q.q,opts:indices.map(function(i){return q.opts[i];}),ans:indices.indexOf(q.ans)};
+  });
+  answers={};flags=new Set();idx=0;submitted=false;
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('test-screen').classList.remove('hidden');
+  timerStart=Date.now();
+  timerInterval=setInterval(updateTimer,1000);
+  renderQ();
+}
+
+function updateTimer(){
+  var s=Math.floor((Date.now()-timerStart)/1000);
+  var m=Math.floor(s/60);var sec=s%60;
+  document.getElementById('timer').textContent=String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+}
+
+function renderQ(){
+  if(!testQs.length)return;
+  var q=testQs[idx];
+  document.getElementById('q-unit').textContent='U'+q.u+': '+unitNames[q.u];
+  document.getElementById('q-num').textContent='Question '+(idx+1)+' of '+testQs.length;
+  document.getElementById('q-text').textContent=q.q;
+  document.getElementById('progress').style.width=((idx+1)/testQs.length*100)+'%';
+  document.getElementById('q-pos').textContent=(idx+1)+'/'+testQs.length;
+  var answered=Object.keys(answers).length;
+  document.getElementById('answered-count').textContent=answered+' answered';
+  document.getElementById('flag-count').textContent=flags.size?flags.size+' flagged':'';
+  var fb=document.getElementById('flag-btn');
+  fb.className='flag-btn'+(flags.has(idx)?' flagged':'');
+  fb.textContent=flags.has(idx)?'Flagged':'Flag';
+  var optDiv=document.getElementById('options');
+  optDiv.textContent='';
+  var keys=['A','B','C','D'];
+  q.opts.forEach(function(o,i){
+    var d=document.createElement('div');
+    d.className='option';
+    if(submitted){
+      if(i===q.ans)d.className='option correct';
+      else if(answers[idx]===i)d.className='option wrong';
+      else d.className='option review-neutral';
+    }else if(answers[idx]===i){
+      d.className='option selected';
+    }
+    var keySpan=document.createElement('span');
+    keySpan.className='key';keySpan.textContent=keys[i];
+    var textSpan=document.createElement('span');
+    textSpan.textContent=o;
+    d.appendChild(keySpan);d.appendChild(textSpan);
+    if(!submitted)d.onclick=function(){selectOpt(i);};
+    optDiv.appendChild(d);
+  });
+  document.getElementById('prev-btn').disabled=idx===0;
+  document.getElementById('next-btn').disabled=idx===testQs.length-1;
+  var sr=document.getElementById('submit-row');
+  if(!submitted){
+    sr.classList.remove('hidden');
+    var unanswered=testQs.length-Object.keys(answers).length;
+    var wb=document.getElementById('warn-box');
+    if(unanswered>0||flags.size){
+      wb.classList.remove('hidden');
+      var parts=[];
+      if(unanswered>0)parts.push(unanswered+' unanswered');
+      if(flags.size)parts.push(flags.size+' flagged');
+      wb.textContent=parts.join(' and ')+' question'+(unanswered+flags.size>1?'s':'');
+    }else{
+      wb.classList.add('hidden');
+    }
+  }else{
+    sr.classList.add('hidden');
+  }
+}
+
+function selectOpt(i){if(submitted)return;answers[idx]=i;renderQ();}
+function nextQ(){if(idx<testQs.length-1){idx++;renderQ();}}
+function prevQ(){if(idx>0){idx--;renderQ();}}
+function toggleFlag(){if(flags.has(idx))flags.delete(idx);else flags.add(idx);renderQ();}
+
+function submitTest(){
+  submitted=true;
+  clearInterval(timerInterval);
+  var elapsed=Math.floor((Date.now()-timerStart)/1000);
+  var m=Math.floor(elapsed/60);var s=elapsed%60;
+  var correct=0;
+  testQs.forEach(function(q,i){if(answers[i]===q.ans)correct++;});
+  var pct=Math.round(correct/testQs.length*100);
+  var grade,gc;
+  if(pct>=86){grade='A';gc='grade-A';}
+  else if(pct>=73){grade='B';gc='grade-B';}
+  else if(pct>=67){grade='C+';gc='grade-Cp';}
+  else if(pct>=60){grade='C';gc='grade-C';}
+  else if(pct>=50){grade='C-';gc='grade-Cm';}
+  else{grade='F';gc='grade-F';}
+  document.getElementById('test-screen').classList.add('hidden');
+  document.getElementById('results-screen').classList.remove('hidden');
+  document.getElementById('kb-hint').classList.add('hidden');
+  var gl=document.getElementById('grade-letter');
+  gl.textContent=grade;gl.className='grade-big '+gc;
+  document.getElementById('grade-pct').textContent=correct+'/'+testQs.length+' ('+pct+'%) -- '+m+'m '+s+'s';
+
+  var unitStats={};
+  testQs.forEach(function(q,i){
+    if(!unitStats[q.u])unitStats[q.u]={total:0,correct:0};
+    unitStats[q.u].total++;
+    if(answers[i]===q.ans)unitStats[q.u].correct++;
+  });
+  var usd=document.getElementById('unit-scores');
+  usd.textContent='';
+  for(var u=1;u<=9;u++){
+    if(!unitStats[u])continue;
+    var st=unitStats[u];
+    var up=Math.round(st.correct/st.total*100);
+    var color=up>=86?'#22c55e':up>=73?'#a3e635':up>=60?'#f59e0b':'#ef4444';
+    var row=document.createElement('div');row.className='unit-row';
+    var label=document.createElement('span');label.className='label';label.textContent='U'+u;
+    var barWrap=document.createElement('div');barWrap.className='bar-wrap';
+    var barFill=document.createElement('div');barFill.className='bar-fill';
+    barFill.style.width=up+'%';barFill.style.background=color;
+    barWrap.appendChild(barFill);
+    var score=document.createElement('span');score.className='score';score.textContent=st.correct+'/'+st.total+' ('+up+'%)';
+    row.appendChild(label);row.appendChild(barWrap);row.appendChild(score);
+    usd.appendChild(row);
+  }
+
+  var rl=document.getElementById('review-list');
+  rl.textContent='';
+  testQs.forEach(function(q,i){
+    var isCorrect=answers[i]===q.ans;
+    var isSkipped=answers[i]===undefined;
+    var card=document.createElement('div');
+    card.className='question-card';card.style.marginBottom='12px';
+    var unitDiv=document.createElement('div');unitDiv.className='q-unit';
+    unitDiv.textContent='U'+q.u+': '+unitNames[q.u];
+    var topRow=document.createElement('div');
+    topRow.style.cssText='display:flex;justify-content:space-between;align-items:center;margin-bottom:8px';
+    var numDiv=document.createElement('div');numDiv.className='q-num';numDiv.textContent='Question '+(i+1);
+    var tag=document.createElement('span');
+    tag.className='review-tag '+(isCorrect?'review-correct':isSkipped?'review-skip':'review-wrong');
+    tag.textContent=isCorrect?'Correct':isSkipped?'Skipped':'Wrong';
+    topRow.appendChild(numDiv);topRow.appendChild(tag);
+    var qText=document.createElement('div');qText.className='q-text';qText.textContent=q.q;
+    var optsDiv=document.createElement('div');optsDiv.className='options';
+    var keys=['A','B','C','D'];
+    q.opts.forEach(function(o,j){
+      var d=document.createElement('div');
+      d.className='option review-neutral';d.style.cursor='default';
+      if(j===q.ans)d.className='option correct';
+      else if(answers[i]===j)d.className='option wrong';
+      var ks=document.createElement('span');ks.className='key';ks.textContent=keys[j];
+      var ts=document.createElement('span');ts.textContent=o;
+      d.appendChild(ks);d.appendChild(ts);
+      optsDiv.appendChild(d);
+    });
+    card.appendChild(unitDiv);card.appendChild(topRow);card.appendChild(qText);card.appendChild(optsDiv);
+    rl.appendChild(card);
+  });
+
+  var missed=testQs.filter(function(_,i){return answers[i]!==testQs[i].ans;});
+  document.getElementById('retry-btn').style.display=missed.length?'':'none';
+}
+
+function retryMissed(){
+  var missed=testQs.filter(function(_,i){return answers[i]!==testQs[i].ans;});
+  if(!missed.length)return;
+  testQs=missed;
+  shuffleArr(testQs);
+  testQs=testQs.map(function(q){
+    var indices=[0,1,2,3];
+    shuffleArr(indices);
+    return{u:q.u,q:q.q,opts:indices.map(function(i){return q.opts[i];}),ans:indices.indexOf(q.ans)};
+  });
+  answers={};flags=new Set();idx=0;submitted=false;
+  document.getElementById('results-screen').classList.add('hidden');
+  document.getElementById('test-screen').classList.remove('hidden');
+  document.getElementById('kb-hint').classList.remove('hidden');
+  timerStart=Date.now();
+  timerInterval=setInterval(updateTimer,1000);
+  renderQ();
+}
+
+document.addEventListener('keydown',function(e){
+  if(submitted)return;
+  if(document.getElementById('test-screen').classList.contains('hidden'))return;
+  if(e.key==='ArrowRight')nextQ();
+  else if(e.key==='ArrowLeft')prevQ();
+  else if(e.key==='1'||e.key==='a'||e.key==='A')selectOpt(0);
+  else if(e.key==='2'||e.key==='b'||e.key==='B')selectOpt(1);
+  else if(e.key==='3'||e.key==='c'||e.key==='C')selectOpt(2);
+  else if(e.key==='4'||e.key==='d'||e.key==='D')selectOpt(3);
+  else if(e.key==='f'||e.key==='F')toggleFlag();
+  else if(e.key==='Enter'){
+    if(idx===testQs.length-1&&Object.keys(answers).length===testQs.length)submitTest();
+  }
+});
+
+init();
+</script>
+</body>
+</html>

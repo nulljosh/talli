@@ -1,0 +1,10 @@
+playwright==1.48.0
+python-dotenv
+setuptools>=65.0.0
+flask
+Pillow
+pymupdf
+pypdf
+beautifulsoup4
+pytest
+pytest-mock

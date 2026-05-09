@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Precalc 12 Practice</title>
+<style>
+  :root { --sf: -apple-system,"SF Pro Display","SF Pro Text",BlinkMacSystemFont,sans-serif; --blur: blur(20px) saturate(180%); }
+  *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:var(--sf); min-height:100vh; background:#1c1c1e; display:flex; align-items:flex-start; justify-content:center; padding:3rem 1.25rem 4rem; }
+  .container { width:100%; max-width:580px; }
+  .app-header { display:flex; align-items:center; gap:12px; margin-bottom:2rem; }
+  .back { font-size:13px; color:rgba(255,255,255,0.35); text-decoration:none; letter-spacing:-0.01em; transition:color 0.15s; }
+  .back:hover { color:rgba(255,255,255,0.65); }
+  .header-right { margin-left:auto; display:flex; align-items:center; gap:12px; }
+  .app-icon { width:44px; height:44px; background:rgba(255,255,255,0.08); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur); border:0.5px solid rgba(255,255,255,0.18); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:14px; color:rgba(255,255,255,0.85); }
+  .app-title { font-size:13px; font-weight:500; color:rgba(255,255,255,0.5); letter-spacing:-0.01em; }
+  .app-sub { font-size:11px; color:rgba(255,255,255,0.25); margin-top:2px; }
+  .unit-selector { display:flex; gap:6px; margin-bottom:1.25rem; flex-wrap:wrap; }
+  .unit-btn { padding:6px 13px; border-radius:99px; font-family:var(--sf); font-size:12px; font-weight:500; color:rgba(255,255,255,0.4); background:rgba(255,255,255,0.05); border:0.5px solid rgba(255,255,255,0.1); cursor:pointer; letter-spacing:-0.01em; transition:all 0.15s; }
+  .unit-btn:hover { color:rgba(255,255,255,0.7); background:rgba(255,255,255,0.1); }
+  .unit-btn.active { color:#fff; background:rgba(255,255,255,0.14); border-color:rgba(255,255,255,0.28); }
+  .progress-wrap { margin-bottom:1.5rem; }
+  .progress-info { display:flex; justify-content:space-between; font-size:12px; color:rgba(255,255,255,0.3); margin-bottom:8px; }
+  .progress-track { height:3px; background:rgba(255,255,255,0.08); border-radius:99px; overflow:hidden; }
+  .progress-fill { height:100%; background:rgba(255,255,255,0.35); border-radius:99px; transition:width 0.4s ease; }
+  .q-card { background:rgba(255,255,255,0.07); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur); border:0.5px solid rgba(255,255,255,0.14); border-radius:20px; padding:1.75rem; box-shadow:inset 0 1px 0 rgba(255,255,255,0.12); }
+  .unit-label { font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,0.2); margin-bottom:10px; }
+  .q-func { font-size:22px; font-weight:700; letter-spacing:-0.03em; color:#fff; margin-bottom:6px; line-height:1.35; }
+  .q-sub { font-size:15px; color:rgba(255,255,255,0.45); margin-bottom:1.5rem; letter-spacing:-0.01em; line-height:1.5; }
+  .options { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .opt-btn { background:rgba(255,255,255,0.06); border:0.5px solid rgba(255,255,255,0.12); border-radius:13px; padding:13px 11px; font-family:var(--sf); font-size:13px; color:rgba(255,255,255,0.75); cursor:pointer; text-align:left; transition:background 0.15s,border-color 0.15s,transform 0.12s; box-shadow:inset 0 1px 0 rgba(255,255,255,0.08); line-height:1.4; letter-spacing:-0.01em; }
+  .opt-btn:hover:not(:disabled) { background:rgba(255,255,255,0.11); border-color:rgba(255,255,255,0.22); color:#fff; }
+  .opt-btn:active:not(:disabled) { transform:scale(0.98); }
+  .opt-btn.correct { background:rgba(48,209,88,0.12); border-color:rgba(48,209,88,0.5); color:rgba(48,209,88,0.95); }
+  .opt-btn.wrong { background:rgba(255,69,58,0.1); border-color:rgba(255,69,58,0.45); color:rgba(255,80,70,0.9); }
+  .opt-btn.reveal { background:rgba(48,209,88,0.07); border-color:rgba(48,209,88,0.3); color:rgba(48,209,88,0.7); }
+  .hint-box { font-size:12px; color:rgba(255,255,255,0.25); margin-top:12px; padding:8px 10px; background:rgba(255,255,255,0.03); border-radius:9px; border:0.5px solid rgba(255,255,255,0.07); }
+  .qa-answer { margin-top:1.25rem; padding:14px 16px; background:rgba(255,255,255,0.04); border:0.5px solid rgba(255,255,255,0.1); border-radius:13px; display:none; }
+  .qa-answer.show { display:block; }
+  .qa-ans-text { font-size:15px; font-weight:500; color:rgba(255,255,255,0.85); margin-bottom:6px; line-height:1.5; }
+  .qa-exp-text { font-size:12px; color:rgba(255,255,255,0.3); line-height:1.5; }
+  .qa-actions { display:flex; gap:8px; margin-top:10px; }
+  .reveal-btn { margin-top:1.25rem; padding:10px 18px; background:rgba(255,255,255,0.07); border:0.5px solid rgba(255,255,255,0.15); border-radius:11px; font-family:var(--sf); font-size:13px; font-weight:500; color:rgba(255,255,255,0.6); cursor:pointer; letter-spacing:-0.01em; transition:background 0.15s,color 0.15s; }
+  .reveal-btn:hover { background:rgba(255,255,255,0.12); color:#fff; }
+  .qa-got { flex:1; padding:10px; background:rgba(48,209,88,0.1); border:0.5px solid rgba(48,209,88,0.35); border-radius:11px; font-family:var(--sf); font-size:13px; font-weight:500; color:rgba(48,209,88,0.9); cursor:pointer; transition:background 0.15s; }
+  .qa-got:hover { background:rgba(48,209,88,0.18); }
+  .qa-missed { flex:1; padding:10px; background:rgba(255,69,58,0.08); border:0.5px solid rgba(255,69,58,0.3); border-radius:11px; font-family:var(--sf); font-size:13px; font-weight:500; color:rgba(255,80,70,0.85); cursor:pointer; transition:background 0.15s; }
+  .qa-missed:hover { background:rgba(255,69,58,0.15); }
+  .feedback { font-size:13px; font-weight:500; margin-top:12px; padding:10px 13px; border-radius:11px; display:none; letter-spacing:-0.01em; }
+  .feedback.show { display:block; }
+  .feedback.correct { background:rgba(48,209,88,0.1); color:rgba(48,209,88,0.95); border:0.5px solid rgba(48,209,88,0.3); }
+  .feedback.wrong { background:rgba(255,69,58,0.09); color:rgba(255,80,70,0.9); border:0.5px solid rgba(255,69,58,0.28); }
+  .next-btn { margin-top:14px; padding:10px 20px; background:rgba(255,255,255,0.08); border:0.5px solid rgba(255,255,255,0.18); border-radius:11px; font-family:var(--sf); font-size:14px; font-weight:500; color:rgba(255,255,255,0.7); cursor:pointer; display:none; letter-spacing:-0.01em; transition:background 0.15s,color 0.15s; }
+  .next-btn.show { display:inline-block; }
+  .next-btn:hover { background:rgba(255,255,255,0.13); color:#fff; }
+  .state-msg { font-size:14px; color:rgba(255,255,255,0.3); text-align:center; padding:3rem 0; letter-spacing:-0.01em; }
+  .score-card { background:rgba(255,255,255,0.07); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur); border:0.5px solid rgba(255,255,255,0.14); border-radius:20px; padding:3rem 2rem; text-align:center; display:none; box-shadow:inset 0 1px 0 rgba(255,255,255,0.12); }
+  .score-ring { width:120px; height:120px; margin:0 auto 1.5rem; position:relative; }
+  .score-ring svg { transform:rotate(-90deg); }
+  .ring-bg { stroke:rgba(255,255,255,0.07); }
+  .ring-fill { stroke:rgba(255,255,255,0.5); stroke-linecap:round; transition:stroke-dashoffset 1s cubic-bezier(0.34,1.2,0.64,1); }
+  .score-inner { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .score-num { font-size:28px; font-weight:700; color:#fff; letter-spacing:-0.03em; }
+  .score-pct { font-size:12px; color:rgba(255,255,255,0.35); margin-top:2px; }
+  .score-label { font-size:16px; font-weight:500; color:rgba(255,255,255,0.8); margin-bottom:4px; letter-spacing:-0.02em; }
+  .score-sub { font-size:13px; color:rgba(255,255,255,0.3); margin-bottom:2rem; letter-spacing:-0.01em; }
+  .score-actions { display:flex; gap:8px; justify-content:center; }
+  .restart-btn,.next-unit-btn { padding:11px 22px; background:rgba(255,255,255,0.08); border:0.5px solid rgba(255,255,255,0.18); border-radius:11px; font-family:var(--sf); font-size:14px; font-weight:500; color:rgba(255,255,255,0.7); cursor:pointer; transition:background 0.15s,color 0.15s; letter-spacing:-0.01em; }
+  .restart-btn:hover,.next-unit-btn:hover { background:rgba(255,255,255,0.13); color:#fff; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="app-header">
+    <a class="back" href="/">Back</a>
+    <div class="header-right">
+      <div><div class="app-title">Precalc 12</div><div class="app-sub">All 7 units</div></div>
+      <div class="app-icon">f(x)</div>
+    </div>
+  </div>
+  <div class="unit-selector" id="unitSel"></div>
+  <div class="progress-wrap">
+    <div class="progress-info"><span id="qhdr">Question 1</span><span id="scoretrk">0 correct</span></div>
+    <div class="progress-track"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+  </div>
+  <div class="q-card" id="qcard" style="display:none">
+    <div class="unit-label" id="ulabel"></div>
+    <div class="q-func" id="qfunc"></div>
+    <div class="q-sub" id="qsub" style="display:none"></div>
+    <div id="mcWrap" style="display:none">
+      <div class="options" id="opts"></div>
+      <div class="feedback" id="feedback"></div>
+      <button class="next-btn" id="nextbtn" onclick="nextQ()">Continue</button>
+    </div>
+    <div id="qaWrap" style="display:none">
+      <button class="reveal-btn" id="revealBtn" onclick="revealAns()">Show Answer</button>
+      <div class="qa-answer" id="qaAns">
+        <div class="qa-ans-text" id="qaAnsText"></div>
+        <div class="qa-exp-text" id="qaExpText"></div>
+        <div class="qa-actions">
+          <button class="qa-got" onclick="markQA(true)">Got it</button>
+          <button class="qa-missed" onclick="markQA(false)">Missed it</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="state-msg" id="stateMsg" style="display:none"></div>
+  <div class="score-card" id="scorecard">
+    <div class="score-ring">
+      <svg width="120" height="120" viewBox="0 0 120 120">
+        <circle class="ring-bg" cx="60" cy="60" r="50" fill="none" stroke-width="7"/>
+        <circle class="ring-fill" id="ringFill" cx="60" cy="60" r="50" fill="none" stroke-width="7" stroke-dasharray="314" stroke-dashoffset="314"/>
+      </svg>
+      <div class="score-inner"><div class="score-num" id="scorenum"></div><div class="score-pct" id="scorepct"></div></div>
+    </div>
+    <div class="score-label" id="scorelabel"></div>
+    <div class="score-sub" id="scoresub"></div>
+    <div class="score-actions">
+      <button class="restart-btn" onclick="restartUnit()">Try again</button>
+      <button class="next-unit-btn" id="nextUnitBtn" style="display:none" onclick="goNextUnit()">Next unit</button>
+    </div>
+  </div>
+</div>
+<script>
+const UNITS=[
+  {id:1,label:'U1',name:'Sequences & Series',mode:'qa'},
+  {id:2,label:'U2',name:'Transformations',mode:'mc'},
+  {id:3,label:'U3',name:'Factoring & Roots',mode:'qa'},
+  {id:4,label:'U4',name:'Trigonometry',mode:'qa'},
+  {id:5,label:'U5',name:'Exp & Logs',mode:'qa'},
+  {id:6,label:'U6',name:'Geometric Series',mode:'qa'},
+  {id:7,label:'U7',name:'Financial Math',mode:'qa'},
+];
+const MCQ=[
+  {fn:'y = x\u00b2',sub:'Shift up 3, shift left 2',ans:'y = (x+2)\u00b2 + 3',wrong:['y = (x\u22122)\u00b2 + 3','y = (x+2)\u00b2 \u2212 3','y = (x+3)\u00b2 + 2']},
+  {fn:'y = x\u00b2',sub:'Shift down 4, shift right 5',ans:'y = (x\u22125)\u00b2 \u2212 4',wrong:['y = (x+5)\u00b2 \u2212 4','y = (x\u22125)\u00b2 + 4','y = (x\u22124)\u00b2 \u2212 5']},
+  {fn:'y = x\u00b2',sub:'Vertical stretch by 3, shift up 1',ans:'y = 3x\u00b2 + 1',wrong:['y = (3x)\u00b2 + 1','y = 3x\u00b2 \u2212 1','y = \u00bdx\u00b2 + 1']},
+  {fn:'y = x\u00b2',sub:'Vertical compress by \u00bd, shift right 4',ans:'y = \u00bd(x\u22124)\u00b2',wrong:['y = 2(x\u22124)\u00b2','y = \u00bd(x+4)\u00b2','y = \u00bdx\u00b2 \u2212 4']},
+  {fn:'y = \u221ax',sub:'Reflect over x-axis, shift up 2',ans:'y = \u2212\u221ax + 2',wrong:['y = \u221a(\u2212x) + 2','y = \u2212\u221ax \u2212 2','y = \u2212\u221a(x+2)']},
+  {fn:'y = \u221ax',sub:'Horizontal stretch by 4',ans:'y = \u221a(x/4)',wrong:['y = \u221a(4x)','y = 4\u221ax','y = \u00bc\u221ax']},
+  {fn:'y = |x|',sub:'Shift left 3, shift down 5',ans:'y = |x+3| \u2212 5',wrong:['y = |x\u22123| \u2212 5','y = |x+3| + 5','y = |x\u22125| + 3']},
+  {fn:'y = |x|',sub:'Vertical stretch by 2, reflect over x-axis',ans:'y = \u22122|x|',wrong:['y = 2|x|','y = \u2212\u00bd|x|','y = |\u22122x|']},
+  {fn:'y = 1/x',sub:'Shift right 1, shift up 3',ans:'y = 1/(x\u22121) + 3',wrong:['y = 1/(x+1) + 3','y = 1/(x\u22121) \u2212 3','y = 1/(x\u22123) + 1']},
+  {fn:'y = x\u00b3',sub:'Vertical compress by \u00bc, shift down 2',ans:'y = \u00bcx\u00b3 \u2212 2',wrong:['y = 4x\u00b3 \u2212 2','y = \u00bcx\u00b3 + 2','y = \u00bc(x\u22122)\u00b3']},
+  {fn:'y = x\u00b2',sub:'Reflect over y-axis, shift up 6',ans:'y = x\u00b2 + 6',wrong:['y = \u2212x\u00b2 + 6','y = x\u00b2 \u2212 6','y = (x+6)\u00b2'],hint:'y=x\u00b2 is symmetric \u2014 y-axis reflection leaves it unchanged'},
+  {fn:'y = \u221ax',sub:'Reflect over y-axis, shift down 1',ans:'y = \u221a(\u2212x) \u2212 1',wrong:['y = \u2212\u221ax \u2212 1','y = \u221a(x+1) \u2212 1','y = \u221a(\u2212x) + 1']},
+  {fn:'y = x\u00b2',sub:'Horizontal compress by \u2153, shift left 1',ans:'y = (3x+3)\u00b2',wrong:['y = (3x\u22121)\u00b2','y = 3(x+1)\u00b2','y = (x/3+1)\u00b2'],hint:'Horizontal compress by k: replace x with kx first, then shift'},
+  {fn:'y = |x|',sub:'Vertical stretch by \u00bd, shift right 2, shift up 4',ans:'y = \u00bd|x\u22122| + 4',wrong:['y = \u00bd|x+2| + 4','y = 2|x\u22122| + 4','y = \u00bd|x\u22124| + 2']},
+  {fn:'y = x\u00b3',sub:'Reflect over x-axis, shift right 3, shift up 1',ans:'y = \u2212(x\u22123)\u00b3 + 1',wrong:['y = (x\u22123)\u00b3 + 1','y = \u2212(x+3)\u00b3 + 1','y = \u2212(x\u22123)\u00b3 \u2212 1']},
+  {fn:'y = 1/x',sub:'Vertical stretch by 2, reflect over x-axis',ans:'y = \u22122/x',wrong:['y = 2/x','y = \u2212\u00bd/x','y = 1/(\u22122x)']},
+  {fn:'y = \u221ax',sub:'Shift right 9, vertical stretch by 3',ans:'y = 3\u221a(x\u22129)',wrong:['y = 3\u221a(x+9)','y = \u221a(x\u22129) + 3','y = \u2153\u221a(x\u22129)']},
+  {fn:'y = x\u00b2',sub:'Vertical stretch by 5, reflect over x-axis, shift left 1',ans:'y = \u22125(x+1)\u00b2',wrong:['y = 5(x+1)\u00b2','y = \u22125(x\u22121)\u00b2','y = \u22125x\u00b2 + 1']},
+];
+
+let cur=null,qs=[],order=[],idx=0,score=0,cache=null;
+const sh=a=>a.sort(()=>Math.random()-0.5);
+
+function buildSel(){
+  const sel=document.getElementById('unitSel');
+  UNITS.forEach(u=>{
+    const b=document.createElement('button');
+    b.className='unit-btn'; b.textContent=u.label; b.title=u.name; b.id='ub'+u.id;
+    b.onclick=()=>selectUnit(u.id);
+    sel.appendChild(b);
+  });
+}
+
+async function selectUnit(id){
+  cur=UNITS.find(u=>u.id===id);
+  document.querySelectorAll('.unit-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('ub'+id).classList.add('active');
+  document.getElementById('scorecard').style.display='none';
+  document.getElementById('qcard').style.display='none';
+  document.getElementById('stateMsg').style.display='none';
+  score=0; idx=0;
+  if(cur.mode==='mc'){qs=MCQ; order=sh([...Array(qs.length).keys()]); renderQ();}
+  else await loadQA(id);
+}
+
+async function loadQA(uid){
+  const msg=document.getElementById('stateMsg');
+  msg.textContent='Loading...'; msg.style.display='block';
+  try{
+    if(!cache){
+      const r=await fetch('/api/quizzes');
+      if(!r.ok) throw new Error('Quiz data not found. Run: python tools/generate_quizzes.py math');
+      cache=await r.json();
+    }
+    const uqs=cache.math&&cache.math[String(uid)];
+    if(!uqs||!uqs.length) throw new Error('No questions for unit '+uid+'. Run generate_quizzes.py to generate them.');
+    qs=uqs; order=sh([...Array(qs.length).keys()]);
+    msg.style.display='none'; renderQ();
+  }catch(e){msg.textContent=e.message; msg.style.display='block';}
+}
+
+function clearEl(el){while(el.firstChild)el.removeChild(el.firstChild);}
+
+function renderQ(){
+  document.getElementById('qcard').style.display='block';
+  document.getElementById('stateMsg').style.display='none';
+  const q=qs[order[idx]], tot=qs.length;
+  document.getElementById('ulabel').textContent=cur.label+' \u2014 '+cur.name;
+  document.getElementById('qhdr').textContent='Question '+(idx+1)+' of '+tot;
+  document.getElementById('scoretrk').textContent=score+' correct';
+  document.getElementById('prog').style.width=((idx/tot)*100)+'%';
+  document.getElementById('mcWrap').style.display='none';
+  document.getElementById('qaWrap').style.display='none';
+  document.getElementById('qsub').style.display='none';
+
+  if(cur.mode==='mc'){
+    document.getElementById('qfunc').textContent=q.fn;
+    const subEl=document.getElementById('qsub');
+    subEl.textContent=q.sub; subEl.style.display='block';
+    document.getElementById('mcWrap').style.display='block';
+    const optsDiv=document.getElementById('opts');
+    clearEl(optsDiv);
+    sh([q.ans,...q.wrong]).forEach(opt=>{
+      const b=document.createElement('button');
+      b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click',()=>pickMC(b,opt,q));
+      optsDiv.appendChild(b);
+    });
+    // hint
+    const existHint=document.getElementById('hintBox');
+    if(existHint) existHint.remove();
+    if(q.hint){
+      const h=document.createElement('div');
+      h.className='hint-box'; h.id='hintBox'; h.textContent=q.hint;
+      optsDiv.parentNode.insertBefore(h,document.getElementById('feedback'));
+    }
+    document.getElementById('feedback').className='feedback';
+    document.getElementById('nextbtn').className='next-btn';
+  } else {
+    document.getElementById('qfunc').textContent=q.q;
+    document.getElementById('qaWrap').style.display='block';
+    document.getElementById('revealBtn').style.display='inline-block';
+    document.getElementById('qaAns').className='qa-answer';
+    document.getElementById('qaAnsText').textContent=q.a;
+    document.getElementById('qaExpText').textContent=q.exp||'';
+  }
+}
+
+function pickMC(btn,opt,q){
+  if(document.getElementById('nextbtn').className.includes('show')) return;
+  document.querySelectorAll('.opt-btn').forEach(b=>{
+    b.disabled=true;
+    if(b.textContent===q.ans) b.className='opt-btn reveal';
+  });
+  const fb=document.getElementById('feedback');
+  if(opt===q.ans){btn.className='opt-btn correct';fb.className='feedback correct show';fb.textContent='Correct';score++;}
+  else{btn.className='opt-btn wrong';fb.className='feedback wrong show';fb.textContent='Correct: '+q.ans;}
+  document.getElementById('scoretrk').textContent=score+' correct';
+  document.getElementById('nextbtn').className='next-btn show';
+}
+
+function revealAns(){
+  document.getElementById('revealBtn').style.display='none';
+  document.getElementById('qaAns').className='qa-answer show';
+}
+
+function markQA(correct){if(correct)score++;document.getElementById('scoretrk').textContent=score+' correct';nextQ();}
+
+function nextQ(){idx++;if(idx>=qs.length)showScore();else renderQ();}
+
+function showScore(){
+  document.getElementById('qcard').style.display='none';
+  document.getElementById('scorecard').style.display='block';
+  const tot=qs.length,pct=Math.round((score/tot)*100);
+  document.getElementById('scorenum').textContent=score+'/'+tot;
+  document.getElementById('scorepct').textContent=pct+'%';
+  document.getElementById('prog').style.width='100%';
+  document.getElementById('scorelabel').textContent=pct>=90?'Outstanding':pct>=75?'Solid work':pct>=60?'Getting there':'Keep drilling';
+  document.getElementById('scoresub').textContent=pct>=90?'Ready for the test.':pct>=75?"Review your misses and you're good.":pct>=60?"A few more runs and it'll click.":'More reps needed.';
+  const ui=UNITS.findIndex(u=>u.id===cur.id),nb=document.getElementById('nextUnitBtn');
+  if(ui<UNITS.length-1){nb.style.display='inline-block';nb.dataset.next=UNITS[ui+1].id;}
+  else nb.style.display='none';
+  setTimeout(()=>{const c=2*Math.PI*50;document.getElementById('ringFill').style.strokeDashoffset=c-(c*pct/100);},100);
+}
+
+function restartUnit(){document.getElementById('scorecard').style.display='none';score=0;idx=0;order=sh([...Array(qs.length).keys()]);renderQ();}
+function goNextUnit(){selectUnit(parseInt(document.getElementById('nextUnitBtn').dataset.next));}
+
+buildSel(); selectUnit(1);
+</script>
+</body>
+</html>

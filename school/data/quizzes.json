@@ -1,0 +1,1639 @@
+{
+  "math": {
+    "3": [
+      {
+        "q": "Factor out the GCF from 4a\u00b2b + 16ab \u2212 12a\u00b3.",
+        "a": "4a(ab + 4b \u2212 3a\u00b2)",
+        "exp": "The GCF of all three terms is 4a. Dividing each term by 4a gives ab + 4b \u2212 3a\u00b2. Students commonly miss that the GCF includes a variable factor and only pull out the numerical GCF of 4."
+      },
+      {
+        "q": "Factor n(2n + 1) \u2212 3(2n + 1) completely.",
+        "a": "(2n + 1)(n \u2212 3)",
+        "exp": "The binomial (2n + 1) is a common factor in both terms, so it can be factored out directly, giving (2n + 1)(n \u2212 3). Students often miss this pattern when the common factor is a binomial rather than a monomial."
+      },
+      {
+        "q": "Factor x\u00b2 + 8x + 15.",
+        "a": "(x + 3)(x + 5)",
+        "exp": "Find two numbers that multiply to 15 and add to 8; those are 3 and 5. Students frequently mix up the signs or forget to check that the two numbers satisfy both the product and sum conditions simultaneously."
+      },
+      {
+        "q": "Factor x\u00b2 \u2212 6x + 8.",
+        "a": "(x \u2212 2)(x \u2212 4)",
+        "exp": "Find two numbers that multiply to +8 and add to \u22126; those are \u22122 and \u22124. A common error is choosing \u22122 and +4, which add to +2, not \u22126 \u2014 always verify both the product and the sum."
+      },
+      {
+        "q": "Factor 49x\u00b2 \u2212 9y\u00b2 completely.",
+        "a": "(7x + 3y)(7x \u2212 3y)",
+        "exp": "This is a difference of squares: a\u00b2 \u2212 b\u00b2 = (a + b)(a \u2212 b), where a = 7x and b = 3y. Students often forget to take the square root of the coefficients and may leave the answer as (7x)\u00b2 form rather than distributing properly."
+      },
+      {
+        "q": "Factor v\u2074 \u2212 w\u00b2 completely.",
+        "a": "(v\u00b2 + w)(v\u00b2 \u2212 w)",
+        "exp": "This is a difference of squares with a = v\u00b2 and b = w. Students miss that v\u2074 = (v\u00b2)\u00b2, so the square root of v\u2074 is v\u00b2, not v. The result is (v\u00b2 + w)(v\u00b2 \u2212 w)."
+      },
+      {
+        "q": "Factor x\u00b2 + 6x + 9 \u2212 y\u00b2 completely.",
+        "a": "(x + 3 + y)(x + 3 \u2212 y)",
+        "exp": "First recognize x\u00b2 + 6x + 9 = (x + 3)\u00b2, making the expression (x + 3)\u00b2 \u2212 y\u00b2, a difference of squares. Then apply a\u00b2 \u2212 b\u00b2 to get (x + 3 + y)(x + 3 \u2212 y). Students miss the first step of recognizing the perfect square trinomial."
+      },
+      {
+        "q": "Factor 4x\u00b2 \u2212 y\u00b2 \u2212 10y \u2212 25 completely.",
+        "a": "(2x + y + 5)(2x \u2212 y \u2212 5)",
+        "exp": "Group the last three terms: y\u00b2 + 10y + 25 = (y + 5)\u00b2, so the expression becomes 4x\u00b2 \u2212 (y + 5)\u00b2, a difference of squares. This gives (2x + (y + 5))(2x \u2212 (y + 5)) = (2x + y + 5)(2x \u2212 y \u2212 5). The key step students miss is grouping and recognizing the hidden perfect square."
+      },
+      {
+        "q": "Factor 2x\u00b2 + x \u2212 1 using the procedural (decomposition) method.",
+        "a": "(2x \u2212 1)(x + 1)",
+        "exp": "Multiply a \u00d7 c = 2 \u00d7 (\u22121) = \u22122; find two numbers that multiply to \u22122 and add to +1: those are +2 and \u22121. Decompose the middle term and factor by grouping to get (2x \u2212 1)(x + 1). Students often forget to factor by grouping after decomposition and leave the expression in split form."
+      },
+      {
+        "q": "Factor 6x\u00b2 \u2212 13x + 6 completely.",
+        "a": "(2x \u2212 3)(3x \u2212 2)",
+        "exp": "Multiply 6 \u00d7 6 = 36; find two numbers that multiply to 36 and add to \u221213: those are \u22124 and \u22129. Decompose, group, and factor to get (2x \u2212 3)(3x \u2212 2). A common mistake is finding factors of 36 that add to +13 rather than \u221213, which flips all the signs."
+      },
+      {
+        "q": "Factor 8x\u00b2 \u2212 2x \u2212 6 completely, including any common factor.",
+        "a": "2(4x + 3)(x \u2212 1)",
+        "exp": "First factor out the GCF of 2 to get 2(4x\u00b2 \u2212 x \u2212 3), then factor the trinomial to get 2(4x + 3)(x \u2212 1). Students often skip removing the GCF first and struggle with the larger coefficient, making the decomposition harder than necessary."
+      },
+      {
+        "q": "Factor 2x\u2074 + 9x\u00b2 + 9 completely.",
+        "a": "(x\u00b2 + 3)(2x\u00b2 + 3)",
+        "exp": "Treat x\u00b2 as a single variable (let u = x\u00b2) to get 2u\u00b2 + 9u + 9, which factors as (u + 3)(2u + 3). Substituting back gives (x\u00b2 + 3)(2x\u00b2 + 3). Students miss this substitution strategy when the variable appears only in even powers."
+      },
+      {
+        "q": "Solve m\u00b2 + 9m + 18 = 0 by factoring.",
+        "a": "m = \u22123 and m = \u22126",
+        "exp": "Factor to get (m + 3)(m + 6) = 0, then apply the zero-product property: m + 3 = 0 gives m = \u22123 and m + 6 = 0 gives m = \u22126. Students commonly factor correctly but then forget to apply the zero-product property and set each factor equal to zero."
+      },
+      {
+        "q": "Solve 4n\u00b2 \u2212 10n + 4 = 0 by factoring.",
+        "a": "n = 1/2 and n = 2",
+        "exp": "Factor out the GCF first: 2(2n\u00b2 \u2212 5n + 2) = 0, then factor the trinomial to get 2(2n \u2212 1)(n \u2212 2) = 0. This gives n = 1/2 and n = 2. Students often forget to factor out the GCF first or drop it and miss the fractional solution."
+      },
+      {
+        "q": "Solve k\u00b2 \u2212 10k = \u221216 by factoring.",
+        "a": "k = 2 and k = 8",
+        "exp": "Rearrange to k\u00b2 \u2212 10k + 16 = 0, then factor as (k \u2212 2)(k \u2212 8) = 0, giving k = 2 and k = 8. Students forget to move all terms to one side before factoring, attempting to factor k(k \u2212 10) = \u221216 directly, which does not allow use of the zero-product property."
+      },
+      {
+        "q": "State the Remainder Theorem in your own words.",
+        "a": "When a polynomial P(x) is divided by (x \u2212 a), the remainder equals P(a).",
+        "exp": "The theorem means you can find the remainder of a polynomial division by substituting the zero of the divisor into the polynomial \u2014 no long division required. Students often confuse the sign: dividing by (x + 4) means a = \u22124, so you evaluate P(\u22124), not P(4)."
+      },
+      {
+        "q": "Use the Remainder Theorem to find the remainder when P(x) = x\u00b3 \u2212 5x + 11 is divided by (x + 4).",
+        "a": "The remainder is \u221233.",
+        "exp": "Substitute x = \u22124 (the zero of x + 4) into P(x): (\u22124)\u00b3 \u2212 5(\u22124) + 11 = \u221264 + 20 + 11 = \u221233. A common error is substituting x = 4 instead of x = \u22124, since the divisor is (x + 4), not (x \u2212 4)."
+      },
+      {
+        "q": "Which polynomial has x = \u22124 as a root: P(x) = x\u00b2 \u2212 3x + 5 or P(x) = 3x\u00b2 + 10x \u2212 8? Explain.",
+        "a": "P(x) = 3x\u00b2 + 10x \u2212 8 has x = \u22124 as a root because P(\u22124) = 0.",
+        "exp": "A root means P(a) = 0, which by the Remainder Theorem also means the remainder when dividing by (x \u2212 a) is zero. P(\u22124) = 3(16) + 10(\u22124) \u2212 8 = 48 \u2212 40 \u2212 8 = 0. Students confuse 'remainder of zero' with 'root' \u2014 these are equivalent statements."
+      },
+      {
+        "q": "The polynomial P(x) = x\u00b2 + mx \u2212 7 is divided by (x \u2212 1) and gives a remainder of 5. Find m.",
+        "a": "m = 11",
+        "exp": "By the Remainder Theorem, P(1) = 5. Substituting: 1 + m \u2212 7 = 5, so m \u2212 6 = 5 and m = 11. Students forget to substitute x = 1 (the zero of x \u2212 1) and may mistakenly use x = \u22121 or attempt long division instead of direct substitution."
+      },
+      {
+        "q": "The volume of a box is V(x) = x\u00b3 + 2x\u00b2 \u2212 5x \u2212 6 and one dimension is (x + 1). Factor V(x) completely to find the other two dimensions, then state the dimensions when x = 9 ft.",
+        "a": "V(x) = (x + 1)(x \u2212 2)(x + 3); when x = 9, the dimensions are 10 ft \u00d7 7 ft \u00d7 12 ft.",
+        "exp": "Dividing by (x + 1) gives the quadratic x\u00b2 + x \u2212 6 = (x \u2212 2)(x + 3), so V(x) = (x + 1)(x \u2212 2)(x + 3). Substituting x = 9 gives factors of 10, 7, and 12. Students often stop after finding the quadratic factor and do not factor it further to find all three linear dimensions."
+      }
+    ],
+    "1": [
+      {
+        "q": "What is the common difference of the arithmetic sequence 12, 8, 4, 0, -4, -8, ...?",
+        "a": "The common difference is -4.",
+        "exp": "The common difference is found by subtracting any term from the next: 8 - 12 = -4. Students often make the error of subtracting in the wrong order or reporting the absolute value 4 instead of the signed value -4. A negative common difference means the sequence is decreasing."
+      },
+      {
+        "q": "Using the formula a\u2099 = a\u2081 + (n-1)d, find the 35th term of the sequence 55, 59, 63, 67, 71, ...",
+        "a": "The 35th term is 191.",
+        "exp": "Here a\u2081 = 55, d = 4, and n = 35. Substituting: a\u2083\u2085 = 55 + (35-1)(4) = 55 + 136 = 191. A common mistake is using n instead of (n-1) in the formula, which gives 55 + 35(4) = 195, off by one step."
+      },
+      {
+        "q": "Find the 21st term of the sequence -13, -11, -9, -7, -5, ...",
+        "a": "The 21st term is 27.",
+        "exp": "With a\u2081 = -13 and d = 2: a\u2082\u2081 = -13 + (21-1)(2) = -13 + 40 = 27. Students often mishandle the negative starting value and get confused when the result becomes positive \u2014 this is expected when a positive d eventually overcomes a negative a\u2081."
+      },
+      {
+        "q": "Find the 45th term of the sequence 20, 10, 0, -10, -20, ...",
+        "a": "The 45th term is -420.",
+        "exp": "With a\u2081 = 20 and d = -10: a\u2084\u2085 = 20 + (44)(-10) = 20 - 440 = -420. The most common error is computing (45)(-10) instead of (44)(-10), forgetting to subtract 1 from n."
+      },
+      {
+        "q": "Write the equation for the nth term of the arithmetic sequence 55, 70, 85, 100, 115, ...",
+        "a": "a\u2099 = 55 + (n-1)15.",
+        "exp": "The common difference is d = 70 - 55 = 15 and a\u2081 = 55. Substituting into a\u2099 = a\u2081 + (n-1)d gives a\u2099 = 55 + (n-1)15. Students sometimes simplify this to a\u2099 = 15n + 40 which is equivalent, but the unsimplified form is acceptable."
+      },
+      {
+        "q": "Write the equation for the nth term of the sequence 12, 6, 0, -6, -12, ...",
+        "a": "a\u2099 = 12 + (n-1)(-6).",
+        "exp": "The common difference is d = 6 - 12 = -6 and a\u2081 = 12. The nth term formula is a\u2099 = 12 + (n-1)(-6). Students frequently write a positive 6 for d by taking the absolute difference rather than attending to the sign."
+      },
+      {
+        "q": "If a\u2083\u2082 = 640 and the common difference is 4, find the first term of the arithmetic sequence.",
+        "a": "The first term is 516.",
+        "exp": "Using a\u2099 = a\u2081 + (n-1)d: 640 = a\u2081 + (31)(4) = a\u2081 + 124, so a\u2081 = 516. A common error is writing (32)(4) instead of (31)(4), using n rather than (n-1)."
+      },
+      {
+        "q": "If a\u2081\u2087 = -3 and the common difference is 5, find the first term of the arithmetic sequence.",
+        "a": "The first term is -83.",
+        "exp": "Using a\u2099 = a\u2081 + (n-1)d: -3 = a\u2081 + (16)(5) = a\u2081 + 80, so a\u2081 = -83. Students often make a sign error here, adding 80 instead of subtracting it, getting a\u2081 = 77."
+      },
+      {
+        "q": "An arithmetic sequence has a third term of 16 and the 7th term exceeds the 5th term by 12. Find the first term and common difference.",
+        "a": "The common difference is 6 and the first term is 4.",
+        "exp": "Since a\u2087 - a\u2085 = 12 and the difference between two terms k steps apart equals k\u00b7d, we get 2d = 12, so d = 6. Then a\u2083 = a\u2081 + 2d: 16 = a\u2081 + 12, giving a\u2081 = 4. Students often set up a\u2087 - a\u2085 = 12 correctly but then solve for d as 12 rather than dividing by 2."
+      },
+      {
+        "q": "How many multiples of 4 lie between 10 and 350?",
+        "a": "There are 85 multiples of 4 between 10 and 350.",
+        "exp": "The first multiple of 4 greater than 10 is 12 and the last before 350 is 348. Using a\u2099 = a\u2081 + (n-1)d: 348 = 12 + (n-1)(4), so n-1 = 84 and n = 85. A common error is starting at 8 or 16, or counting 350 itself by not reading the problem carefully."
+      },
+      {
+        "q": "Kali deposits $5 in week 1 and increases her savings by $1.75 each week. In which week do her savings reach $20.75?",
+        "a": "Her savings reach $20.75 in week 10.",
+        "exp": "With a\u2081 = 5, d = 1.75, and a\u2099 = 20.75: 20.75 = 5 + (n-1)(1.75), giving 15.75 = 1.75(n-1), so n-1 = 9 and n = 10. Students sometimes forget to divide by d and get n-1 = 15.75 directly."
+      },
+      {
+        "q": "Lanie does weight lifting for 5 minutes in week 1 and increases by 2 minutes each week. How many minutes does she lift in week 10?",
+        "a": "She lifts for 23 minutes in week 10.",
+        "exp": "With a\u2081 = 5, d = 2, n = 10: a\u2081\u2080 = 5 + (9)(2) = 5 + 18 = 23. This is a straightforward application; the common mistake is computing 5 + (10)(2) = 25 by not subtracting 1 from n."
+      },
+      {
+        "q": "The Summer Olympics occur every 4 years starting in 2024. In which year will the 16th Summer Olympics from 2024 occur?",
+        "a": "The 16th Summer Olympics from 2024 will occur in 2084.",
+        "exp": "Using a\u2081 = 2024, d = 4, n = 16: a\u2081\u2086 = 2024 + (15)(4) = 2024 + 60 = 2084. Students confuse n = 16 meaning 16 total games (so only 15 gaps from the first) versus thinking there are 16 gaps."
+      },
+      {
+        "q": "The sum of the 4th and 8th terms of an arithmetic sequence is 24 and the sum of the 6th and 10th terms is 44. Find the first three terms.",
+        "a": "The first three terms are -13, -8, -3.",
+        "exp": "Setting up equations: 2a\u2081 + 10d = 24 and 2a\u2081 + 14d = 44. Subtracting gives 4d = 20, d = 5. Then a\u2081 + 5(5) = 12 gives a\u2081 = -13. Students often forget to expand the term formulas and instead treat a\u2084 + a\u2088 = 24 as involving just two unknowns directly."
+      },
+      {
+        "q": "What is the key distinction between a linear relation and an arithmetic sequence when represented as a graph?",
+        "a": "A linear relation is a continuous graph (a straight line defined for all real x), while an arithmetic sequence is a discrete graph (isolated points defined only for positive integer values of n).",
+        "exp": "Both have a constant rate of change, but sequences are only defined at whole-number positions. Students frequently confuse the two because both produce a straight pattern, but the domain restriction is what separates them."
+      },
+      {
+        "q": "Find the sum of the arithmetic series 6 + 14 + 22 + ... up to 20 terms.",
+        "a": "The sum is 1640.",
+        "exp": "With a\u2081 = 6, d = 8, n = 20: first find a\u2082\u2080 = 6 + (19)(8) = 158. Then S\u2082\u2080 = 20/2 \u00d7 (6 + 158) = 10 \u00d7 164 = 1640. Students sometimes use the wrong formula or forget to find the last term before applying S\u2099 = n/2(a\u2081 + a\u2099)."
+      },
+      {
+        "q": "Find the sum of \u221a2 + \u221a8 + \u221a18 + ... up to 13 terms.",
+        "a": "The sum is 91\u221a2.",
+        "exp": "Simplify: \u221a2, 2\u221a2, 3\u221a2, ... so a\u2081 = \u221a2 and d = \u221a2. Then a\u2081\u2083 = 13\u221a2. S\u2081\u2083 = 13/2 \u00d7 (\u221a2 + 13\u221a2) = 6.5 \u00d7 14\u221a2 = 91\u221a2. Students often miss that each term simplifies to a multiple of \u221a2 and try to add the surds without factoring."
+      },
+      {
+        "q": "Find the sum of -40 - 33 - 26 - ... up to 31 terms.",
+        "a": "The sum is 2015.",
+        "exp": "With a\u2081 = -40, d = 7, n = 31: a\u2083\u2081 = -40 + (30)(7) = 170. S\u2083\u2081 = 31/2 \u00d7 (-40 + 170) = 15.5 \u00d7 130 = 2015. Students are surprised that a series starting with negative terms can have a large positive sum when d is positive and n is large enough."
+      },
+      {
+        "q": "Find the sum of 74 + 61 + 48 + ... up to 19 terms.",
+        "a": "The sum is -817.",
+        "exp": "With a\u2081 = 74, d = -13, n = 19: a\u2081\u2089 = 74 + (18)(-13) = 74 - 234 = -160. S\u2081\u2089 = 19/2 \u00d7 (74 + (-160)) = 9.5 \u00d7 (-86) = -817. A common error is computing 74 + (19)(-13), again using n rather than (n-1) when finding the last term."
+      },
+      {
+        "q": "Raoul started work in 1990 at an annual salary of $5000 and received an increment of $200 each year. In which year did his income first reach $8000?",
+        "a": "His income reached $8000 in 2005.",
+        "exp": "With a\u2081 = 5000, d = 200, a\u2099 = 8000: 8000 = 5000 + (n-1)(200), giving n-1 = 15, so n = 16. The 16th term corresponds to year 1990 + 15 = 2005. Students often add n directly to 1990 instead of (n-1), placing the answer in 2006."
+      }
+    ],
+    "2": [
+      {
+        "q": "A polynomial graph starts in quadrant 2 and ends in quadrant 1. What can you conclude about the degree and leading coefficient?",
+        "a": "The polynomial has a positive even degree. Positive even-degree polynomials start in Q2 and end in Q1 (both ends go up).",
+        "exp": "End behavior is determined by the sign of the leading coefficient and whether the degree is odd or even. Even-degree polynomials have both ends pointing the same direction; a positive leading coefficient means both ends rise. Students often confuse this with positive odd-degree, which goes from Q3 to Q1."
+      },
+      {
+        "q": "How many zeros can a negative quartic polynomial have?",
+        "a": "A negative quartic polynomial can have 0, 1, 2, 3, or 4 zeros (0 to 4 solutions).",
+        "exp": "The degree of a polynomial sets the maximum number of real zeros. A quartic (degree 4) has at most 4 real zeros and at least 0. Students commonly assume the number of zeros always equals the degree, but complex or repeated roots reduce the count of distinct real zeros."
+      },
+      {
+        "q": "What is the end behavior of a negative odd-degree polynomial?",
+        "a": "A negative odd-degree polynomial starts in quadrant 2 and ends in quadrant 4 (left end goes up, right end goes down).",
+        "exp": "Odd-degree polynomials have opposite end behaviors. A negative leading coefficient flips the standard positive odd behavior (Q3 to Q1), resulting in Q2 to Q4. Students frequently mix up the starting and ending quadrants when the sign is negative."
+      },
+      {
+        "q": "Which family of functions does f(x) = 5^(x-1) belong to?",
+        "a": "f(x) = 5^(x-1) belongs to the exponential family of functions.",
+        "exp": "Exponential functions have the variable in the exponent with a constant base. The horizontal shift of 1 does not change the family. Students sometimes confuse exponential functions with power functions, where the variable is the base, not the exponent."
+      },
+      {
+        "q": "Which family of functions does f(x) = (1/4)\u221a(x+5) belong to?",
+        "a": "f(x) = (1/4)\u221a(x+5) belongs to the square root family of functions.",
+        "exp": "The defining feature is the square root applied to the variable. The coefficient 1/4 is a vertical stretch/compression and the +5 is a horizontal shift, but neither changes the function family. Students sometimes misidentify the family when a coefficient is present."
+      },
+      {
+        "q": "What is the vertical line test and what does it determine?",
+        "a": "The vertical line test checks whether any vertical line crosses a graph more than once. If no vertical line intersects the graph at more than one point, the relation is a function.",
+        "exp": "A function requires exactly one output (y-value) for each input (x-value). If a vertical line hits two points, the same x maps to two different y-values, violating the definition. Students sometimes apply the test incorrectly by checking horizontal lines, which tests for one-to-one functions, not just functions."
+      },
+      {
+        "q": "Why does the equation x\u00b2 + y\u00b2 = 25 represent a relation but not a function?",
+        "a": "Because for most x-values there are two corresponding y-values (one positive and one negative), so the equation fails the vertical line test.",
+        "exp": "Solving for y gives y = \u00b1\u221a(25 - x\u00b2), which produces two outputs for a single input. Any equation where y appears as y\u00b2 (even degree) can yield two y-values per x. Students often assume an equation is automatically a function without checking for y\u00b2 or |y| terms."
+      },
+      {
+        "q": "Given f(x) = 3x - 5, evaluate f(8).",
+        "a": "f(8) = 3(8) - 5 = 24 - 5 = 19.",
+        "exp": "Function evaluation means substituting the given value for x everywhere in the expression. Students commonly make arithmetic errors or forget to apply the coefficient before subtracting the constant."
+      },
+      {
+        "q": "Given g(x) = 24/(x + 10), evaluate g(-4).",
+        "a": "g(-4) = 24/(-4 + 10) = 24/6 = 4.",
+        "exp": "Substitute -4 for x in the denominator first: -4 + 10 = 6, then divide 24 by 6. Students often forget to add 10 before dividing and instead compute 24/(-4) = -6, which is incorrect."
+      },
+      {
+        "q": "Given h(x) = x\u00b2 - 1, evaluate h(6).",
+        "a": "h(6) = 6\u00b2 - 1 = 36 - 1 = 35.",
+        "exp": "Square the input before subtracting 1. Students frequently compute (6-1)\u00b2 = 25 instead of correctly applying the exponent to just the input value before subtracting the constant."
+      },
+      {
+        "q": "What is the difference between domain and range?",
+        "a": "Domain is the set of all possible input (x) values of a function, and range is the set of all possible output (y) values.",
+        "exp": "A common memory aid is that x comes before y alphabetically, just as domain (inputs) feeds into range (outputs). Students often swap the two terms or incorrectly assign y-values to domain."
+      },
+      {
+        "q": "A graph shows a circle centered at the origin with radius 3. State the domain and range, and determine if it is a function.",
+        "a": "Domain: -3 \u2264 x \u2264 3, Range: -3 \u2264 y \u2264 3. It is NOT a function.",
+        "exp": "The circle fails the vertical line test because any vertical line drawn between x = -3 and x = 3 (exclusive of the endpoints) intersects the circle at two points. Students sometimes forget to check the function condition when they correctly identify domain and range."
+      },
+      {
+        "q": "Write the function notation for 'function h in terms of x + 3'.",
+        "a": "h(x + 3).",
+        "exp": "Function notation replaces x with the specified expression inside the parentheses after the function name. Students sometimes write h(x) + 3 instead of h(x + 3), confusing a horizontal shift in notation with an output addition."
+      },
+      {
+        "q": "What does it mean for a positive odd-degree polynomial in terms of its starting and ending quadrants?",
+        "a": "A positive odd-degree polynomial starts in quadrant 3 (bottom-left) and ends in quadrant 1 (top-right).",
+        "exp": "The odd degree means opposite end behaviors; the positive leading coefficient means as x increases the function increases. Students often reverse the quadrants or confuse this with even-degree behavior where both ends go the same direction."
+      },
+      {
+        "q": "The set {(-7, 3), (9, 4), (3, -7), (6, -4), (6, -1)} \u2014 is this a function? Why or why not?",
+        "a": "No, it is not a function because the input x = 6 maps to two different outputs: -4 and -1.",
+        "exp": "A function requires each input to have exactly one output. Having the same x-value paired with two different y-values violates this rule. Students sometimes only check that the y-values are not repeated, but it is repeated x-values that disqualify a relation from being a function."
+      },
+      {
+        "q": "If the graph of y = x\u00b2 is translated 3 units down and 5 units left, what is the new equation?",
+        "a": "y = (x + 5)\u00b2 - 3.",
+        "exp": "A horizontal translation left by 5 replaces x with (x + 5) inside the function; a vertical translation down by 3 subtracts 3 outside the function. Students commonly reverse the sign of the horizontal shift, writing (x - 5) instead of (x + 5) for a left shift."
+      },
+      {
+        "q": "What transformation is described by replacing x with (x - 1) in a function equation?",
+        "a": "The graph shifts 1 unit to the right (horizontal translation right by 1).",
+        "exp": "Inside the function, subtracting a positive number from x moves the graph to the right, which is counterintuitive. Students frequently assume (x - 1) shifts the graph left because subtraction suggests a decrease, but the horizontal shift is opposite in direction to the sign."
+      },
+      {
+        "q": "How many zeros can a positive quadratic polynomial have?",
+        "a": "A positive quadratic polynomial can have 0, 1, or 2 zeros.",
+        "exp": "The degree sets the maximum number of real zeros, so a quadratic has at most 2. It can touch the x-axis at one point (1 zero, a double root) or miss it entirely (0 zeros) when the discriminant is negative. Students sometimes believe all parabolas must cross the x-axis."
+      },
+      {
+        "q": "The equation y = x\u00b3 is translated 2 units up and 3 units left. Write the new equation.",
+        "a": "y = (x + 3)\u00b3 + 2.",
+        "exp": "Translating left by 3 adds 3 inside the argument: (x + 3). Translating up by 2 adds 2 outside the function. Both adjustments are applied simultaneously. The most common error is writing (x - 3) for a left shift."
+      },
+      {
+        "q": "A positive even-degree polynomial has end behavior where both ends rise. How many zeros is it possible for it to have if it is a quartic?",
+        "a": "A positive quartic can have 0, 1, 2, 3, or 4 real zeros.",
+        "exp": "Even though both ends of the graph rise, the curve can dip below the x-axis multiple times, crossing it up to 4 times (the degree). If the minimum value is above zero, there are 0 real zeros. Students often assume a positive even-degree polynomial with both ends up must have an even number of zeros, but odd crossing counts are also possible."
+      }
+    ],
+    "7": [
+      {
+        "q": "Solve for the exact values of \u03b8 over 0 \u2264 \u03b8 < 2\u03c0: 2cos \u03b8 + \u221a3 = 0",
+        "a": "\u03b8 = 5\u03c0/6 and \u03b8 = 7\u03c0/6 (150\u00b0 and 210\u00b0).",
+        "exp": "Isolating gives cos \u03b8 = \u2212\u221a3/2. The reference angle is \u03c0/6. Cosine is negative in quadrants II and III, so the solutions are \u03c0 \u2212 \u03c0/6 = 5\u03c0/6 and \u03c0 + \u03c0/6 = 7\u03c0/6. Students commonly use the wrong reference angle or forget that cosine is negative in both Q2 and Q3."
+      },
+      {
+        "q": "Solve for the exact values of \u03b8 over 0 \u2264 \u03b8 < 2\u03c0: tan \u03b8 + \u221a3 = 0",
+        "a": "\u03b8 = 2\u03c0/3 and \u03b8 = 5\u03c0/3 (120\u00b0 and 300\u00b0).",
+        "exp": "Isolating gives tan \u03b8 = \u2212\u221a3. The reference angle is \u03c0/3. Tangent is negative in quadrants II and IV, giving \u03c0 \u2212 \u03c0/3 = 2\u03c0/3 and 2\u03c0 \u2212 \u03c0/3 = 5\u03c0/3. A common error is listing only one solution or placing the Q4 answer incorrectly."
+      },
+      {
+        "q": "Solve for the exact values of \u03b8 over 0 \u2264 \u03b8 < 2\u03c0: csc \u03b8 = \u22122",
+        "a": "\u03b8 = 7\u03c0/6 and \u03b8 = 11\u03c0/6 (210\u00b0 and 330\u00b0).",
+        "exp": "Since csc \u03b8 = 1/sin \u03b8, the equation becomes sin \u03b8 = \u22121/2. The reference angle is \u03c0/6. Sine is negative in Q3 and Q4, giving 7\u03c0/6 and 11\u03c0/6. Students often forget to convert csc to sin before solving."
+      },
+      {
+        "q": "Solve for the exact values of \u03b8 over 0 \u2264 \u03b8 < 2\u03c0: 2cos\u00b2\u03b8 \u2212 3cos \u03b8 = 2",
+        "a": "\u03b8 = 2\u03c0/3 and \u03b8 = 4\u03c0/3 (120\u00b0 and 240\u00b0).",
+        "exp": "Rearranging gives 2cos\u00b2\u03b8 \u2212 3cos \u03b8 \u2212 2 = 0, which factors as (2cos \u03b8 + 1)(cos \u03b8 \u2212 2) = 0. cos \u03b8 = \u22121/2 yields 2\u03c0/3 and 4\u03c0/3; cos \u03b8 = 2 has no solution since cosine is bounded by [\u22121, 1]. Students often miss that cos = 2 is extraneous."
+      },
+      {
+        "q": "Solve for the exact values of \u03b8 over 0 \u2264 \u03b8 < 2\u03c0: 2cos \u03b8 sin \u03b8 \u2212 cos \u03b8 = 0",
+        "a": "\u03b8 = \u03c0/6, \u03c0/2, 5\u03c0/6, and 3\u03c0/2 (30\u00b0, 90\u00b0, 150\u00b0, 270\u00b0).",
+        "exp": "Factor out cos \u03b8 to get cos \u03b8(2sin \u03b8 \u2212 1) = 0. Setting each factor to zero gives cos \u03b8 = 0 \u2192 \u03b8 = \u03c0/2, 3\u03c0/2, and sin \u03b8 = 1/2 \u2192 \u03b8 = \u03c0/6, 5\u03c0/6. Students frequently forget to factor and instead divide by cos \u03b8, losing the cos \u03b8 = 0 solutions."
+      },
+      {
+        "q": "Solve for the exact values of \u03b8 over 0 \u2264 \u03b8 < 2\u03c0: 2sin\u00b2\u03b8 + sin \u03b8 = 1",
+        "a": "\u03b8 = \u03c0/6, 5\u03c0/6, and 3\u03c0/2 (30\u00b0, 150\u00b0, 270\u00b0).",
+        "exp": "Rearranging gives 2sin\u00b2\u03b8 + sin \u03b8 \u2212 1 = 0, which factors as (2sin \u03b8 \u2212 1)(sin \u03b8 + 1) = 0. sin \u03b8 = 1/2 \u2192 \u03b8 = \u03c0/6, 5\u03c0/6; sin \u03b8 = \u22121 \u2192 \u03b8 = 3\u03c0/2. Students often miss the 3\u03c0/2 solution or forget to check both quadrants for sin = 1/2."
+      },
+      {
+        "q": "Give the general solution in radians for: 4sin\u00b2\u03b8 \u2212 1 = 0",
+        "a": "\u03b8 = \u03c0/6 + n\u03c0 and \u03b8 = 5\u03c0/6 + n\u03c0, where n is any integer.",
+        "exp": "Solving gives sin\u00b2\u03b8 = 1/4, so sin \u03b8 = \u00b11/2. The reference angle is \u03c0/6. Combining both signs, the pattern repeats every \u03c0, giving \u03c0/6 + n\u03c0 and 5\u03c0/6 + n\u03c0. Students sometimes write four separate families instead of recognizing the \u00b11/2 consolidates into two families with period \u03c0."
+      },
+      {
+        "q": "Give the general solution in radians for: tan \u03b8 + \u221a3 = 0",
+        "a": "\u03b8 = 2\u03c0/3 + n\u03c0 (or equivalently 120\u00b0 + 180\u00b0n), where n is any integer.",
+        "exp": "tan \u03b8 = \u2212\u221a3 has reference angle \u03c0/3. Since tangent has period \u03c0, there is one family: 2\u03c0/3 + n\u03c0. Students commonly write two separate families (2\u03c0/3 + 2n\u03c0 and 5\u03c0/3 + 2n\u03c0), not realizing tangent's period is \u03c0, not 2\u03c0."
+      },
+      {
+        "q": "Determine whether the following is a trigonometric identity: (cos \u03b8 \u2212 sin \u03b8)(cos \u03b8 \u2212 sin \u03b8) = cos\u00b2\u03b8 \u2212 sin\u00b2\u03b8",
+        "a": "No, it is not an identity.",
+        "exp": "Expanding the left side gives (cos \u03b8 \u2212 sin \u03b8)\u00b2 = cos\u00b2\u03b8 \u2212 2cos \u03b8 sin \u03b8 + sin\u00b2\u03b8 = 1 \u2212 2cos \u03b8 sin \u03b8, which is not equal to cos\u00b2\u03b8 \u2212 sin\u00b2\u03b8 for all \u03b8. Students miss the middle term \u22122cos \u03b8 sin \u03b8 that appears when squaring a binomial."
+      },
+      {
+        "q": "State the two ratio identities.",
+        "a": "tan \u03b8 = sin \u03b8 / cos \u03b8 and cot \u03b8 = cos \u03b8 / sin \u03b8.",
+        "exp": "These follow directly from the definitions of the six trig functions in terms of opposite, adjacent, and hypotenuse. Students sometimes invert cot or confuse it with tan; remember cot is the reciprocal of tan, not the ratio sin/cos."
+      },
+      {
+        "q": "State the three Pythagorean identities.",
+        "a": "sin\u00b2\u03b8 + cos\u00b2\u03b8 = 1; tan\u00b2\u03b8 + 1 = sec\u00b2\u03b8; 1 + cot\u00b2\u03b8 = csc\u00b2\u03b8.",
+        "exp": "All three derive from sin\u00b2\u03b8 + cos\u00b2\u03b8 = 1 by dividing through by cos\u00b2\u03b8 or sin\u00b2\u03b8 respectively. Students often memorize only the first and forget the other two, which are essential for simplifying expressions involving sec, csc, tan, and cot."
+      },
+      {
+        "q": "Prove the identity: tan \u03b8 cos \u03b8 = sin \u03b8",
+        "a": "LHS = (sin \u03b8 / cos \u03b8) \u00b7 cos \u03b8 = sin \u03b8 = RHS.",
+        "exp": "Substituting the ratio identity tan \u03b8 = sin \u03b8/cos \u03b8 and cancelling cos \u03b8 directly gives sin \u03b8. Students should always work on only one side and use known identities rather than manipulating both sides simultaneously."
+      },
+      {
+        "q": "Prove the identity: cot \u03b8 sec \u03b8 = csc \u03b8",
+        "a": "LHS = (cos \u03b8 / sin \u03b8)(1 / cos \u03b8) = 1/sin \u03b8 = csc \u03b8 = RHS.",
+        "exp": "Replace cot and sec with their ratio/reciprocal definitions and cancel cos \u03b8. The result is 1/sin \u03b8, which equals csc \u03b8 by definition. Students often expand incorrectly or forget that sec \u03b8 = 1/cos \u03b8."
+      },
+      {
+        "q": "Prove the identity: sec \u03b8 \u2212 tan \u03b8 sin \u03b8 = 1/sec \u03b8",
+        "a": "LHS = 1/cos \u03b8 \u2212 (sin \u03b8/cos \u03b8)sin \u03b8 = (1 \u2212 sin\u00b2\u03b8)/cos \u03b8 = cos\u00b2\u03b8/cos \u03b8 = cos \u03b8 = 1/sec \u03b8 = RHS.",
+        "exp": "After combining over a common denominator of cos \u03b8, the numerator becomes 1 \u2212 sin\u00b2\u03b8 = cos\u00b2\u03b8 by the Pythagorean identity. Students often skip combining fractions and miss applying sin\u00b2\u03b8 + cos\u00b2\u03b8 = 1 to simplify the numerator."
+      },
+      {
+        "q": "Prove the identity: cos\u00b2\u03b8 \u2212 2sin\u00b2\u03b8 = 1 \u2212 3sin\u00b2\u03b8",
+        "a": "LHS = (1 \u2212 sin\u00b2\u03b8) \u2212 2sin\u00b2\u03b8 = 1 \u2212 3sin\u00b2\u03b8 = RHS.",
+        "exp": "Replace cos\u00b2\u03b8 with 1 \u2212 sin\u00b2\u03b8 using the Pythagorean identity, then collect like terms. Students commonly try to expand the right side instead of converting the left, which is less direct. Recognizing cos\u00b2\u03b8 = 1 \u2212 sin\u00b2\u03b8 is the key step."
+      },
+      {
+        "q": "Prove the identity: sec\u00b2\u03b8 / (sec\u00b2\u03b8 \u2212 1) = csc\u00b2\u03b8",
+        "a": "The denominator sec\u00b2\u03b8 \u2212 1 = tan\u00b2\u03b8, so LHS = sec\u00b2\u03b8/tan\u00b2\u03b8 = (1/cos\u00b2\u03b8)/(sin\u00b2\u03b8/cos\u00b2\u03b8) = 1/sin\u00b2\u03b8 = csc\u00b2\u03b8 = RHS.",
+        "exp": "The Pythagorean identity tan\u00b2\u03b8 + 1 = sec\u00b2\u03b8 rearranges to sec\u00b2\u03b8 \u2212 1 = tan\u00b2\u03b8. After substituting, dividing fractions and cancelling cos\u00b2\u03b8 leaves 1/sin\u00b2\u03b8. Students miss the substitution sec\u00b2\u03b8 \u2212 1 = tan\u00b2\u03b8 or make an error when dividing the compound fraction."
+      },
+      {
+        "q": "State the restrictions on \u03b8 for the expression cot \u03b8 sec \u03b8 over 0 \u2264 \u03b8 < 2\u03c0.",
+        "a": "\u03b8 \u2260 0, \u03c0/2, \u03c0, 3\u03c0/2 (i.e., \u03b8 \u2260 0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0).",
+        "exp": "cot \u03b8 = cos \u03b8/sin \u03b8 requires sin \u03b8 \u2260 0, excluding \u03b8 = 0 and \u03c0. sec \u03b8 = 1/cos \u03b8 requires cos \u03b8 \u2260 0, excluding \u03b8 = \u03c0/2 and 3\u03c0/2. Students often list only one set of restrictions and forget to check every function in the expression."
+      },
+      {
+        "q": "State the restrictions on \u03b8 for the expression 1/(1 + 2cos \u03b8) over 0 \u2264 \u03b8 < 2\u03c0.",
+        "a": "\u03b8 \u2260 2\u03c0/3 and \u03b8 \u2260 4\u03c0/3 (i.e., \u03b8 \u2260 120\u00b0 and \u03b8 \u2260 240\u00b0).",
+        "exp": "The denominator 1 + 2cos \u03b8 \u2260 0 means cos \u03b8 \u2260 \u22121/2. The reference angle for cos = 1/2 is \u03c0/3; cosine is negative in Q2 and Q3, giving 2\u03c0/3 and 4\u03c0/3. Students sometimes restrict based on undefined trig functions rather than the algebraic denominator condition."
+      },
+      {
+        "q": "Solve for the exact values of \u03b8 over 0 \u2264 \u03b8 < 2\u03c0: cos \u03b8 tan\u00b2\u03b8 \u2212 cos \u03b8 = 0",
+        "a": "\u03b8 = \u03c0/4, \u03c0/2, 3\u03c0/4, 5\u03c0/4, 3\u03c0/2, 7\u03c0/4 (45\u00b0, 90\u00b0, 135\u00b0, 225\u00b0, 270\u00b0, 315\u00b0).",
+        "exp": "Factor as cos \u03b8(tan\u00b2\u03b8 \u2212 1) = 0. cos \u03b8 = 0 gives \u03c0/2 and 3\u03c0/2; tan\u00b2\u03b8 = 1 means tan \u03b8 = \u00b11, giving \u03c0/4, 3\u03c0/4, 5\u03c0/4, 7\u03c0/4. Note that at \u03b8 = \u03c0/2 and 3\u03c0/2 tan \u03b8 is undefined but cos \u03b8 = 0 still satisfies the original equation, so those solutions are valid."
+      },
+      {
+        "q": "Prove the identity: (sin \u03b8 + cos \u03b8)\u00b2 + (sin \u03b8 \u2212 cos \u03b8)\u00b2 = 2",
+        "a": "Expanding both squares: (sin\u00b2\u03b8 + 2sin \u03b8 cos \u03b8 + cos\u00b2\u03b8) + (sin\u00b2\u03b8 \u2212 2sin \u03b8 cos \u03b8 + cos\u00b2\u03b8) = 2sin\u00b2\u03b8 + 2cos\u00b2\u03b8 = 2(sin\u00b2\u03b8 + cos\u00b2\u03b8) = 2 = RHS.",
+        "exp": "The cross terms +2sin \u03b8 cos \u03b8 and \u22122sin \u03b8 cos \u03b8 cancel, leaving 2(sin\u00b2\u03b8 + cos\u00b2\u03b8). Applying sin\u00b2\u03b8 + cos\u00b2\u03b8 = 1 gives 2. Students often forget to expand both binomials fully or do not recognize that the middle terms cancel."
+      }
+    ],
+    "6": [
+      {
+        "q": "Convert 240\u00b0 to radians, expressed exactly in terms of \u03c0.",
+        "a": "240\u00b0 \u00d7 (\u03c0/180) = 4\u03c0/3 radians.",
+        "exp": "Multiply degrees by \u03c0/180 and simplify the fraction. Students commonly forget to reduce: 240/180 simplifies to 4/3, giving 4\u03c0/3. Leaving it as 240\u03c0/180 is not exact form."
+      },
+      {
+        "q": "Convert 5\u03c0/9 radians to degrees exactly.",
+        "a": "(5\u03c0/9) \u00d7 (180/\u03c0) = 100\u00b0.",
+        "exp": "Multiply by 180/\u03c0 and cancel \u03c0. 5 \u00d7 180 / 9 = 900/9 = 100. Students often multiply incorrectly or forget to cancel \u03c0, leaving \u03c0 in the answer."
+      },
+      {
+        "q": "Define a co-terminal angle and give one positive and one negative co-terminal angle for 120\u00b0.",
+        "a": "Co-terminal angles share the same terminal arm. For 120\u00b0: positive co-terminal = 480\u00b0, negative co-terminal = \u2212240\u00b0.",
+        "exp": "Add or subtract 360\u00b0 to find co-terminal angles. 120 + 360 = 480 and 120 \u2212 360 = \u2212240. Students commonly confuse co-terminal with supplementary or forget that there are infinitely many co-terminal angles."
+      },
+      {
+        "q": "What is the reference angle for \u03b8 = 110\u00b0?",
+        "a": "The reference angle is 70\u00b0.",
+        "exp": "The reference angle is the acute angle between the terminal arm and the nearest x-axis. In Quadrant II, reference angle = 180\u00b0 \u2212 110\u00b0 = 70\u00b0. Students often subtract from 360\u00b0 instead of 180\u00b0 for Quadrant II angles."
+      },
+      {
+        "q": "What is the reference angle for \u03b8 = \u2212130\u00b0?",
+        "a": "The reference angle is 50\u00b0.",
+        "exp": "\u2212130\u00b0 lands in Quadrant III (adding 360\u00b0 gives 230\u00b0). The reference angle = 230\u00b0 \u2212 180\u00b0 = 50\u00b0. Students often apply the wrong formula by not first identifying the quadrant of the angle."
+      },
+      {
+        "q": "A circle has a radius of 8 cm. Find the arc length subtended by a central angle of 3.5 radians.",
+        "a": "Arc length = r \u00d7 \u03b8 = 8 \u00d7 3.5 = 28 cm.",
+        "exp": "The arc length formula is a = r\u03b8 where \u03b8 must be in radians. Since 3.5 is already in radians, direct substitution gives 28 cm. Students commonly use the formula with degrees without converting first."
+      },
+      {
+        "q": "An arc of length 15 cm subtends a central angle of 135\u00b0 in a circle. Find the radius.",
+        "a": "Convert 135\u00b0 to 3\u03c0/4 radians, then r = a/\u03b8 = 15 \u00f7 (3\u03c0/4) = 20/\u03c0 \u2248 6.37 cm.",
+        "exp": "The formula r = a/\u03b8 requires \u03b8 in radians. 135\u00b0 \u00d7 \u03c0/180 = 3\u03c0/4. Then 15 \u00f7 (3\u03c0/4) = 15 \u00d7 4/(3\u03c0) = 20/\u03c0. Students often forget to convert degrees to radians before applying the arc length formula."
+      },
+      {
+        "q": "An arc has a length of 5 cm and the circle has a radius of 3 cm. What angle (in radians) does the arc subtend?",
+        "a": "\u03b8 = a/r = 5/3 radians.",
+        "exp": "Rearranging a = r\u03b8 gives \u03b8 = a/r. Substituting gives 5/3 radians. Students sometimes mistakenly convert to degrees unnecessarily or invert the fraction to get r/a."
+      },
+      {
+        "q": "Explain the mnemonic 'All Students Take Calculus' and how it applies to trigonometry.",
+        "a": "It identifies which trig ratios are positive in each quadrant: All (Q1), Sine (Q2), Tangent (Q3), Cosine (Q4), reading counter-clockwise starting from Quadrant I.",
+        "exp": "This is the ASTC rule. In Q1 all ratios are positive; in Q2 only sin is positive; in Q3 only tan is positive; in Q4 only cos is positive. Students commonly misplace which quadrant corresponds to which letter or confuse the direction of rotation."
+      },
+      {
+        "q": "Point P(\u22120.6, \u22120.8) lies on the unit circle. Find sin(\u03b8), cos(\u03b8), and tan(\u03b8).",
+        "a": "sin(\u03b8) = \u22120.8, cos(\u03b8) = \u22120.6, tan(\u03b8) = (\u22120.8)/(\u22120.6) = 4/3 \u2248 1.333.",
+        "exp": "On the unit circle, the x-coordinate is cos(\u03b8) and the y-coordinate is sin(\u03b8). tan(\u03b8) = sin/cos = y/x. Both coordinates are negative, placing the angle in Quadrant III where tangent is positive. Students often swap x and y for sin and cos."
+      },
+      {
+        "q": "Point A(6, \u22123) lies on the terminal arm of angle \u03b8. Find the coordinates of point P on the unit circle.",
+        "a": "r = \u221a(6\u00b2 + (\u22123)\u00b2) = \u221a45 = 3\u221a5. P = (6/(3\u221a5), \u22123/(3\u221a5)) = (2/\u221a5, \u22121/\u221a5).",
+        "exp": "Divide each coordinate by r to normalize to the unit circle. r = \u221a(x\u00b2 + y\u00b2) = \u221a45 = 3\u221a5. Dividing: (6/3\u221a5, \u22123/3\u221a5) = (2/\u221a5, \u22121/\u221a5). Students frequently forget to calculate r or divide incorrectly."
+      },
+      {
+        "q": "If sin(\u03b8) = \u22121/8 and the terminal arm is in Quadrant III, find cos(\u03b8) exactly.",
+        "a": "cos\u00b2(\u03b8) = 1 \u2212 sin\u00b2(\u03b8) = 1 \u2212 1/64 = 63/64, so cos(\u03b8) = \u2212\u221a63/8 (negative in Q3).",
+        "exp": "Use the Pythagorean identity sin\u00b2(\u03b8) + cos\u00b2(\u03b8) = 1. In Quadrant III, cosine is negative, so take the negative square root. Students often forget to apply the sign based on quadrant, leaving the answer as +\u221a63/8."
+      },
+      {
+        "q": "If cos(\u03b8) = 2/3 and sin(\u03b8) < 0, find the exact value of sin(\u03b8).",
+        "a": "sin\u00b2(\u03b8) = 1 \u2212 4/9 = 5/9, and since sin(\u03b8) < 0, sin(\u03b8) = \u2212\u221a5/3.",
+        "exp": "Since cos is positive and sin is negative, \u03b8 is in Quadrant IV. Apply sin\u00b2+cos\u00b2=1: sin\u00b2=5/9, sin=\u2212\u221a5/3. Students frequently choose the positive root without checking the given condition that sin < 0."
+      },
+      {
+        "q": "The terminal arm of angle \u03b8 passes through (3, \u22122). Find sin(\u03b8), cos(\u03b8), and tan(\u03b8) exactly.",
+        "a": "r = \u221a13. sin(\u03b8) = \u22122/\u221a13, cos(\u03b8) = 3/\u221a13, tan(\u03b8) = \u22122/3.",
+        "exp": "Calculate r = \u221a(x\u00b2+y\u00b2) = \u221a(9+4) = \u221a13. Then sin = y/r, cos = x/r, tan = y/x. The point is in Quadrant IV so sin and tan are negative, cos is positive. Students often forget to compute r and attempt to use x and y directly."
+      },
+      {
+        "q": "Using the special triangles, find the exact value of sin(\u03c0/4).",
+        "a": "sin(\u03c0/4) = 1/\u221a2 = \u221a2/2.",
+        "exp": "\u03c0/4 = 45\u00b0, which is one of the angles in the 45-45-90 triangle with sides 1, 1, \u221a2. sin(45\u00b0) = opposite/hypotenuse = 1/\u221a2. Students sometimes confuse which side is opposite to which angle or rationalize incorrectly."
+      },
+      {
+        "q": "Using special triangles, find the exact value of cos(4\u03c0/3).",
+        "a": "4\u03c0/3 is in Quadrant III with reference angle \u03c0/3 (60\u00b0). cos(\u03c0/3) = 1/2, and cosine is negative in Q3, so cos(4\u03c0/3) = \u22121/2.",
+        "exp": "Identify the reference angle: 4\u03c0/3 \u2212 \u03c0 = \u03c0/3. From the 30-60-90 triangle, cos(60\u00b0) = 1/2. Apply the ASTC rule: in Q3, only tangent is positive, so cos = \u22121/2. Students often forget to negate the ratio based on quadrant."
+      },
+      {
+        "q": "Find the exact value of 3cos(7\u03c0/4).",
+        "a": "7\u03c0/4 is in Quadrant IV with reference angle \u03c0/4. cos(\u03c0/4) = 1/\u221a2. Cosine is positive in Q4, so 3cos(7\u03c0/4) = 3/\u221a2 = 3\u221a2/2.",
+        "exp": "7\u03c0/4 = 315\u00b0, reference angle = 2\u03c0 \u2212 7\u03c0/4 = \u03c0/4. From the 45-45-90 triangle, cos(\u03c0/4) = 1/\u221a2. Q4 cosine is positive. Multiplying by 3 gives 3\u221a2/2. Students commonly misidentify the quadrant or forget to multiply by the coefficient."
+      },
+      {
+        "q": "Find the exact value of 6tan(5\u03c0/3).",
+        "a": "5\u03c0/3 is in Quadrant IV with reference angle \u03c0/3. tan(\u03c0/3) = \u221a3, and tangent is negative in Q4, so 6tan(5\u03c0/3) = \u22126\u221a3.",
+        "exp": "5\u03c0/3 = 300\u00b0, reference angle = 2\u03c0 \u2212 5\u03c0/3 = \u03c0/3. From the 30-60-90 triangle, tan(60\u00b0) = \u221a3. In Q4 only cosine is positive, so tan is negative. Multiplying: 6 \u00d7 (\u2212\u221a3) = \u22126\u221a3. Forgetting the negative sign from the quadrant is the most common error."
+      },
+      {
+        "q": "What is the reference angle for \u03b8 = 425\u00b0?",
+        "a": "425\u00b0 \u2212 360\u00b0 = 65\u00b0. The reference angle is 65\u00b0.",
+        "exp": "Angles greater than 360\u00b0 require subtracting multiples of 360\u00b0 first to find the principal angle. 425\u00b0 \u2212 360\u00b0 = 65\u00b0, which is already in Q1, so the reference angle equals the angle itself (65\u00b0). Students sometimes skip the reduction step and treat 425\u00b0 as if it directly gives a reference angle."
+      },
+      {
+        "q": "Define 'standard position angle' and explain the role of the initial arm and terminal arm.",
+        "a": "A standard position angle has its vertex at the origin and its initial arm along the positive x-axis. The terminal arm rotates from the initial arm to form the angle.",
+        "exp": "The initial arm is fixed along the positive x-axis; the terminal arm is the ray that rotates (counter-clockwise for positive angles, clockwise for negative). The angle is measured between the two arms. Students often confuse initial and terminal arms or place the vertex somewhere other than the origin."
+      }
+    ],
+    "5": [
+      {
+        "q": "Which of the following is NOT a rational expression and why: (4x + \u221ax)/3 or (2x-1)/(3x+7)?",
+        "a": "(4x + \u221ax)/3 is not a rational expression because \u221ax is not a polynomial \u2014 a rational expression requires both numerator and denominator to be polynomials.",
+        "exp": "A rational expression is defined as a ratio of two polynomials. The square root of a variable introduces a fractional exponent, which violates the polynomial requirement. Students often confuse 'rational' with 'fraction' and miss this distinction."
+      },
+      {
+        "q": "What are the non-permissible values for the expression (m+5)/(m\u00b2-1)?",
+        "a": "m \u2260 1 and m \u2260 -1, because m\u00b2-1 = (m+1)(m-1), and the denominator cannot equal zero.",
+        "exp": "Non-permissible values are found by setting the denominator equal to zero and solving. Factoring m\u00b2-1 as a difference of squares gives (m+1)(m-1) = 0, so m = \u00b11. Students frequently forget to factor first and miss one of the values."
+      },
+      {
+        "q": "What are the non-permissible values for the expression 3x/(3x\u00b2+6x)?",
+        "a": "x \u2260 0 and x \u2260 -2, because 3x\u00b2+6x = 3x(x+2), and setting each factor to zero gives x = 0 and x = -2.",
+        "exp": "Factor the denominator completely before setting it equal to zero. Students often cancel the 3x from numerator and denominator and then only identify x = -2, forgetting that x = 0 is also non-permissible based on the original expression before simplification."
+      },
+      {
+        "q": "For the rational function y = a/(x-h) + k, what is the equation of the horizontal asymptote?",
+        "a": "The horizontal asymptote is y = k.",
+        "exp": "The parameter k shifts the base function 1/x vertically by k units, so the horizontal asymptote shifts from y = 0 to y = k. Students commonly confuse h and k, writing x = k instead of y = k."
+      },
+      {
+        "q": "For the rational function y = a/(x-h) + k, what is the equation of the vertical asymptote?",
+        "a": "The vertical asymptote is x = h.",
+        "exp": "The denominator equals zero when x = h, making the function undefined at that point and creating a vertical asymptote there. Students often write x = -h because they misread the form, forgetting that the denominator is (x - h), not (x + h)."
+      },
+      {
+        "q": "What two effects can the parameter 'a' have on the graph of y = a/(x-h) + k?",
+        "a": "The parameter 'a' can cause a vertical expansion or compression of the graph, and if 'a' is negative, it reflects the graph across the x-axis.",
+        "exp": "When |a| > 1 the hyperbola stretches away from the asymptotes; when 0 < |a| < 1 it compresses toward them. A negative 'a' flips the two branches so they occupy different quadrants. Students often only identify the reflection and forget expansion/compression."
+      },
+      {
+        "q": "Identify the horizontal asymptote, vertical asymptote, and any removable discontinuity for y = (x+7)(x-3)/((x-3)(x+1)).",
+        "a": "Horizontal asymptote: y = 1; vertical asymptote: x = -1; removable discontinuity at x = 3.",
+        "exp": "The factor (x-3) cancels from numerator and denominator, creating a hole (removable discontinuity) at x = 3 rather than a vertical asymptote. The remaining denominator gives VA at x = -1, and since degrees are equal with leading coefficients both 1, HA is y = 1."
+      },
+      {
+        "q": "For y = (x\u00b2-4)/(x\u00b2-5x+6), identify the horizontal asymptote, vertical asymptote, and any removable discontinuity.",
+        "a": "Horizontal asymptote: y = 1; vertical asymptote: x = 3; removable discontinuity at (2, -4).",
+        "exp": "Factor to get (x+2)(x-2)/((x-3)(x-2)). The (x-2) factor cancels, producing a hole at x = 2. To find the y-coordinate of the hole, substitute x = 2 into the simplified form (x+2)/(x-3) = 4/(-1) = -4, giving the point (2, -4)."
+      },
+      {
+        "q": "What is the domain of the rational function y = 1/(x-3) + 2?",
+        "a": "The domain is all real numbers except x = 3, written as x \u2260 3.",
+        "exp": "The vertical asymptote at x = 3 means the function is undefined there, so x = 3 must be excluded from the domain. Students sometimes also exclude the horizontal asymptote value from the domain, but horizontal asymptotes restrict the range, not the domain."
+      },
+      {
+        "q": "What is the range of the rational function y = 1/(x-3) + 2?",
+        "a": "The range is all real numbers except y = 2, written as y \u2260 2.",
+        "exp": "The horizontal asymptote y = 2 is a value the function approaches but never reaches, so it is excluded from the range. The function can produce any other real output. Students frequently confuse domain and range restrictions or forget the range exclusion entirely."
+      },
+      {
+        "q": "For y = 3x/(x+4), state the horizontal asymptote and explain how it is determined.",
+        "a": "The horizontal asymptote is y = 3, found by dividing the leading coefficients of the numerator and denominator since the degrees are equal.",
+        "exp": "When the degree of the numerator equals the degree of the denominator, the HA equals the ratio of leading coefficients: 3/1 = 3. Students often default to y = 0 without checking degrees, which only applies when the numerator's degree is less than the denominator's degree."
+      },
+      {
+        "q": "How do you determine the horizontal asymptote of y = (2x\u00b2-5x-3)/(x\u00b2-4x+3)?",
+        "a": "The horizontal asymptote is y = 2, because both numerator and denominator have degree 2 and the leading coefficients are 2 and 1 respectively, giving 2/1 = 2.",
+        "exp": "Equal degrees means HA = ratio of leading coefficients. Students must look only at the leading terms and not the full expressions. A common error is computing the ratio of constant terms instead of leading coefficients."
+      },
+      {
+        "q": "What is a removable discontinuity (hole) in a rational function, and how is it different from a vertical asymptote?",
+        "a": "A removable discontinuity is a single missing point on the graph caused by a factor that cancels from both numerator and denominator; a vertical asymptote occurs at a factor that remains only in the denominator after cancellation.",
+        "exp": "If (x-a) cancels completely, the function is simply undefined at one point \u2014 it can be 'removed' by redefining the function there. If (x-a) stays in the denominator, the function grows without bound near x = a, creating an asymptote. Students often treat all non-permissible values as asymptotes."
+      },
+      {
+        "q": "For y = (x\u00b2+6x+9)/(x\u00b2+x-6), identify the horizontal asymptote, vertical asymptote, and removable discontinuity.",
+        "a": "Horizontal asymptote: y = 1; vertical asymptote: x = 2; removable discontinuity at x = -3.",
+        "exp": "Factor to (x+3)\u00b2/((x+3)(x-2)). The (x+3) cancels once, leaving (x+3)/(x-2), with a hole at x = -3 and a vertical asymptote at x = 2. Equal leading coefficients give HA = y = 1. Students miss that (x+3)\u00b2 only partially cancels with one (x+3) in the denominator."
+      },
+      {
+        "q": "Write the equation of a rational function with vertical asymptotes at x = -2 and x = 3, and x-intercepts at x = -1 and x = 4.",
+        "a": "y = (x+1)(x-4)/((x+2)(x-3)) = (x\u00b2-3x-4)/(x\u00b2-x-6).",
+        "exp": "X-intercepts become factors of the numerator (set equal to zero gives the intercept), and vertical asymptotes become factors of the denominator. Students often mix these up, placing intercept values in the denominator or asymptote values in the numerator."
+      },
+      {
+        "q": "A rational function has a discontinuous point at (-3, -4/5), a vertical asymptote at x = 2, an x-intercept at x = -5, and a horizontal asymptote at y = 2. Write its equation.",
+        "a": "y = 2(x+3)(x+5)/((x-2)(x+3)) = (2x\u00b2+16x+30)/(x\u00b2+x-6).",
+        "exp": "The discontinuous point at x = -3 means (x+3) is a factor in both numerator and denominator. The HA of y = 2 requires the leading coefficient ratio to be 2, so multiply the numerator by 2. Students often forget the leading coefficient scalar needed to match the horizontal asymptote."
+      },
+      {
+        "q": "Explain why x\u00b2+16 in the denominator of (x+4)/(x\u00b2+16) produces no non-permissible values.",
+        "a": "x\u00b2+16 = 0 has no real solutions because x\u00b2 \u2265 0 for all real x, so x\u00b2+16 \u2265 16 > 0 always. The denominator is never zero.",
+        "exp": "For a denominator to produce non-permissible values it must be possible for it to equal zero. Since x\u00b2 is always non-negative, adding 16 guarantees the sum is always positive. Students sometimes factor incorrectly or try to set x\u00b2+16 = 0 and get confused when there is no real answer."
+      },
+      {
+        "q": "For the expression (4(x+1))/((x+2)(x+1)), what are the non-permissible values?",
+        "a": "The non-permissible values are x \u2260 -1 and x \u2260 -2, because both values make the original denominator equal to zero.",
+        "exp": "Non-permissible values are determined from the original expression before any simplification. Even though (x+1) cancels, x = -1 is still non-permissible. Students frequently simplify first and then only identify x = -2, losing the restriction from the cancelled factor."
+      },
+      {
+        "q": "Given y = 4/(x-3) + 2, find the x-intercept.",
+        "a": "Set y = 0: 0 = 4/(x-3) + 2, so 4/(x-3) = -2, then x-3 = -2, giving x = 1. The x-intercept is (1, 0).",
+        "exp": "To find the x-intercept, substitute y = 0 and solve algebraically. Multiply both sides by (x-3) to clear the denominator. Students often make sign errors when isolating the fraction or forget to check that the solution is not a non-permissible value."
+      },
+      {
+        "q": "Determine the non-permissible values for (x\u00b2-1)/(x\u00b3+1) and factor both the numerator and denominator completely.",
+        "a": "x\u00b3+1 = (x+1)(x\u00b2-x+1) = 0 gives x = -1 as the only real non-permissible value; x\u00b2-1 = (x+1)(x-1). So x \u2260 -1.",
+        "exp": "The numerator factors as a difference of squares, and the denominator factors as a sum of cubes using a\u00b3+b\u00b3 = (a+b)(a\u00b2-ab+b\u00b2). The quadratic factor x\u00b2-x+1 has no real roots (discriminant < 0), so the only non-permissible value is x = -1. Students often try to factor x\u00b3+1 as (x+1)\u00b3, which is incorrect."
+      }
+    ],
+    "4": [
+      {
+        "q": "Simplify (x^3)^2 / x^(-4) and write the answer with a positive exponent.",
+        "a": "x^10",
+        "exp": "Apply the power rule: (x^3)^2 = x^6. Then dividing by x^(-4) means adding exponents: x^6 * x^4 = x^10. Students commonly forget that dividing by a negative exponent is equivalent to multiplying by the positive version, and they also confuse the power rule with the product rule."
+      },
+      {
+        "q": "Solve for x using the reciprocal exponent: x^(2/3) = 4",
+        "a": "x = 8",
+        "exp": "Raise both sides to the reciprocal power 3/2: x = 4^(3/2) = (4^(1/2))^3 = 2^3 = 8. The most common error is inverting the fraction incorrectly or applying the reciprocal to only one part of the expression rather than the entire right side."
+      },
+      {
+        "q": "Convert 9^(1/2) = 3 to logarithmic form.",
+        "a": "log_9(3) = 1/2",
+        "exp": "The conversion rule is: b^e = r becomes log_b(r) = e. Here b = 9, e = 1/2, and r = 3, so log_9(3) = 1/2. Students frequently swap the base and the result, writing log_3(9) instead."
+      },
+      {
+        "q": "Convert log_4(1/16) = -2 to exponential form.",
+        "a": "4^(-2) = 1/16",
+        "exp": "The conversion rule is: log_b(r) = e becomes b^e = r. Here b = 4, e = -2, and r = 1/16. A negative exponent is valid here. Students sometimes flip the base and exponent or forget to keep the negative in the exponent."
+      },
+      {
+        "q": "Evaluate log_2(8\u221a2).",
+        "a": "7/2",
+        "exp": "Rewrite 8\u221a2 as 2^3 * 2^(1/2) = 2^(7/2), so log_2(2^(7/2)) = 7/2. Students miss that \u221a2 = 2^(1/2) and fail to combine the exponents before applying the logarithm."
+      },
+      {
+        "q": "State the two domain restrictions that apply to every logarithmic function y = log_b(x).",
+        "a": "The argument x must be greater than zero, and the base b must be positive and not equal to 1.",
+        "exp": "Logarithms are only defined for positive arguments because no real exponent produces a non-positive result from a positive base. The base cannot be 1 because 1 raised to any power is always 1, making the logarithm undefined for all values except the argument 1. Students often remember one restriction but forget the other."
+      },
+      {
+        "q": "State the domain of y = log_2(3x - 5).",
+        "a": "x > 5/3",
+        "exp": "Set the argument greater than zero: 3x - 5 > 0, so 3x > 5, giving x > 5/3. Students often solve the inequality as an equation and forget the strict inequality direction, or they forget to divide by 3 as the final step."
+      },
+      {
+        "q": "Write 2log_3(x) - log_3(y) as a single logarithm.",
+        "a": "log_3(x^2 / y)",
+        "exp": "Apply the power rule first: 2log_3(x) = log_3(x^2). Then apply the quotient rule: log_3(x^2) - log_3(y) = log_3(x^2/y). Students commonly try to apply the quotient rule before the power rule, which leads to errors in the numerator."
+      },
+      {
+        "q": "Expand log(x/y^2) using logarithm laws.",
+        "a": "log(x) - 2log(y)",
+        "exp": "Apply the quotient rule: log(x/y^2) = log(x) - log(y^2). Then apply the power rule to log(y^2): log(x) - 2log(y). Students often forget the power rule on the denominator term or incorrectly add the logs instead of subtracting them."
+      },
+      {
+        "q": "Simplify 5^(2log_5(x)).",
+        "a": "x^2",
+        "exp": "Use the power rule in reverse: 2log_5(x) = log_5(x^2). Then apply the inverse property: 5^(log_5(x^2)) = x^2. Students miss that an exponential and a logarithm with the same base cancel, leaving only the argument."
+      },
+      {
+        "q": "Given log(2) = a and log(3) = b, express log(6) in terms of a and b.",
+        "a": "log(6) = a + b",
+        "exp": "Since 6 = 2 * 3, apply the product rule: log(6) = log(2) + log(3) = a + b. Students sometimes try to treat log(6) as log(2) * log(3), which is not a valid logarithm law."
+      },
+      {
+        "q": "If log_3(x) = 10, evaluate log_3(9x) without a calculator.",
+        "a": "12",
+        "exp": "Apply the product rule: log_3(9x) = log_3(9) + log_3(x) = 2 + 10 = 12, since 3^2 = 9. Students often forget to evaluate log_3(9) = 2 separately and just write 10 + 9 or leave the answer unsimplified."
+      },
+      {
+        "q": "Solve for x using common bases: 4^(2x) = 8.",
+        "a": "x = 3/4",
+        "exp": "Rewrite both sides as powers of 2: (2^2)^(2x) = 2^3, so 2^(4x) = 2^3. Setting exponents equal: 4x = 3, so x = 3/4. Students often fail to rewrite 4 and 8 as powers of the same base before comparing exponents."
+      },
+      {
+        "q": "Solve for x using common bases: 3^(3x+4) = 9^x.",
+        "a": "x = -4",
+        "exp": "Rewrite 9 as 3^2: 3^(3x+4) = 3^(2x). Set exponents equal: 3x + 4 = 2x, so x = -4. Students frequently forget to distribute the exponent when converting 9^x to 3^(2x), writing 3^(2+x) instead."
+      },
+      {
+        "q": "Solve for the exact value of x: 3^x = 11.",
+        "a": "x = log(11) / log(3)",
+        "exp": "Take the common log of both sides: x*log(3) = log(11), so x = log(11)/log(3) \u2248 2.1827. This is an application of the change-of-base principle. Students often incorrectly write log(11/3) instead of log(11)/log(3), which applies the quotient rule incorrectly."
+      },
+      {
+        "q": "Solve algebraically: log(x - 5) = 1.",
+        "a": "x = 15",
+        "exp": "Convert to exponential form using base 10: 10^1 = x - 5, so 10 = x - 5, giving x = 15. Students must verify 15 - 5 = 10 > 0 to confirm the solution is valid. A common error is forgetting that log without a written base means base 10."
+      },
+      {
+        "q": "Solve algebraically: log(x) + log(x) = log(36).",
+        "a": "x = 6",
+        "exp": "Combine the left side: 2log(x) = log(x^2) = log(36), so x^2 = 36 and x = \u00b16. Since the argument must be positive, x = -6 is rejected. Students often accept both solutions without checking the domain restriction."
+      },
+      {
+        "q": "Solve algebraically: log(x - 1) + log(x + 2) = 1.",
+        "a": "x = 3",
+        "exp": "Apply the product rule: log((x-1)(x+2)) = 1, so (x-1)(x+2) = 10, giving x^2 + x - 12 = 0, so (x+4)(x-3) = 0. x = -4 makes x-1 < 0, so it is extraneous. Only x = 3 is valid. Failing to check and reject the extraneous solution is the most common error."
+      },
+      {
+        "q": "State the equation of the asymptote for y = 5^(x+1) - 2.",
+        "a": "y = -2",
+        "exp": "For an exponential function y = a*b^(x+h) + k, the horizontal asymptote is always y = k, because the exponential term approaches zero but never reaches it. Here k = -2, so the asymptote is y = -2. Students confuse the horizontal shift h with the vertical shift k."
+      },
+      {
+        "q": "State the equation of the asymptote for y = log(x + 4) - 3.",
+        "a": "x = -4",
+        "exp": "For a logarithmic function y = log_b(x + h) + k, the vertical asymptote occurs where the argument equals zero: x + 4 = 0, so x = -4. Unlike exponential functions, logarithmic functions have a vertical asymptote, not a horizontal one. Students sometimes write y = -3, confusing the vertical shift with the asymptote."
+      }
+    ]
+  },
+  "science": {
+    "2": [
+      {
+        "q": "What two observations together form the modern cell theory?",
+        "a": "All living things are made of cells (Schleiden and Schwann), and cells come from pre-existing cells (Rudolf Virchow).",
+        "exp": "Students often attribute the entire cell theory to Schleiden and Schwann, forgetting Virchow's critical addition about cell reproduction. The full theory requires both statements \u2014 composition and origin of cells."
+      },
+      {
+        "q": "What is the key structural feature that distinguishes prokaryotic cells from eukaryotic cells?",
+        "a": "Prokaryotic cells lack a true nucleus and membrane-bound organelles, containing only ribosomes as organelles.",
+        "exp": "Students commonly say prokaryotes 'have no organelles' which is imprecise \u2014 they do have ribosomes. The defining distinction is the absence of membrane-bound organelles and a true nucleus."
+      },
+      {
+        "q": "Why are prokaryotic cells considered less efficient than eukaryotic cells?",
+        "a": "Chemical reactions in prokaryotic cells occur throughout the cytosol rather than in specialized compartments, making them less efficient.",
+        "exp": "Efficiency in eukaryotes comes from compartmentalization \u2014 organelles concentrate specific reactions in controlled environments. Students miss that specialization via membrane-bound organelles is the source of eukaryotic efficiency."
+      },
+      {
+        "q": "What three structural features are found in plant cells but not in animal cells?",
+        "a": "Plant cells have chloroplasts, a cell wall, and large central vacuoles that are absent in animal cells.",
+        "exp": "These three structures reflect the plant cell's unique functions: photosynthesis, structural support, and storage. Students often forget the large central vacuole or confuse small animal cell vesicles with plant vacuoles."
+      },
+      {
+        "q": "What is the composition of the plant cell wall and what two functions does it provide?",
+        "a": "The cell wall is composed of cellulose and provides strength and protection to the plant cell.",
+        "exp": "Cellulose is a polysaccharide \u2014 the most abundant organic polymer on Earth. Students sometimes confuse the cell wall with the cell membrane; the wall surrounds the membrane and is a rigid, non-selective structure."
+      },
+      {
+        "q": "What is the role of chlorophyll in chloroplasts?",
+        "a": "Chlorophyll captures light energy and converts it to chemical energy during photosynthesis.",
+        "exp": "Chlorophyll is the pigment responsible for light absorption, not the site of the entire reaction. Students often describe chloroplasts as simply 'doing photosynthesis' without identifying chlorophyll's specific role in energy capture."
+      },
+      {
+        "q": "Up to what percentage of a plant cell's volume can a large central vacuole occupy, and what is its primary function?",
+        "a": "A large central vacuole can occupy up to 90% of a plant cell's volume and serves primarily as a storage site.",
+        "exp": "The 90% figure surprises many students who underestimate the vacuole's dominance in plant cell volume. Beyond storage, vacuoles also perform digestive functions similar to lysosomes and can store nutrients or degrade unwanted substances."
+      },
+      {
+        "q": "What is the nuclear envelope and what structures allow larger molecules to pass through it?",
+        "a": "The nuclear envelope is a double membrane surrounding the nucleus, and nuclear pores are the structures through which larger molecules pass.",
+        "exp": "Students sometimes call it a 'nuclear membrane' without recognizing it is double-layered. The pores are selective \u2014 not everything passes freely, which is key to regulating gene expression."
+      },
+      {
+        "q": "What is chromatin and what does it condense into during cell division?",
+        "a": "Chromatin is the genetic blueprint of the cell, composed of DNA and protein, and it condenses into chromosomes during cell division.",
+        "exp": "Chromatin and chromosomes are the same material in different states \u2014 a distinction students frequently miss. During interphase chromatin is loosely arranged; during cell division it compacts into the visible rod-shaped chromosomes."
+      },
+      {
+        "q": "What is the function of the nucleolus?",
+        "a": "The nucleolus is a dark region within the nucleus where ribosomal RNA (rRNA) is produced or stored.",
+        "exp": "Students often describe the nucleolus vaguely as 'involved in protein synthesis,' but its specific role is rRNA production. rRNA is a structural and functional component of ribosomes, linking the nucleolus directly to translation."
+      },
+      {
+        "q": "How many chromosomes does a typical human somatic cell have, and how does this differ from a human sex cell?",
+        "a": "A typical human somatic cell has 46 chromosomes, while sex cells (eggs and sperm) have only 23 chromosomes.",
+        "exp": "This halving is essential for sexual reproduction \u2014 when egg and sperm fuse, the resulting zygote regains the full 46. Students should understand that sex cells are haploid (23) and somatic cells are diploid (46)."
+      },
+      {
+        "q": "What is the cell membrane primarily composed of, and what is its key functional property?",
+        "a": "The cell membrane is primarily composed of phospholipids and acts as a selectively permeable barrier, allowing certain substances in while keeping others out.",
+        "exp": "The phospholipid bilayer's hydrophilic heads and hydrophobic tails create selective permeability. Students often say the membrane is 'semi-permeable' without clarifying that selectivity is based on the chemical properties of the molecules trying to cross."
+      },
+      {
+        "q": "What is the structural difference between smooth ER and rough ER?",
+        "a": "Rough ER has ribosomes attached to its surface, while smooth ER does not.",
+        "exp": "The name 'rough' refers directly to the appearance caused by attached ribosomes. The functional difference follows from structure: rough ER is involved in protein synthesis for export, while smooth ER produces lipids."
+      },
+      {
+        "q": "What does smooth ER primarily produce, and what types of cells have abundant smooth ER?",
+        "a": "Smooth ER primarily produces lipids including phospholipids and steroids, and cells that produce large amounts of protein have abundant smooth ER.",
+        "exp": "This is a common confusion point \u2014 smooth ER produces lipids, not proteins. Cells like liver cells and steroid-secreting cells have high amounts of smooth ER precisely because of their lipid synthesis demands."
+      },
+      {
+        "q": "What is the function of the Golgi apparatus in the cell?",
+        "a": "The Golgi apparatus receives protein-filled vesicles from the ER on one side, processes them, and ships transport vesicles out the other side to different locations in the cell.",
+        "exp": "The Golgi functions like a cellular post office \u2014 it receives, modifies, packages, and dispatches proteins. Students often forget the directional nature of Golgi traffic (cis face receives, trans face ships) or confuse it with the ER."
+      },
+      {
+        "q": "What are vesicles and how are they formed from smooth ER?",
+        "a": "Vesicles are small membrane-bound sacs containing lipids that form when a section of smooth ER buds off.",
+        "exp": "Budding is a key membrane transport mechanism throughout the cell. Students should recognize that vesicles are the primary vehicle for moving lipids and proteins between organelles and to the cell membrane."
+      },
+      {
+        "q": "What is the role of ribosomes, and in which types of cells are they the only organelle present?",
+        "a": "Ribosomes are the site of protein synthesis and are the only organelles present in prokaryotic cells.",
+        "exp": "Because ribosomes are not membrane-bound, they are present in both prokaryotic and eukaryotic cells. Students sometimes state that prokaryotes have no organelles at all, which is incorrect \u2014 ribosomes are the one universal organelle."
+      },
+      {
+        "q": "What two German biologists first proposed that all organisms are composed of cells, and what were their respective fields?",
+        "a": "Matthias Schleiden, a botanist, and Theodor Schwann, a zoologist, proposed that all organisms are composed of cells in the late 1830s.",
+        "exp": "Their different specializations (plants vs. animals) are significant \u2014 each independently reached the same conclusion by studying different organism types. Students often forget which scientist studied which organism group."
+      },
+      {
+        "q": "Why does frequent exposure to certain drugs lead to proliferation of smooth ER?",
+        "a": "The liver's smooth ER contains enzymes that detoxify drugs; repeated exposure triggers more smooth ER to be produced, increasing the cell's capacity to metabolize the drug and building tolerance.",
+        "exp": "This is a cellular-level explanation for drug tolerance. Students often think tolerance is purely a neurological phenomenon, but this example shows that organelle-level adaptation also plays a role."
+      },
+      {
+        "q": "How does the energy source used by animal cells differ from that used by plant cells, and which organelle is responsible in each case?",
+        "a": "Animal cells obtain energy (ATP) from food via mitochondria, while plant cells convert sunlight into chemical energy via chloroplasts through photosynthesis.",
+        "exp": "Both processes ultimately produce ATP, but the input differs \u2014 organic molecules vs. light energy. Students sometimes state that plant cells do not have mitochondria, which is false; plants use both organelles and perform both photosynthesis and cellular respiration."
+      }
+    ],
+    "3": [
+      {
+        "q": "What are the three components that make up a DNA nucleotide?",
+        "a": "A DNA nucleotide is composed of a phosphate group, a deoxyribose sugar, and a nitrogenous base.",
+        "exp": "All three parts are required to form a nucleotide \u2014 missing any one means it is not a complete nucleotide. Students often forget the phosphate group or confuse deoxyribose (DNA) with ribose (RNA)."
+      },
+      {
+        "q": "Which nitrogenous bases are classified as purines, and which are pyrimidines?",
+        "a": "Adenine and guanine are purines (double-ringed). Cytosine and thymine are pyrimidines (single-ringed).",
+        "exp": "Purines have two fused rings and pyrimidines have one ring. A common mistake is mixing up which category each base belongs to \u2014 remember: pure As Gold (purines: Adenine, Guanine)."
+      },
+      {
+        "q": "According to complementary base pairing, adenine always bonds with which base, and guanine always bonds with which base?",
+        "a": "Adenine always bonds with thymine, and guanine always bonds with cytosine.",
+        "exp": "This is called Chargaff's rule. The rule exists because two purines would overlap and two pyrimidines would be too short to span the rung \u2014 so one purine must pair with one pyrimidine."
+      },
+      {
+        "q": "Why can two purines not bond together to form a rung of the DNA ladder?",
+        "a": "Two purines are both double-ringed, so they would be too large and would physically overlap, preventing proper bonding.",
+        "exp": "The structural constraint forces purine-pyrimidine pairing. Students often state only that 'they don't match' without explaining the size incompatibility that causes this rule."
+      },
+      {
+        "q": "What type of bond holds the two complementary strands of DNA together at the base pairs?",
+        "a": "Hydrogen bonds hold the two strands of DNA together between the complementary nitrogenous bases.",
+        "exp": "Hydrogen bonds are relatively weak individually, which is important because they must be broken during replication. Students confuse these with the strong covalent sugar-phosphate bonds that form the backbone."
+      },
+      {
+        "q": "What makes up the 'rails' (backbone) of the DNA ladder?",
+        "a": "The alternating sugar (deoxyribose) and phosphate groups make up the two rails of the DNA ladder.",
+        "exp": "The backbone provides structural support, while the bases form the rungs. Students sometimes reverse this and say the bases form the backbone."
+      },
+      {
+        "q": "What is the role of the enzyme helicase in DNA replication?",
+        "a": "Helicase breaks the hydrogen bonds between the complementary base pairs, causing the two DNA strands to separate and unzip.",
+        "exp": "Helicase specifically targets the hydrogen bonds between bases \u2014 it does not break the sugar-phosphate backbone. Students sometimes say it 'cuts' the DNA, which is inaccurate."
+      },
+      {
+        "q": "What is the role of DNA polymerase during DNA replication?",
+        "a": "DNA polymerase assists with base pairing by adding free-floating nucleotides to the complementary bases on the parent (template) strand.",
+        "exp": "DNA polymerase reads the template and adds matching nucleotides. Students often confuse it with ligase, which joins nucleotides together, rather than placing them in position."
+      },
+      {
+        "q": "What does the enzyme ligase do during DNA replication?",
+        "a": "Ligase bonds adjacent nucleotides together through their sugar-phosphate components, sealing the newly forming strand.",
+        "exp": "Ligase forms the covalent sugar-phosphate backbone bonds that hold the nucleotide chain together. It is distinct from helicase (unzips) and DNA polymerase (places nucleotides)."
+      },
+      {
+        "q": "Why is DNA replication described as 'semi-conservative'?",
+        "a": "Each new double helix contains one original (parent) strand and one newly synthesized (daughter) strand, conserving half of the original molecule.",
+        "exp": "The term 'semi' means half \u2014 half is conserved, half is new. Students sometimes think semi-conservative means the sequence is only partially copied, which is incorrect."
+      },
+      {
+        "q": "List the three main functions of DNA.",
+        "a": "DNA replicates itself so each daughter cell receives a copy, controls cell activities by producing proteins, and undergoes occasional mutations that account for diversity in living organisms.",
+        "exp": "All three functions are distinct. Students often only recall replication and protein production, overlooking mutation as a formal function that drives genetic diversity."
+      },
+      {
+        "q": "What is recombinant DNA?",
+        "a": "Recombinant DNA is DNA that contains genes from two or more different sources, often produced by introducing foreign DNA into a host organism to create a new combination of genes.",
+        "exp": "The key concept is that DNA from different sources is combined. Students sometimes think recombinant DNA only refers to DNA inserted into bacteria, but the definition is broader."
+      },
+      {
+        "q": "What is a plasmid and why is it commonly used as a vector in recombinant DNA technology?",
+        "a": "A plasmid is a small circular DNA molecule found naturally in bacteria. It is commonly used as a vector because it can be easily removed from bacteria, modified with foreign DNA, and reintroduced.",
+        "exp": "Plasmids replicate independently every time the bacterial cell divides, producing many copies of the inserted gene. Students confuse vectors with the restriction enzyme that cuts the plasmid open."
+      },
+      {
+        "q": "What is the role of restriction enzymes in creating recombinant DNA?",
+        "a": "Restriction enzymes cut the plasmid open so that foreign DNA can be inserted into it.",
+        "exp": "Restriction enzymes are molecular scissors \u2014 they cut at specific sequences. Students often confuse restriction enzymes with ligase; ligase is used after to seal the foreign DNA in place."
+      },
+      {
+        "q": "How can viruses serve as vectors in recombinant DNA technology?",
+        "a": "A virus carrying recombinant DNA infects a cell and delivers the viral DNA, which includes the foreign gene, into the host cell where it can be replicated.",
+        "exp": "Viruses inject their DNA into host cells naturally, making them effective delivery tools. Each new virus produced contains the recombinant DNA, enabling cloning of a particular gene at scale."
+      },
+      {
+        "q": "What is a genomic library?",
+        "a": "A genomic library is a collection of engineered viruses that together carry fragments of an entire genome.",
+        "exp": "It requires approximately 10 million viruses to carry all the genes of a mouse, illustrating the scale. Students sometimes confuse a genomic library with a gene database or sequence catalogue."
+      },
+      {
+        "q": "Give two specific examples of proteins that are now produced using recombinant DNA technology.",
+        "a": "Insulin (produced using yeast cells) and interferon (a protein used in cancer treatments to help the immune system) are both produced using recombinant DNA technology.",
+        "exp": "These are practical applications that demonstrate the medical value of recombinant DNA. Students sometimes only recall insulin and forget interferon, or cannot name the cell system used to produce insulin."
+      },
+      {
+        "q": "What is the difference between DNA replication and protein synthesis in terms of what each process produces?",
+        "a": "DNA replication produces two identical copies of DNA. Protein synthesis uses DNA as a template to produce proteins.",
+        "exp": "These are two distinct processes and must not be confused. A key distinction: replication copies the entire DNA molecule, while protein synthesis reads specific genes to build proteins."
+      },
+      {
+        "q": "Why must a copy of DNA be made before a protein can be synthesized, rather than using DNA directly?",
+        "a": "DNA cannot leave the nucleus, so a messenger RNA (mRNA) copy must be made to carry the genetic instructions to the ribosomes where protein synthesis occurs.",
+        "exp": "DNA is the master copy and stays protected in the nucleus. The mRNA acts as an intermediary. Students often overlook the reason for mRNA \u2014 DNA's inability to leave the nucleus is the key constraint."
+      },
+      {
+        "q": "What is transcription and what molecule does it produce?",
+        "a": "Transcription is the process of making messenger RNA (mRNA) from a DNA template.",
+        "exp": "Transcription is the first step of protein synthesis and occurs in the nucleus. Students sometimes confuse transcription with translation \u2014 transcription makes mRNA, translation uses mRNA to build a protein."
+      }
+    ],
+    "7": [
+      {
+        "q": "What are the two main divisions of the nervous system, and what structures make up each?",
+        "a": "The Central Nervous System (CNS) is made up of the brain and spinal cord. The Peripheral Nervous System (PNS) consists of peripheral nerves that link the CNS with the rest of the body.",
+        "exp": "Students often forget that the spinal cord is part of the CNS, not the PNS. The PNS is everything outside the brain and spinal cord \u2014 it is the communication highway between the CNS and the rest of the body."
+      },
+      {
+        "q": "What is the direction of impulse conduction in a dendrite versus an axon?",
+        "a": "Dendrites conduct impulses toward the cell body. Axons conduct impulses away from the cell body.",
+        "exp": "A common mistake is reversing the two directions. A useful mnemonic: dendrites deliver signals in, axons send signals away. Every neuron has many dendrites but only one axon."
+      },
+      {
+        "q": "What is the function of the myelin sheath?",
+        "a": "The myelin sheath is a fatty insulating layer wrapped around larger axons and dendrites. It increases the speed of impulse conduction by enabling saltatory conduction.",
+        "exp": "Students sometimes think myelin just protects the axon \u2014 its primary role is electrical insulation that forces the action potential to jump between Nodes of Ranvier, dramatically increasing conduction speed."
+      },
+      {
+        "q": "What are Nodes of Ranvier and why are they functionally important?",
+        "a": "Nodes of Ranvier are gaps in the myelin sheath along the axon. They allow for saltatory conduction, where the action potential jumps from node to node rather than traveling continuously.",
+        "exp": "The word 'saltatory' comes from the Latin for jumping. Without nodes, the impulse would have to depolarize every point on the axon, which is far slower. Students often confuse the nodes themselves as active sites where the impulse regenerates."
+      },
+      {
+        "q": "Compare the conduction speeds of myelinated versus unmyelinated nerve fibers.",
+        "a": "Myelinated fibers can conduct impulses at up to 200 m/s, while unmyelinated fibers can be as slow as 0.5 m/s.",
+        "exp": "This 400-fold difference is entirely due to saltatory conduction in myelinated fibers. Students should understand that the action potential is not traveling through the myelin \u2014 it jumps between the exposed nodes."
+      },
+      {
+        "q": "What are the three types of neurons, and what is the function of each?",
+        "a": "Sensory (afferent) neurons transmit impulses from receptors to the CNS. Interneurons (connector neurons) are found only in the CNS and relay signals between neurons. Motor (efferent) neurons transmit impulses from the CNS to effectors such as muscles and glands.",
+        "exp": "Students frequently mix up afferent and efferent pathways. Afferent = arriving at the CNS (sensory); efferent = exiting the CNS (motor). Interneurons are entirely within the CNS and make up the brain and spinal cord."
+      },
+      {
+        "q": "What is a ganglion?",
+        "a": "A ganglion is a collection of neuron cell bodies located outside the Central Nervous System.",
+        "exp": "Ganglia are part of the PNS. Students sometimes confuse ganglia with nuclei \u2014 nuclei are clusters of cell bodies inside the CNS, while ganglia are clusters outside it."
+      },
+      {
+        "q": "Describe the stimulus-response pathway in order from stimulus to response.",
+        "a": "A stimulus is detected at a receptor; a sensory neuron carries the impulse via an afferent pathway to the CNS (spinal cord or brain); interneurons relay the signal to a higher centre where it is interpreted; a motor neuron carries the impulse via an efferent pathway to an effector (muscle or gland), producing a response.",
+        "exp": "Students often omit the interpretation step at the higher centre or confuse afferent and efferent directions. The full pathway is: receptor \u2192 sensory neuron \u2192 CNS \u2192 motor neuron \u2192 effector."
+      },
+      {
+        "q": "What is the resting membrane potential of a neuron, and what maintains it?",
+        "a": "The resting membrane potential is -70 mV (inside negative relative to outside). It is maintained by the sodium-potassium pump (Na+/K+ pump), which actively transports 3 Na+ ions out and 2 K+ ions in per cycle.",
+        "exp": "Students frequently forget the exact ratio (3 Na+ out, 2 K+ in). Because more positive charges are pumped out than in, the inside remains more negative \u2014 this is the source of the electrochemical gradient."
+      },
+      {
+        "q": "Why is the sodium-potassium pump described as an antiport mechanism, and what energy source does it require?",
+        "a": "It is an antiport mechanism because it moves two different ions in opposite directions simultaneously \u2014 Na+ out and K+ in. It requires ATP as its energy source.",
+        "exp": "This is active transport, not passive diffusion. Students sometimes assume ions move down their concentration gradients on their own \u2014 the pump works against the gradient, which is why ATP is needed."
+      },
+      {
+        "q": "What is depolarization and what ion movement causes it?",
+        "a": "Depolarization is the change in membrane potential from -70 mV (resting) to approximately +30 mV (action potential). It is caused by voltage-gated sodium channels opening, allowing Na+ to rush into the cell.",
+        "exp": "The key detail students miss is that it is voltage-gated channels (not ligand-gated) that open in response to a sufficient change in membrane potential. The influx of positive Na+ ions is what makes the inside positive."
+      },
+      {
+        "q": "What is threshold potential, and what happens if it is not reached?",
+        "a": "Threshold potential is the minimum membrane potential change required to trigger a full action potential. If the stimulus does not depolarize the membrane to threshold, no action potential is generated \u2014 this is the all-or-nothing principle.",
+        "exp": "Students often think a stronger stimulus produces a bigger action potential \u2014 it does not. Either threshold is reached and a full action potential fires, or no action potential fires at all. Stimulus strength is encoded by frequency, not amplitude."
+      },
+      {
+        "q": "What is repolarization and what ion movement causes it?",
+        "a": "Repolarization is the return of the membrane potential toward -70 mV. It is caused by voltage-gated potassium channels opening, allowing K+ to flow out of the cell, making the inside negative again.",
+        "exp": "Students confuse depolarization and repolarization. Depolarization = Na+ rushing in (membrane goes positive). Repolarization = K+ rushing out (membrane returns negative). Both are driven by voltage-gated channels."
+      },
+      {
+        "q": "After repolarization, why can the neuron not immediately fire another action potential?",
+        "a": "Although the charge is restored after repolarization, the ions are on the wrong sides of the membrane. The sodium-potassium pump must actively restore the original ion distribution before another action potential can be generated.",
+        "exp": "This recovery phase is called the refractory period. Students often think repolarization fully restores the neuron \u2014 it restores the charge, but the ion concentrations are reversed. The pump corrects this, which takes time."
+      },
+      {
+        "q": "What is the refractory period and what two functions does it serve?",
+        "a": "The refractory period is the time after an action potential during which the neuron cannot generate another action potential. It prevents backward signaling and allows ion concentrations to be restored by the sodium-potassium pump.",
+        "exp": "Students commonly only state one function. The refractory period is critical for directionality \u2014 it ensures the wave of depolarization travels in one direction only (away from the cell body along the axon), preventing the signal from reversing."
+      },
+      {
+        "q": "How does an action potential travel along the entire length of a neuron?",
+        "a": "Depolarization at one point on the axon triggers adjacent voltage-gated sodium channels to open, creating a chain reaction \u2014 a wave of depolarization that propagates along the entire length of the fiber.",
+        "exp": "The action potential is not a single event at one point; it is a self-propagating wave. Each new region depolarizes the next region, so the signal regenerates at full strength all the way to the axon terminal without decay."
+      },
+      {
+        "q": "What value does the membrane potential reach at the peak of an action potential, and what value represents the resting potential?",
+        "a": "The resting potential is -70 mV. At the peak of an action potential (depolarization), the membrane potential reaches approximately +30 mV.",
+        "exp": "Students often state vague values or get the signs wrong. The inside goes from -70 mV to +30 mV during depolarization \u2014 a swing of about 100 mV. Memorizing both values with their signs is required for the unit test."
+      },
+      {
+        "q": "What is saltatory conduction and where does it occur?",
+        "a": "Saltatory conduction is the process by which an action potential jumps from one Node of Ranvier to the next along a myelinated axon. It occurs only in myelinated nerve fibers.",
+        "exp": "The term 'saltatory' means jumping. The action potential does not travel continuously through the myelin \u2014 it leaps between the unmyelinated gaps (nodes). This is why myelinated fibers conduct impulses so much faster than unmyelinated ones."
+      },
+      {
+        "q": "What is the role of motor end plates?",
+        "a": "Motor end plates are specialized structures at the end of motor neurons that are in close proximity to muscles and organs. They are the site where the nerve impulse is transmitted to the effector to produce a response.",
+        "exp": "Students sometimes place motor end plates on sensory neurons \u2014 they are found only on motor neurons. They are the functional junction between the nervous system output and the target tissue (muscle or gland)."
+      },
+      {
+        "q": "Distinguish between the afferent and efferent pathways.",
+        "a": "The afferent pathway carries sensory information from receptors toward the CNS. The efferent pathway carries motor commands from the CNS outward to effectors (muscles and glands).",
+        "exp": "A reliable way to remember: Afferent = Arriving at CNS (sensory); Efferent = Exiting CNS (motor). Students regularly reverse these, which is one of the most common errors on nervous system tests."
+      }
+    ],
+    "5": [
+      {
+        "q": "What three things happen to air as it passes through the nasal cavity?",
+        "a": "Air is warmed, filtered, and moistened as it passes through the nasal cavity.",
+        "exp": "The nasal cavity prepares air before it reaches the delicate lung tissue. Students often list only one or two of the three functions \u2014 all three must be included for a complete answer."
+      },
+      {
+        "q": "What is the function of the epiglottis in relation to the glottis?",
+        "a": "The epiglottis covers the glottis (the opening to the larynx) to prevent food and liquid from entering the airway during swallowing.",
+        "exp": "The glottis is the opening at the top of the larynx; the epiglottis acts as a flap that closes over it during swallowing. Students confuse the glottis and epiglottis or forget that the epiglottis is a protective covering, not a permanent structure."
+      },
+      {
+        "q": "What is the structural composition of the trachea and why is this structure important?",
+        "a": "The trachea is made of C-shaped cartilage rings lined with ciliated mucous membrane. The rings keep the airway open while allowing flexibility, and the cilia move debris-laden mucous upward out of the respiratory tract.",
+        "exp": "The C-shape is significant because it allows the esophagus (directly behind the trachea) to expand when swallowing food. Students often forget the functional role of the cilia and mucous lining alongside the structural cartilage."
+      },
+      {
+        "q": "Describe the two-part process by which inhaled air is cleansed of debris.",
+        "a": "First, nose hairs (vibrissae) in the nasal passageways trap large particles. Second, mucous membranes lining the respiratory tract trap finer debris, and cilia sweep the mucous and trapped material upward toward the pharynx where it is swallowed or expelled.",
+        "exp": "The two-stage nature is commonly missed \u2014 students describe only one mechanism. The role of cilia in actively moving mucous upward (the mucociliary escalator) is a key detail that distinguishes a complete answer."
+      },
+      {
+        "q": "Why is air in the lungs described as 100% saturated, and how does inhaled air reach this state?",
+        "a": "Air in the lungs is 100% saturated with water vapour because it passes over warm, moist mucous membranes on its way to the alveoli, which fully humidify the air before it reaches the gas exchange surface.",
+        "exp": "This protects delicate alveolar tissue from drying out. Students often overlook that the saturation is a consequence of contact with moist surfaces along the entire respiratory tract, not just at the alveoli."
+      },
+      {
+        "q": "What is surfactant and why is it critical to alveolar function?",
+        "a": "Surfactant is a substance coating the inner surface of alveoli that maintains their shape and prevents them from collapsing and sticking together during exhalation.",
+        "exp": "Without surfactant, the surface tension of water in the alveoli would cause them to collapse with each breath (a condition seen in premature infants with respiratory distress syndrome). Students often confuse surfactant's role with that of stretch receptors."
+      },
+      {
+        "q": "What is the role of stretch receptors in the alveoli, and what process do they initiate?",
+        "a": "Stretch receptors in the alveoli detect when the lungs are sufficiently inflated during inhalation and send a signal to the medulla oblongata to initiate exhalation.",
+        "exp": "This is the neural feedback mechanism that prevents over-inflation of the lungs. Students frequently mix up which direction (inhalation vs. exhalation) the stretch receptor signal triggers \u2014 it signals the onset of exhalation, not more inhalation."
+      },
+      {
+        "q": "Explain why the alveoli are highly effective at gas exchange by listing at least three structural adaptations.",
+        "a": "Alveoli are effective at gas exchange because: they are extremely numerous (up to 300 million), providing a large surface area; their walls are one cell thick, minimizing diffusion distance; and each alveolus is surrounded by a rich network of capillaries ensuring efficient gas exchange.",
+        "exp": "All three adaptations work together. Students commonly name only surface area and forget wall thickness or blood supply. The combination of high surface area, minimal diffusion distance, and constant blood flow maximizes the rate of gas exchange."
+      },
+      {
+        "q": "What are pleural membranes and what is their primary mechanical function during breathing?",
+        "a": "Pleural membranes are two layers of membrane surrounding the lungs \u2014 one attached to the lung surface and one attached to the chest wall \u2014 separated by pleural fluid that allows the lungs to slide over the chest wall without friction.",
+        "exp": "The pleural fluid reduces friction during the continuous expansion and contraction of breathing. Students often think the membranes directly inflate the lungs rather than understanding their role in enabling frictionless movement."
+      },
+      {
+        "q": "What happens to the lung if the pleural membranes are punctured, and why?",
+        "a": "If the pleural membranes are punctured, air rushes in and destroys the vacuum (negative interpleural pressure), causing the lung to collapse (pneumothorax).",
+        "exp": "The lungs stay open because interpleural pressure is lower than atmospheric pressure, creating a partial vacuum that holds them expanded. Puncturing the membrane equalizes the pressure, removing the force keeping the lung inflated."
+      },
+      {
+        "q": "What is the primary stimulus that triggers the urge to breathe?",
+        "a": "High levels of carbon dioxide (CO2) or hydrogen ions (H+) in the blood are the primary stimuli that stimulate the breathing center in the medulla oblongata to initiate inhalation.",
+        "exp": "Many students incorrectly believe low oxygen is the primary trigger \u2014 it is actually rising CO2 (and resulting acidity) that drives the urge to breathe under normal conditions. Oxygen levels serve as a backup stimulus."
+      },
+      {
+        "q": "Trace the neural pathway that initiates inhalation from stimulus to muscle action.",
+        "a": "When CO2 concentration in the blood rises too high, the medulla oblongata is stimulated and sends a nerve impulse to the diaphragm and intercostal muscles, causing them to contract.",
+        "exp": "Students must connect the stimulus (high CO2), the control center (medulla oblongata), and the effectors (diaphragm and intercostal muscles) in the correct order. Skipping the medulla or misidentifying the muscles is a common error."
+      },
+      {
+        "q": "Describe the physical changes that occur in the thoracic cavity during inhalation.",
+        "a": "During inhalation, the diaphragm contracts and flattens, and the intercostal muscles contract causing the ribs to rise upward and outward, together increasing the volume of the thoracic cavity.",
+        "exp": "Increasing cavity volume reduces air pressure inside the lungs below atmospheric pressure. Students sometimes reverse cause and effect \u2014 the cavity enlarges first, creating low pressure that draws air in; the air does not push the lungs open."
+      },
+      {
+        "q": "Why is it said that humans breathe by 'negative pressure' rather than by forcing air in?",
+        "a": "Breathing occurs by negative pressure because the thoracic cavity expands first, creating a partial vacuum (pressure lower than atmospheric), which causes air to flow in passively to equalize the pressure. The lungs have no muscles of their own.",
+        "exp": "This is a conceptually important distinction. Air moves into the lungs because low pressure 'sucks' it in, not because any muscle pumps air. Students must understand that lung expansion is a consequence of thoracic expansion, not the cause."
+      },
+      {
+        "q": "What triggers exhalation during normal breathing?",
+        "a": "Stretch receptors in the inflated lungs signal the medulla oblongata, which stops sending nerve impulses to the diaphragm and intercostal muscles. These muscles relax, the thoracic cavity decreases in volume, and air is pushed out.",
+        "exp": "Normal exhalation is a passive process driven by elastic recoil of the lungs and chest wall when muscles relax \u2014 no additional muscular effort is required. Students often describe exhalation as an active muscular process, which applies only to forced exhalation."
+      },
+      {
+        "q": "What are the four processes that collectively make up the respiratory system?",
+        "a": "The four processes are: breathing (inhalation and exhalation), external respiration (gas exchange between lungs and blood), internal respiration (gas exchange between blood and body tissues), and cellular respiration (production of ATP using oxygen in cells).",
+        "exp": "Students frequently conflate 'breathing' with 'respiration' \u2014 breathing is only the mechanical movement of air. The four processes form a connected sequence from air intake to ATP production at the cellular level."
+      },
+      {
+        "q": "What is the difference between external respiration and internal respiration?",
+        "a": "External respiration is the exchange of gases (O2 and CO2) between the alveoli and the pulmonary capillaries in the lungs. Internal respiration is the exchange of gases between the blood in systemic capillaries and the body's tissues.",
+        "exp": "Both involve diffusion down concentration gradients, but they occur at different locations. Students mix up the direction of gas movement \u2014 in external respiration O2 moves into blood and CO2 moves out; in internal respiration this is reversed."
+      },
+      {
+        "q": "What is the role of the diaphragm and where is it located?",
+        "a": "The diaphragm is a sheet of skeletal muscle that separates the thoracic cavity from the abdominal cavity. It is the primary muscle of breathing \u2014 when it contracts and flattens, it increases the volume of the thoracic cavity to drive inhalation.",
+        "exp": "Students sometimes describe the diaphragm as smooth muscle (involuntary) when it is actually skeletal muscle under involuntary control via the phrenic nerve. Its role as the main driver of inhalation \u2014 not just an accessory muscle \u2014 must be emphasized."
+      },
+      {
+        "q": "What is the function of the bronchi, and how do they relate to the bronchioles and alveoli?",
+        "a": "The bronchi are the two branches of the trachea, each leading to one lung. They divide into progressively smaller bronchioles, which ultimately lead to the alveoli where gas exchange occurs.",
+        "exp": "The bronchi-bronchiole-alveoli sequence represents the conducting zone transitioning to the respiratory zone. Students sometimes skip the bronchioles or place alveoli directly off the bronchi, missing the branching hierarchy."
+      },
+      {
+        "q": "How do the ribs and intercostal muscles contribute to inhalation?",
+        "a": "During inhalation, the intercostal muscles (located between the ribs) contract, causing the ribs to rise upward and expand outward, which increases the lateral and anterior-posterior dimensions of the thoracic cavity.",
+        "exp": "The ribs protect the lungs and heart, but they also actively participate in breathing by expanding the chest cage. Students often attribute inhalation solely to the diaphragm and overlook the contribution of rib elevation via intercostal muscles."
+      }
+    ],
+    "8": [
+      {
+        "q": "What is excretion, and why is it essential for maintaining homeostasis?",
+        "a": "Excretion is the process of removing metabolic wastes, which are the useless and potentially dangerous byproducts of cellular activities. It maintains homeostasis by preventing toxic buildup in body fluids.",
+        "exp": "Students often confuse excretion with egestion (elimination of undigested food). Excretion specifically refers to removing metabolic byproducts produced by cells. Without excretion, waste accumulation would disrupt the chemical balance required for normal cell function."
+      },
+      {
+        "q": "List the four organs of the excretory system other than the kidneys and state one waste each excretes.",
+        "a": "The skin excretes water, salt, and urea through perspiration. The lungs excrete carbon dioxide and water vapour. The liver excretes bile pigments. The intestine excretes certain salts such as calcium and iron.",
+        "exp": "Students frequently omit the liver and intestine, thinking only of the skin and lungs. The liver's role is indirect \u2014 it processes waste into exportable forms \u2014 while the intestine absorbs salts from the digestive tract that then become part of feces."
+      },
+      {
+        "q": "How does the liver contribute to the excretion of nitrogenous waste?",
+        "a": "The liver destroys old red blood cells and deaminates amino acids, producing urea as a nitrogenous waste, which is then excreted from the body by the kidneys.",
+        "exp": "Students often think the liver directly excretes urea, but the liver only produces it. The kidneys are responsible for its final removal from the body. The distinction between production and excretion of urea is a common source of confusion."
+      },
+      {
+        "q": "What happens to the skin's excretory role during kidney (renal) failure?",
+        "a": "During renal failure, the skin compensates by increasing the excretion of wastes through perspiration, as the kidneys can no longer adequately filter and remove those wastes.",
+        "exp": "This illustrates that excretory organs can partially compensate for one another. Students should understand that the skin is not the primary organ for nitrogenous waste removal \u2014 it only becomes more active in this role when kidney function is compromised."
+      },
+      {
+        "q": "Name the four structures of the urinary system and state the function of each.",
+        "a": "The kidneys filter blood to produce urine; the ureters carry urine from the kidneys to the bladder; the bladder stores urine; and the urethra is the passage through which urine exits the body.",
+        "exp": "Students sometimes reverse the roles of the ureter and urethra. The ureters are paired tubes connecting kidneys to the bladder, while the urethra is a single tube leading outside the body. The function of each structure follows the directional flow of urine."
+      },
+      {
+        "q": "Describe the three anatomical regions visible in a longitudinal section of the kidney.",
+        "a": "The three regions are the outer cortex, the inner medulla, and a central cavity called the renal pelvis where urine collects before passing into the ureter.",
+        "exp": "Students often forget the renal pelvis as a distinct region, listing only cortex and medulla. The renal pelvis is a funnel-shaped space, not a tissue layer, and it serves as the collecting point for urine prior to transport to the bladder."
+      },
+      {
+        "q": "Where are the kidneys located in the body, and which blood vessel delivers unfiltered blood to them?",
+        "a": "The kidneys are located in the abdominal cavity behind the peritoneum (retroperitoneal). They receive unfiltered blood with high nutrient content and high urea from the renal artery.",
+        "exp": "Students may place the kidneys inside the peritoneal cavity. Their retroperitoneal position is clinically significant. The renal artery branches directly from the abdominal aorta, delivering a large volume of blood for filtration."
+      },
+      {
+        "q": "What structures are found in the cortex of the kidney at the nephron level?",
+        "a": "The cortex contains Bowman's capsule and the glomerulus, the proximal convoluted tubule (PCT), and the distal convoluted tubule (DCT).",
+        "exp": "Students often place the entire nephron in the cortex. The loop of Henle is the component that dips into the medulla. Knowing which parts are in the cortex versus medulla is important for understanding where each step of urine formation occurs."
+      },
+      {
+        "q": "What is the role of the loop of Henle in the medulla?",
+        "a": "The loop of Henle is a hairpin-shaped tube that dips into the medulla. The descending arm pumps sodium and chlorine out of the tubule, creating a high osmotic pressure in the medulla that drives water reabsorption.",
+        "exp": "Students sometimes think the loop of Henle primarily reabsorbs water directly. Its main function is to create a salt concentration gradient in the medullary tissue; water then follows by osmosis. The ascending arm carries fluid with greater waste concentration and little nutrient value."
+      },
+      {
+        "q": "Describe what happens during pressure filtration at the glomerulus.",
+        "a": "Blood pressure forces water, small molecules, and wastes out of the glomerular capillaries into Bowman's capsule. Large organic molecules such as blood proteins are not filtered and remain in the blood.",
+        "exp": "Students often think everything leaves the blood during filtration. The key distinction is size: large proteins stay behind. The fluid in Bowman's capsule is essentially plasma minus blood proteins, containing glucose, amino acids, salts, urea, and water."
+      },
+      {
+        "q": "What is renin, and why is it released from the glomerulus?",
+        "a": "Renin is a hormone released by specialized tissue in the glomerulus when blood pressure is too low. It causes constriction of the glomerular vessels, raising blood pressure to a level adequate for filtration to occur.",
+        "exp": "Students may confuse renin with ADH. Renin specifically responds to low blood pressure at the glomerulus to ensure filtration can proceed. Without adequate blood pressure, the pressure filtration step fails entirely and urine cannot be formed."
+      },
+      {
+        "q": "Which substances are selectively reabsorbed at the proximal convoluted tubule (PCT), and by what mechanism?",
+        "a": "Glucose, amino acids, vitamins, minerals, salts, and the bicarbonate ion are reabsorbed at the PCT by active transport back into the blood.",
+        "exp": "Active transport is required because reabsorption moves substances against a concentration gradient. Students often forget bicarbonate reabsorption at the PCT and its dependence on blood pH \u2014 the lower the blood pH, the greater the bicarbonate reabsorption to buffer acidity."
+      },
+      {
+        "q": "How does water follow sodium and chlorine during reabsorption in the loop of Henle?",
+        "a": "Sodium and chlorine are actively pumped out of the descending arm of the loop of Henle into surrounding medullary tissue, creating a high osmotic pressure. Water then follows by osmosis to equalize the electrical and concentration gradients.",
+        "exp": "Water itself is not actively transported \u2014 it moves passively by osmosis in response to the solute gradient created by salt pumping. Students frequently confuse active and passive transport roles here; only the ions are actively moved, while water follows passively."
+      },
+      {
+        "q": "What is tubular excretion, and where does it primarily occur?",
+        "a": "Tubular excretion is the process by which excess molecules in the blood are secreted into the nephron tubule fluid. It occurs mainly at the distal convoluted tubule (DCT) and helps maintain the pH of the blood.",
+        "exp": "Students may not distinguish tubular excretion from filtration. Filtration is a bulk pressure-driven process; tubular excretion is selective secretion from blood into the tubule. If blood pH is too low, more hydrogen ions are secreted into the nephron to raise blood pH."
+      },
+      {
+        "q": "What is antidiuretic hormone (ADH), and where is it released from?",
+        "a": "ADH is a hormone released from the posterior pituitary gland that promotes water reabsorption in the collecting duct and renal tubules, producing more concentrated urine.",
+        "exp": "Students sometimes say ADH is produced by the pituitary, which is partially correct \u2014 it is produced by the hypothalamus but released from the posterior pituitary. The distinction matters because the signal originates with the hypothalamus detecting low water levels in the blood."
+      },
+      {
+        "q": "Explain the negative feedback loop involving ADH when blood water levels are too low.",
+        "a": "When too little water is taken in orally, the hypothalamus detects low water concentration in the blood and signals the posterior pituitary to release ADH. ADH causes more water to be reabsorbed in the nephron, producing less and more concentrated urine until water balance is restored.",
+        "exp": "Students often describe this as a positive feedback loop. It is negative because the response (water reabsorption) counteracts the stimulus (low blood water). The loop terminates when blood water concentration rises back to normal and ADH release is inhibited."
+      },
+      {
+        "q": "Why does consuming alcohol cause increased urination and dehydration?",
+        "a": "Alcohol inhibits the release of ADH. Without ADH, the collecting duct does not reabsorb water, so water is lost in the urine rather than returned to the blood, leading to dehydration.",
+        "exp": "This is a classic application of the ADH feedback mechanism. Students should recognize that alcohol does not increase urine production by increasing blood volume \u2014 it suppresses the hormone that controls water reabsorption, so the kidneys fail to conserve water."
+      },
+      {
+        "q": "What is urea, how is it formed, and why is it significant in the context of kidney function?",
+        "a": "Urea is a nitrogenous waste produced by the liver through the deamination of amino acids. It is a major component of the filtrate in Bowman's capsule and is a primary waste the kidneys must excrete.",
+        "exp": "Students sometimes think urea is formed in the kidneys. It is produced in the liver and transported via the blood to the kidneys for excretion. Because urea is small enough to pass through glomerular capillary walls, it is filtered into Bowman's capsule along with water and salts."
+      },
+      {
+        "q": "What is the difference between the composition of blood in the renal artery versus the renal vein?",
+        "a": "The renal artery carries unfiltered blood with high nutrient content and high urea. The renal vein carries filtered blood with low waste content, low urea, and high glucose.",
+        "exp": "Students may think both vessels carry identical blood at different pressures. The compositional change reflects the work of the nephron: wastes removed, nutrients reabsorbed. The presence of glucose in the renal vein confirms successful selective reabsorption at the PCT."
+      },
+      {
+        "q": "Trace the five steps of urine formation in order, naming the nephron structure where each step occurs.",
+        "a": "1. Pressure filtration at the glomerulus/Bowman's capsule. 2. Selective reabsorption at the PCT. 3. Water reabsorption at the loop of Henle. 4. Tubular excretion at the DCT. 5. Excretion of concentrated urine via the collecting duct to the renal pelvis.",
+        "exp": "Students often confuse the order or location of steps, particularly steps 3 and 4. The loop of Henle concentrates the medullary fluid to drive water out, while the DCT fine-tunes waste secretion. The collecting duct completes concentration before urine enters the renal pelvis."
+      }
+    ],
+    "6": [
+      {
+        "q": "What is the primary function of arteries, and how do the largest arteries (aorta and pulmonary artery) assist in moving blood?",
+        "a": "Arteries carry blood away from the heart. The largest arteries expand when the ventricles eject blood, then recoil to keep blood moving forward.",
+        "exp": "The elastic recoil of large arteries is a passive mechanism that maintains continuous blood flow between heartbeats. Students often forget that recoil, not just the heartbeat itself, sustains pressure. Arteries then branch into smaller arterioles leading to capillary beds."
+      },
+      {
+        "q": "How does the structure of veins differ from arteries, and why is this appropriate for their function?",
+        "a": "Veins have thinner walls with less muscle and elastic tissue than arteries because they carry blood back to the heart at lower pressure.",
+        "exp": "Arteries need thick, elastic walls to withstand high pressure from ventricular ejection. Since veins operate at much lower pressure on the return trip, thinner walls are sufficient. Students commonly confuse which vessel type has thicker walls."
+      },
+      {
+        "q": "Why do capillaries have the greatest total cross-sectional area of all blood vessel types?",
+        "a": "Capillaries are present in massive numbers throughout every tissue, so their combined cross-sectional area exceeds that of arteries or veins even though each individual capillary is extremely small.",
+        "exp": "This large total area slows blood flow within capillaries, maximizing time for exchange of oxygen, nutrients, and waste between blood and cells. Students often think arteries or the aorta would have the greatest total area because they are the largest individual vessels."
+      },
+      {
+        "q": "What would happen to blood pressure if all capillary beds opened simultaneously, and why?",
+        "a": "Blood pressure would decrease because the blood would spread across a vastly larger volume of vessels, reducing the pressure within the circulatory system.",
+        "exp": "Pressure depends on the volume of fluid relative to the space it occupies. Opening all capillary beds dramatically increases total vascular volume. Students sometimes incorrectly think more open vessels would increase pressure."
+      },
+      {
+        "q": "What is vasodilation and what effect does it have on blood flow?",
+        "a": "Vasodilation is the widening of blood vessels, which increases blood flow through the affected vessels.",
+        "exp": "Sphincter muscles in arterioles control whether capillary beds are open or closed. When these sphincters relax, the vessel widens and flow increases. Students often confuse vasodilation with vasoconstriction \u2014 remember: dilation = wider = more flow."
+      },
+      {
+        "q": "What is vasoconstriction and how do arteriolar sphincter muscles produce it?",
+        "a": "Vasoconstriction is the narrowing of blood vessels caused by sphincter muscles contracting around arterioles, which decreases blood flow to the downstream capillary bed.",
+        "exp": "The sphincter muscles act as gatekeepers, selectively redirecting blood away from certain tissues and toward others based on demand. Students should not confuse the sphincter mechanism as being located in the capillaries themselves \u2014 it is in the arterioles feeding them."
+      },
+      {
+        "q": "Where does the aorta originate and what is its general path through the body?",
+        "a": "The aorta originates from the left ventricle, rises to form the aortic arch over the heart, then descends along the inside of the backbone.",
+        "exp": "The aorta is the largest artery in the body and the origin point for most major systemic arteries. A common error is saying it originates from the right ventricle \u2014 that is the pulmonary trunk, not the aorta."
+      },
+      {
+        "q": "Why do the coronary arteries exist if the heart is constantly filled with blood?",
+        "a": "The heart muscle is too thick and dense, and blood moves through the chambers too fast, for the myocardium to extract oxygen directly from intrachamber blood, so coronary arteries supply the muscle itself.",
+        "exp": "The cardiac muscle cells require their own dedicated blood supply via the coronary circulation. This is a key concept students miss \u2014 the heart cannot feed itself from the blood inside its chambers."
+      },
+      {
+        "q": "What is 'spent blood' and what are its characteristics?",
+        "a": "Spent blood is blood that has already delivered its oxygen and nutrients to the cells, making it low in oxygen and high in carbon dioxide.",
+        "exp": "The term is used to distinguish deoxygenated venous blood from oxygenated arterial blood. Students sometimes think spent blood contains no oxygen at all \u2014 it is simply lower in oxygen, not completely depleted."
+      },
+      {
+        "q": "What types of receptors are found in the carotid arteries and what do they regulate?",
+        "a": "The carotid arteries contain chemoreceptors that detect oxygen content and pressure receptors that detect blood pressure changes; together they help regulate blood pressure and breathing rate.",
+        "exp": "This makes the carotid arteries functionally unique among major vessels because they act as sensory organs in addition to conducting blood. Students often know the carotid arteries supply the brain but overlook their regulatory sensory role."
+      },
+      {
+        "q": "Why do the jugular veins not require valves to return blood to the heart?",
+        "a": "The jugular veins drain blood from the head downward toward the heart, so gravity assists blood flow and valves are unnecessary.",
+        "exp": "Veins in the lower limbs require valves to prevent backflow against gravity. Because the head is above the heart, gravity already moves blood in the correct direction through the jugulars. Students sometimes apply the same valve logic to all veins."
+      },
+      {
+        "q": "What is the hepatic portal vein and why is it called a 'portal' vessel?",
+        "a": "The hepatic portal vein carries nutrient-rich blood from the intestines to the liver; it is called portal because it has a capillary bed at each end of the vessel.",
+        "exp": "Portal vessels are unique in that they connect two capillary beds rather than running from a capillary bed directly to a major vein. This arrangement allows the liver to process absorbed nutrients before they enter general circulation. Students often incorrectly describe it as a normal vein."
+      },
+      {
+        "q": "What is the function of the hepatic vein?",
+        "a": "The hepatic vein carries blood from the liver back to the inferior vena cava after the liver has filtered and processed it.",
+        "exp": "Once the liver has cleansed and processed blood delivered by the hepatic portal vein, the hepatic vein returns it to systemic venous circulation. Students sometimes confuse the hepatic vein with the hepatic portal vein \u2014 the portal vein delivers to the liver; the hepatic vein drains from it."
+      },
+      {
+        "q": "What are the functions of the renal arteries and renal veins?",
+        "a": "Renal arteries carry blood to the kidneys for filtration, while renal veins carry the filtered blood away from the kidneys back to the inferior vena cava.",
+        "exp": "The kidneys filter waste products from the blood, so blood entering via renal arteries contains metabolic waste and blood leaving via renal veins is cleaner. Students often mix up which vessel delivers versus drains the kidney."
+      },
+      {
+        "q": "What is the function of the anterior (superior) and posterior (inferior) vena cava?",
+        "a": "The vena cavae are the largest veins in the body; they collect deoxygenated blood from the body and return it to the right atrium of the heart.",
+        "exp": "The superior vena cava collects from the upper body and the inferior vena cava from the lower body. Students must remember both vessels empty into the right atrium, not the left, because the right side of the heart pumps to the lungs for reoxygenation."
+      },
+      {
+        "q": "Why is the pulmonary circuit considered the only circuit where arteries carry deoxygenated blood and veins carry oxygenated blood?",
+        "a": "In the pulmonary circuit, the pulmonary arteries carry deoxygenated blood from the right ventricle to the lungs, and the pulmonary veins return oxygenated blood from the lungs to the left atrium \u2014 the reverse of what arteries and veins carry in the systemic circuit.",
+        "exp": "The defining characteristic of arteries and veins is direction relative to the heart, not oxygen content. Arteries always carry blood away from the heart; veins always carry blood toward it. The pulmonary circuit is the exception to the common assumption that arteries always carry oxygenated blood."
+      },
+      {
+        "q": "Trace the path of blood through the pulmonary circuit from the right ventricle back to the heart.",
+        "a": "Blood travels from the right ventricle through the pulmonary trunk and pulmonary arteries to the lung capillaries, where gas exchange occurs, then returns via the pulmonary veins to the left atrium.",
+        "exp": "This circuit exists solely to reoxygenate blood and expel carbon dioxide. Students frequently place the pulmonary veins returning to the right atrium \u2014 they return to the left atrium to enter the systemic circuit."
+      },
+      {
+        "q": "What is the role of the mesenteric arteries and the villi they supply?",
+        "a": "Mesenteric arteries branch from the aorta to supply the digestive organs; they branch into capillaries within the villi of the intestinal lining to absorb nutrients from the digestive tract.",
+        "exp": "The villi are finger-like projections that dramatically increase the absorptive surface area of the small intestine. Blood picks up absorbed nutrients at the villi capillaries before draining into the hepatic portal system. Students should link mesenteric arteries to nutrient absorption, not just organ perfusion."
+      },
+      {
+        "q": "What is the function of the subclavian arteries and how do they relate to the brachial artery?",
+        "a": "The subclavian arteries branch from the aorta and carry oxygenated blood to the arms; as the vessel travels down the arm it becomes the brachial artery.",
+        "exp": "The subclavian arteries are named for their position beneath the clavicle. Students should understand that major vessels are often renamed as they pass into different anatomical regions \u2014 the subclavian continues as the brachial in the upper arm."
+      },
+      {
+        "q": "What is the systemic circuit and what types of blood does it carry on the way out versus the way back?",
+        "a": "The systemic circuit is the path from the left ventricle through the body and back to the right atrium; it carries oxygenated blood out to body tissues and returns deoxygenated blood back to the heart.",
+        "exp": "The systemic circuit is the larger of the two circuits and supplies every organ and tissue except the lungs. Students must not confuse systemic with pulmonary \u2014 the systemic circuit begins at the left ventricle with oxygenated blood, opposite to the pulmonary circuit."
+      }
+    ],
+    "1": [
+      {
+        "q": "What is homeostasis and why does it require most of the body's energy?",
+        "a": "Homeostasis is the body's maintenance of a stable internal environment despite an ever-changing external environment. It requires most of the body's energy because regulatory mechanisms must operate continuously to keep internal conditions within a normal range.",
+        "exp": "Students often define homeostasis only as 'balance' without specifying that it is an active, energy-demanding process. The key word is 'despite' \u2014 the body is constantly working against external fluctuations. Linking energy cost to the continuous nature of feedback mechanisms is what earns full marks."
+      },
+      {
+        "q": "List and describe the four components shared by all homeostatic regulatory mechanisms.",
+        "a": "The four components are: (1) stimuli \u2014 changes that deviate from the normal state; (2) receptors/sensors \u2014 detect stimuli and transmit information via signal pathways; (3) control center \u2014 contains a set point and sends commands to counteract change; (4) effectors \u2014 organs, tissues, or cells (e.g., muscles and glands) that act on commands to restore normal range.",
+        "exp": "Students frequently confuse receptors with effectors. Receptors detect and report; effectors act. The control center is the decision-maker that compares input to the set point. Missing the set point as part of the control center is a common error."
+      },
+      {
+        "q": "What is a set point and which component of the homeostatic mechanism contains it?",
+        "a": "A set point is a target value that a particular variable should maintain, such as body temperature at 37\u00b0C. It is contained within the control center.",
+        "exp": "Students sometimes place the set point at the receptor level. The receptor only detects deviation; it is the control center that holds the reference value and compares incoming information against it. The 37\u00b0C body temperature example from the notes is the standard illustration."
+      },
+      {
+        "q": "What role do effectors play in homeostasis, and give two examples of effectors from the notes?",
+        "a": "Effectors are the organs, tissues, or cells that act on commands from the control center to counteract a change and restore the system to its normal range. Two examples are muscles and glands.",
+        "exp": "Students often describe effectors too vaguely as 'the body's response.' The precise answer requires identifying them as organs, tissues, or cells that receive specific commands and produce a measurable corrective response. Muscles and glands are the textbook examples."
+      },
+      {
+        "q": "In a negative feedback loop, what happens to the original stimulus once the normal state is restored?",
+        "a": "Once the normal state (set point) is reached, the stimulus for the corrective response ceases \u2014 the feedback loop turns itself off.",
+        "exp": "This is the defining feature of negative feedback: the response opposes and ultimately eliminates the stimulus that triggered it. Students confuse this with positive feedback, where the stimulus is reinforced rather than removed. The blood pressure example in the notes illustrates this clearly."
+      },
+      {
+        "q": "Describe how baroreceptors and the brain work together to regulate low blood pressure using negative feedback.",
+        "a": "When blood pressure drops below normal, baroreceptors in the arteries detect the low pressure and send signals to the brain via the glossopharyngeal nerve. The brain then sends a nerve impulse to the heart to increase heart rate, which raises cardiac output and in turn raises blood pressure back to normal.",
+        "exp": "Students must link each component: baroreceptors (receptor) \u2192 glossopharyngeal nerve signal \u2192 brain (control center) \u2192 nerve impulse to heart \u2192 increased heart rate (effector response). Missing the nerve pathway or the cardiac output step loses marks."
+      },
+      {
+        "q": "What happens to heart rate when blood pressure is too high, and why does this represent negative feedback?",
+        "a": "When blood pressure is too high, the heart rate decreases to lower cardiac output and bring blood pressure back to normal. This is negative feedback because the response (decreased heart rate) opposes and counteracts the original stimulus (high blood pressure).",
+        "exp": "Negative feedback always produces a response opposite to the deviation. Students sometimes state that the heart 'stops working' rather than precisely stating that rate decreases. The key is the opposing direction of the corrective response relative to the stimulus."
+      },
+      {
+        "q": "What distinguishes positive feedback from negative feedback in terms of stability?",
+        "a": "Negative feedback restores stability by opposing the original change, whereas positive feedback reinforces the original change, amplifying the stimulus and driving the system into an unstable or amplified state.",
+        "exp": "The most common error is assuming positive feedback is beneficial and negative feedback is harmful. In biology, negative feedback is the basis of stability; positive feedback is used only in specific situations where amplification is required, such as childbirth."
+      },
+      {
+        "q": "Describe the positive feedback mechanism that occurs during childbirth, identifying the stimulus, signal, and response at each step.",
+        "a": "The baby's head pushes against the cervix (stimulus), which stimulates stretch receptors in the cervix that send signals to the brain. The brain responds by releasing oxytocin, which causes stronger and more frequent uterine contractions, increasing pressure on the cervix and perpetuating the cycle until the baby is born.",
+        "exp": "Students must identify the stretch receptors as the sensors and oxytocin as the chemical messenger. A common mistake is omitting that birth itself ends the feedback cycle by removing the cervical pressure. The cycle is self-amplifying, not self-correcting."
+      },
+      {
+        "q": "Why is childbirth considered the only required example of positive feedback for this course, and what ends the positive feedback cycle?",
+        "a": "Childbirth is the required example because it is a physiological process that requires amplification to completion rather than a return to a set point. The cycle ends when the baby is born, removing the stimulus of the head pressing against the cervix.",
+        "exp": "Students need to explain that the removal of the physical stimulus \u2014 not a counter-signal \u2014 terminates the cycle. This is unlike negative feedback where the corrective response itself removes the stimulus. The endpoint (birth) is what makes the positive feedback loop finite."
+      },
+      {
+        "q": "How do single-celled organisms like euglena maintain homeostasis compared to multicellular organisms like humans?",
+        "a": "Single-celled organisms survive and reproduce as long as their environment provides the proper conditions for life and they can obtain nutrition. Humans, by contrast, have many specialized cells surrounded by extracellular fluid that function together to keep the internal environment stable despite external changes.",
+        "exp": "Single-celled organisms depend directly on their external environment; they have no internal regulatory systems. Multicellular organisms internalized the environment through extracellular fluid and developed regulatory mechanisms so cells are buffered from external fluctuations."
+      },
+      {
+        "q": "What is extracellular fluid and what is its role in multicellular organisms?",
+        "a": "Extracellular fluid is the fluid surrounding the specialized cells that make up internal organs and organ systems. It serves as the immediate internal environment that cells depend on, and its composition must remain relatively stable for cells to function properly.",
+        "exp": "Students sometimes conflate extracellular fluid with blood. While blood plasma is one type, extracellular fluid refers broadly to all fluid outside cells. The critical concept is that homeostasis is largely the regulation of this fluid's chemical and physical properties."
+      },
+      {
+        "q": "Why is water considered the universal solvent, and what percentage of a typical cell is water?",
+        "a": "Water is called the universal solvent because it is the substance that makes life possible on Earth and is capable of dissolving a wide range of substances essential for biochemical reactions. Most cells are approximately 70\u201395% water.",
+        "exp": "Students focus on water's dissolving ability but often forget the range 70\u201395% or give a single fixed number. The biological importance is that cellular chemistry occurs in aqueous solution; without water, metabolic reactions cannot take place."
+      },
+      {
+        "q": "What makes a molecule 'organic' in chemistry, and give one example of an organic molecule and one inorganic molecule from the notes?",
+        "a": "A molecule is organic if it contains at least one carbon atom. An organic example from the notes is vinegar (CH3CH2OH); an inorganic example is water (H2O), which contains no carbon.",
+        "exp": "Students sometimes say organic means 'from living things,' which is imprecise. The chemical definition requires a carbon atom. Water is the classic non-organic molecule that students incorrectly label as organic because it is biologically essential."
+      },
+      {
+        "q": "Name the four types of biochemicals (organic molecules) that make up living things.",
+        "a": "The four types of biochemicals found in living things are lipids, carbohydrates, nucleic acids, and proteins.",
+        "exp": "Students frequently omit nucleic acids or conflate lipids with fats only. All four classes are carbon-containing macromolecules, and each plays distinct structural or functional roles in cells. Memorizing this list exactly is necessary for later units."
+      },
+      {
+        "q": "What is a stimulus in the context of homeostasis?",
+        "a": "A stimulus is any deviation from the normal state, such as a change in temperature, pressure, or chemical composition inside or surrounding a cell.",
+        "exp": "Students often define stimulus only as an external event. In homeostasis, stimuli include internal deviations \u2014 any measured departure from the set point qualifies. The breadth of examples (temperature, pressure, chemical composition) shows that stimuli span physical and chemical changes."
+      },
+      {
+        "q": "Why must blood pressure be maintained within a specific range and what are the two dangers if it falls outside that range?",
+        "a": "Blood pressure must be high enough to pump blood to all parts of the body, but not so high that it damages blood cells. If pressure is too low, tissues are underperfused; if too high, blood cells can be physically damaged.",
+        "exp": "Students often only mention low pressure as a problem. The notes explicitly state the upper limit exists to prevent blood cell damage. Both extremes matter, and this dual constraint is exactly why negative feedback \u2014 rather than simply maximizing pressure \u2014 is the appropriate mechanism."
+      },
+      {
+        "q": "What is the role of signal pathways in homeostatic feedback systems?",
+        "a": "Signal pathways allow receptors and sensors to detect a change and transmit that information to the control center, initiating the corrective response.",
+        "exp": "Students skip over signal pathways as mere 'wiring.' In reality, the speed and accuracy of signal transmission determine the response time of the feedback loop. The glossopharyngeal nerve in the blood pressure example is one such signal pathway, carrying information from baroreceptors to the brain."
+      },
+      {
+        "q": "Compare the outcome of negative and positive feedback on the body's internal state.",
+        "a": "Negative feedback restores the body to its normal stable state (homeostasis) by opposing the original change. Positive feedback drives the body into an amplified, unstable state by reinforcing the original change until a specific endpoint is reached.",
+        "exp": "Students often assume positive feedback is always pathological. The notes clarify that positive feedback is adaptive in childbirth, where instability is needed to complete a process. The distinction is endpoint: negative feedback has the set point as its endpoint; positive feedback has an external event (birth) as its endpoint."
+      },
+      {
+        "q": "Why did life on Earth originate in water, and how does this relate to the cellular composition of modern organisms?",
+        "a": "Life began in water because water provides the necessary solvent environment for the chemistry of organic molecules. Modern cells reflect this origin \u2014 most cells are surrounded by water and are themselves 70\u201395% water, maintaining an aqueous internal environment essential for biochemical reactions.",
+        "exp": "Students treat this as trivia rather than a mechanistic point. The connection is that intracellular biochemistry still requires an aqueous medium, so the evolutionary origin in water is directly reflected in the water content of every living cell. This also explains why dehydration disrupts metabolism so rapidly."
+      }
+    ],
+    "4": [
+      {
+        "q": "What is the difference between mechanical digestion and chemical digestion?",
+        "a": "Mechanical digestion is the physical breakdown of food into smaller pieces to increase surface area for enzymes to work on. Chemical digestion uses enzymes to break down food molecules into absorbable nutrient molecules.",
+        "exp": "Both processes work together \u2014 mechanical digestion (chewing, churning) does not change the chemical nature of food, it only reduces particle size. Students often confuse the two or think chewing alone is sufficient for nutrient absorption, which it is not."
+      },
+      {
+        "q": "What enzyme is found in saliva, and what does it begin to digest?",
+        "a": "Salivary amylase is found in saliva, and it begins the chemical digestion of starch, converting it into maltose (a disaccharide).",
+        "exp": "Starch digestion begins in the mouth, not the stomach \u2014 this is a commonly missed detail. Salivary amylase only acts on starch, not proteins or fats, and its activity stops once food reaches the acidic stomach environment."
+      },
+      {
+        "q": "What is the function of the epiglottis during swallowing?",
+        "a": "The epiglottis is a flap at the base of the tongue that covers the glottis (opening to the larynx and windpipe) during swallowing, preventing food from entering the lungs.",
+        "exp": "The epiglottis acts as a physical valve that redirects food into the esophagus rather than the trachea. Students often confuse the epiglottis with the soft palate \u2014 the soft palate closes off the nasal passage, while the epiglottis closes the airway."
+      },
+      {
+        "q": "What is peristalsis, and where does it occur?",
+        "a": "Peristalsis is rhythmic contractions of smooth muscle that push food along the digestive tract. It occurs throughout the entire intestinal tract, not just the esophagus.",
+        "exp": "Peristalsis is involuntary and powered by smooth muscle, not skeletal muscle. A common misconception is that peristalsis only moves food through the esophagus \u2014 it continues through the stomach and intestines as well."
+      },
+      {
+        "q": "What is chyme, and how is it formed?",
+        "a": "Chyme is the acidic, mushy liquid produced in the stomach as a result of the stomach churning food together with hydrochloric acid (HCl) and the enzyme pepsin.",
+        "exp": "Chyme formation involves both mechanical digestion (churning) and chemical digestion (HCl and pepsin acting on food). Students sometimes omit that chyme is specifically acidic due to HCl, which is important because that acidity must be neutralized before entering the small intestine."
+      },
+      {
+        "q": "What is the role of hydrochloric acid (HCl) in the stomach?",
+        "a": "HCl creates the acidic environment needed to activate pepsinogen into its active form, pepsin, which then digests proteins into peptides. HCl also helps kill pathogens in food.",
+        "exp": "HCl does not directly digest proteins \u2014 it activates the enzyme pepsin which does the protein digestion. Students often forget that pepsin is secreted as inactive pepsinogen and that HCl is the trigger for its activation."
+      },
+      {
+        "q": "Why does the stomach produce a mucus lining, and what happens when it fails?",
+        "a": "The stomach produces a mucus lining to protect the gut lining from being damaged by HCl. If the mucus lining is breached, HCl can burn the gut lining, resulting in a peptic ulcer.",
+        "exp": "The stomach's own acid is corrosive enough to damage tissue \u2014 the mucus barrier is the sole protection. Students frequently overlook that ulcers are a direct consequence of inadequate mucus protection, not just excess acid alone."
+      },
+      {
+        "q": "What is gastrin, and what does it stimulate?",
+        "a": "Gastrin is a hormone produced by the stomach lining that enters the bloodstream and returns to stimulate the gastric glands to produce more pepsin and HCl, especially after eating a protein-rich meal.",
+        "exp": "Gastrin is a hormonal (endocrine) signal, meaning it travels through the blood rather than acting locally through nerves. Students sometimes confuse hormonal control with nervous control, or forget that gastrin is released in response to protein specifically."
+      },
+      {
+        "q": "What are the functions of the cardiac sphincter and pyloric sphincter?",
+        "a": "The cardiac sphincter opens to allow food into the stomach from the esophagus but closes to prevent stomach acid and food from refluxing back up. The pyloric sphincter controls the release of small amounts of chyme (~1 teaspoon at a time) into the small intestine.",
+        "exp": "Both sphincters are one-way valves that regulate the flow of material between compartments. Students often mix up which sphincter is at which end of the stomach, or forget that the pyloric sphincter releases chyme in small controlled amounts to allow proper digestion in the duodenum."
+      },
+      {
+        "q": "What is the function of bile, and which organs produce and store it?",
+        "a": "Bile emulsifies fats, breaking large fat globules into smaller droplets to increase the surface area available for lipase to act on. Bile is produced by the liver and stored in the gall bladder until released into the small intestine.",
+        "exp": "Bile does not chemically digest fats \u2014 it only physically emulsifies them. This is a critical distinction. Students also commonly forget that the liver produces bile while the gall bladder only stores and releases it."
+      },
+      {
+        "q": "What triggers the release of secretin, and what does secretin stimulate?",
+        "a": "Secretin is released by the duodenal wall in response to acidic chyme entering the small intestine. It stimulates the pancreas to release sodium bicarbonate, which neutralizes the acid.",
+        "exp": "The specific trigger for secretin is acid (HCl) in the duodenum. Students mix up secretin and CCK \u2014 secretin specifically targets the bicarbonate response, not enzyme release. Without neutralization, the small intestine's enzymes would be denatured."
+      },
+      {
+        "q": "What triggers the release of CCK, and what does CCK stimulate?",
+        "a": "CCK (cholecystokinin) is released by the duodenal wall in response to partially digested proteins and fats entering the duodenum. It stimulates the release of pancreatic enzymes and bile from the gall bladder.",
+        "exp": "CCK responds to protein and fat, not acid \u2014 this distinguishes it from secretin. Students often omit that CCK stimulates both the pancreas (enzymes) and the gall bladder (bile) simultaneously, coordinating fat and protein digestion in the duodenum."
+      },
+      {
+        "q": "What does sodium bicarbonate do in the duodenum, and why is this step necessary?",
+        "a": "Sodium bicarbonate neutralizes the acidic chyme entering the duodenum from the stomach, raising the pH from approximately 2 to a neutral pH of 7.5\u20138.0 so that pancreatic and intestinal enzymes can function without being denatured.",
+        "exp": "Enzymes have optimal pH ranges \u2014 the intestinal enzymes cannot function in the acidic environment of stomach chyme. Students often skip the reasoning step and fail to connect that enzyme denaturation at low pH is exactly what bicarbonate prevents."
+      },
+      {
+        "q": "Name the three main pancreatic enzymes secreted into the duodenum and identify what each digests.",
+        "a": "Pancreatic amylase digests starch to maltose; trypsin digests proteins to peptides; lipase breaks down emulsified fat droplets into glycerol and fatty acids. Nucleases also digest nucleic acids to nucleotides.",
+        "exp": "All three macronutrients (carbohydrates, proteins, fats) are chemically digested in the duodenum by pancreatic enzymes. Students frequently forget lipase or confuse the products \u2014 specifically that lipase produces glycerol and fatty acids, not glucose."
+      },
+      {
+        "q": "What enzymes complete carbohydrate and protein digestion in the remainder of the small intestine?",
+        "a": "Maltase digests maltose into glucose; peptidases (peptidase enzymes) digest peptides into amino acids. Nucleosidases break down nucleotides into bases, sugars, and phosphates.",
+        "exp": "Final digestion to fully absorbable monomers occurs in the small intestine wall itself, not the duodenum. Students often forget that maltase is needed to finish carbohydrate digestion, since amylase only gets to maltose, not individual glucose units."
+      },
+      {
+        "q": "How is the small intestine structurally adapted to maximize nutrient absorption?",
+        "a": "The small intestine has folded walls, finger-like projections called villi lining the walls, and microvilli on the columnar epithelial cells of each villus \u2014 all of which dramatically increase the surface area available for absorption.",
+        "exp": "There are three layers of surface-area amplification: folds, villi, and microvilli (the brush border). Students often mention only villi and forget microvilli, or confuse the order of structures. More surface area means faster and more complete absorption of nutrients."
+      },
+      {
+        "q": "What are lacteals, and what role do they play in absorption?",
+        "a": "Lacteals are lymphatic vessels found within each villus that absorb fats (as glycerol and fatty acids) and transport them through the lymphatic system, eventually returning them to the bloodstream at the thoracic duct.",
+        "exp": "Fats are absorbed differently from glucose and amino acids \u2014 they enter lacteals rather than blood capillaries directly. Students often incorrectly state that all nutrients are absorbed into blood capillaries, missing that fats take the lymphatic route."
+      },
+      {
+        "q": "What is the role of the duodenum in digestion?",
+        "a": "The duodenum is the first 25\u201330 cm of the small intestine where pancreatic enzymes, bile from the gall bladder, and intestinal enzymes act simultaneously to chemically digest all three macronutrient groups (carbohydrates, proteins, and fats).",
+        "exp": "The duodenum is where the most significant chemical digestion occurs, coordinated by the hormones secretin and CCK. Students sometimes assume the stomach completes digestion \u2014 in reality, only protein digestion is partially started in the stomach, and fats and carbohydrates are primarily digested in the duodenum."
+      },
+      {
+        "q": "What is the function of the tongue during digestion?",
+        "a": "The tongue directs food onto the teeth for chewing and then manipulates food into a bolus \u2014 a rounded mass \u2014 that is positioned for swallowing.",
+        "exp": "The tongue plays a mechanical role in both positioning food for teeth and forming the bolus. Students often reduce the tongue's role to just taste, overlooking its mechanical contribution to both chewing efficiency and the swallowing reflex."
+      },
+      {
+        "q": "What sequence of events prevents food from entering the airways during swallowing?",
+        "a": "During swallowing, the soft palate rises to close off the nasal passage, the epiglottis covers the glottis to close the airway to the lungs, and breathing momentarily stops \u2014 directing food into the esophagus.",
+        "exp": "Three protective mechanisms work simultaneously: soft palate, epiglottis, and cessation of breathing. Students often name only the epiglottis and forget the soft palate's role in blocking the nasal cavity. Any failure in this coordination results in choking or food entering the airway."
+      }
+    ],
+    "9": [
+      {
+        "q": "Why are the testes located in the scrotum rather than inside the body cavity?",
+        "a": "The testes are suspended outside the body cavity in the scrotum for temperature regulation, as sperm production requires a temperature slightly lower than core body temperature.",
+        "exp": "Spermatogenesis is temperature-sensitive and cannot proceed efficiently at 37\u00b0C. Students often overlook that this is an active physiological requirement, not simply anatomical convenience. The scrotum can contract or relax to move the testes closer to or farther from the body to maintain optimal temperature."
+      },
+      {
+        "q": "What is the specific site of sperm production within the testes, and what are the cells that produce testosterone located between them?",
+        "a": "Sperm are produced in the seminiferous tubules; interstitial cells (Leydig cells) located between the seminiferous tubules produce testosterone.",
+        "exp": "Students frequently confuse where sperm are made versus where testosterone is produced. These are two distinct cell populations in the same organ. Interstitial cells respond to LH, while the seminiferous tubules respond to FSH and testosterone."
+      },
+      {
+        "q": "What type of cell division do spermatogonia undergo first, and what is the significance of this step?",
+        "a": "Spermatogonia undergo mitosis, which continuously replenishes the undifferentiated stem cell population so sperm production can be sustained throughout a male's reproductive life.",
+        "exp": "Mitosis here serves a maintenance function \u2014 it is not the division that reduces chromosome number. Students miss that some daughter cells remain as spermatogonia while others differentiate into primary spermatocytes. Without this mitotic reservoir, sperm production would eventually cease."
+      },
+      {
+        "q": "How many chromosomes does a primary spermatocyte have, and what chromosome number results after meiosis I?",
+        "a": "A primary spermatocyte has 46 chromosomes; after meiosis I it divides into two secondary spermatocytes, each with 23 chromosomes.",
+        "exp": "Meiosis I is the reductive division that halves the chromosome number. Students sometimes place the reduction at meiosis II, but meiosis II only separates sister chromatids without changing chromosome count. Secondary spermatocytes have 23 chromosomes but each chromosome still consists of two chromatids."
+      },
+      {
+        "q": "What is the role of Sertoli cells in the seminiferous tubules?",
+        "a": "Sertoli cells nourish and support the spermatogenic cells throughout the stages of sperm development.",
+        "exp": "Sertoli cells are non-reproductive supporting cells, not hormone producers. Students sometimes confuse them with interstitial cells. They also secrete inhibin, which provides negative feedback on FSH \u2014 a concept students commonly miss when tracing the full hormonal loop."
+      },
+      {
+        "q": "What structure do spermatids become after differentiation, and where are mature sperm stored before ejaculation?",
+        "a": "Spermatids differentiate into spermatozoa (mature sperm); mature sperm are stored in the epididymis.",
+        "exp": "Spermatogenesis ends with spermatids, but functional sperm require further maturation in the epididymis. Students often stop at spermatozoa without noting that motility and maturation occur in the epididymis, not the seminiferous tubules."
+      },
+      {
+        "q": "What is the function of the acrosome on the head of a sperm cell?",
+        "a": "The acrosome contains hydrolytic enzymes that break down the protective barrier of an egg, allowing the sperm to penetrate and fertilize it.",
+        "exp": "The acrosome is a modified lysosome \u2014 students who remember that lysosomes contain hydrolytic enzymes can deduce this. A common error is thinking the acrosome only drills mechanically; the enzymatic digestion of the zona pellucida is the key mechanism."
+      },
+      {
+        "q": "Which three accessory glands contribute to seminal fluid, and what does each contribute?",
+        "a": "The seminal vesicles contribute fructose-rich fluid; the prostate gland contributes seminal fluid; the Cowper's (bulbourethral) glands contribute alkaline mucus that lubricates the urethra.",
+        "exp": "Students often remember only one or two glands. The fructose from the seminal vesicles is the primary energy source for sperm. The alkalinity from Cowper's gland neutralizes acidic residual urine in the urethra before ejaculation, not the vagina \u2014 that neutralization role belongs to seminal vesicle secretions."
+      },
+      {
+        "q": "Why must seminal fluid be alkaline, given that sperm are not adapted to acidic environments?",
+        "a": "Seminal fluid must be alkaline to neutralize the acidity of the vagina, protecting sperm from the acidic environment so they can survive long enough to reach the egg.",
+        "exp": "The vagina is naturally acidic as a defense against pathogens. Sperm cannot function in that acidity, so the alkaline secretions of accessory glands buffer the environment. Students miss that the prostaglandins in semen also stimulate uterine contractions to actively assist sperm movement."
+      },
+      {
+        "q": "What provides the energy for sperm motility, and what structure physically propels the sperm?",
+        "a": "Mitochondria in the midpiece provide ATP energy for motility; the tail (flagellum) physically propels the sperm.",
+        "exp": "The midpiece is densely packed with mitochondria specifically to power the flagellar motion. Students sometimes say the tail produces energy rather than uses it. The division of labor \u2014 energy production in the midpiece, mechanical propulsion by the tail \u2014 reflects efficient cell specialization."
+      },
+      {
+        "q": "Describe the negative feedback loop that regulates testosterone levels.",
+        "a": "High testosterone in the blood signals the hypothalamus to decrease GnRH release, which reduces LH and FSH from the anterior pituitary, lowering testosterone production by interstitial cells.",
+        "exp": "Students often state the feedback exists without tracing every step in the chain. The hypothalamus is the entry point, not the pituitary. A common mistake is omitting that decreased GnRH is what drives down LH, and LH is what directly stimulates interstitial cells \u2014 FSH targets the seminiferous tubules, not testosterone production."
+      },
+      {
+        "q": "What hormone do Sertoli cells secrete when sperm concentration is high, and what is its effect?",
+        "a": "Sertoli cells secrete inhibin when sperm concentration is high; inhibin decreases FSH secretion from the anterior pituitary, slowing sperm production.",
+        "exp": "Inhibin provides a second, parallel negative feedback loop specifically targeting FSH rather than the full GnRH-LH-testosterone axis. Students frequently miss inhibin entirely when describing reproductive hormone regulation, which is a common exam gap."
+      },
+      {
+        "q": "What is the site of fertilization in the female reproductive system, and what is another name for this structure?",
+        "a": "Fertilization normally occurs in the oviduct (also called the Fallopian tube or uterine tube); the fertilized egg is then conducted to the uterus.",
+        "exp": "Students sometimes say fertilization occurs in the uterus, which is incorrect. The oviduct has three alternate names that appear on different sources \u2014 knowing all three (oviduct, Fallopian tube, uterine tube) prevents confusion. Implantation occurs in the uterus, not fertilization."
+      },
+      {
+        "q": "What is the function of the fimbriae, and where are they located?",
+        "a": "Fimbriae are finger-like projections located near each ovary that sweep the released egg into the oviduct after ovulation.",
+        "exp": "There is no direct physical connection between the ovary and oviduct \u2014 the egg is released into the peritoneal cavity and swept in by fimbriae. Students miss this detail and assume the egg travels through a sealed tube from the start. Failure of this sweeping mechanism is one cause of ectopic pregnancy."
+      },
+      {
+        "q": "List three secondary sex characteristics stimulated by estrogen in females.",
+        "a": "Estrogen stimulates breast development, wider pelvis (enlarged pelvic girdle), and fat deposition beneath the skin as secondary sex characteristics.",
+        "exp": "Secondary sex characteristics are those not directly involved in reproduction but distinguish male and female body forms. Students sometimes include uterine maturation or bone density, which are primary/functional effects of estrogen, not secondary sex characteristics. The distinction matters for exam classification questions."
+      },
+      {
+        "q": "What happens during the follicular phase of the ovarian cycle (Days 1-13)?",
+        "a": "The hypothalamus releases GnRH, stimulating the anterior pituitary to release FSH and LH; FSH stimulates follicle development in the ovary, and the maturing follicle secretes estrogen while one primary follicle develops into a Graafian (vesicular) follicle containing the secondary oocyte.",
+        "exp": "The follicular phase involves follicle growth and rising estrogen. Students often forget that multiple follicles begin developing but only one typically reaches the Graafian stage while the others become atretic (degenerate). The secondary oocyte, not a fully mature egg, is what is actually ovulated."
+      },
+      {
+        "q": "What is the chromosome content of a secondary oocyte compared to a primary oocyte, and what division produces it?",
+        "a": "A primary oocyte has 46 chromosomes; meiosis I produces a secondary oocyte with 23 chromosomes (two chromatids each) and a polar body that receives the discarded chromosomes.",
+        "exp": "Like spermatogenesis, oogenesis involves meiosis I reducing the chromosome number. A key difference from sperm production is that the cytoplasm is distributed unequally \u2014 the secondary oocyte gets nearly all the cytoplasm, while the polar body gets minimal cytoplasm. Students frequently omit the polar body."
+      },
+      {
+        "q": "What is the role of the prostate gland, and what anatomical feature makes its enlargement clinically significant?",
+        "a": "The prostate gland is a single doughnut-shaped gland that surrounds the upper portion of the urethra, just below the urinary bladder; it contributes seminal fluid to semen, and its enlargement compresses the urethra causing painful urination.",
+        "exp": "The anatomical relationship between the prostate and urethra is the reason prostate problems directly affect urination. Students miss that the prostate encircles the urethra rather than being adjacent to it. Benign prostatic hyperplasia is the most common form of enlargement and is distinct from prostate cancer."
+      },
+      {
+        "q": "What is the function of the cervix and the vagina in the female reproductive system?",
+        "a": "The cervix is the narrow opening of the uterus leading to the vagina; the vagina receives the penis during intercourse, serves as the birth canal, and provides the exit path for menstrual fluid.",
+        "exp": "Students often understate the vagina's multiple functions. The cervix has its own clinical importance as the site of Pap smear sampling and the first tissue affected by cervical cancer. Distinguishing that the cervix leads to the uterus while the vagina opens externally is a frequent point of confusion."
+      },
+      {
+        "q": "How does LH differ from FSH in its target cells and effect within the male reproductive system?",
+        "a": "FSH targets the seminiferous tubules to promote sperm development, while LH targets the interstitial cells to stimulate testosterone production.",
+        "exp": "Both are gonadotropins released from the anterior pituitary in response to GnRH, but they act on entirely different cell types. Students often reverse which hormone does which. A useful mnemonic: LH targets Leydig (interstitial) cells for testosterone; FSH targets the follicle/seminiferous tubules for gamete production."
+      }
+    ]
+  },
+  "generated_at": "2026-04-11T05:31:33.312113+00:00"
+}
