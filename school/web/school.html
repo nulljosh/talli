@@ -872,14 +872,8 @@
       const lastUpdated = (meta && meta.lastUpdated) || fallbackRetrievedAt || null;
       updatedEl.textContent = formatLastUpdated(lastUpdated);
 
-      if (meta && meta.stale) {
-        const ageLabel = meta.ageHours === null || meta.ageHours === undefined ? '?' : meta.ageHours;
-        dataWarningEl.textContent = `Data may be stale (${ageLabel}h old). Run: npm run refresh`;
-        dataWarningEl.style.display = 'block';
-      } else {
-        dataWarningEl.textContent = '';
-        dataWarningEl.style.display = 'none';
-      }
+      dataWarningEl.textContent = '';
+      dataWarningEl.style.display = 'none';
     }
 
     function showLoadError(message) {
