@@ -3,49 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#111" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#faf7f4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d0c0b" media="(prefers-color-scheme: dark)">
   <meta name="view-transition" content="same-origin">
   <meta name="description" content="Grade tracker for Langley SD35 D2L Brightspace. Pre-Calculus 12, Anatomy & Physiology 12.">
-  <title>School -- Langley SD35</title>
+  <title>tally -- school</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@200;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #fafafa;
-      --text: #000;
-      --text-secondary: rgba(0,0,0,0.5);
-      --text-tertiary: rgba(0,0,0,0.3);
-      --border: rgba(0,0,0,0.1);
+      --bg: #faf7f4;
+      --bg2: #f0ebe4;
+      --text: #1a1612;
+      --text-secondary: rgba(26,22,18,0.55);
+      --text-tertiary: rgba(26,22,18,0.35);
+      --border: rgba(26,22,18,0.1);
+      --accent: #FF851B;
       --green: #16a34a;
       --red: #dc2626;
       --amber: #d97706;
-      --font: 'Geist', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+      --font: 'Space Grotesk', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
       --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    @media (prefers-color-scheme: dark) {
-      :root:not([data-theme="light"]) {
-        --bg: #111;
-        --text: #e8e8e8;
-        --text-secondary: rgba(255,255,255,0.5);
-        --text-tertiary: rgba(255,255,255,0.25);
-        --border: rgba(255,255,255,0.1);
-        --green: #4ade80;
-        --red: #f87171;
-        --amber: #fbbf24;
-      }
-    }
-
     [data-theme="dark"] {
-      --bg: #111;
-      --text: #e8e8e8;
-      --text-secondary: rgba(255,255,255,0.5);
-      --text-tertiary: rgba(255,255,255,0.25);
-      --border: rgba(255,255,255,0.1);
+      --bg: #0d0c0b;
+      --bg2: #161412;
+      --text: #f2ede8;
+      --text-secondary: rgba(242,237,232,0.55);
+      --text-tertiary: rgba(242,237,232,0.3);
+      --border: rgba(242,237,232,0.1);
+      --accent: #FF851B;
       --green: #4ade80;
       --red: #f87171;
       --amber: #fbbf24;
@@ -61,7 +52,7 @@
       line-height: 1.6;
       min-height: 100dvh;
       -webkit-font-smoothing: antialiased;
-      transition: background 0.3s, color 0.3s;
+      transition: background 0.35s ease-out, color 0.35s ease-out;
     }
 
     .container {
@@ -96,8 +87,8 @@
 
     h1 {
       font-size: clamp(2rem, 6vw, 3rem);
-      font-weight: 200;
-      letter-spacing: -0.03em;
+      font-weight: 700;
+      letter-spacing: -0.04em;
       color: var(--text);
       line-height: 1.1;
     }
@@ -178,8 +169,8 @@
     }
 
     .course-tab.active {
-      color: var(--text);
-      border-bottom-color: var(--text);
+      color: var(--accent);
+      border-bottom-color: var(--accent);
     }
 
     /* Overall grade */
@@ -288,7 +279,7 @@
 
     .progress-fill {
       height: 100%;
-      background: var(--text);
+      background: var(--accent);
       border-radius: 2px;
       transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -365,13 +356,13 @@
     }
 
     .status-badge.done {
-      color: var(--green);
-      border-color: var(--green);
+      color: var(--text-tertiary);
+      border-color: var(--border);
     }
 
     .status-badge.active {
-      color: var(--text);
-      border-color: var(--text);
+      color: var(--accent);
+      border-color: var(--accent);
     }
 
     .status-badge.needs-work {
@@ -448,17 +439,17 @@
       margin-top: 0.5rem;
       padding: 0.5rem 1.25rem;
       font-size: 0.875rem;
-      font-weight: 500;
+      font-weight: 600;
       font-family: var(--font);
-      background: var(--text);
-      color: var(--bg);
+      background: var(--accent);
+      color: #fff;
       border: none;
       border-radius: 100px;
       cursor: pointer;
       transition: opacity 0.2s, transform 0.2s var(--spring);
     }
 
-    .quiz-start:hover { opacity: 0.8; transform: translateY(-1px); }
+    .quiz-start:hover { opacity: 0.88; transform: translateY(-1px); }
     .quiz-start:disabled { opacity: 0.3; cursor: default; transform: none; }
 
     .quiz-session { padding-top: 0.5rem; }
@@ -571,17 +562,17 @@
     .quiz-again {
       padding: 0.5rem 1.25rem;
       font-size: 0.875rem;
-      font-weight: 500;
+      font-weight: 600;
       font-family: var(--font);
-      background: var(--text);
-      color: var(--bg);
+      background: var(--accent);
+      color: #fff;
       border: none;
       border-radius: 100px;
       cursor: pointer;
       transition: opacity 0.2s, transform 0.2s var(--spring);
     }
 
-    .quiz-again:hover { opacity: 0.8; transform: translateY(-1px); }
+    .quiz-again:hover { opacity: 0.88; transform: translateY(-1px); }
 
     @media (hover: none) {
       .quiz-btn:hover { color: var(--text-secondary); border-color: var(--border); transform: none; }
@@ -594,7 +585,7 @@
   <div class="container">
     <header class="fade-up">
       <div class="top-row">
-        <h1><a href="/">School</a></h1>
+        <h1><a href="/">school<span style="color:var(--accent)">.</span></a></h1>
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
           <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="5"/>

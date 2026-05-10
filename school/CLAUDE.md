@@ -1,7 +1,7 @@
 # School
 v1.2.0
 ## Rules
-- Portfolio aesthetic: `rgba()` tokens, `-apple-system` font, `clamp()` sizing, auto dark/light
+- Tally aesthetic: warm parchment (#faf7f4 light / #0d0c0b dark), orange accent #FF851B, Space Grotesk font
 - All CSS/JS inline in `web/school.html`
 - Data flow: `grades.py` -> `data/grades.json` -> `school-grades.js` -> `server.js` -> `school.html`
 - No emojis
