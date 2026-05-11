@@ -1,6 +1,6 @@
 # Tally iOS
 
-v2.4.1
+v2.5.0
 
 ## Rules
 
@@ -9,13 +9,14 @@ v2.4.1
 - Solid cards: `Color(.secondarySystemGroupedBackground)` -- no ultraThinMaterial
 - `Color.tallyOrange` for all accent uses (calendar, paid toggle, tab tint, avatar fallback)
 - Shared `AvatarView(size:)` for all avatar rendering (ContentView toolbar + SettingsView)
-- Avatar: 8x8 mirrored pixel-art grid (Core Graphics), 6 palettes, matches web generatePixelArtSVG()
+- Avatar: node-graph SVG style (Anthropic dots/lines), generated via `AppState.generateNodeGraphAvatar()`, cached to Documents dir as PNG. Tap in SettingsView to regenerate.
 - SF Pro typography
 - No emojis
 - Session cookies via HTTPCookieStorage.shared; on 401, prompt re-auth
 - Features: 4-tab layout: Home, Reports, Benefits, Messages; Dashboard with large income amount, PWD timeline, payment calendar; Benefits tab: simple active benefits list; Monthly report submission; BC Self-Serve login; Offline caching with instant launch
 - Roadmap Done: iOS companion app with full dashboard; BC Self-Serve auth + biometric sign-in; Payment calendar widget; DTC navigator (12-step screener); CRA workspace (profile, tasks, T2201 draft); RDSP guide with eligibility + resources; Dispute analyzer (legal issue analysis); Monthly report submission; Offline caching with instant launch; CSV export
 - Roadmap Next: Payment history chart (sparkline/bar); PWD approval status tracker; CRA phase 2 (T4/T5 slip import); Document vault (encrypted storage); Budget planner; Push notifications for payment dates; Multi-province support; PDF report export; Accessibility audit (WCAG 2.1 AA)
+- Changelog v2.5.0 (2026-05-11): MessagesView redesigned to match web — initials circles (orange=unread, gray=read), unread dot, tap-to-expand, per-message read marking via AppState. Avatar migrated from UserDefaults to Documents disk cache; generation consolidated into AppState.generateNodeGraphAvatar() (node-graph Anthropic style), SettingsView drops duplicate implementation.
 - Changelog v2.4.1 (2026-05-07): Fixed app icon PNGs — SVG was rasterized without scaling, icon sat in top-left 200px of 1024x1024 canvas. Regenerated all three variants (light, dark, tinted) via cairosvg at full 1024x1024. Splash screen now shows tally marks (LaunchIcon + LaunchBackground assets) instead of blank screen.
 - Changelog v2.4.0 (2026-05-05): tallyOrange accent throughout. Solid cards replace glass. Pixel-art avatar (Core Graphics, 6 palettes). Top-right avatar button → Settings. "in X days" hero text + earning rate footnote. Shared AvatarView. daysUntilPayment moved to AppState. Removed accentGlassCard/parchment dead code.
 - Changelog v2.3.0: SettingsView with avatar generation (node-graph, now replaced). TabView tint updated.

@@ -2,6 +2,7 @@ import Foundation
 import LocalAuthentication
 import Network
 import Observation
+import UIKit
 
 @Observable
 @MainActor
@@ -22,6 +23,11 @@ final class AppState {
     var readMessageIds: Set<String> = []
     var avatarImageData: Data? = nil
 
+    private static let avatarFileURL: URL = {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("tally_avatar.png")
+    }()
+
     private let monitor = NWPathMonitor()
     private let monitorQueue = DispatchQueue(label: "com.heyitsmejosh.tally.network")
 
@@ -36,7 +42,17 @@ final class AppState {
         dashboard = Self.loadCached(DashboardData.self, forKey: Constants.dashboardCacheKey)
         lastSyncDate = UserDefaults.standard.object(forKey: Constants.lastSyncKey) as? Date
         storedCredentials = KeychainHelper.loadCredentials()
-        avatarImageData = UserDefaults.standard.data(forKey: "avatar-image")
+        if let diskData = try? Data(contentsOf: Self.avatarFileURL) {
+            avatarImageData = diskData
+        } else {
+            // First launch or migration — generate node-graph avatar and cache to disk
+            UserDefaults.standard.removeObject(forKey: "avatar-image")
+            let img = Self.generateNodeGraphAvatar()
+            if let png = img.pngData() {
+                try? png.write(to: Self.avatarFileURL)
+                avatarImageData = png
+            }
+        }
     }
 
     deinit {
@@ -104,15 +120,18 @@ final class AppState {
         }
     }
 
+    func markMessageRead(_ id: String) async {
+        readMessageIds.insert(id)
+        guard isAuthenticated else { return }
+        let ids = Array(readMessageIds)
+        _ = try? await APIClient.shared.markMessagesRead(ids: ids)
+    }
+
     func markAllMessagesRead() async {
         let allIds = statusMessageItems.map(\.id)
         readMessageIds = Set(allIds)
         guard isAuthenticated else { return }
-        do {
-            _ = try await APIClient.shared.markMessagesRead(ids: allIds)
-        } catch {
-            // Non-critical
-        }
+        _ = try? await APIClient.shared.markMessagesRead(ids: allIds)
     }
 
     var isPaid: Bool {
@@ -148,7 +167,70 @@ final class AppState {
 
     func saveAvatarData(_ data: Data) {
         avatarImageData = data
-        UserDefaults.standard.set(data, forKey: "avatar-image")
+        try? data.write(to: Self.avatarFileURL)
+    }
+
+    func regenerateAvatar() {
+        let img = Self.generateNodeGraphAvatar()
+        if let png = img.pngData() {
+            saveAvatarData(png)
+        }
+    }
+
+    static func generateNodeGraphAvatar(size: CGFloat = 64) -> UIImage {
+        let s = size
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: s, height: s))
+        return renderer.image { ctx in
+            let cg = ctx.cgContext
+            UIColor(hex: "0d0c0b").setFill()
+            cg.fill(CGRect(x: 0, y: 0, width: s, height: s))
+
+            let count = 18 + Int.random(in: 0..<5)
+            struct Node { var x, y, r: CGFloat; var hub, accent: Bool }
+            let nodes = (0..<count).map { _ in
+                Node(
+                    x: 4 + CGFloat.random(in: 0..<1) * (s - 8),
+                    y: 4 + CGFloat.random(in: 0..<1) * (s - 8),
+                    r: 1 + CGFloat.random(in: 0..<1) * 1.5,
+                    hub: CGFloat.random(in: 0..<1) < 0.15,
+                    accent: CGFloat.random(in: 0..<1) < 0.3
+                )
+            }
+
+            // Edges
+            for i in 0..<nodes.count {
+                for j in (i+1)..<nodes.count {
+                    let dx = nodes[i].x - nodes[j].x
+                    let dy = nodes[i].y - nodes[j].y
+                    let dist = sqrt(dx*dx + dy*dy)
+                    if dist < 22 {
+                        let alpha = (1 - dist / 22) * 0.45
+                        cg.setStrokeColor(UIColor(red: 1, green: 0.52, blue: 0.11, alpha: alpha).cgColor)
+                        cg.setLineWidth(0.5)
+                        cg.move(to: CGPoint(x: nodes[i].x, y: nodes[i].y))
+                        cg.addLine(to: CGPoint(x: nodes[j].x, y: nodes[j].y))
+                        cg.strokePath()
+                    }
+                }
+            }
+
+            // Nodes
+            for n in nodes {
+                if n.hub {
+                    let hr = n.r + 4
+                    cg.setStrokeColor(UIColor(red: 1, green: 0.52, blue: 0.11, alpha: 0.15).cgColor)
+                    cg.setLineWidth(0.75)
+                    cg.addEllipse(in: CGRect(x: n.x - hr, y: n.y - hr, width: hr * 2, height: hr * 2))
+                    cg.strokePath()
+                }
+                if n.accent {
+                    UIColor(hex: "FF851B").setFill()
+                } else {
+                    UIColor(red: 0.95, green: 0.93, blue: 0.91, alpha: 0.65).setFill()
+                }
+                cg.fillEllipse(in: CGRect(x: n.x - n.r, y: n.y - n.r, width: n.r * 2, height: n.r * 2))
+            }
+        }
     }
 
     func bootstrap() async {
