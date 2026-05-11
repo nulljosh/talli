@@ -29,6 +29,7 @@ npm run upload-blob # upload to Vercel Blob
 - `tools/dtc_apply.py` -- T2201/DTC helper
 
 ## Changelog
+- v3.5.0 (2026-05-11): Server extractMobileData uses djb2 content-hash IDs (same algorithm as web) instead of positional msg-N strings. Cross-platform read state now syncs correctly between web and iOS via shared ID namespace.
 - v3.4.0 (2026-05-11): Web — removed duplicate "tally." hero wordmark from landing page. Messages read state lifted to App level (readIds survives polls + tab switches, badge clears correctly). iOS — MessagesView redesigned with initials circles, unread dot, tap-to-expand, per-message read API sync. Avatar generation consolidated into AppState (node-graph, disk cache, UserDefaults migration).
 - v3.3.0: iOS UI overhaul (tallyOrange accent, solid cards, pixel-art avatar via Core Graphics, top-right settings shortcut, "in X days" hero text, earning rate footnote). Landing page redesigned as hero splash (wordmark, preview card, feature row). Notification read-state now server-synced on mount (merge) and on tap. api.js read-messages POST unions instead of overwrites. Shared AvatarView component (ContentView + SettingsView). Removed dead accentGlassCard/parchment.
 - v3.2.2: Redesigned icon. v3.2.1: Scrubbed BC_PIN from git history (git filter-repo). PIN now per-user AES-256 encrypted in Blob; removed from Vercel env vars.

@@ -2,7 +2,7 @@
 
 # Tally
 
-![version](https://img.shields.io/badge/version-v3.4.0-orange)
+![version](https://img.shields.io/badge/version-v3.5.0-orange)
 
 BC Self-Serve scraper and benefits dashboard. Tracks income, payment dates, PWD application status, and government messages.
 

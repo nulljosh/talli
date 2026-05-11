@@ -1889,6 +1889,13 @@ app.get('/api/check', scrapeLimiter, requireAuth, async (req, res) => {
 
 // ── Mobile API ──────────────────────────────────────────────────────────────
 
+function msgHash(s) {
+  let h = 5381;
+  const t = s.slice(0, 80);
+  for (let i = 0; i < t.length; i++) h = (h * 33 ^ t.charCodeAt(i)) >>> 0;
+  return String(h);
+}
+
 function extractMobileData(scraperResult) {
   const sections = scraperResult?.sections || {};
 
@@ -1937,7 +1944,8 @@ function extractMobileData(scraperResult) {
       const dateParts = rawDate.replace(/\s*\/\s*/g, '-').replace(/(\d{4})-([A-Z]{3})-(\d{2})/, (_, y, m, d) => {
         return `${y}-${MONTHS[m] || '01'}-${d}`;
       });
-      return { id: `msg-${idx}`, text, timestamp: dateParts };
+      const lines = text.split('\n');
+      return { id: msgHash(lines[0] + '|' + lines.slice(1).join('\n')), text, timestamp: dateParts };
     });
 
   return { payment_amount: paymentAmount || fallbackAmount, next_date: nextDate, messages };
