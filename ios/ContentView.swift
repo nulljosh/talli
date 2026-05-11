@@ -75,11 +75,6 @@ private struct AuthenticatedTabShell: View {
                 .tag(4)
         }
         .tint(Color.tallyOrange)
-        .onChange(of: appState.selectedTabIndex) { _, newTab in
-            if newTab == 3, appState.unreadMessageCount > 0 {
-                Task { await appState.markAllMessagesRead() }
-            }
-        }
     }
 }
 

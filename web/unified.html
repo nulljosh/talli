@@ -141,6 +141,13 @@ function parseMsgDate(str) {
   return new Date(+m[1], MON[m[2]], +m[3]).toLocaleDateString('en-CA', {month:'short', day:'numeric'});
 }
 
+function msgHash(s) {
+  let h = 5381;
+  const t = s.slice(0, 80);
+  for (let i = 0; i < t.length; i++) h = (h * 33 ^ t.charCodeAt(i)) >>> 0;
+  return h;
+}
+
 function parseMessages(sections) {
   const SPAM = new Set(['Home','Payment Info','Messages','Notifications','Service Requests','Monthly Reports','Sign out','Profile','Back','Print','Help','My Self Serve']);
   const SPAM_RX = /^skip to|inactiv|logged out|javascript|^my self serve$|^service canada$/i;
@@ -159,7 +166,7 @@ function parseMessages(sections) {
         pendingDate = parseMsgDate(line);
       }
     } else if (!cur) {
-      cur = { id:i, title:line.trim(), body:'', date:pendingDate, unread:true };
+      cur = { id:0, title:line.trim(), body:'', date:pendingDate, unread:true };
       pendingDate = '';
     } else {
       cur.body = cur.body ? cur.body + '\n' + line.trim() : line.trim();
@@ -167,7 +174,9 @@ function parseMessages(sections) {
   });
   if (cur) msgs.push(cur);
   const seen = new Set();
-  return msgs.filter(m => { const k = m.title+'|'+m.body; if (seen.has(k)) return false; seen.add(k); return true; }).slice(0, 12);
+  const deduped = msgs.filter(m => { const k = m.title+'|'+m.body; if (seen.has(k)) return false; seen.add(k); return true; }).slice(0, 12);
+  deduped.forEach(m => { m.id = msgHash(m.title + '|' + m.body); });
+  return deduped;
 }
 
 function parseDollar(s) { return parseFloat((s||'').replace(/[^0-9.]/g,'')) || 0; }
