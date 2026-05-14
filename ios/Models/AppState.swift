@@ -381,7 +381,10 @@ final class AppState {
         defer { isLoading = false }
 
         do {
-            let fresh = try await APIClient.shared.check()
+            async let dashTask = APIClient.shared.check()
+            async let readTask: Void = loadReadMessages()
+            let fresh = try await dashTask
+            _ = await readTask
             dashboard = fresh
             cacheDashboard(fresh)
             updateSyncDate()

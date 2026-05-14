@@ -46,8 +46,11 @@ struct SettingsView: View {
             Button {
                 guard !isGeneratingAvatar else { return }
                 isGeneratingAvatar = true
-                appState.regenerateAvatar()
-                isGeneratingAvatar = false
+                Task { @MainActor in
+                    await Task.yield()
+                    appState.regenerateAvatar()
+                    isGeneratingAvatar = false
+                }
             } label: {
                 ZStack {
                     AvatarView(size: 56)

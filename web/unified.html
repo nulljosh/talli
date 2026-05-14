@@ -1026,7 +1026,7 @@ function App() {
     try {
       const r = await fetch('/api/avatar',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({svgBase64:b64})});
       const d = await r.json();
-      if(d.avatarUrl) setAvatarUrl(d.avatarUrl);
+      if(d.avatarUrl) setAvatarUrl(d.avatarUrl.split('?')[0] + '?v=' + Date.now());
     } catch {}
   };
 
