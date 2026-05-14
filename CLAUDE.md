@@ -28,7 +28,13 @@ npm run upload-blob # upload to Vercel Blob
 - `web/benefits.html` -- benefits guide (disability, general BC/Canada, retirement)
 - `tools/dtc_apply.py` -- T2201/DTC helper
 
+## PWD Roadmap (Joshua's account — 2026-05-14)
+- Active PWD application was denied. Resubmission in progress.
+- **Feature needed**: PWD Resubmit button on Status tab — one-click to pre-fill and resubmit the PWD application directly from Tally, without navigating BC Self-Serve. Support queuing multiple submissions with deduplication tracking.
+- **Status tab**: Add reconsideration deadline tracker (20 business days from denial letter date).
+
 ## Changelog
+- v3.6.0 (2026-05-14): Landing page hero heading added. Login page redesigned to match parchment design system (Space Grotesk, orange CTA, matches landing). Web settings tab added (avatar, username, refresh, sign out). Avatar generator upgraded to 200px topology approach (star/hex/mesh) matching epiphany quality. iOS AvatarView removed .interpolation(.none) bitmap rendering. iOS AppState.generateNodeGraphAvatar upgraded to 200px topology. SettingsView avatar tap hint added.
 - v3.5.0 (2026-05-11): Server extractMobileData uses djb2 content-hash IDs (same algorithm as web) instead of positional msg-N strings. Cross-platform read state now syncs correctly between web and iOS via shared ID namespace.
 - v3.4.0 (2026-05-11): Web — removed duplicate "tally." hero wordmark from landing page. Messages read state lifted to App level (readIds survives polls + tab switches, badge clears correctly). iOS — MessagesView redesigned with initials circles, unread dot, tap-to-expand, per-message read API sync. Avatar generation consolidated into AppState (node-graph, disk cache, UserDefaults migration).
 - v3.3.0: iOS UI overhaul (tallyOrange accent, solid cards, pixel-art avatar via Core Graphics, top-right settings shortcut, "in X days" hero text, earning rate footnote). Landing page redesigned as hero splash (wordmark, preview card, feature row). Notification read-state now server-synced on mount (merge) and on tap. api.js read-messages POST unions instead of overwrites. Shared AvatarView component (ContentView + SettingsView). Removed dead accentGlassCard/parchment.

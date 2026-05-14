@@ -1,84 +1,324 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Tally -- Sign In</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config = { darkMode: 'class' }</script>
+  <meta name="view-transition" content="same-origin">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    .transition-colors { transition: background-color 0.2s, border-color 0.2s, color 0.2s; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #faf7f4;
+      --bg2: #f0ebe4;
+      --text: #1a1612;
+      --text-secondary: rgba(26,22,18,0.55);
+      --text-tertiary: rgba(26,22,18,0.35);
+      --border: rgba(26,22,18,0.1);
+      --border2: rgba(26,22,18,0.16);
+      --accent: #FF851B;
+      --error: #d94f3d;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0d0c0b;
+      --bg2: #161412;
+      --text: #f2ede8;
+      --text-secondary: rgba(242,237,232,0.55);
+      --text-tertiary: rgba(242,237,232,0.3);
+      --border: rgba(242,237,232,0.1);
+      --border2: rgba(242,237,232,0.18);
+      --accent: #FF851B;
+      --error: #f87171;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      font-weight: 400;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100dvh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0 clamp(1.25rem, 5vw, 3rem);
+    }
+    nav .inner {
+      max-width: 640px;
+      margin: 0 auto;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .wordmark {
+      font-size: 1.0625rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .wordmark span { color: var(--accent); }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      border-radius: 50%;
+      color: var(--text-secondary);
+      transition: color 0.3s, border-color 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+    .theme-toggle:hover { color: var(--text); border-color: var(--text-tertiary); }
+    .theme-toggle svg { width: 14px; height: 14px; }
+
+    /* ── Page shell ── */
+    .page {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 clamp(1.25rem, 5vw, 3rem);
+      padding-left: max(clamp(1.25rem, 5vw, 3rem), env(safe-area-inset-left));
+      padding-right: max(clamp(1.25rem, 5vw, 3rem), env(safe-area-inset-right));
+      padding-bottom: max(4rem, env(safe-area-inset-bottom));
+    }
+
+    /* ── Form ── */
+    .form-wrap {
+      padding: clamp(3rem, 8vw, 5rem) 0 clamp(2rem, 5vw, 3rem);
+      max-width: 360px;
+    }
+
+    .form-heading {
+      font-size: clamp(1.75rem, 5vw, 2.25rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 0.375rem;
+    }
+
+    .form-sub {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      margin-bottom: 2.25rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 1.125rem;
+    }
+
+    label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      border-color: var(--accent);
+    }
+    input::placeholder { color: var(--text-tertiary); }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 1.5rem;
+    }
+    .checkbox-row input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+    .checkbox-row label {
+      font-size: 0.875rem;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      border: none;
+      border-radius: 100px;
+      padding: 14px 32px;
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s;
+      margin-bottom: 1rem;
+    }
+    .btn-submit:hover:not(:disabled) { transform: translateY(-2px) scale(1.02); }
+    .btn-submit:active:not(:disabled) { transform: scale(0.98); opacity: 0.9; }
+    .btn-submit:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .error-msg {
+      display: none;
+      font-size: 0.875rem;
+      color: var(--error);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 0.75rem;
+    }
+    .success-msg {
+      display: none;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-note {
+      font-size: 0.8125rem;
+      color: var(--text-tertiary);
+      margin-top: 1.5rem;
+    }
+    .footer-note a {
+      color: var(--text-secondary);
+      text-decoration: underline;
+      text-decoration-color: var(--border);
+      text-underline-offset: 2px;
+      transition: opacity 0.2s;
+    }
+    .footer-note a:hover { opacity: 0.5; }
+
+    :focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
   </style>
 </head>
-<body class="min-h-dvh bg-white dark:bg-black text-gray-900 dark:text-white flex items-center justify-center p-4 transition-colors">
-  <div class="w-full max-w-sm">
-    <!-- Header -->
-    <div class="border-b border-gray-200 dark:border-gray-800 pb-4 mb-6 flex justify-between items-center">
-      <h1 class="text-xl font-medium">Tally</h1>
-      <button onclick="toggleDarkMode()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Toggle dark mode">
-        <svg id="theme-icon-dark" class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+<body>
+
+  <nav>
+    <div class="inner">
+      <a href="/" class="wordmark">tally<span>.</span></a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
         </svg>
-        <svg id="theme-icon-light" class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+        <svg id="moonIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
         </svg>
       </button>
     </div>
+  </nav>
 
-    <!-- Form -->
-    <form id="login-form" class="space-y-4">
-      <div>
-        <label for="username" class="block text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1.5">BCeID Username</label>
-        <input type="text" id="username" name="username" autocomplete="username" placeholder="your.username" required
-          class="w-full bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 outline-none focus:border-gray-400 dark:focus:border-gray-600 transition-colors">
-      </div>
+  <div class="page">
+    <div class="form-wrap">
+      <h1 class="form-heading">Sign in</h1>
+      <p class="form-sub">Enter your BCeID credentials.</p>
 
-      <div>
-        <label for="password" class="block text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1.5">Password</label>
-        <input type="password" id="password" name="password" autocomplete="current-password" placeholder="••••••••" required
-          class="w-full bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 outline-none focus:border-gray-400 dark:focus:border-gray-600 transition-colors">
-      </div>
+      <div id="error-msg" class="error-msg"></div>
+      <div id="success-msg" class="success-msg">Signed in. Loading your dashboard...</div>
 
-      <div class="flex items-center gap-2">
-        <input type="checkbox" id="rememberMe" name="rememberMe" checked
-          class="accent-gray-900 dark:accent-white w-4 h-4">
-        <label for="rememberMe" class="text-sm text-gray-500 dark:text-gray-400">Remember me for 30 days</label>
-      </div>
+      <form id="login-form">
+        <div class="field">
+          <label for="username">BCeID Username</label>
+          <input type="text" id="username" name="username" autocomplete="username" placeholder="your.username" required>
+        </div>
 
-      <button type="submit" id="submit-btn"
-        class="w-full bg-gray-900 dark:bg-white text-white dark:text-black rounded-lg px-4 py-2.5 text-sm font-medium hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed">
-        Sign In
-      </button>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" autocomplete="current-password" placeholder="••••••••" required>
+        </div>
 
-      <div id="error-msg" class="hidden text-red-500 dark:text-red-400 text-sm border border-gray-200 dark:border-gray-800 rounded-lg px-3 py-2.5"></div>
-      <div id="success-msg" class="hidden text-sm text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-800 rounded-lg px-3 py-2.5">Signed in. Loading your dashboard...</div>
-    </form>
+        <div class="checkbox-row">
+          <input type="checkbox" id="rememberMe" name="rememberMe" checked>
+          <label for="rememberMe">Remember me for 30 days</label>
+        </div>
 
-    <p class="text-xs text-gray-400 dark:text-gray-600 mt-6">
-      <a href="/" class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">Back to home</a>
-      &middot; Not affiliated with the Government of BC.
-    </p>
+        <button type="submit" id="submit-btn" class="btn-submit">Sign In</button>
+      </form>
+
+      <p class="footer-note">
+        <a href="/">Back to home</a> &middot; Not affiliated with the Government of BC.
+      </p>
+    </div>
   </div>
 
   <script>
-    function toggleDarkMode() {
-      const html = document.documentElement;
-      if (html.classList.contains('dark')) {
-        html.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-      } else {
-        html.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-      }
-    }
+    const themeToggle = document.getElementById('themeToggle');
+    const sunIcon = document.getElementById('sunIcon');
+    const moonIcon = document.getElementById('moonIcon');
 
-    (function () {
+    const getPreferredTheme = () => {
       const saved = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (saved === 'light' || (!saved && !prefersDark)) {
-        document.documentElement.classList.remove('dark');
+      if (saved) return saved;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+
+    const setTheme = (theme, animate) => {
+      const apply = () => {
+        if (theme === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          sunIcon.style.display = 'none';
+          moonIcon.style.display = 'block';
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+          sunIcon.style.display = 'block';
+          moonIcon.style.display = 'none';
+        }
+        localStorage.setItem('theme', theme);
+      };
+      if (animate && document.startViewTransition) {
+        document.startViewTransition(apply);
+      } else {
+        apply();
       }
-    })();
+    };
+
+    setTheme(getPreferredTheme(), false);
+    themeToggle.addEventListener('click', () => {
+      const current = document.documentElement.hasAttribute('data-theme') ? 'dark' : 'light';
+      setTheme(current === 'dark' ? 'light' : 'dark', true);
+    });
 
     // Skip login if session is valid
     (async () => {
@@ -87,7 +327,7 @@
         if (res.ok) {
           const s = document.getElementById('success-msg');
           s.textContent = 'Resuming session...';
-          s.classList.remove('hidden');
+          s.style.display = 'block';
           window.location.href = '/app';
         }
       } catch {}
@@ -110,20 +350,19 @@
         line2.style.marginTop = '4px';
         errorMsg.appendChild(line2);
       }
-      errorMsg.classList.remove('hidden');
+      errorMsg.style.display = 'block';
     }
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-
       const username = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value;
       const rememberMe = document.getElementById('rememberMe').checked;
 
       if (!username || !password) return;
 
-      errorMsg.classList.add('hidden');
-      successMsg.classList.add('hidden');
+      errorMsg.style.display = 'none';
+      successMsg.style.display = 'none';
       submitBtn.disabled = true;
       submitBtn.textContent = 'Signing in...';
 
@@ -140,7 +379,7 @@
         }
 
         if (res.ok && data.success) {
-          successMsg.classList.remove('hidden');
+          successMsg.style.display = 'block';
           setTimeout(() => { window.location.href = '/app'; }, 800);
         } else {
           const msg = data.error || data.message || 'Invalid credentials. Please try again.';

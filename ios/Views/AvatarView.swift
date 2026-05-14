@@ -9,7 +9,6 @@ struct AvatarView: View {
         if let data = appState.avatarImageData, let uiImage = UIImage(data: data) {
             Image(uiImage: uiImage)
                 .resizable()
-                .interpolation(.none)
                 .scaledToFill()
                 .frame(width: size, height: size)
                 .clipShape(Circle())

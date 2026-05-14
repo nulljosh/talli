@@ -42,23 +42,28 @@ struct SettingsView: View {
     }
 
     private var avatarButton: some View {
-        Button {
-            guard !isGeneratingAvatar else { return }
-            isGeneratingAvatar = true
-            appState.regenerateAvatar()
-            isGeneratingAvatar = false
-        } label: {
-            ZStack {
-                AvatarView(size: 56)
-                if isGeneratingAvatar {
-                    Circle()
-                        .fill(.black.opacity(0.4))
-                        .frame(width: 56, height: 56)
-                    ProgressView().tint(.white)
+        VStack(spacing: 6) {
+            Button {
+                guard !isGeneratingAvatar else { return }
+                isGeneratingAvatar = true
+                appState.regenerateAvatar()
+                isGeneratingAvatar = false
+            } label: {
+                ZStack {
+                    AvatarView(size: 56)
+                    if isGeneratingAvatar {
+                        Circle()
+                            .fill(.black.opacity(0.4))
+                            .frame(width: 56, height: 56)
+                        ProgressView().tint(.white)
+                    }
                 }
             }
+            .buttonStyle(.plain)
+            Text("Tap to regenerate")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
         }
-        .buttonStyle(.plain)
     }
 }
 

@@ -177,58 +177,64 @@ final class AppState {
         }
     }
 
-    static func generateNodeGraphAvatar(size: CGFloat = 64) -> UIImage {
+    static func generateNodeGraphAvatar(size: CGFloat = 200) -> UIImage {
         let s = size
+        let cx = s / 2, cy = s / 2
+        typealias Pt = (CGFloat, CGFloat)
+        let topologies: [([Pt], [(Int, Int)])] = [
+            // Star/hub
+            ([(0,-58),(46,-30),(55,18),(20,56),(-20,56),(-55,18),(-46,-30),(0,0)],
+             [(7,0),(7,1),(7,2),(7,3),(7,4),(7,5),(7,6),(0,1),(1,2),(2,3),(3,4),(4,5),(5,6),(6,0)]),
+            // Hexagon ring + inner triangle
+            ([(0,-55),(48,-27),(48,27),(0,55),(-48,27),(-48,-27),(0,-22),(22,11),(-22,11)],
+             [(0,1),(1,2),(2,3),(3,4),(4,5),(5,0),(6,7),(7,8),(8,6),(0,6),(2,7),(4,8)]),
+            // Scattered mesh
+            ([(-38,-50),(18,-52),(52,-10),(44,42),(0,55),(-44,34),(-54,-10),(0,-10),(30,12),(-25,18)],
+             [(0,1),(1,2),(2,3),(3,4),(4,5),(5,6),(6,0),(0,7),(2,8),(4,9),(7,8),(8,9),(7,9)]),
+        ]
+        let (baseOffsets, allEdges) = topologies.randomElement()!
+        let jitter: CGFloat = CGFloat.random(in: 8...16)
+        let nodes = baseOffsets.map { dx, dy in
+            CGPoint(
+                x: cx + dx + CGFloat.random(in: -jitter...jitter),
+                y: cy + dy + CGFloat.random(in: -jitter...jitter)
+            )
+        }
+        let edgeDensity = Double.random(in: 0.55...0.85)
+        let activeEdges = allEdges.filter { _ in Double.random(in: 0...1) < edgeDensity }
+
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: s, height: s))
         return renderer.image { ctx in
             let cg = ctx.cgContext
+            // Dark circle background
             UIColor(hex: "0d0c0b").setFill()
-            cg.fill(CGRect(x: 0, y: 0, width: s, height: s))
-
-            let count = 18 + Int.random(in: 0..<5)
-            struct Node { var x, y, r: CGFloat; var hub, accent: Bool }
-            let nodes = (0..<count).map { _ in
-                Node(
-                    x: 4 + CGFloat.random(in: 0..<1) * (s - 8),
-                    y: 4 + CGFloat.random(in: 0..<1) * (s - 8),
-                    r: 1 + CGFloat.random(in: 0..<1) * 1.5,
-                    hub: CGFloat.random(in: 0..<1) < 0.15,
-                    accent: CGFloat.random(in: 0..<1) < 0.3
-                )
-            }
+            cg.fillEllipse(in: CGRect(x: 0, y: 0, width: s, height: s))
 
             // Edges
-            for i in 0..<nodes.count {
-                for j in (i+1)..<nodes.count {
-                    let dx = nodes[i].x - nodes[j].x
-                    let dy = nodes[i].y - nodes[j].y
-                    let dist = sqrt(dx*dx + dy*dy)
-                    if dist < 22 {
-                        let alpha = (1 - dist / 22) * 0.45
-                        cg.setStrokeColor(UIColor(red: 1, green: 0.52, blue: 0.11, alpha: alpha).cgColor)
-                        cg.setLineWidth(0.5)
-                        cg.move(to: CGPoint(x: nodes[i].x, y: nodes[i].y))
-                        cg.addLine(to: CGPoint(x: nodes[j].x, y: nodes[j].y))
-                        cg.strokePath()
-                    }
-                }
+            cg.setStrokeColor(UIColor(red: 1, green: 0.52, blue: 0.11, alpha: 0.3).cgColor)
+            cg.setLineWidth(1.5)
+            cg.setLineCap(.round)
+            for (a, b) in activeEdges where a < nodes.count && b < nodes.count {
+                cg.move(to: nodes[a])
+                cg.addLine(to: nodes[b])
             }
+            cg.strokePath()
 
             // Nodes
-            for n in nodes {
-                if n.hub {
-                    let hr = n.r + 4
-                    cg.setStrokeColor(UIColor(red: 1, green: 0.52, blue: 0.11, alpha: 0.15).cgColor)
-                    cg.setLineWidth(0.75)
-                    cg.addEllipse(in: CGRect(x: n.x - hr, y: n.y - hr, width: hr * 2, height: hr * 2))
-                    cg.strokePath()
-                }
-                if n.accent {
+            for (i, node) in nodes.enumerated() {
+                let r = CGFloat.random(in: 5...11)
+                let isAccent = i == 0 || i == nodes.count / 2
+                if isAccent {
                     UIColor(hex: "FF851B").setFill()
                 } else {
-                    UIColor(red: 0.95, green: 0.93, blue: 0.91, alpha: 0.65).setFill()
+                    UIColor(red: 0.95, green: 0.93, blue: 0.91, alpha: 0.75).setFill()
                 }
-                cg.fillEllipse(in: CGRect(x: n.x - n.r, y: n.y - n.r, width: n.r * 2, height: n.r * 2))
+                cg.fillEllipse(in: CGRect(x: node.x - r, y: node.y - r, width: r * 2, height: r * 2))
+                if isAccent {
+                    UIColor(white: 1, alpha: 0.4).setFill()
+                    let dot: CGFloat = 2.5
+                    cg.fillEllipse(in: CGRect(x: node.x - dot, y: node.y - dot, width: dot * 2, height: dot * 2))
+                }
             }
         }
     }

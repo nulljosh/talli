@@ -1147,7 +1147,15 @@ async function fetchOrLoadData(req) {
 app.get('/api/latest', requireAuth, async (req, res) => {
   try {
     log('[API] /api/latest called');
-    const uiConfig = { pwdApproved: PWD_APPROVED, pwdMedicalDone: PWD_MEDICAL_DONE };
+    const userId = req.session?.userId;
+    const pwdProfile = await loadUserBlob(userId, 'pwd-profile', { status: 'applied' }).catch(() => ({ status: 'applied' }));
+    const uiConfig = {
+      pwdApproved: pwdProfile.status === 'approved' || PWD_APPROVED,
+      pwdMedicalDone: pwdProfile.status === 'medical_done' || pwdProfile.status === 'approved' || PWD_MEDICAL_DONE,
+      pwdStatus: pwdProfile.status,
+      pwdDeniedDate: pwdProfile.deniedDate || null,
+      pwdSubmittedDate: pwdProfile.submittedDate || null,
+    };
 
     const result = await fetchOrLoadData(req);
     if (result) {
@@ -1692,6 +1700,43 @@ app.post('/api/profile/pin', requireAuth, async (req, res) => {
   } catch (err) {
     log('[PROFILE] PIN save error:', err.message);
     res.status(500).json({ error: 'Failed to save PIN' });
+  }
+});
+
+// PWD profile -- per-user application status (applied/in_review/medical_done/denied/resubmitted/approved)
+const VALID_PWD_STATUSES = new Set(['applied','in_review','medical_done','denied','resubmitted','approved']);
+
+app.get('/api/pwd-profile', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    const data = await loadUserBlob(userId, 'pwd-profile', { status: 'applied', submittedDate: null, deniedDate: null, notes: '' });
+    res.json(data);
+  } catch (err) {
+    log('[PWD] GET error:', err.message);
+    res.json({ status: 'applied', submittedDate: null, deniedDate: null, notes: '' });
+  }
+});
+
+app.post('/api/pwd-profile', requireAuth, async (req, res) => {
+  try {
+    const { status, submittedDate, deniedDate, notes } = req.body || {};
+    if (status && !VALID_PWD_STATUSES.has(status)) {
+      return res.status(400).json({ error: 'Invalid status' });
+    }
+    const userId = req.session?.userId;
+    const existing = await loadUserBlob(userId, 'pwd-profile', { status: 'applied' });
+    const data = {
+      ...existing,
+      ...(status !== undefined && { status }),
+      ...(submittedDate !== undefined && { submittedDate }),
+      ...(deniedDate !== undefined && { deniedDate }),
+      ...(notes !== undefined && { notes }),
+    };
+    await saveUserBlob(userId, 'pwd-profile', data);
+    res.json(data);
+  } catch (err) {
+    log('[PWD] POST error:', err.message);
+    res.status(500).json({ error: 'Failed to save PWD profile' });
   }
 });
 
