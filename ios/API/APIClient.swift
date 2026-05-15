@@ -1,4 +1,4 @@
-import Foundation
+import Foundation 
 
 enum APIClientError: Error, LocalizedError {
     case unauthorized
