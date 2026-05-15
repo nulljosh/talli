@@ -23,6 +23,9 @@ const ENCRYPTION_KEY = process.env.SESSION_SECRET || crypto.randomBytes(32).toSt
 const DEBUG = process.env.DEBUG === 'true' || process.env.NODE_ENV === 'development';
 const PWD_APPROVED = process.env.PWD_APPROVED === 'true';
 const PWD_MEDICAL_DONE = process.env.PWD_MEDICAL_DONE === 'true';
+const PWD_DENIED = process.env.PWD_DENIED === 'true';
+const PWD_DENIED_DATE = process.env.PWD_DENIED_DATE || null;
+const PWD_RESUBMITTED = process.env.PWD_RESUBMITTED === 'true';
 const DEFAULT_SESSION_MAX_AGE_MS = 2 * 60 * 60 * 1000; // 2 hours
 const REMEMBER_ME_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 const SESSION_IDLE_TIMEOUT_MS = 60 * 60 * 1000; // 1 hour
@@ -1152,8 +1155,8 @@ app.get('/api/latest', requireAuth, async (req, res) => {
     const uiConfig = {
       pwdApproved: pwdProfile.status === 'approved' || PWD_APPROVED,
       pwdMedicalDone: pwdProfile.status === 'medical_done' || pwdProfile.status === 'approved' || PWD_MEDICAL_DONE,
-      pwdStatus: pwdProfile.status,
-      pwdDeniedDate: pwdProfile.deniedDate || null,
+      pwdStatus: PWD_RESUBMITTED ? 'resubmitted' : PWD_DENIED ? 'denied' : pwdProfile.status,
+      pwdDeniedDate: pwdProfile.deniedDate || PWD_DENIED_DATE,
       pwdSubmittedDate: pwdProfile.submittedDate || null,
     };
 
