@@ -320,7 +320,7 @@ final class AppState {
             let response = try await APIClient.shared.login(username: username, password: password)
             guard response.success else {
                 isAuthenticated = false
-                errorMessage = "Login failed. Check your username/password."
+                errorMessage = response.error ?? "Login failed. Check your username/password."
                 return
             }
 

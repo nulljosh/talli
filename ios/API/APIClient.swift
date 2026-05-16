@@ -48,12 +48,30 @@ final class APIClient: @unchecked Sendable {
     }
 
     func login(username: String, password: String) async throws -> LoginResponse {
-        try await send(
-            path: "api/login",
-            method: "POST",
-            body: LoginRequest(username: username, password: password),
-            responseType: LoginResponse.self
-        )
+        var request = URLRequest(url: baseURL.appending(path: "api/login"))
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try encoder.encode(LoginRequest(username: username, password: password))
+
+        let data: Data
+        let urlResponse: URLResponse
+        do {
+            (data, urlResponse) = try await session.data(for: request)
+        } catch {
+            throw APIClientError.networkError(error)
+        }
+
+        guard urlResponse is HTTPURLResponse else {
+            throw APIClientError.invalidResponse
+        }
+
+        // Always decode body — server includes the real error message regardless of status
+        if let result = try? decoder.decode(LoginResponse.self, from: data) {
+            return result
+        }
+
+        throw APIClientError.invalidResponse
     }
 
     func sessionCheck() async throws -> Bool {
