@@ -337,7 +337,7 @@ app.set('trust proxy', 1);
 // Rate limiting for login attempts
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // 5 attempts per window
+  max: 20, // 20 attempts per window (single-user app; session expiry causes frequent re-auth)
   message: 'Too many login attempts, please try again in 15 minutes',
   standardHeaders: true,
   legacyHeaders: false,

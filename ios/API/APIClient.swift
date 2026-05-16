@@ -2,6 +2,7 @@ import Foundation
 
 enum APIClientError: Error, LocalizedError {
     case unauthorized
+    case rateLimited
     case serverError(Int)
     case invalidResponse
     case decodingError(Error)
@@ -11,6 +12,8 @@ enum APIClientError: Error, LocalizedError {
         switch self {
         case .unauthorized:
             return "Session expired. Please sign in again."
+        case .rateLimited:
+            return "Too many sign-in attempts. Wait 15 minutes and try again."
         case .serverError(let code):
             return "Server error (\(code))."
         case .invalidResponse:
@@ -168,6 +171,8 @@ final class APIClient: @unchecked Sendable {
             break
         case 401:
             throw APIClientError.unauthorized
+        case 429:
+            throw APIClientError.rateLimited
         default:
             throw APIClientError.serverError(response.statusCode)
         }
@@ -198,6 +203,8 @@ final class APIClient: @unchecked Sendable {
             return
         case 401:
             throw APIClientError.unauthorized
+        case 429:
+            throw APIClientError.rateLimited
         default:
             throw APIClientError.serverError(response.statusCode)
         }
