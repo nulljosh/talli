@@ -290,8 +290,14 @@ async function fetchPage(url, jar, options = {}) {
   if (!headers.has('User-Agent')) {
     headers.set(
       'User-Agent',
-      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36'
     );
+  }
+  if (!headers.has('Accept')) {
+    headers.set('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8');
+  }
+  if (!headers.has('Accept-Language')) {
+    headers.set('Accept-Language', 'en-CA,en;q=0.9');
   }
 
   const fetchOpts = { ...options, headers };
@@ -532,13 +538,14 @@ async function executeLogin(username, password) {
     method: 'GET',
     redirect: 'manual'
   });
-  const homeHtml = await readBody(homeResponse);
+  const homeResult = await followRedirectChain(homeResponse, jar, BASE_URL);
+  const homeHtml = homeResult.body;
 
-  if (!homeResponse.ok) {
-    throw new Error(`Homepage ${BASE_URL} returned HTTP ${homeResponse.status}`);
+  if (!homeResult.response.ok) {
+    throw new Error(`Homepage ${BASE_URL} returned HTTP ${homeResult.response.status}`);
   }
 
-  const signInUrl = parseSignInLink(homeHtml, BASE_URL);
+  const signInUrl = parseSignInLink(homeHtml, homeResult.url);
   if (!signInUrl) {
     throw new Error('Sign in link not found');
   }
