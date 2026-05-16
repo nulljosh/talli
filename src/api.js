@@ -1512,23 +1512,6 @@ async function loadUserBlob(userId, key, fallback) {
       const resp = await fetch(match.url);
       return await resp.json();
     }
-    // Migration: try legacy path without HMAC prefix (remove after 2026-05-01)
-    const legacyPath = `tally-cache/${userId}/${key}.json`;
-    const { blobs: legacyBlobs } = await list({ prefix: legacyPath });
-    const legacyMatch = legacyBlobs?.find(b => b.pathname === legacyPath);
-    if (legacyMatch) {
-      const resp = await fetch(legacyMatch.url);
-      const data = await resp.json();
-      // Re-save under new HMAC path
-      await saveUserBlob(userId, key, data);
-      // Delete legacy blob
-      try {
-        const { del } = require('@vercel/blob');
-        await del(legacyMatch.url);
-        log(`[BLOB] Migrated ${key} from legacy path`);
-      } catch { /* non-fatal */ }
-      return data;
-    }
   } catch (err) {
     log(`[BLOB] Read ${key} failed:`, err.message);
   }
