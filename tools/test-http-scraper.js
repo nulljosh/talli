@@ -433,6 +433,20 @@ function run() {
     assert.strictEqual(parseSignInLink(html, 'https://example.com/start'), 'https://example.com/auth/logon');
   });
 
+  test('parseSignInLink handles span-wrapped text and resolves against redirected final URL', () => {
+    const html = `
+      <html><body>
+        <a href="/Auth/Login" class="btn btn-primary btn-lg" role="button" aria-label="Sign in to My Self Serve">
+          <span>Sign in </span>
+        </a>
+      </body></html>
+    `;
+    assert.strictEqual(
+      parseSignInLink(html, 'https://myselfserve.gov.bc.ca/'),
+      'https://myselfserve.gov.bc.ca/Auth/Login'
+    );
+  });
+
   test('mock fetchAllSections-style result matches extractMobileData-compatible section shape', () => {
     const paymentInfo = extractSectionData(`
       <html>
