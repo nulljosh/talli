@@ -1750,10 +1750,14 @@ app.post('/api/avatar', requireAuth, async (req, res) => {
 
     const profile = await loadUserBlob(userId, 'profile', {});
     if (IS_PRODUCTION) {
-      const { put } = require('@vercel/blob');
-      const pathname = `${blobPrefix(userId)}/avatar.svg`;
+      const { put, del } = require('@vercel/blob');
+      const oldUrl = profile.avatarUrl;
+      const pathname = `${blobPrefix(userId)}/avatar-${Date.now()}.svg`;
       const { url } = await put(pathname, svgBuffer, { access: 'public', addRandomSuffix: false, contentType: 'image/svg+xml' });
       profile.avatarUrl = url;
+      if (oldUrl && oldUrl.includes('blob.vercel-storage.com')) {
+        del(oldUrl).catch(() => {});
+      }
     } else {
       // Dev: return data URL so the UI still works locally
       profile.avatarUrl = `data:image/svg+xml;base64,${svgBase64}`;
