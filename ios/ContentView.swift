@@ -376,10 +376,10 @@ private struct DashboardScreen: View {
 
     private var pwdSteps: [(label: String, date: String, done: Bool)] {
         [
-            ("Application submitted", "March 4, 2026", true),
-            ("Sorted -- decision due", "Week 8 of ~8 -- expected by May 2026", true),
-            ("Decision", "Pending", false),
-            ("Payment adjustment", "Pending", false)
+            ("Application submitted", "Jan 14, 2026", true),
+            ("Medical review", "Complete", true),
+            ("Decision", "Denied May 2026 -- Resubmission in progress", false),
+            ("Backdated payments", "Upon approval", false)
         ]
     }
 
