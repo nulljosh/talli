@@ -91,6 +91,7 @@ final class MacAppState {
             if let sessionValid = try? await MacAPIClient.shared.sessionCheck(), sessionValid {
                 isAuthenticated = true
                 try? await loadLatest()
+                Task { await refresh() }
                 return
             }
             // Slow path: full login against BC Self-Serve
@@ -116,6 +117,7 @@ final class MacAppState {
                 MacKeychainHelper.saveCredentials(username: username, password: password)
             }
             try await loadLatest()
+            Task { await refresh() }
         } catch {
             errorMessage = error.localizedDescription
         }
