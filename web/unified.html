@@ -809,6 +809,8 @@ function MessagesTab({dark, messages, readIds, onRead}) {
 function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, onLogout}) {
   const t = tk(dark);
   const [refreshing, setRefreshing] = useState(false);
+  const [imgError, setImgError] = useState(false);
+  useEffect(() => { setImgError(false); }, [avatarUrl]);
   const handleRefresh = async () => {
     if (refreshing) return;
     setRefreshing(true);
@@ -828,8 +830,9 @@ function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, onLogout}) {
       {/* Avatar section */}
       <div style={{marginTop:20,marginBottom:24,display:'flex',flexDirection:'column',alignItems:'center',gap:12}}>
         <div style={{width:72,height:72,borderRadius:'50%',overflow:'hidden',background:t.bg2,border:`1px solid ${t.border2}`,display:'flex',alignItems:'center',justifyContent:'center'}}>
-          {avatarUrl && <img src={avatarUrl} width={72} height={72} style={{display:'block',borderRadius:'50%',objectFit:'cover'}} alt="avatar" onError={e=>e.target.style.display='none'}/>}
-          <span style={{fontSize:24,fontWeight:700,color:t.accent,display:avatarUrl?'none':'block'}}>{(username||'J').slice(0,1).toUpperCase()}</span>
+          {avatarUrl && !imgError
+            ? <img src={avatarUrl} width={72} height={72} style={{display:'block',borderRadius:'50%',objectFit:'cover'}} alt="avatar" onError={()=>setImgError(true)}/>
+            : <span style={{fontSize:24,fontWeight:700,color:t.accent}}>{(username||'J').slice(0,1).toUpperCase()}</span>}
         </div>
         <button onClick={handleRefresh} disabled={refreshing} style={{background:'none',border:`1px solid ${t.border2}`,borderRadius:100,padding:'7px 18px',fontSize:12,fontWeight:600,color:t.muted,cursor:refreshing?'not-allowed':'pointer',letterSpacing:'0.04em',textTransform:'uppercase',transition:'border-color 0.2s,color 0.2s',opacity:refreshing?0.5:1}}>
           {refreshing ? 'Generating...' : 'Refresh Avatar'}

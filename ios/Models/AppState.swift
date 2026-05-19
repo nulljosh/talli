@@ -42,10 +42,11 @@ final class AppState {
         dashboard = Self.loadCached(DashboardData.self, forKey: Constants.dashboardCacheKey)
         lastSyncDate = UserDefaults.standard.object(forKey: Constants.lastSyncKey) as? Date
         storedCredentials = KeychainHelper.loadCredentials()
-        if let diskData = try? Data(contentsOf: Self.avatarFileURL) {
+        if let diskData = try? Data(contentsOf: Self.avatarFileURL),
+           UIImage(data: diskData) != nil {
             avatarImageData = diskData
         } else {
-            // First launch or migration — generate node-graph avatar and cache to disk
+            try? FileManager.default.removeItem(at: Self.avatarFileURL)
             UserDefaults.standard.removeObject(forKey: "avatar-image")
             let img = Self.generateNodeGraphAvatar()
             if let png = img.pngData() {
@@ -253,6 +254,7 @@ final class AppState {
                 async let readTask: Void = loadReadMessages()
                 _ = await (paidTask, readTask)
                 try? await loadLatestData()
+                Task { await refreshDashboard() }
                 return
             }
         }
@@ -342,6 +344,7 @@ final class AppState {
                     errorMessage = error.localizedDescription
                 }
             }
+            Task { await refreshDashboard() }
         } catch {
             isAuthenticated = false
             errorMessage = error.localizedDescription
