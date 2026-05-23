@@ -18,3 +18,4 @@ api-calls-*.json
 .env.vercel
 **/.DS_Store
 *.profraw
+.env*
