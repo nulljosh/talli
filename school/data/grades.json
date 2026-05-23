@@ -1,10 +1,10 @@
 {
-  "retrieved_at": "2026-05-09T21:00:00.000000",
+  "retrieved_at": "2026-05-23T18:30:00.000000",
   "courses": [
     {
       "course": "LEC Pre-Calculus 12 Spring Blended 2026 AD, PREC12 SPBL 26 DHIMAN- LEC",
       "course_ou": "198889",
-      "retrieved_at": "2026-05-07T18:28:58.668132",
+      "retrieved_at": "2026-05-23T18:30:00.000000",
       "categories": [
         {
           "category": "Course Plan - Must be submitted to start the course",
@@ -238,7 +238,7 @@
     {
       "course": "LEC Pre-Calculus 12 25-26 JR, PREC12 OL 25-26 RATCLIFFE - LEC",
       "course_ou": "184298",
-      "retrieved_at": "2026-05-07T18:29:02.752909",
+      "retrieved_at": "2026-05-23T18:30:00.000000",
       "categories": [
         {
           "category": "Learning Guides",
@@ -521,7 +521,7 @@
     {
       "course": "LEC Anatomy & Physiology 12 25-26 AD, ATPH12 OL 25-26 DHIMAN - LEC",
       "course_ou": "153403",
-      "retrieved_at": "2026-05-07T18:29:07.798965",
+      "retrieved_at": "2026-05-23T18:30:00.000000",
       "categories": [
         {
           "category": "Course Plan",
