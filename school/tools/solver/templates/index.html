@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Solver</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main class="shell">
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">
+      <span class="theme-icon" id="themeIcon">Sun</span>
+      <span id="themeLabel">Auto</span>
+    </button>
+    <section class="header">
+      <h1>Solver</h1>
+      <p class="subhead">Drop a screenshot. Get the answer.</p>
+    </section>
+    <section class="body">
+      <label class="dropzone" id="dropzone">
+        <input id="fileInput" type="file" accept=".png,.jpg,.jpeg,.webp,.gif,image/png,image/jpeg,image/webp,image/gif">
+        <div class="drop-copy">
+          <h2>Drag and drop, click to upload, or press Cmd+V</h2>
+          <p>Accepted formats: PNG, JPG, JPEG, WEBP, GIF. One image at a time.</p>
+          <div class="preview" id="preview" aria-hidden="true">
+            <img id="previewImage" alt="Selected image preview">
+          </div>
+          <div class="drop-hint" id="dropHint">No image selected yet.</div>
+        </div>
+      </label>
+      <div class="status" id="status">
+        <div class="status-row">
+          <span id="statusText">Processing image...</span>
+          <span class="status-pulse" aria-hidden="true"></span>
+        </div>
+        <div class="progress" aria-hidden="true"></div>
+      </div>
+      <div class="actions" id="actions">
+        <button class="button" id="clearButton" type="button">Clear</button>
+      </div>
+      <article class="result" id="result"></article>
+    </section>
+    <footer class="footer">
+      MIT 2026 Joshua Trommel
+    </footer>
+  </main>
+  <script src="/static/solver.js"></script>
+</body>
+</html>

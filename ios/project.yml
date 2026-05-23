@@ -1,0 +1,39 @@
+name: Tally
+options:
+  bundleIdPrefix: com.heyitsmejosh
+  deploymentTarget:
+    iOS: "17.0"
+settings:
+  DEVELOPMENT_TEAM: QMM486NPYC
+  SWIFT_VERSION: "6.0"
+  MARKETING_VERSION: "2.3.0"
+  CURRENT_PROJECT_VERSION: "5"
+targets:
+  Tally:
+    type: application
+    platform: iOS
+    sources:
+      - path: .
+        excludes:
+          - "*.xcodeproj"
+          - "*.yml"
+          - ".git"
+          - ".gitignore"
+          - "README.md"
+          - "CLAUDE.md"
+          - "architecture.svg"
+          - UITests
+    settings:
+      INFOPLIST_FILE: Info.plist
+      PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally
+  TallyUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - UITests
+    dependencies:
+      - target: Tally
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally.uitests
+        GENERATE_INFOPLIST_FILE: YES

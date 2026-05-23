@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#1a1a1a" rx="32"/>
+  <!-- Outer glass panel -->
+  <rect x="30" y="30" width="140" height="140" rx="14" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <!-- Inner glass card -->
+  <rect x="44" y="44" width="112" height="112" rx="10" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+  <!-- Tally marks - 4 vertical + 1 diagonal -->
+  <!-- Mark 1 -->
+  <line x1="62" y1="72" x2="62" y2="128" stroke="rgba(255,255,255,0.6)" stroke-width="3" stroke-linecap="round"/>
+  <!-- Mark 2 -->
+  <line x1="78" y1="72" x2="78" y2="128" stroke="rgba(255,255,255,0.6)" stroke-width="3" stroke-linecap="round"/>
+  <!-- Mark 3 -->
+  <line x1="94" y1="72" x2="94" y2="128" stroke="rgba(255,255,255,0.6)" stroke-width="3" stroke-linecap="round"/>
+  <!-- Mark 4 -->
+  <line x1="110" y1="72" x2="110" y2="128" stroke="rgba(255,255,255,0.6)" stroke-width="3" stroke-linecap="round"/>
+  <!-- Strike-through diagonal -->
+  <line x1="54" y1="118" x2="118" y2="78" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Checkmark to the right -->
+  <polyline points="126,92 132,100 144,82" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Top label line -->
+  <rect x="56" y="52" width="40" height="3" rx="1.5" fill="rgba(255,255,255,0.1)"/>
+  <rect x="102" y="52" width="20" height="3" rx="1.5" fill="rgba(255,255,255,0.06)"/>
+  <!-- Bottom status dots -->
+  <circle cx="76" cy="144" r="2" fill="rgba(255,255,255,0.15)"/>
+  <circle cx="88" cy="144" r="2" fill="rgba(255,255,255,0.15)"/>
+  <circle cx="100" cy="144" r="2" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="112" cy="144" r="2" fill="rgba(255,255,255,0.15)"/>
+  <circle cx="124" cy="144" r="2" fill="rgba(255,255,255,0.1)"/>
+</svg>

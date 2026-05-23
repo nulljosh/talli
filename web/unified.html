@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
+  <meta name="view-transition" content="same-origin">
+  <link rel="apple-touch-icon" href="/icon-192.svg">
+  <link rel="stylesheet" href="design-tokens.css">
+  <title>Tally Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: var(--bg-primary); border-bottom: 1px solid var(--border); padding-top: calc(10px + env(safe-area-inset-top, 0px)); display: flex; flex-direction: column; }
+    .nav-row { display: flex; align-items: center; gap: 12px; padding: 0 20px 10px; }
+    .nav-tabs { display: flex; gap: 0; padding: 0 16px; border-top: 1px solid var(--border); }
+    .nav-user { font-size: 15px; font-weight: 500; letter-spacing: -0.02em; }
+    .nav-link { font-size: 13px; color: var(--text-secondary); background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; }
+    .nav-link:hover { color: var(--text-primary); }
+    .nav-spacer { flex: 1; }
+    .theme-toggle { background: none; border: none; cursor: pointer; padding: 4px; color: var(--text-secondary); opacity: 0.4; display: flex; align-items: center; }
+    .theme-toggle:hover { opacity: 1; }
+    .theme-toggle svg { width: 14px; height: 14px; }
+    .nav-tab { background: none; border: none; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 500; color: var(--text-secondary); padding: 8px 12px; border-bottom: 2px solid transparent; position: relative; }
+    .nav-tab:hover { color: var(--text-primary); }
+    .nav-tab.active { color: var(--text-primary); border-bottom-color: var(--text-primary); }
+    .nav-tab .tab-badge { position: absolute; top: 4px; right: 4px; background: var(--error); color: #fff; font-size: 9px; font-weight: 700; padding: 1px 4px; border-radius: 8px; min-width: 14px; text-align: center; }
+
+    .container { max-width: 700px; margin: 0 auto; padding: 90px 20px 32px; padding-top: calc(90px + env(safe-area-inset-top, 0px)); }
+    .offline-banner { display: none; margin-bottom: 12px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg-secondary); color: var(--text-secondary); font-size: 13px; text-align: center; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.22s ease both; }
+
+    .home-top { display: grid; grid-template-columns: 1fr; gap: 12px; align-items: start; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+    @media (min-width: 601px) { .home-top { grid-template-columns: 1fr auto; gap: 24px; } }
+
+    .payment-card { display: flex; flex-direction: column; justify-content: center; }
+    .payment-amount-wrap { display: flex; align-items: flex-start; line-height: 1; transition: opacity 0.3s ease; animation: countUp 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+    .payment-dollar { font-size: clamp(1.1rem, 2.5vw, 1.4rem); font-weight: 700; color: var(--text-primary); margin-top: 0.28em; letter-spacing: -0.5px; }
+    .payment-number { font-size: clamp(2.5rem, 6vw, 3.5rem); font-weight: 700; letter-spacing: -3px; color: var(--text-primary); }
+    .payment-designation { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-secondary); margin-top: 6px; }
+    .payment-meta { margin-top: 8px; display: flex; flex-direction: column; gap: 1px; }
+    .payment-meta-row { font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
+    .payment-meta-row.urgent { color: var(--warning); }
+    .payment-meta-row .countdown { font-weight: 600; color: var(--text-primary); }
+
+    .check-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .paid-check { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px; border-radius: 100px; border: 1px solid var(--border); background: var(--bg-secondary); cursor: pointer; font-size: 13px; color: var(--text-secondary); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.15s; user-select: none; }
+    .paid-check:hover { border-color: var(--text-primary); transform: scale(1.03); }
+    .paid-check.checked { border-color: var(--success); color: var(--success); }
+    .paid-check input[type="checkbox"] { width: 16px; height: 16px; margin: 0; accent-color: var(--success); cursor: pointer; }
+    .paid-check .paid-date { font-size: 12px; opacity: 0.7; }
+    .undo-paid { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 100px; border: 1px solid var(--border); background: none; cursor: pointer; font-size: 12px; color: var(--text-secondary); font-family: inherit; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .undo-paid:hover { border-color: var(--text-primary); transform: scale(1.03); }
+
+    .calendar-widget { max-width: 280px; }
+    @media (max-width: 600px) { .calendar-widget { max-width: 100%; } }
+    .calendar-title { text-align: center; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; text-align: center; }
+    .calendar-header { font-size: 10px; font-weight: 600; color: var(--text-secondary); padding: 2px 0; }
+    .calendar-day { font-size: 12px; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
+    .calendar-day.empty { color: transparent; }
+    .calendar-day.today { border: 1px solid var(--text-primary); }
+    .calendar-day.payment-day { background: var(--text-primary); color: var(--bg-primary); font-weight: 700; animation: pulse-ring 2.5s ease-out infinite; --pulse-c: rgba(0,0,0,0.2); }
+    [data-theme="dark"] .calendar-day.payment-day { --pulse-c: rgba(255,255,255,0.2); }
+    .calendar-day.past { color: var(--text-secondary); opacity: 0.5; }
+
+    .pwd-tracker { padding: 16px 0; }
+    .pwd-tracker-title { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 8px; }
+    .pwd-timeline { border-left: 2px solid var(--border); margin-left: 6px; padding-left: 16px; }
+    .pwd-step { position: relative; padding-bottom: 16px; }
+    .pwd-step:last-child { padding-bottom: 0; }
+    .pwd-step::before { content: ''; position: absolute; left: -22px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--border); border: 2px solid var(--bg-primary); }
+    .pwd-step.completed::before, .pwd-step.current::before { background: var(--text-primary); }
+    .pwd-step.current::before { animation: breathe 2s ease-in-out infinite; }
+    .step-label { font-size: 14px; font-weight: 500; }
+    .step-date { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
+    .card { background: var(--bg-secondary); border-radius: 4px; border: 1px solid var(--border); padding: 12px 14px; margin-bottom: 8px; }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .card-title { font-size: 15px; font-weight: 600; }
+    .status { display: inline-block; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600; }
+    .status-success { background: var(--success); color: var(--bg-primary); }
+    .status-error { background: var(--error); color: var(--bg-primary); }
+    .status-warning { background: var(--warning); color: var(--bg-primary); }
+
+    .message-card { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+    .message-card:last-child { border-bottom: none; }
+    .message-card-text { font-size: 14px; font-weight: 500; line-height: 1.5; }
+    .message-card-meta { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+    .message-empty { padding: 20px; text-align: center; color: var(--text-secondary); font-size: 13px; }
+
+    .form-group { margin-bottom: 12px; }
+    label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+    input { width: 100%; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-family: inherit; font-size: 14px; }
+    input:focus { outline: none; border-color: var(--text-primary); }
+    .btn { background: var(--text-primary); color: var(--bg-primary); border: none; padding: 10px 20px; border-radius: 4px; font-weight: 600; font-size: 13px; cursor: pointer; }
+    .btn:hover { opacity: 0.85; }
+    .btn-secondary { background: var(--border); color: var(--text-primary); }
+    .loading { text-align: center; padding: 20px; color: var(--text-secondary); }
+    .spinner { border: 2px solid var(--border); border-top-color: var(--text-primary); border-radius: 50%; width: 32px; height: 32px; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0px var(--pulse-c, rgba(0,0,0,0.3)); } 70% { box-shadow: 0 0 0 5px transparent; } 100% { box-shadow: 0 0 0 0px transparent; } }
+    @keyframes breathe { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
+    @keyframes urgent-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes countUp { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    .days-bar-wrap { margin-top: 14px; margin-bottom: 4px; }
+    .days-bar-track { height: 2px; background: var(--border); border-radius: 2px; position: relative; overflow: visible; }
+    .days-bar-fill { height: 100%; border-radius: 2px; background: var(--text-primary); transition: width 0.8s cubic-bezier(0.4,0,0.2,1); }
+    .days-bar-dot { position: absolute; right: -3px; top: -2px; width: 6px; height: 6px; border-radius: 50%; background: var(--text-primary); animation: pulse-ring 2s ease-out infinite; --pulse-c: rgba(0,0,0,0.25); }
+    .days-bar-labels { display: flex; justify-content: space-between; margin-top: 5px; }
+    .days-bar-label { font-size: 10px; color: var(--text-secondary); }
+    .days-bar-wrap.urgent .days-bar-fill, .days-bar-wrap.urgent .days-bar-dot { background: var(--warning); }
+    .days-bar-wrap.urgent .days-bar-label-right { color: var(--warning); font-weight: 600; }
+    .urgent-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--warning); flex-shrink: 0; animation: urgent-blink 1s ease-in-out infinite; display: inline-block; vertical-align: middle; }
+    [data-theme="dark"] .days-bar-dot { --pulse-c: rgba(255,255,255,0.2); }
+
+    footer { text-align: center; padding: 24px 20px 16px; font-size: 11px; color: var(--text-secondary); border-top: 1px solid var(--border); margin-top: 16px; }
+    footer a { color: var(--text-secondary); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-row">
+      <span class="nav-user" id="nav-username">tally</span>
+      <button class="nav-link" onclick="logout()">Logout</button>
+      <span class="nav-spacer"></span>
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg id="moonIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="switchTab('home')" data-tab="home">Home</button>
+      <button class="nav-tab" onclick="switchTab('reports')" data-tab="reports">Reports</button>
+      <button class="nav-tab" onclick="switchTab('messages')" data-tab="messages">Messages<span class="tab-badge" id="bottom-msg-badge" style="display:none">0</span></button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div id="offline-banner" class="offline-banner">Offline -- showing cached data</div>
+
+    <div id="home-tab" class="tab-content active">
+      <div class="home-top">
+        <div id="payment-info" class="payment-card"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+        <div id="payment-calendar" class="calendar-widget"></div>
+      </div>
+      <div id="pwd-tracker" class="pwd-tracker"></div>
+      <div id="dtc-tracker" class="pwd-tracker"></div>
+      <div id="cra-payments" class="pwd-tracker" style="padding-top:0"></div>
+      <div id="bceid-login-prompt" style="display: none;">
+        <div class="card" style="max-width: 480px; margin: 40px auto;">
+          <div class="card-header"><div class="card-title">Connect BC Self-Serve</div></div>
+          <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 16px;">Enter your BCeID credentials to scrape live data.</p>
+          <div class="form-group"><label>BCeID Username</label><input type="text" id="bceid-user" placeholder="Username" autocomplete="username"></div>
+          <div class="form-group"><label>BCeID Password</label><input type="password" id="bceid-pass" placeholder="Password" autocomplete="current-password"></div>
+          <div id="bceid-error" style="display: none; color: var(--error); font-size: 13px; margin-bottom: 12px;"></div>
+          <button class="btn" onclick="saveBCeIDAndScrape()" id="bceid-login-btn" style="width: 100%;">Connect & Scrape</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="reports-tab" class="tab-content">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Monthly Report</div><span class="status" id="mr-status">--</span></div>
+        <div id="mr-content" style="font-size: 13px; color: var(--text-secondary);"></div>
+      </div>
+      <div class="card" style="margin-bottom:8px;">
+        Wait until after the 28th to submit. Forms submitted in the first week of the open period (~21st) don't clear by payday.
+      </div>
+      <div class="card" style="margin-top: 8px;">
+        <div class="card-title" style="margin-bottom: 12px;">Submit Report</div>
+        <div class="form-group"><label>SIN</label><input type="password" id="submit-sin" placeholder="Social Insurance Number" autocomplete="off"></div>
+        <div class="form-group"><label>Phone</label><input type="tel" id="submit-phone" placeholder="Phone number" autocomplete="tel"></div>
+        <div class="form-group"><label>PIN</label><input type="password" id="submit-pin" placeholder="4-digit PIN" autocomplete="off"></div>
+        <div style="display: flex; gap: 8px; margin-top: 12px;">
+          <button class="btn btn-secondary" id="btn-preview" onclick="submitReport(true)">Preview</button>
+          <button class="btn" id="btn-submit" onclick="submitReport(false)">Submit</button>
+        </div>
+        <div id="submit-status" style="display: none; margin-top: 12px; padding: 10px; border-radius: 4px; font-size: 13px;"></div>
+      </div>
+    </div>
+
+    <div id="messages-tab" class="tab-content">
+      <div class="card" style="padding: 0;">
+        <div style="padding: 12px 14px; border-bottom: 1px solid var(--border); font-weight: 600; font-size: 14px;">Messages</div>
+        <div id="messages-full-list"><div class="message-empty">No messages</div></div>
+      </div>
+      <div class="card" style="padding: 0; margin-top: 8px;">
+        <div style="padding: 12px 14px; border-bottom: 1px solid var(--border); font-weight: 600; font-size: 14px;">Notifications</div>
+        <div id="notifications-full-list"><div class="message-empty">No notifications</div></div>
+      </div>
+    </div>
+    <footer>MIT License 2026 Joshua Trommel <span style="margin: 0 8px;">|</span> <a href="https://github.com/nulljosh/apps/tree/main/apps/tally" target="_blank">GitHub</a></footer>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script>
+    function escapeForStatus(text) { var d = document.createElement('div'); d.textContent = text; return d.innerHTML; }
+
+    async function logout() {
+      try { var r = await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' }); if (r.ok) window.location.href = '/login.html'; } catch (e) { console.error(e); }
+    }
+
+    function toggleTheme() {
+      var isDark = document.documentElement.hasAttribute('data-theme');
+      var t = isDark ? 'light' : 'dark';
+      var apply = function() {
+        if (t === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); document.getElementById('sunIcon').style.display = 'none'; document.getElementById('moonIcon').style.display = 'block'; }
+        else { document.documentElement.removeAttribute('data-theme'); document.getElementById('sunIcon').style.display = 'block'; document.getElementById('moonIcon').style.display = 'none'; }
+        localStorage.setItem('theme', t);
+      };
+      document.startViewTransition ? document.startViewTransition(apply) : apply();
+    }
+
+    function applyTheme(theme) {
+      if (theme === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); document.getElementById('sunIcon').style.display = 'none'; document.getElementById('moonIcon').style.display = 'block'; }
+      else { document.documentElement.removeAttribute('data-theme'); document.getElementById('sunIcon').style.display = 'block'; document.getElementById('moonIcon').style.display = 'none'; }
+    }
+    var savedTheme = localStorage.getItem('theme');
+    var activeTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    if (activeTheme === 'dark') applyTheme('dark');
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) { if (!localStorage.getItem('theme')) applyTheme(e.matches ? 'dark' : 'light'); });
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+      var el = document.getElementById(tab + '-tab');
+      if (el) el.classList.add('active');
+      document.querySelectorAll('.nav-tab').forEach(function(bt) { bt.classList.toggle('active', bt.dataset.tab === tab); });
+      if (tab === 'messages') {
+        msgsRead = true; notifsRead = true;
+        if (lastMsgContent) { readMsgHash = simpleHash(lastMsgContent); localStorage.setItem('tally-msg-read-hash', readMsgHash); }
+        if (lastNotifContent) { readNotifHash = simpleHash(lastNotifContent); localStorage.setItem('tally-notif-read-hash', readNotifHash); }
+        var b = document.getElementById('bottom-msg-badge'); if (b) b.style.display = 'none';
+      }
+    }
+
+    function renderTracker(containerId, title, steps) {
+      var container = document.getElementById(containerId);
+      if (!container) return;
+      var titleEl = document.createElement('div'); titleEl.className = 'pwd-tracker-title'; titleEl.textContent = title; container.appendChild(titleEl);
+      var timeline = document.createElement('div'); timeline.className = 'pwd-timeline';
+      steps.forEach(function(s) {
+        var step = document.createElement('div'); step.className = 'pwd-step ' + s.status;
+        var lbl = document.createElement('span'); lbl.className = 'step-label'; lbl.textContent = s.label; step.appendChild(lbl);
+        var dt = document.createElement('div'); dt.className = 'step-date'; dt.textContent = s.date; step.appendChild(dt);
+        timeline.appendChild(step);
+      });
+      container.appendChild(timeline);
+    }
+
+    renderTracker('pwd-tracker', 'PWD Application', [
+      { label: 'Application submitted', date: 'March 4, 2026', status: 'completed' },
+      { label: 'Application sorted', date: 'Confirmed -- response within 2 months', status: 'current' },
+      { label: 'Decision', date: 'Expected by ~June 2026', status: 'future' },
+      { label: 'Payment adjustment', date: 'Pending', status: 'future' }
+    ]);
+
+    renderTracker('dtc-tracker', 'DTC Application', [
+      { label: 'Application submitted', date: 'April 2026', status: 'completed' },
+      { label: 'CRA processing', date: 'Expected 8-12 weeks', status: 'current' },
+      { label: 'Decision', date: 'Pending', status: 'future' },
+      { label: 'Credit applied retroactively', date: 'Pending', status: 'future' }
+    ]);
+
+    // CRA upcoming payments
+    (function() {
+      var container = document.getElementById('cra-payments');
+      if (!container) return;
+      var title = document.createElement('div'); title.className = 'pwd-tracker-title'; title.textContent = 'CRA Benefits'; container.appendChild(title);
+      var row = document.createElement('div');
+      row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:4px 0;';
+      var left = document.createElement('div');
+      var lbl = document.createElement('div'); lbl.className = 'step-label'; lbl.textContent = 'GST/HST Credit'; left.appendChild(lbl);
+      var dt = document.createElement('div'); dt.className = 'step-date'; dt.textContent = 'June 5, 2026'; left.appendChild(dt);
+      var amt = document.createElement('span'); amt.style.cssText = 'font-size:14px;font-weight:600;'; amt.textContent = '$174.50';
+      row.appendChild(left); row.appendChild(amt); container.appendChild(row);
+      var note = document.createElement('div');
+      note.style.cssText = 'font-size:11px;color:var(--text-secondary);margin-top:8px;';
+      note.textContent = '4 payments/yr. Not all CRA credits shown.';
+      container.appendChild(note);
+    })();
+
+    var PAY_DATES_2026 = { 0:21, 1:25, 2:25, 3:22, 4:27, 5:24, 6:29, 7:26, 8:23, 9:21, 10:18, 11:16 };
+
+    function getPaymentTimeline() {
+      var now = new Date();
+      var thisMonthDay = PAY_DATES_2026[now.getMonth()];
+      var nextPayday;
+      if (thisMonthDay && now <= new Date(now.getFullYear(), now.getMonth(), thisMonthDay)) nextPayday = new Date(now.getFullYear(), now.getMonth(), thisMonthDay);
+      else { var nm = (now.getMonth() + 1) % 12; nextPayday = new Date(nm === 0 ? now.getFullYear() + 1 : now.getFullYear(), nm, PAY_DATES_2026[nm] || 25); }
+      var daysUntil = Math.ceil((nextPayday - now) / 86400000);
+      var paydayLabel = daysUntil === 0 ? 'Today' : daysUntil === 1 ? 'Tomorrow' : daysUntil + ' days';
+      var paydayDate = nextPayday.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+      var reportDeadline = new Date(now.getFullYear(), now.getMonth(), 5);
+      if (now > reportDeadline) reportDeadline = new Date(now.getFullYear(), now.getMonth() + 1, 5);
+      var daysUntilReport = Math.ceil((reportDeadline - now) / 86400000);
+      var reportLabel = daysUntilReport === 0 ? 'Today' : daysUntilReport === 1 ? 'Tomorrow' : daysUntilReport + ' days';
+      return { paydayDate: paydayDate, paydayLabel: paydayLabel, reportDate: reportDeadline.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }), reportLabel: reportLabel, reportUrgent: daysUntilReport <= 3 };
+    }
+
+    function countUpAmount(el, target, duration) {
+      if (!el) return;
+      var start = performance.now();
+      function run(now) {
+        var elapsed = now - start;
+        var p = Math.min(elapsed / duration, 1);
+        var eased = 1 - Math.pow(1 - p, 3);
+        var val = Math.round(target * eased);
+        el.textContent = val.toLocaleString('en-CA');
+        if (p < 1) requestAnimationFrame(run);
+        else el.textContent = Math.round(target).toLocaleString('en-CA');
+      }
+      requestAnimationFrame(run);
+    }
+    function renderDaysBar(daysUntil, urgent) {
+      var cycleDays = 30;
+      var elapsed = cycleDays - Math.min(daysUntil, cycleDays);
+      var pct = Math.max(0, Math.min(100, (elapsed / cycleDays) * 100));
+      var wrap = document.createElement('div'); wrap.className = 'days-bar-wrap' + (urgent ? ' urgent' : '');
+      var track = document.createElement('div'); track.className = 'days-bar-track';
+      var fill = document.createElement('div'); fill.className = 'days-bar-fill'; fill.style.width = pct + '%'; track.appendChild(fill);
+      var dot = document.createElement('div'); dot.className = 'days-bar-dot'; track.appendChild(dot);
+      wrap.appendChild(track);
+      var labels = document.createElement('div'); labels.className = 'days-bar-labels';
+      var left = document.createElement('span'); left.className = 'days-bar-label'; left.textContent = 'last payment';
+      var right = document.createElement('span'); right.className = 'days-bar-label days-bar-label-right'; right.textContent = daysUntil === 0 ? 'today' : daysUntil + 'd away';
+      labels.appendChild(left); labels.appendChild(right); wrap.appendChild(labels);
+      return wrap;
+    }
+
+    var lastPaymentHash = '';
+    var lastPaymentAmount = 0;
+    function renderPaymentCard(target, amount, designation, timeline, isApproximate) {
+      var hash = amount + designation + timeline.paydayLabel;
+      if (hash === lastPaymentHash) return;
+      lastPaymentHash = hash;
+      lastPaymentAmount = parseFloat(amount.replace(/[^0-9.]/g, '')) || 0;
+      var numVal = lastPaymentAmount;
+      var w = document.createElement('div');
+      var amountWrap = document.createElement('div'); amountWrap.className = 'payment-amount-wrap'; amountWrap.id = 'payment-amount-wrap';
+      var dollarSpan = document.createElement('span'); dollarSpan.className = 'payment-dollar'; dollarSpan.textContent = '$'; amountWrap.appendChild(dollarSpan);
+      var numSpan = document.createElement('span'); numSpan.className = 'payment-number'; numSpan.id = 'payment-number-val'; numSpan.textContent = '0'; amountWrap.appendChild(numSpan);
+      w.appendChild(amountWrap);
+      var desigEl = document.createElement('div'); desigEl.className = 'payment-designation'; desigEl.textContent = designation + (isApproximate ? ' (est.)' : ''); w.appendChild(desigEl);
+      var daysUntilNum = (timeline.paydayLabel === 'Today' ? 0 : timeline.paydayLabel === 'Tomorrow' ? 1 : parseInt(timeline.paydayLabel) || 99);
+      var paydayUrgent = daysUntilNum <= 3;
+      var meta = document.createElement('div'); meta.className = 'payment-meta';
+      function metaRow(text, countdown, cls, withDot) { var row = document.createElement('div'); row.className = 'payment-meta-row' + (cls ? ' ' + cls : ''); if (withDot) { var dot = document.createElement('span'); dot.className = 'urgent-dot'; dot.style.marginRight = '4px'; row.appendChild(dot); } var span = document.createElement('span'); span.textContent = text; row.appendChild(span); var badge = document.createElement('span'); badge.className = 'countdown'; badge.textContent = countdown; row.appendChild(badge); return row; }
+      meta.appendChild(metaRow(timeline.paydayDate, timeline.paydayLabel, paydayUrgent ? 'urgent' : '', paydayUrgent));
+      meta.appendChild(metaRow('Report ' + timeline.reportDate, timeline.reportLabel, timeline.reportUrgent ? 'urgent' : ''));
+      var cdRow = document.createElement('div'); cdRow.className = 'payment-meta-row';
+      var cdLabel = document.createElement('span'); cdLabel.textContent = 'Countdown'; cdRow.appendChild(cdLabel);
+      var cdVal = document.createElement('span'); cdVal.className = 'countdown'; cdVal.id = 'live-countdown-val'; cdVal.style.fontVariantNumeric = 'tabular-nums'; cdVal.textContent = '--'; cdRow.appendChild(cdVal);
+      meta.appendChild(cdRow);
+      var erRow = document.createElement('div'); erRow.className = 'payment-meta-row';
+      var erLabel = document.createElement('span'); erLabel.textContent = 'Earning'; erRow.appendChild(erLabel);
+      var erVal = document.createElement('span'); erVal.className = 'countdown'; erVal.id = 'earnings-rate-val'; erVal.textContent = '--'; erRow.appendChild(erVal);
+      meta.appendChild(erRow);
+      w.appendChild(meta);
+      w.appendChild(renderDaysBar(daysUntilNum, paydayUrgent));
+      var checkRow = document.createElement('div'); checkRow.className = 'check-row';
+      var paidLabel = document.createElement('label'); paidLabel.className = 'paid-check'; paidLabel.id = 'paid-check';
+      var cb = document.createElement('input'); cb.type = 'checkbox'; cb.id = 'paid-cb'; cb.addEventListener('change', togglePaid); paidLabel.appendChild(cb);
+      var paidSpan = document.createElement('span'); paidSpan.id = 'paid-label'; paidSpan.textContent = 'Paid yet?'; paidLabel.appendChild(paidSpan); checkRow.appendChild(paidLabel);
+      var undo = document.createElement('button'); undo.className = 'undo-paid'; undo.id = 'undo-paid-btn'; undo.textContent = 'Undo'; undo.style.display = 'none'; undo.onclick = function(e) { e.stopPropagation(); cb.checked = false; togglePaid(); }; checkRow.appendChild(undo);
+      var reportLbl = document.createElement('label'); reportLbl.className = 'paid-check'; reportLbl.id = 'report-check';
+      var rcb = document.createElement('input'); rcb.type = 'checkbox'; rcb.id = 'report-cb'; rcb.addEventListener('change', toggleReport); reportLbl.appendChild(rcb);
+      var reportSpan = document.createElement('span'); reportSpan.id = 'report-label'; reportSpan.textContent = 'Report filled out?'; reportLbl.appendChild(reportSpan); checkRow.appendChild(reportLbl);
+      var reportUndo = document.createElement('button'); reportUndo.className = 'undo-paid'; reportUndo.id = 'undo-report-btn'; reportUndo.textContent = 'Undo'; reportUndo.style.display = 'none'; reportUndo.onclick = function(e) { e.stopPropagation(); rcb.checked = false; toggleReport(); }; checkRow.appendChild(reportUndo);
+      w.appendChild(checkRow);
+      target.textContent = '';
+      target.appendChild(w);
+      if (numVal > 0) countUpAmount(document.getElementById('payment-number-val'), numVal, 600);
+      loadPaidStatus(); loadReportStatus();
+    }
+
+    var calendarMonthOffset = 0;
+    function renderCalendar(monthOffset) {
+      if (typeof monthOffset === 'number') calendarMonthOffset = monthOffset;
+      var el = document.getElementById('payment-calendar'); if (!el) return;
+      var now = new Date(); var td = new Date(now.getFullYear(), now.getMonth() + calendarMonthOffset, 1);
+      var year = td.getFullYear(); var month = td.getMonth(); var isCurrent = (calendarMonthOffset === 0); var today = isCurrent ? now.getDate() : -1;
+      var payDay = PAY_DATES_2026[month] || 25;
+      el.textContent = '';
+      var title = document.createElement('div'); title.className = 'calendar-title'; title.textContent = new Date(year, month).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }); el.appendChild(title);
+      var grid = document.createElement('div'); grid.className = 'calendar-grid';
+      ['S','M','T','W','T','F','S'].forEach(function(h) { var hdr = document.createElement('div'); hdr.className = 'calendar-header'; hdr.textContent = h; grid.appendChild(hdr); });
+      var firstDay = new Date(year, month, 1).getDay(); var daysInMonth = new Date(year, month + 1, 0).getDate();
+      for (var i = 0; i < firstDay; i++) { var empty = document.createElement('div'); empty.className = 'calendar-day empty'; grid.appendChild(empty); }
+      for (var d = 1; d <= daysInMonth; d++) { var cell = document.createElement('div'); var cls = 'calendar-day'; if (d === payDay) cls += ' payment-day'; else if (d === today) cls += ' today'; if (isCurrent && d < today && d !== payDay) cls += ' past'; cell.className = cls; cell.textContent = d; grid.appendChild(cell); }
+      el.appendChild(grid);
+    }
+
+    function getCurrentPaymentMonth() { var now = new Date(); var d = PAY_DATES_2026[now.getMonth()]; if (d && now <= new Date(now.getFullYear(), now.getMonth(), d)) return now.toISOString().slice(0, 7); return new Date(now.getFullYear(), now.getMonth() + 1, 1).toISOString().slice(0, 7); }
+    function getCurrentReportMonth() { var now = new Date(); var dl = new Date(now.getFullYear(), now.getMonth(), 5); if (now > dl) dl = new Date(now.getFullYear(), now.getMonth() + 1, 5); return dl.toISOString().slice(0, 7); }
+
+    async function loadPaidStatus() {
+      try {
+        var resp = await fetch('/api/paid-status', { credentials: 'include' }); if (!resp.ok) return;
+        var data = await resp.json(); var pm = data.paidMonths || {}; var month = getCurrentPaymentMonth(); var ts = pm[month]; var isPaid = !!ts;
+        var cb = document.getElementById('paid-cb'); var label = document.getElementById('paid-label'); var wrap = document.getElementById('paid-check'); if (!cb) return;
+        cb.checked = isPaid; var undoBtn = document.getElementById('undo-paid-btn');
+        var amountWrapEl = document.getElementById('payment-amount-wrap');
+        if (isPaid) { var d = new Date(ts); label.textContent = 'Paid (' + d.toLocaleDateString('en-US', { month: 'short' }) + ')'; wrap.classList.add('checked'); renderCalendar(1); if (undoBtn) undoBtn.style.display = 'inline-flex'; if (amountWrapEl) amountWrapEl.style.opacity = '0.35'; }
+        else { label.textContent = 'Paid yet?'; wrap.classList.remove('checked'); if (undoBtn) undoBtn.style.display = 'none'; renderCalendar(0); if (amountWrapEl) amountWrapEl.style.opacity = '1'; }
+      } catch (_) {}
+    }
+
+    async function togglePaid() {
+      var cb = document.getElementById('paid-cb');
+      try { var resp = await fetch('/api/paid-status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify({ month: getCurrentPaymentMonth(), paid: cb.checked }) }); if (resp.ok) loadPaidStatus(); } catch (_) {}
+    }
+
+    async function loadReportStatus() {
+      try {
+        var resp = await fetch('/api/report-status', { credentials: 'include' }); if (!resp.ok) return;
+        var data = await resp.json(); var rm = data.reportMonths || {}; var month = getCurrentReportMonth(); var ts = rm[month]; var isFiled = !!ts;
+        var cb = document.getElementById('report-cb'); var label = document.getElementById('report-label'); var wrap = document.getElementById('report-check'); if (!cb) return;
+        cb.checked = isFiled; var undoBtn = document.getElementById('undo-report-btn');
+        if (isFiled) { var d = new Date(ts); label.textContent = 'Filed (' + d.toLocaleDateString('en-US', { month: 'short' }) + ')'; wrap.classList.add('checked'); if (undoBtn) undoBtn.style.display = 'inline-flex'; }
+        else { label.textContent = 'Report filled out?'; wrap.classList.remove('checked'); if (undoBtn) undoBtn.style.display = 'none'; }
+      } catch (_) {}
+    }
+
+    async function toggleReport() {
+      var cb = document.getElementById('report-cb');
+      try { var resp = await fetch('/api/report-status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify({ month: getCurrentReportMonth(), filed: cb.checked }) }); if (resp.ok) loadReportStatus(); } catch (_) {}
+    }
+
+    async function loadSubmitCreds() { try { var r = await fetch('/api/submit-creds'); if (!r.ok) return; var c = await r.json(); if (c.sin) document.getElementById('submit-sin').value = c.sin; if (c.phone) document.getElementById('submit-phone').value = c.phone; if (c.pin) document.getElementById('submit-pin').value = c.pin; } catch (_) {} }
+    loadSubmitCreds();
+
+    async function submitReport(dryRun) {
+      var sin = document.getElementById('submit-sin').value.trim(); var phone = document.getElementById('submit-phone').value.trim(); var pin = document.getElementById('submit-pin').value.trim();
+      var statusEl = document.getElementById('submit-status'); var btnP = document.getElementById('btn-preview'); var btnS = document.getElementById('btn-submit');
+      if (!sin || !phone || !pin) { statusEl.style.display = 'block'; statusEl.style.background = 'rgba(255,59,48,0.1)'; statusEl.style.color = 'var(--error)'; statusEl.textContent = 'SIN, phone, and PIN are all required.'; return; }
+      if (!dryRun && !confirm('Submit your monthly report? This cannot be undone.')) return;
+      btnP.disabled = true; btnS.disabled = true; statusEl.style.display = 'block'; statusEl.style.background = 'var(--bg-secondary)'; statusEl.style.color = 'var(--text-secondary)';
+      statusEl.textContent = dryRun ? 'Running preview -- takes 1-2 min...' : 'Submitting -- takes 1-2 min...';
+      var controller = new AbortController();
+      var timer = setTimeout(function() { controller.abort(); }, 290000);
+      try {
+        var resp = await fetch('/api/submit-report', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sin: sin, phone: phone, pin: pin, dryRun: dryRun }), signal: controller.signal });
+        clearTimeout(timer);
+        var result = await resp.json();
+        if (result.success) {
+          statusEl.style.background = 'rgba(52,199,89,0.1)'; statusEl.style.color = 'var(--success)';
+          if (result.dryRun) {
+            var summary = 'Preview complete -- ready to submit.';
+            var s = result.preSubmitState;
+            if (s && s.fields && s.fields.length) {
+              var sinField = s.fields.find(function(f) { return f.name && f.name.toLowerCase().includes('sin'); });
+              var phoneField = s.fields.find(function(f) { return f.type === 'tel' || (f.name && f.name.toLowerCase().includes('phone')); });
+              var parts = [];
+              if (sinField && sinField.value) parts.push('SIN ending ' + String(sinField.value).slice(-3));
+              if (phoneField && phoneField.value) parts.push('Phone ' + phoneField.value);
+              if (parts.length) summary += ' (' + parts.join(', ') + ')';
+            }
+            statusEl.textContent = summary;
+          } else { statusEl.textContent = 'Report submitted.'; }
+        } else { statusEl.style.background = 'rgba(255,59,48,0.1)'; statusEl.style.color = 'var(--error)'; statusEl.textContent = result.error || 'Failed'; }
+      } catch (err) {
+        clearTimeout(timer);
+        statusEl.style.background = 'rgba(255,59,48,0.1)'; statusEl.style.color = 'var(--error)';
+        statusEl.textContent = err.name === 'AbortError' ? 'Timed out. BC Self-Serve can be slow -- try again.' : 'Network error. Check your connection and try again.';
+      }
+      finally { btnP.disabled = false; btnS.disabled = false; }
+    }
+
+    function filterNavItems(items) {
+      var skip = ['Skip to main content','Skip to navigation','Accessibility Statement','Notifications','Service Requests','Monthly Reports','Payment Info','Employment Plans','Account Info','Terms of Use','Accessibility','Due to inactivity'];
+      return items.filter(function(item) { return !skip.some(function(s) { return item.includes(s); }); });
+    }
+    function setOfflineBanner(v) { var el = document.getElementById('offline-banner'); if (el) el.style.display = v ? 'block' : 'none'; }
+    function getDesignationFromText(raw, fallback) { var n = (raw || '').toLowerCase(); if (n.includes('pwd') || n.includes('disability assistance')) return 'PWD'; if (n.includes('income assistance')) return 'Income Assistance'; return fallback ? 'PWD' : 'Income Assistance'; }
+    function getFallbackIncomeAmount(d) { return d === 'PWD' ? '~$1,500-1,700/mo' : '~$1,000/mo'; }
+
+    var lastMsgContent = ''; var lastMsgRendered = ''; var lastNotifContent = ''; var msgsRead = false; var notifsRead = false;
+    var readMsgHash = localStorage.getItem('tally-msg-read-hash'); var readNotifHash = localStorage.getItem('tally-notif-read-hash');
+    function simpleHash(str) { var h = 0; for (var i = 0; i < str.length; i++) h = ((h << 5) - h + str.charCodeAt(i)) | 0; return String(h); }
+
+    var isLoadingData = false; var dataLoaded = false; var autoCheckAttempted = false; var pwdApprovedFallback = false;
+
+    async function loadData() {
+      if (isLoadingData) return; isLoadingData = true;
+      try {
+        var response = await fetch('/api/latest', { credentials: 'include' });
+        if (!response.ok) {
+          if (!navigator.onLine) setOfflineBanner(true);
+          if (response.status === 404 && !autoCheckAttempted) { autoCheckAttempted = true; showWaitingForData(); await runCheck(true); isLoadingData = false; return; }
+          showNoData(''); isLoadingData = false; return;
+        }
+        var result = await response.json();
+        pwdApprovedFallback = !!(result && result.uiConfig && result.uiConfig.pwdApproved);
+        setOfflineBanner(false);
+        var data = result.data;
+        if (!data || !data.sections) { showWaitingForData(); isLoadingData = false; return; }
+        dataLoaded = true;
+        document.getElementById('bceid-login-prompt').style.display = 'none';
+        isLoadingData = false;
+        var sections = data.sections;
+        var messages = filterNavItems((sections.Messages && sections.Messages.allText) || []);
+        var notifications = filterNavItems((sections.Notifications && sections.Notifications.allText) || []);
+
+        var msgContent = JSON.stringify(messages);
+        if (msgContent !== lastMsgContent) { lastMsgContent = msgContent; msgsRead = (readMsgHash === simpleHash(msgContent)); }
+        var badge = document.getElementById('bottom-msg-badge');
+        if (badge) { if (messages.length > 0 && !msgsRead) { badge.textContent = messages.length; badge.style.display = ''; } else badge.style.display = 'none'; }
+
+        if (msgContent !== lastMsgRendered) {
+          lastMsgRendered = msgContent;
+          var msgList = document.getElementById('messages-full-list');
+          if (msgList) {
+            msgList.textContent = '';
+            if (messages.length === 0) { var empty = document.createElement('div'); empty.className = 'message-empty'; empty.textContent = 'No messages'; msgList.appendChild(empty); }
+            else messages.forEach(function(msg) {
+              var card = document.createElement('div'); card.className = 'message-card';
+              var dateMatch = msg.match(/^(\d{4})\s*\/\s*([A-Z]{3})\s*\/\s*(\d{2})\s+(.*)/);
+              var titleEl = document.createElement('div'); titleEl.className = 'message-card-text';
+              if (dateMatch) { titleEl.textContent = dateMatch[4]; var meta = document.createElement('div'); meta.className = 'message-card-meta'; meta.textContent = dateMatch[2].charAt(0) + dateMatch[2].slice(1).toLowerCase() + ' ' + parseInt(dateMatch[3]) + ', ' + dateMatch[1]; card.appendChild(titleEl); card.appendChild(meta); }
+              else { titleEl.textContent = msg; card.appendChild(titleEl); }
+              msgList.appendChild(card);
+            });
+          }
+        }
+
+        var notifContent = JSON.stringify(notifications);
+        if (notifContent !== lastNotifContent) { lastNotifContent = notifContent; notifsRead = (readNotifHash === simpleHash(notifContent)); }
+        var notifList = document.getElementById('notifications-full-list');
+        if (notifList) {
+          notifList.textContent = '';
+          if (notifications.length === 0) { var e = document.createElement('div'); e.className = 'message-empty'; e.textContent = 'No notifications'; notifList.appendChild(e); }
+          else notifications.forEach(function(n) { var c = document.createElement('div'); c.className = 'message-card'; var t = document.createElement('div'); t.className = 'message-card-text'; t.textContent = n; c.appendChild(t); notifList.appendChild(c); });
+        }
+
+        var paymentInfo = document.getElementById('payment-info');
+        var ps = sections['Payment Info'] || {}; var pd = ps.tableData || []; var pa = ps.allText || [];
+        var raw = pd.concat(pa).join('\n');
+        var designation = getDesignationFromText(raw, pwdApprovedFallback);
+        var timeline = getPaymentTimeline();
+        if (pd.length > 0) {
+          var totalAmount = (raw.match(/Amount:\s*(\$[\d,]+\.\d{2})/) || [])[1] || '';
+          var paidTo = (raw.match(/Paid to:\s*([^|]+)/) || [])[1] || '';
+          if (paidTo && document.getElementById('nav-username').dataset.fallback === 'true') setNavUsername(paidTo.trim().toLowerCase().replace(/\b\w/g, function(c) { return c.toUpperCase(); }), true);
+          if (totalAmount) renderPaymentCard(paymentInfo, totalAmount, designation, timeline, false);
+          else renderPaymentCard(paymentInfo, getFallbackIncomeAmount(designation), designation, timeline, true);
+        } else renderPaymentCard(paymentInfo, getFallbackIncomeAmount(pwdApprovedFallback ? 'PWD' : 'Income Assistance'), pwdApprovedFallback ? 'PWD' : 'Income Assistance', timeline, true);
+
+        var mrSection = sections['Monthly Reports']; var mrStatus = document.getElementById('mr-status');
+        if (mrSection && mrSection.success) {
+          var statuses = mrSection.statuses || [];
+          if (statuses.some(function(s) { return s.toLowerCase().includes('overdue'); })) { mrStatus.textContent = 'Overdue'; mrStatus.className = 'status status-error'; }
+          else if (statuses.some(function(s) { return s.toLowerCase().includes('pending') || s.toLowerCase().includes('not submitted'); })) { mrStatus.textContent = 'Pending'; mrStatus.className = 'status status-warning'; }
+          else if (statuses.some(function(s) { return s.toLowerCase().includes('submitted'); })) { mrStatus.textContent = 'Submitted'; mrStatus.className = 'status status-success'; }
+        }
+      } catch (err) { console.error(err); if (!navigator.onLine) setOfflineBanner(true); showNoData('Data unavailable'); isLoadingData = false; }
+    }
+
+    function showWaitingForData() { var el = document.getElementById('payment-info'); if (el) { el.textContent = ''; var d = document.createElement('div'); d.className = 'loading'; var s = document.createElement('div'); s.className = 'spinner'; d.appendChild(s); d.appendChild(document.createTextNode('Scraping BC Self-Serve...')); el.appendChild(d); } }
+    function showNoData(reason) { var el = document.getElementById('payment-info'); if (el) { el.textContent = ''; var d = document.createElement('div'); d.style.cssText = 'padding:20px;text-align:center;color:var(--text-secondary)'; d.textContent = 'No data yet.' + (reason ? ' ' + reason : ''); el.appendChild(d); } }
+
+    async function runCheck(silent) { try { var r = await fetch('/api/check', { credentials: 'include' }); if (r.ok) await loadData(); } catch (e) { showNoData(e.message); } }
+
+    function setNavUsername(label, isFallback) { var el = document.getElementById('nav-username'); el.textContent = label; el.style.opacity = isFallback ? '0.7' : '1'; el.dataset.fallback = isFallback ? 'true' : 'false'; }
+
+    async function loadCurrentUser(attempt) {
+      attempt = attempt || 1;
+      try { var r = await fetch('/api/me', { credentials: 'include' }); if (!r.ok) { setNavUsername('Guest', true); return; } var d = await r.json(); if (!d || !d.authenticated) { setNavUsername('Guest', true); return; } var u = (d.username || '').trim(); setNavUsername(u || 'Account', !u); }
+      catch (e) { if (attempt < 2) { await new Promise(function(r) { setTimeout(r, 600); }); return loadCurrentUser(2); } setNavUsername('Session issue', true); }
+    }
+
+    async function saveBCeIDAndScrape() {
+      var user = document.getElementById('bceid-user').value.trim(); var pass = document.getElementById('bceid-pass').value;
+      var errorEl = document.getElementById('bceid-error'); var btn = document.getElementById('bceid-login-btn');
+      if (!user || !pass) { errorEl.textContent = 'Both fields required'; errorEl.style.display = 'block'; return; }
+      errorEl.style.display = 'none'; btn.textContent = 'Connecting...'; btn.disabled = true;
+      localStorage.setItem('bceid_user', user);
+      try {
+        await fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ password: 'hunter2', bceid_username: user, bceid_password: pass }) });
+        document.getElementById('bceid-login-prompt').style.display = 'none'; showWaitingForData();
+        var cr = await fetch('/api/check'); if (cr.ok) await loadData(); else { errorEl.textContent = 'Scrape failed'; errorEl.style.display = 'block'; document.getElementById('bceid-login-prompt').style.display = 'block'; }
+      } catch (err) { errorEl.textContent = 'Connection failed'; errorEl.style.display = 'block'; }
+      btn.textContent = 'Connect & Scrape'; btn.disabled = false;
+    }
+
+    function getNextPaydayDate() {
+      var now = new Date(); var d = PAY_DATES_2026[now.getMonth()];
+      var next; if (d && now <= new Date(now.getFullYear(), now.getMonth(), d)) { next = new Date(now.getFullYear(), now.getMonth(), d); } else { var nm = (now.getMonth() + 1) % 12; next = new Date(nm === 0 ? now.getFullYear() + 1 : now.getFullYear(), nm, PAY_DATES_2026[nm] || 25); }
+      next.setHours(0, 0, 0, 0); return next;
+    }
+    function updateLiveCountdown() {
+      var now = new Date(); var next = getNextPaydayDate(); var totalSec = Math.max(0, Math.floor((next - now) / 1000));
+      var days = Math.floor(totalSec / 86400); var hrs = Math.floor((totalSec % 86400) / 3600); var mins = Math.floor((totalSec % 3600) / 60); var secs = totalSec % 60;
+      var str = (days > 0 ? days + 'd ' : '') + String(hrs).padStart(2,'0') + ':' + String(mins).padStart(2,'0') + ':' + String(secs).padStart(2,'0');
+      var cdEl = document.getElementById('live-countdown-val'); if (cdEl) cdEl.textContent = str;
+      var erEl = document.getElementById('earnings-rate-val');
+      if (erEl && lastPaymentAmount > 0 && totalSec > 0) { var rate = lastPaymentAmount / (totalSec / 3600); erEl.textContent = '$' + rate.toFixed(2) + '/hr'; }
+    }
+
+    loadCurrentUser(); loadData();
+    function visibilityInterval(fn, ms) { var id = setInterval(fn, ms); document.addEventListener('visibilitychange', function() { if (document.hidden) { clearInterval(id); id = null; } else { fn(); id = setInterval(fn, ms); } }); }
+    visibilityInterval(loadData, 120000); visibilityInterval(loadCurrentUser, 120000);
+    visibilityInterval(updateLiveCountdown, 1000);
+    window.addEventListener('online', function() { setOfflineBanner(false); });
+    if ('serviceWorker' in navigator) window.addEventListener('load', function() { navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function(e) { console.error(e); }); });
+  </script>
+</body>
+</html>

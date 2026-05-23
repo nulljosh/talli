@@ -1,0 +1,45 @@
+{
+  "name": "tally",
+  "version": "3.1.0",
+  "description": "Tally - BC Self-Serve Portal Scraper - Automated scraping of notifications, messages, payment info, and service requests",
+  "main": "src/scraper.js",
+  "scripts": {
+    "check": "node src/scraper.js",
+    "test": "node tools/test-cors-utils.js && node tools/test-auth-cookie.js && node tools/test-paid-status.js && node tools/test-read-messages.js && node tools/test-csrf-origin.js && node tools/test-blob-helpers.js && node tools/test-mobile-data.js && node tools/test-dispute-wizard.js && node tools/test-dtc-navigator.js && node tools/test-http-scraper.js && node tools/test-http-scraper-integration.js",
+    "test:http-scraper-integration": "node tools/test-http-scraper-integration.js",
+    "test:cors": "node tools/test-cors-utils.js",
+    "test:auth-cookie": "node tools/test-auth-cookie.js",
+    "test:paid-status": "node tools/test-paid-status.js",
+    "test:scraper": "node tools/test.js",
+    "test:monthly-report": "node tools/test-monthly-report.js",
+    "api": "node src/api.js",
+    "dev": "nodemon src/api.js",
+    "watch": "concurrently \"nodemon src/api.js\" \"browser-sync start --proxy localhost:3000 --files 'web/**/*.html' --no-open\"",
+    "start": "node src/api.js",
+    "upload-blob": "node scripts/upload-to-blob.js",
+    "info": "bash scripts/tally-info.sh",
+    "monthly-report": "python3 tools/monthly_report.py",
+    "screenshot:preview": "node scripts/preview-screenshot.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@sparticuz/chromium": "^143.0.4",
+    "@vercel/blob": "^2.2.0",
+    "cheerio": "^1.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.2.1",
+    "express-session": "^1.18.2",
+    "puppeteer-core": "^24.40.0"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.4",
+    "concurrently": "^9.2.1",
+    "live-server": "^1.2.2",
+    "nodemon": "^3.1.11"
+  }
+}

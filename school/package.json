@@ -1,0 +1,17 @@
+{
+  "name": "school",
+  "version": "1.2.0",
+  "description": "D2L Brightspace grade scraper and dashboard for Langley SD35",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node test/test-school-grades.js",
+    "refresh": "bash scripts/refresh-school-grades.sh"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.0",
+    "express": "^4.18.0"
+  },
+  "license": "MIT",
+  "private": true
+}

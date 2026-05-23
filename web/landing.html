@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" href="/icon-192.svg">
+  <title>Tally -- Benefits + grades, no bureaucracy</title>
+  <meta name="description" content="Tally gives BC residents instant access to their Self-Serve benefits data -- payments, messages, and notifications -- without the portal maze.">
+  <meta name="view-transition" content="same-origin">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #fafafa;
+      --text: #000;
+      --text-secondary: rgba(0,0,0,0.5);
+      --text-tertiary: rgba(0,0,0,0.3);
+      --border: rgba(0,0,0,0.1);
+    }
+
+    [data-theme="dark"] {
+      --bg: #111;
+      --text: #e8e8e8;
+      --text-secondary: rgba(255,255,255,0.5);
+      --text-tertiary: rgba(255,255,255,0.25);
+      --border: rgba(255,255,255,0.1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+      font-weight: 400;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100dvh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: clamp(4rem, 10vw, 8rem) clamp(1.25rem, 5vw, 3rem) 3rem;
+      padding-left: max(clamp(1.25rem, 5vw, 3rem), env(safe-area-inset-left));
+      padding-right: max(clamp(1.25rem, 5vw, 3rem), env(safe-area-inset-right));
+      padding-bottom: max(3rem, env(safe-area-inset-bottom));
+    }
+
+    /* FadeUp animation */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Header */
+    header {
+      margin-bottom: clamp(3rem, 6vw, 4rem);
+    }
+
+    header .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 300;
+      letter-spacing: -0.03em;
+    }
+
+    .intro {
+      color: var(--text-secondary);
+      font-size: clamp(0.9375rem, 1.5vw, 1.0625rem);
+      line-height: 1.8;
+      max-width: 520px;
+      font-weight: 400;
+    }
+
+    .intro a {
+      color: var(--text);
+      text-decoration: underline;
+      text-decoration-color: var(--border);
+      text-underline-offset: 3px;
+      transition: opacity 0.4s ease-out;
+    }
+
+    .intro a:hover {
+      opacity: 0.5;
+    }
+
+    /* Theme toggle */
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      padding: 0;
+      border-radius: 50%;
+      color: var(--text-secondary);
+      transition: color 0.4s ease-out, border-color 0.4s ease-out;
+      display: flex;
+      align-items: center;
+      width: 32px;
+      height: 32px;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .theme-toggle:hover {
+      color: var(--text);
+      border-color: var(--text-tertiary);
+    }
+
+    .theme-toggle svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.4s ease-out, opacity 0.2s;
+    }
+
+    .theme-toggle .icon-spin {
+      transform: rotate(360deg) scale(1);
+    }
+
+    /* Sections */
+    section { margin-bottom: clamp(3rem, 6vw, 4rem); }
+
+    h2 {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-tertiary);
+      margin-bottom: 1.25rem;
+    }
+
+    /* Item lists */
+    .items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .items li {
+      padding: 0.875rem 0;
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      transition: opacity 0.4s ease-out;
+    }
+
+    .items li:first-child {
+      border-top: 1px solid var(--border);
+    }
+
+    .items li:hover {
+      opacity: 0.6;
+    }
+
+    .items li strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .items li a {
+      color: var(--text);
+      text-decoration: underline;
+      text-decoration-color: var(--border);
+      text-underline-offset: 3px;
+      font-weight: 500;
+      transition: opacity 0.4s ease-out;
+    }
+
+    .items li a:hover {
+      opacity: 0.5;
+    }
+
+    /* Preview card */
+    .preview {
+      margin: clamp(3rem, 6vw, 4rem) 0;
+      padding: 1.25rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .preview-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.375rem 0;
+      font-size: 0.9375rem;
+    }
+
+    .preview-row + .preview-row {
+      border-top: 1px solid var(--border);
+    }
+
+    .preview-label {
+      color: var(--text-secondary);
+    }
+
+    .preview-value {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* Divider */
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    /* Footer */
+    footer {
+      font-size: 0.8125rem;
+      color: var(--text-tertiary);
+      padding: 1rem 0 2rem;
+    }
+
+    footer a {
+      color: var(--text-secondary);
+      text-decoration: underline;
+      text-decoration-color: var(--border);
+      text-underline-offset: 2px;
+      transition: opacity 0.4s ease-out;
+    }
+
+    footer a:hover { opacity: 0.5; }
+
+    /* Focus */
+    :focus-visible {
+      outline: 2px solid var(--text);
+      outline-offset: 2px;
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+      .fade-up { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="fade-up">
+      <div class="top-row">
+        <h1>Tally</h1>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg id="moonIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
+      <p class="intro">
+        Tally pulls your BC Self-Serve data into one clean dashboard. Benefits, payments, messages -- no portal maze required. <a href="/login">Sign in</a> to get started.
+      </p>
+    </header>
+
+    <section class="fade-up">
+      <h2>What you get</h2>
+      <ul class="items">
+        <li><strong>Payments at a glance</strong> -- See your next payment date and amount instantly. No more logging in and clicking through five screens to find a number.</li>
+        <li><strong>Messages & notifications</strong> -- All your BC Self-Serve messages and notifications in one clean list. Read them without fighting the government portal UI.</li>
+        <li><strong>Your credentials, secure</strong> -- Your logins are encrypted end-to-end. Tally never stores passwords in plain text or shares your data.</li>
+      </ul>
+    </section>
+
+    <div class="preview fade-up">
+      <div class="preview-row">
+        <span class="preview-label">Next payment</span>
+        <span class="preview-value">$847.00 -- Feb 25</span>
+      </div>
+      <div class="preview-row">
+        <span class="preview-label">Unread messages</span>
+        <span class="preview-value">2 new</span>
+      </div>
+      <div class="preview-row">
+        <span class="preview-label">Active benefits</span>
+        <span class="preview-value">Income Assistance</span>
+      </div>
+      <div class="preview-row">
+        <span class="preview-label">Last updated</span>
+        <span class="preview-value">Just now</span>
+      </div>
+    </div>
+
+    <hr>
+
+    <section class="fade-up">
+      <p class="intro">
+        Free to use. No account needed beyond your existing logins. <a href="/login">Check your benefits now</a>.
+      </p>
+    </section>
+
+    <footer>
+      Built for BC residents. Not affiliated with the Government of British Columbia.<br>
+      &copy; 2026 Joshua Trommel &middot;
+      <a href="https://github.com/nulljosh/apps/blob/main/apps/tally/main/LICENSE" target="_blank" rel="noopener">MIT License</a> &middot;
+      <a href="https://github.com/nulljosh/apps/tree/main/apps/tally" target="_blank" rel="noopener">GitHub</a> &middot;
+      <a href="https://github.com/nulljosh/apps/tree/main/apps/tally/ios" target="_blank" rel="noopener">iOS</a>
+    </footer>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+    const sunIcon = document.getElementById('sunIcon');
+    const moonIcon = document.getElementById('moonIcon');
+
+    const getPreferredTheme = () => {
+      const saved = localStorage.getItem('theme');
+      if (saved) return saved;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+
+    const setTheme = (theme, animate) => {
+      const apply = () => {
+        if (theme === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          sunIcon.style.display = 'none';
+          moonIcon.style.display = 'block';
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+          sunIcon.style.display = 'block';
+          moonIcon.style.display = 'none';
+        }
+        localStorage.setItem('theme', theme);
+      };
+
+      if (animate && document.startViewTransition) {
+        document.startViewTransition(apply);
+      } else {
+        apply();
+      }
+    };
+
+    setTheme(getPreferredTheme(), false);
+
+    themeToggle.addEventListener('click', () => {
+      const current = document.documentElement.hasAttribute('data-theme') ? 'dark' : 'light';
+      setTheme(current === 'dark' ? 'light' : 'dark', true);
+    });
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme')) {
+        setTheme(e.matches ? 'dark' : 'light', true);
+      }
+    });
+
+    // FadeUp observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-up').forEach((el, i) => {
+      el.style.transitionDelay = `${i * 0.08}s`;
+      observer.observe(el);
+    });
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', async () => {
+        try {
+          await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+        } catch (error) {
+          console.error('Service worker registration failed:', error);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

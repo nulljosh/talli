@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Solver - Login</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main class="login-shell">
+    <h1>Solver</h1>
+    <p class="subhead">Enter the password to continue.</p>
+    {% if error %}
+    <p class="login-error">{{ error }}</p>
+    {% endif %}
+    <form class="login-form" method="post" action="/login">
+      <input class="login-input" type="password" name="password" placeholder="Password" autofocus required>
+      <button class="login-button" type="submit">Sign in</button>
+    </form>
+  </main>
+  <script>
+    const root = document.documentElement;
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const stored = localStorage.getItem('solver-theme');
+    if (stored === 'light' || stored === 'dark') {
+      root.setAttribute('data-theme', stored);
+    }
+  </script>
+</body>
+</html>

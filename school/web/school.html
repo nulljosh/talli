@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111" media="(prefers-color-scheme: dark)">
+  <meta name="view-transition" content="same-origin">
+  <meta name="description" content="Grade tracker for Langley SD35 D2L Brightspace. Pre-Calculus 12, Anatomy & Physiology 12.">
+  <title>School -- Langley SD35</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@200;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #fafafa;
+      --text: #000;
+      --text-secondary: rgba(0,0,0,0.5);
+      --text-tertiary: rgba(0,0,0,0.3);
+      --border: rgba(0,0,0,0.1);
+      --green: #16a34a;
+      --red: #dc2626;
+      --amber: #d97706;
+      --font: 'Geist', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+      --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #111;
+        --text: #e8e8e8;
+        --text-secondary: rgba(255,255,255,0.5);
+        --text-tertiary: rgba(255,255,255,0.25);
+        --border: rgba(255,255,255,0.1);
+        --green: #4ade80;
+        --red: #f87171;
+        --amber: #fbbf24;
+      }
+    }
+
+    [data-theme="dark"] {
+      --bg: #111;
+      --text: #e8e8e8;
+      --text-secondary: rgba(255,255,255,0.5);
+      --text-tertiary: rgba(255,255,255,0.25);
+      --border: rgba(255,255,255,0.1);
+      --green: #4ade80;
+      --red: #f87171;
+      --amber: #fbbf24;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      font-weight: 400;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100dvh;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: clamp(3rem, 6vw, 4rem) clamp(1.25rem, 5vw, 3rem) 3rem;
+      padding-left: max(clamp(1.25rem, 5vw, 3rem), env(safe-area-inset-left));
+      padding-right: max(clamp(1.25rem, 5vw, 3rem), env(safe-area-inset-right));
+      padding-bottom: max(3rem, env(safe-area-inset-bottom));
+    }
+
+    /* FadeUp animation */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    header { margin-bottom: clamp(1.5rem, 4vw, 2.5rem); }
+
+    header .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 200;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      line-height: 1.1;
+    }
+
+    h1 a {
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+      padding: 0;
+      border-radius: 50%;
+      color: var(--text-tertiary);
+      opacity: 0.4;
+      transition: color 0.4s ease-out, border-color 0.4s ease-out, opacity 0.4s ease-out, transform 0.2s var(--spring);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    .theme-toggle:hover {
+      color: var(--text-secondary);
+      border-color: var(--border);
+      opacity: 1;
+    }
+
+    .theme-toggle svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.4s ease-out, opacity 0.2s;
+    }
+
+    .theme-toggle .icon-spin {
+      transform: rotate(360deg);
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: clamp(0.875rem, 1.5vw, 0.9375rem);
+    }
+
+    .data-warning {
+      color: var(--amber);
+      font-size: 0.8125rem;
+      margin-top: 0.375rem;
+    }
+
+    /* Course selector */
+    .course-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .course-tab {
+      padding: 0.625rem 1rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: none;
+      border: none;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.2s, border-color 0.2s, transform 0.2s var(--spring);
+    }
+
+    .course-tab:hover {
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    .course-tab.active {
+      color: var(--text);
+      border-bottom-color: var(--text);
+    }
+
+    /* Overall grade */
+    .overall {
+      text-align: center;
+      padding: 1.5rem 0;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .overall-grade {
+      font-size: clamp(3rem, 10vw, 4.5rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .overall-grade.high { color: var(--green); }
+    .overall-grade.mid { color: var(--amber); }
+    .overall-grade.low { color: var(--red); }
+
+    .overall-label {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
+    /* Sections */
+    section { margin-bottom: 2rem; }
+
+    h2 {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-tertiary);
+      margin-bottom: 0.75rem;
+    }
+
+    /* Grade rows */
+    .grade-list { list-style: none; }
+
+    .grade-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      font-size: 0.9375rem;
+      transition: opacity 0.4s ease-out;
+    }
+
+    .grade-list li:first-child {
+      border-top: 1px solid var(--border);
+    }
+
+    .grade-list li + li {
+      border-top: 1px solid var(--border);
+    }
+
+    .grade-list li:hover {
+      opacity: 0.6;
+    }
+
+    .grade-name {
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .grade-value {
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .grade-value.high { color: var(--green); }
+    .grade-value.mid { color: var(--amber); }
+    .grade-value.low { color: var(--red); }
+    .grade-value.none { color: var(--text-secondary); font-weight: 400; }
+
+    /* Category header with average */
+    .cat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .cat-avg {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    /* Progress bar */
+    .progress-wrap {
+      margin-bottom: 2rem;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--text);
+      border-radius: 2px;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 0.375rem;
+    }
+
+    footer {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      padding: 1rem 0 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    footer a {
+      color: var(--text-secondary);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      transition: opacity 0.4s ease-out;
+    }
+
+    footer a:hover { opacity: 0.5; }
+
+    /* Course status summary */
+    .course-status {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 2rem;
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.625rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9375rem;
+      transition: opacity 0.4s ease-out, transform 0.2s var(--spring);
+    }
+
+    .status-row:first-child {
+      border-top: 1px solid var(--border);
+    }
+
+    .status-row:hover {
+      opacity: 0.6;
+      transform: translateX(4px);
+    }
+
+    .status-name {
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .status-badge {
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .status-badge.done {
+      color: var(--green);
+      border-color: var(--green);
+    }
+
+    .status-badge.active {
+      color: var(--text);
+      border-color: var(--text);
+    }
+
+    .status-badge.needs-work {
+      color: var(--amber);
+      border-color: var(--amber);
+    }
+
+    /* Touch device overrides */
+    @media (hover: none) {
+      .grade-list li:hover { opacity: 1; }
+      .status-row:hover { opacity: 1; transform: none; }
+      .course-tab:hover { color: var(--text-secondary); transform: none; }
+      .theme-toggle:hover { opacity: 0.4; transform: none; }
+    }
+
+    /* Focus-visible */
+    .theme-toggle:focus-visible,
+    .course-tab:focus-visible,
+    footer a:focus-visible {
+      outline: 2px solid var(--text);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      html { scroll-behavior: auto; }
+      .fade-up { opacity: 1; transform: none; transition: none; }
+    }
+
+    /* Print */
+    @media print {
+      body { background: #fff; color: #000; font-size: 11pt; }
+      .container { max-width: 100%; padding: 0; }
+      .theme-toggle { display: none !important; }
+      h1 { font-size: 24pt; }
+      .grade-value, .overall-grade { color: #000 !important; }
+    }
+
+    /* ---- Quiz ---- */
+    .quiz-setup { padding: 1rem 0 2rem; }
+
+    .quiz-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .quiz-btn {
+      padding: 0.4rem 0.875rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      font-family: var(--font);
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s, transform 0.2s var(--spring);
+    }
+
+    .quiz-btn:hover { color: var(--text); border-color: var(--text); transform: translateY(-1px); }
+    .quiz-btn.active { color: var(--text); border-color: var(--text); }
+
+    .quiz-start {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.5rem 1.25rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      font-family: var(--font);
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s var(--spring);
+    }
+
+    .quiz-start:hover { opacity: 0.8; transform: translateY(-1px); }
+    .quiz-start:disabled { opacity: 0.3; cursor: default; transform: none; }
+
+    .quiz-session { padding-top: 0.5rem; }
+
+    .quiz-progress {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+      margin-bottom: 1.25rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .quiz-q {
+      font-size: clamp(1rem, 2.5vw, 1.125rem);
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .quiz-options { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem; }
+
+    .quiz-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9375rem;
+      font-family: var(--font);
+      background: none;
+      color: var(--text);
+      text-align: left;
+      transition: border-color 0.15s, background 0.15s, transform 0.2s var(--spring);
+      line-height: 1.4;
+    }
+
+    .quiz-option:hover:not(:disabled) { border-color: var(--text); transform: translateX(3px); }
+    .quiz-option:disabled { cursor: default; }
+    .quiz-option.correct { border-color: var(--green); color: var(--green); }
+    .quiz-option.wrong { border-color: var(--red); color: var(--red); opacity: 0.6; }
+    .quiz-option.missed { border-color: var(--green); }
+
+    .quiz-letter {
+      font-size: 0.75rem;
+      font-weight: 600;
+      width: 18px;
+      flex-shrink: 0;
+      padding-top: 1px;
+      color: var(--text-secondary);
+    }
+
+    .quiz-feedback {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+      padding: 0.75rem 1rem;
+      border-left: 2px solid var(--border);
+    }
+
+    .quiz-feedback.correct-fb { border-color: var(--green); }
+    .quiz-feedback.wrong-fb { border-color: var(--red); }
+
+    .quiz-next {
+      padding: 0.4rem 1rem;
+      font-size: 0.875rem;
+      font-family: var(--font);
+      font-weight: 500;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s var(--spring);
+    }
+
+    .quiz-next:hover { border-color: var(--text); transform: translateY(-1px); }
+
+    .quiz-results { padding: 1rem 0 2rem; }
+
+    .quiz-score {
+      font-size: clamp(3rem, 10vw, 4.5rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+
+    .quiz-score.high { color: var(--green); }
+    .quiz-score.mid { color: var(--amber); }
+    .quiz-score.low { color: var(--red); }
+
+    .quiz-verdict { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 2rem; }
+
+    .quiz-review { list-style: none; margin-bottom: 2rem; }
+
+    .quiz-review-item {
+      padding: 0.75rem 0;
+      border-top: 1px solid var(--border);
+      font-size: 0.875rem;
+    }
+
+    .quiz-review-item:last-child { border-bottom: 1px solid var(--border); }
+
+    .quiz-review-q { font-weight: 500; margin-bottom: 0.25rem; }
+    .quiz-review-correct { color: var(--green); font-size: 0.8125rem; margin-bottom: 0.25rem; }
+    .quiz-review-exp { color: var(--text-secondary); font-size: 0.8125rem; line-height: 1.5; }
+
+    .quiz-again {
+      padding: 0.5rem 1.25rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      font-family: var(--font);
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s var(--spring);
+    }
+
+    .quiz-again:hover { opacity: 0.8; transform: translateY(-1px); }
+
+    @media (hover: none) {
+      .quiz-btn:hover { color: var(--text-secondary); border-color: var(--border); transform: none; }
+      .quiz-option:hover:not(:disabled) { border-color: var(--border); transform: none; }
+      .quiz-next:hover { border-color: var(--border); transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="fade-up">
+      <div class="top-row">
+        <h1><a href="/">School</a></h1>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg id="moonIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
+      <p class="subtitle">Langley School District -- 2025-26</p>
+      <p class="data-warning" id="dataWarning" style="display:none"></p>
+    </header>
+
+    <section class="fade-up">
+      <h2>Status</h2>
+      <div class="course-status" id="courseStatus"></div>
+    </section>
+
+    <div class="course-tabs fade-up" id="courseTabs"></div>
+
+    <div id="courseContent"></div>
+
+    <section class="fade-up" style="margin-top:2.5rem">
+      <h2 style="font-size:13px;font-weight:500;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">Practice</h2>
+      <a href="/precalc.html" style="display:flex;align-items:center;justify-content:space-between;font-size:14px;color:var(--text);text-decoration:none;padding:14px 16px;border:1px solid var(--border);border-radius:10px;transition:background 0.15s,border-color 0.15s;background:transparent;" onmouseover="this.style.background='rgba(0,0,0,0.04)'" onmouseout="this.style.background='transparent'">
+        <span>Precalc 12 &mdash; All 7 Units</span>
+        <span style="color:var(--text-secondary)">&rarr;</span>
+      </a>
+    </section>
+
+    <footer class="fade-up">
+      Updated <span id="lastUpdated"></span>
+    </footer>
+  </div>
+
+  <script>
+    // Theme
+    const themeToggle = document.getElementById('themeToggle');
+    const sunIcon = document.getElementById('sunIcon');
+    const moonIcon = document.getElementById('moonIcon');
+
+    const getPreferredTheme = () => {
+      const saved = localStorage.getItem('theme');
+      if (saved) return saved;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+
+    const setTheme = (theme, animate) => {
+      const apply = () => {
+        document.documentElement.setAttribute('data-theme', theme);
+        if (theme === 'dark') {
+          sunIcon.style.display = 'none';
+          moonIcon.style.display = 'block';
+        } else {
+          sunIcon.style.display = 'block';
+          moonIcon.style.display = 'none';
+        }
+        localStorage.setItem('theme', theme);
+      };
+      if (animate) {
+        const activeIcon = theme === 'dark' ? moonIcon : sunIcon;
+        activeIcon.classList.add('icon-spin');
+        setTimeout(() => activeIcon.classList.remove('icon-spin'), 400);
+        if (document.startViewTransition) {
+          document.startViewTransition(apply);
+        } else {
+          apply();
+        }
+      } else {
+        apply();
+      }
+    };
+
+    setTheme(getPreferredTheme(), false);
+
+    themeToggle.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      setTheme(current === 'dark' ? 'light' : 'dark', true);
+    });
+
+    // Follow system theme changes unless user has explicitly chosen
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme')) {
+        setTheme(e.matches ? 'dark' : 'light', false);
+      }
+    });
+
+    let GRADES = null;
+    const statusEl = document.getElementById('courseStatus');
+
+    // Completed courses not in D2L
+    const COMPLETED_COURSES = [
+      { name: 'English 12', grade: 'A+', status: 'done' }
+    ];
+
+    // Short course names
+    function shortName(full) {
+      if (!full || typeof full !== 'string') return 'Course';
+      if (full.includes('Pre-Calculus')) return 'Pre-Calculus 12';
+      if (full.includes('Anatomy')) return 'Anatomy & Physiology 12';
+      return full.split(',')[0];
+    }
+
+    function gradeClass(pct) {
+      if (pct === null || pct === undefined) return 'none';
+      if (pct >= 80) return 'high';
+      if (pct >= 60) return 'mid';
+      return 'low';
+    }
+
+    function formatPct(pct) {
+      if (pct === null || pct === undefined) return '--';
+      return Math.round(pct) + '%';
+    }
+
+    // Count remaining tests/exams (non-quiz, non-project, non-learning-guide categories)
+    const TEST_CATEGORIES = ['Unit Tests', 'Unit Exams', 'Module Exams', 'Final Exam'];
+    function countRemainingTests(course) {
+      let remaining = 0;
+      const categories = Array.isArray(course?.categories) ? course.categories : [];
+      for (const cat of categories) {
+        if (!TEST_CATEGORIES.includes(cat?.category)) continue;
+        const items = Array.isArray(cat?.items) ? cat.items : [];
+        for (const item of items) {
+          if (item && (item.percentage === null || item.percentage === undefined)) remaining++;
+        }
+      }
+      return remaining;
+    }
+
+    // Count completed items across all categories
+    function courseProgress(course) {
+      let done = 0, total = 0;
+      const categories = Array.isArray(course?.categories) ? course.categories : [];
+      for (const cat of categories) {
+        const items = Array.isArray(cat?.items) ? cat.items : [];
+        for (const item of items) {
+          total++;
+          if (item && item.percentage !== null && item.percentage !== undefined) done++;
+        }
+      }
+      return { done, total };
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Render
+    const tabsEl = document.getElementById('courseTabs');
+    const contentEl = document.getElementById('courseContent');
+    const updatedEl = document.getElementById('lastUpdated');
+    const dataWarningEl = document.getElementById('dataWarning');
+
+    let activeCourse = 0;
+
+    function renderTabs() {
+      if (!GRADES || !Array.isArray(GRADES.courses)) return;
+      tabsEl.innerHTML = '';
+      GRADES.courses.forEach((c, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'course-tab' + (i === activeCourse ? ' active' : '');
+        btn.textContent = shortName(c.course);
+        btn.addEventListener('click', () => {
+          activeCourse = i;
+          renderTabs();
+          renderCourse(c);
+        });
+        tabsEl.appendChild(btn);
+      });
+    }
+
+    // Compute simple average of all graded item percentages in a course
+    function computeCourseAverage(course) {
+      const categories = Array.isArray(course?.categories) ? course.categories : [];
+      let sum = 0;
+      let count = 0;
+      for (const cat of categories) {
+        const items = Array.isArray(cat?.items) ? cat.items : [];
+        for (const item of items) {
+          if (item && item.percentage !== null && item.percentage !== undefined) {
+            sum += item.percentage;
+            count++;
+          }
+        }
+      }
+      if (count === 0) return null;
+      return { average: Math.round(sum / count), count };
+    }
+
+    function renderCourse(course) {
+      const { done, total } = courseProgress(course);
+      const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+      const avg = computeCourseAverage(course);
+
+      let html = '';
+
+      if (avg) {
+        html += `
+          <div class="overall">
+            <div class="overall-grade ${gradeClass(avg.average)}">${avg.average}%</div>
+            <div class="overall-label">Average across ${avg.count} graded items</div>
+          </div>`;
+      }
+
+      // Progress bar
+      html += `
+        <div class="progress-wrap">
+          <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+          <div class="progress-label">
+            <span>${done} of ${total} items complete</span>
+            <span>${pct}%</span>
+          </div>
+        </div>`;
+
+      // Categories
+      const skipCategories = ['Course Plan'];
+      const categories = Array.isArray(course?.categories) ? course.categories : [];
+      for (const cat of categories) {
+        const categoryName = cat && typeof cat === 'object' ? cat.category : null;
+        if (categoryName && skipCategories.includes(categoryName)) continue;
+        const items = Array.isArray(cat?.items) ? cat.items : [];
+        if (items.length === 0) continue;
+
+        const avgDisplay = cat?.grade_pct !== null && cat?.grade_pct !== undefined ? formatPct(cat.grade_pct) : null;
+
+        html += `<section>
+          <div class="cat-header">
+            <h2>${escapeHtml(categoryName || 'Category')}</h2>
+            ${avgDisplay ? `<span class="cat-avg">${avgDisplay} avg</span>` : ''}
+          </div>
+          <ul class="grade-list">`;
+
+        for (const item of items) {
+          const cls = gradeClass(item.percentage);
+          const val = formatPct(item.percentage);
+          html += `<li>
+            <span class="grade-name">${escapeHtml(item.name || 'Grade item')}</span>
+            <span class="grade-value ${cls}">${val}</span>
+          </li>`;
+        }
+
+        html += `</ul></section>`;
+      }
+
+      contentEl.innerHTML = html;
+    }
+
+    function formatLastUpdated(iso) {
+      if (!iso) return 'unknown';
+      const date = new Date(iso);
+      if (Number.isNaN(date.getTime())) return 'unknown';
+      return date.toLocaleString('en-CA', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    function setMeta(meta, fallbackRetrievedAt) {
+      const lastUpdated = (meta && meta.lastUpdated) || fallbackRetrievedAt || null;
+      updatedEl.textContent = formatLastUpdated(lastUpdated);
+
+      if (meta && meta.stale) {
+        const ageLabel = meta.ageHours === null || meta.ageHours === undefined ? '?' : meta.ageHours;
+        dataWarningEl.textContent = `Data may be stale (${ageLabel}h old). Run: npm run refresh`;
+        dataWarningEl.style.display = 'block';
+      } else {
+        dataWarningEl.textContent = '';
+        dataWarningEl.style.display = 'none';
+      }
+    }
+
+    function showLoadError(message) {
+      updatedEl.textContent = 'unavailable';
+      dataWarningEl.textContent = message || 'Could not load school grades.';
+      dataWarningEl.style.display = 'block';
+      tabsEl.innerHTML = '';
+      contentEl.innerHTML = '<section><h2>School Data</h2><p class="subtitle">Unable to load grades right now.</p></section>';
+    }
+
+    async function loadAndRender() {
+      updatedEl.textContent = 'loading...';
+      contentEl.innerHTML = '<section><h2>School Data</h2><p class="subtitle">Loading grades...</p></section>';
+
+      const response = await fetch('/api/grades', { cache: 'no-store' });
+      let payload = null;
+      try {
+        payload = await response.json();
+      } catch (error) {
+        throw new Error(`Invalid response from server (HTTP ${response.status})`);
+      }
+
+      if (!response.ok) {
+        throw new Error((payload && payload.error) || `HTTP ${response.status}`);
+      }
+
+      GRADES = payload.grades;
+      if (!GRADES || typeof GRADES !== 'object') {
+        throw new Error('Missing grades payload');
+      }
+      setMeta(payload.meta, GRADES.retrieved_at);
+
+      if (!Array.isArray(GRADES.courses) || GRADES.courses.length === 0) {
+        tabsEl.innerHTML = '';
+        contentEl.innerHTML = '<section><h2>School Data</h2><p class="subtitle">No courses available yet. Run: npm run refresh</p></section>';
+        return;
+      }
+
+      activeCourse = GRADES.courses.length > 1 ? 1 : 0;
+      renderTabs();
+      renderCourse(GRADES.courses[activeCourse]);
+    }
+
+    function renderStatus() {
+      let rows = [];
+      // Active courses from D2L
+      if (GRADES && Array.isArray(GRADES.courses)) {
+        for (const course of GRADES.courses) {
+          const avg = computeCourseAverage(course);
+          const { done, total } = courseProgress(course);
+          const pct = avg ? avg.average : null;
+          let statusClass = 'active';
+          let statusLabel = done + '/' + total;
+          if (pct !== null && pct < 60) {
+            statusClass = 'needs-work';
+            statusLabel = formatPct(pct);
+          } else if (pct !== null) {
+            statusLabel = formatPct(pct);
+          }
+          const row = document.createElement('div');
+          row.className = 'status-row';
+          const nameSpan = document.createElement('span');
+          nameSpan.className = 'status-name';
+          nameSpan.textContent = shortName(course.course);
+          const badge = document.createElement('span');
+          badge.className = 'status-badge ' + statusClass;
+          badge.textContent = statusLabel;
+          row.appendChild(nameSpan);
+          row.appendChild(badge);
+          rows.push(row);
+        }
+      }
+      // Tests remaining summary
+      if (GRADES && Array.isArray(GRADES.courses)) {
+        let totalRemaining = 0;
+        for (const course of GRADES.courses) totalRemaining += countRemainingTests(course);
+        if (totalRemaining > 0) {
+          const row = document.createElement('div');
+          row.className = 'status-row';
+          const nameSpan = document.createElement('span');
+          nameSpan.className = 'status-name';
+          nameSpan.textContent = 'Tests Remaining';
+          nameSpan.style.color = 'var(--text-secondary)';
+          const badge = document.createElement('span');
+          badge.className = 'status-badge active';
+          badge.textContent = totalRemaining;
+          row.appendChild(nameSpan);
+          row.appendChild(badge);
+          rows.push(row);
+        }
+      }
+
+      // Completed courses
+      for (const c of COMPLETED_COURSES) {
+        const row = document.createElement('div');
+        row.className = 'status-row';
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'status-name';
+        nameSpan.textContent = c.name;
+        const badge = document.createElement('span');
+        badge.className = 'status-badge done';
+        badge.textContent = c.grade;
+        row.appendChild(nameSpan);
+        row.appendChild(badge);
+        rows.push(row);
+      }
+      statusEl.replaceChildren(...rows);
+    }
+
+    loadAndRender().then(() => renderStatus()).catch((error) => {
+      showLoadError(error.message);
+    });
+
+    // ---- Quiz ----
+    let QUIZZES = null;
+    const LETTERS = ['A','B','C','D'];
+
+    function mkEl(tag, cls, text) {
+      const e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (text !== undefined) e.textContent = text;
+      return e;
+    }
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function buildOptions(question, pool) {
+      const distractors = shuffle(pool.filter(q => q !== question)).slice(0, 3).map(q => q.a);
+      return shuffle([question.a, ...distractors]);
+    }
+
+    function quizPillRow(items, getLabel, isActive, onPick) {
+      const row = mkEl('div', 'quiz-row');
+      items.forEach(item => {
+        const b = mkEl('button', 'quiz-btn' + (isActive(item) ? ' active' : ''), getLabel(item));
+        b.addEventListener('click', () => {
+          row.querySelectorAll('.quiz-btn').forEach(x => x.classList.remove('active'));
+          b.classList.add('active');
+          onPick(item);
+        });
+        row.appendChild(b);
+      });
+      return row;
+    }
+
+    function renderQuizSetup() {
+      contentEl.innerHTML = '';
+      if (!QUIZZES) {
+        const msg = mkEl('p', 'subtitle', 'Loading quiz data...');
+        contentEl.appendChild(msg);
+        fetch('/api/quizzes')
+          .then(r => r.ok ? r.json() : Promise.reject(r.status))
+          .then(data => { QUIZZES = data; renderQuizSetup(); })
+          .catch(() => { msg.textContent = 'Quiz data unavailable. Run: python3 tools/generate_quizzes.py'; msg.style.color = 'var(--red)'; });
+        return;
+      }
+
+      const wrap = mkEl('div', 'quiz-setup');
+      let subject = 'math';
+      let unit = 'all';
+      let count = 10;
+
+      const mathUnits = Object.keys(QUIZZES.math || {}).map(Number).sort((a,b) => a-b);
+      const sciUnits  = Object.keys(QUIZZES.science || {}).map(Number).sort((a,b) => a-b);
+
+      // Subject row
+      wrap.appendChild(mkEl('h2', null, 'Subject'));
+      let unitRowEl;
+      const subjectRow = quizPillRow(
+        ['math', 'science'],
+        s => s === 'math' ? 'Pre-Calculus 12' : 'Anatomy & Physiology 12',
+        s => s === subject,
+        s => { subject = s; unit = 'all'; wrap.removeChild(unitRowEl); unitRowEl = buildUnitRow(); wrap.insertBefore(unitRowEl, countLabel); }
+      );
+      wrap.appendChild(subjectRow);
+
+      // Unit row
+      const unitLabel = mkEl('h2', null, 'Unit');
+      unitLabel.style.marginTop = '1.25rem';
+      wrap.appendChild(unitLabel);
+
+      function buildUnitRow() {
+        const units = subject === 'math' ? mathUnits : sciUnits;
+        const allLabel = subject === 'math' ? 'All Pre-Calc' : 'All A&P';
+        return quizPillRow(
+          ['all', ...units],
+          u => u === 'all' ? allLabel : 'Unit ' + u,
+          u => String(u) === String(unit),
+          u => { unit = u; }
+        );
+      }
+      unitRowEl = buildUnitRow();
+      wrap.appendChild(unitRowEl);
+
+      // Count row
+      const countLabel = mkEl('h2', null, 'Questions');
+      countLabel.style.marginTop = '1.25rem';
+      wrap.appendChild(countLabel);
+      wrap.appendChild(quizPillRow([5,10,20], n => String(n), n => n === count, n => { count = n; }));
+
+      // Start button
+      const startBtn = mkEl('button', 'quiz-start', 'Start Quiz');
+      startBtn.addEventListener('click', () => {
+        const pool = unit === 'all'
+          ? Object.values(QUIZZES[subject] || {}).flat()
+          : (QUIZZES[subject]?.[String(unit)] || []);
+        if (!pool.length) { alert('No questions available.'); return; }
+        runQuiz(shuffle(pool).slice(0, Math.min(count, pool.length)), subject);
+      });
+      wrap.appendChild(startBtn);
+      contentEl.appendChild(wrap);
+    }
+
+    function runQuiz(questions, subject) {
+      const pool = Object.values(QUIZZES[subject] || {}).flat();
+      let idx = 0, score = 0;
+      const missed = [];
+
+      function renderQ() {
+        contentEl.innerHTML = '';
+        const q = questions[idx];
+        const options = buildOptions(q, pool);
+        const correctIdx = options.indexOf(q.a);
+
+        const session = mkEl('div', 'quiz-session');
+        session.appendChild(mkEl('div', 'quiz-progress', `Question ${idx+1} of ${questions.length}  ·  ${score} correct`));
+        session.appendChild(mkEl('div', 'quiz-q', q.q));
+
+        const optWrap = mkEl('div', 'quiz-options');
+        options.forEach((opt, i) => {
+          const b = document.createElement('button');
+          b.className = 'quiz-option';
+          const letter = mkEl('span', 'quiz-letter', LETTERS[i]);
+          const text = mkEl('span', null, opt);
+          b.appendChild(letter);
+          b.appendChild(text);
+          b.addEventListener('click', () => {
+            const correct = i === correctIdx;
+            if (correct) score++; else missed.push({ q: q.q, a: q.a, exp: q.exp });
+            optWrap.querySelectorAll('.quiz-option').forEach((ob, oi) => {
+              ob.disabled = true;
+              if (oi === correctIdx) ob.classList.add('correct');
+              else if (oi === i && !correct) ob.classList.add('wrong');
+            });
+            const fb = mkEl('div', 'quiz-feedback ' + (correct ? 'correct-fb' : 'wrong-fb'));
+            if (!correct) {
+              const ans = mkEl('strong', null, q.a);
+              fb.textContent = 'Incorrect. Correct answer: ';
+              fb.appendChild(ans);
+              fb.appendChild(document.createTextNode(' — ' + q.exp));
+            } else {
+              fb.textContent = 'Correct. ' + q.exp;
+            }
+            const nextBtn = mkEl('button', 'quiz-next', idx + 1 < questions.length ? 'Next' : 'See Results');
+            nextBtn.addEventListener('click', () => { idx++; idx < questions.length ? renderQ() : renderResults(); });
+            session.appendChild(fb);
+            session.appendChild(nextBtn);
+          });
+          optWrap.appendChild(b);
+        });
+        session.appendChild(optWrap);
+        contentEl.appendChild(session);
+      }
+
+      function renderResults() {
+        contentEl.innerHTML = '';
+        const pct = Math.round(score / questions.length * 100);
+        const cls = pct >= 80 ? 'high' : pct >= 60 ? 'mid' : 'low';
+        const verdict = pct >= 90 ? 'Ready for the exam.' : pct >= 70 ? 'Review missed questions.' : 'Full review recommended.';
+        const wrap = mkEl('div', 'quiz-results');
+        wrap.appendChild(mkEl('div', 'quiz-score ' + cls, `${score}/${questions.length}`));
+        const v = mkEl('div', 'quiz-verdict', `${pct}%  ·  ${verdict}`);
+        wrap.appendChild(v);
+        if (missed.length) {
+          wrap.appendChild(mkEl('h2', null, 'Missed'));
+          const list = mkEl('ul', 'quiz-review');
+          missed.forEach(r => {
+            const li = mkEl('li', 'quiz-review-item');
+            li.appendChild(mkEl('div', 'quiz-review-q', r.q));
+            li.appendChild(mkEl('div', 'quiz-review-correct', r.a));
+            li.appendChild(mkEl('div', 'quiz-review-exp', r.exp));
+            list.appendChild(li);
+          });
+          wrap.appendChild(list);
+        }
+        const again = mkEl('button', 'quiz-again', 'Quiz Again');
+        again.addEventListener('click', renderQuizSetup);
+        wrap.appendChild(again);
+        contentEl.appendChild(wrap);
+      }
+
+      renderQ();
+    }
+
+    // Inject Quiz tab after grades load
+    const _origRenderTabs = renderTabs;
+    renderTabs = function() {
+      _origRenderTabs();
+      const quizTab = mkEl('button', 'course-tab', 'Quiz');
+      quizTab.addEventListener('click', () => {
+        document.querySelectorAll('.course-tab').forEach(t => t.classList.remove('active'));
+        quizTab.classList.add('active');
+        renderQuizSetup();
+      });
+      tabsEl.appendChild(quizTab);
+    };
+
+    // FadeUp scroll reveal
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    // Observe initial elements
+    document.querySelectorAll('.fade-up').forEach(el => fadeObserver.observe(el));
+
+    // Re-observe after content renders
+    const origRenderCourse = renderCourse;
+    renderCourse = function(course) {
+      origRenderCourse(course);
+      requestAnimationFrame(() => {
+        contentEl.querySelectorAll('section, .overall, .progress-wrap').forEach(el => {
+          el.classList.add('fade-up');
+          fadeObserver.observe(el);
+        });
+      });
+    };
+
+  </script>
+</body>
+</html>

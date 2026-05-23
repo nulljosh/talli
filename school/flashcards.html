@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biology 12 Flashcards</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a0a;color:#fafafa;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+.header{width:100%;max-width:640px;padding:24px 20px 0;display:flex;justify-content:space-between;align-items:center}
+.header h1{font-size:1.1rem;font-weight:600;letter-spacing:-0.02em}
+.header span{font-size:0.8rem;color:#a3a3a3}
+.controls{width:100%;max-width:640px;padding:12px 20px;display:flex;gap:8px;flex-wrap:wrap}
+.unit-btn{background:#171717;border:1px solid #262626;color:#a3a3a3;padding:6px 12px;border-radius:6px;font-size:0.75rem;cursor:pointer;transition:all 0.15s ease}
+.unit-btn:hover{border-color:#525252;color:#fafafa}
+.unit-btn.active{background:#fafafa;color:#0a0a0a;border-color:#fafafa}
+.unit-names{width:100%;max-width:640px;padding:0 20px 4px;font-size:0.7rem;color:#525252;min-height:1.2em}
+.card-area{flex:1;width:100%;max-width:640px;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.card{width:100%;min-height:320px;background:#171717;border:1px solid #262626;border-radius:12px;padding:32px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1);user-select:none}
+.card:hover{transform:scale(1.01)}
+.card:active{transform:scale(0.99)}
+.card-unit{position:absolute;top:16px;left:20px;font-size:0.7rem;color:#525252;letter-spacing:0.05em;text-transform:uppercase}
+.card-count{position:absolute;top:16px;right:20px;font-size:0.7rem;color:#525252}
+.card-label{position:absolute;bottom:16px;font-size:0.7rem;color:#525252}
+.card-text{font-size:1.1rem;line-height:1.6;text-align:center;max-width:90%}
+.card.answer .card-text{font-size:0.95rem;color:#d4d4d4;text-align:left}
+.nav{width:100%;max-width:640px;padding:12px 20px 32px;display:flex;gap:12px;justify-content:center;align-items:center}
+.nav button{background:#171717;border:1px solid #262626;color:#fafafa;padding:10px 24px;border-radius:8px;font-size:0.85rem;cursor:pointer;transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1)}
+.nav button:hover{transform:translateY(-1px);border-color:#525252}
+.nav button:disabled{opacity:0.3;cursor:default;transform:none}
+.shuffle-btn{background:transparent !important;border-color:#363636 !important;font-size:0.75rem !important;padding:8px 16px !important}
+.progress{width:100%;max-width:640px;padding:0 20px 8px}
+.progress-bar{width:100%;height:3px;background:#1a1a1a;border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:#fafafa;transition:width 0.3s ease;border-radius:2px}
+.stats{width:100%;max-width:640px;padding:0 20px 8px;display:flex;justify-content:space-between;font-size:0.7rem;color:#525252}
+kbd{display:inline-block;background:#1a1a1a;border:1px solid #333;border-radius:3px;padding:1px 5px;font-size:0.65rem;color:#666;font-family:inherit}
+.kb-hint{position:fixed;bottom:12px;right:16px;font-size:0.65rem;color:#333}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Biology 12 Flashcards</h1>
+  <span id="total-count"></span>
+</div>
+
+<div class="controls" id="controls"></div>
+<div class="unit-names" id="unit-names"></div>
+
+<div class="progress"><div class="progress-bar"><div class="progress-fill" id="progress"></div></div></div>
+<div class="stats"><span id="seen-stat"></span><span id="remaining-stat"></span></div>
+
+<div class="card-area">
+  <div class="card" id="card" onclick="flip()">
+    <div class="card-unit" id="card-unit"></div>
+    <div class="card-count" id="card-count"></div>
+    <div class="card-text" id="card-text"></div>
+    <div class="card-label" id="card-label">tap to flip</div>
+  </div>
+</div>
+
+<div class="nav">
+  <button onclick="prev()" id="prev-btn" disabled>&larr; Back</button>
+  <button class="shuffle-btn" onclick="shuffle()">Shuffle</button>
+  <button onclick="next()" id="next-btn">Next &rarr;</button>
+</div>
+
+<div class="kb-hint"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp; <kbd>space</kbd> flip</div>
+
+<script>
+const unitNames = {
+  1:'Homeostasis & Biochemistry',
+  2:'Cell Structure & Membrane',
+  3:'DNA, Protein Synthesis & Enzymes',
+  4:'Digestive System',
+  5:'Respiratory System',
+  6:'Circulatory System',
+  7:'Nervous System',
+  8:'Urinary System',
+  9:'Reproductive System'
+};
+
+const allCards = [
+  // ===== UNIT 1: HOMEOSTASIS, WATER, pH, BIOMOLECULES =====
+  {u:1,q:"What is homeostasis?",a:"The tendency of the body to seek and maintain a condition of balance within its internal environment."},
+  {u:1,q:"What are the three components of a homeostatic feedback loop?",a:"Receptors (detect change from set point), Control center/regulatory center (processes info, sends message), Effectors (carry out the response to return to set point)."},
+  {u:1,q:"How does negative feedback work? Give an example.",a:"The output reverses/reduces the original stimulus to maintain normalcy. Example: blood glucose regulation -- kept between 70-110 mg/dL. When glucose rises, insulin is released to lower it; when it falls, glucagon raises it."},
+  {u:1,q:"How does positive feedback differ from negative? Give an example.",a:"Positive feedback amplifies the stimulus toward an extreme rather than maintaining normalcy. Examples: childbirth (oxytocin contractions), blood clotting."},
+  {u:1,q:"Why do elderly people with poor circulation have greater risk of heatstroke?",a:"Poor circulation, damaged skin, and inefficient sweat glands make it harder to adjust to heat. They also take medications (like diuretics) that can cause water loss and inhibit perspiration."},
+  {u:1,q:"Why does spraying water on skin in front of a fan lower body temperature?",a:"Evaporation is endothermic -- water absorbs body heat from the skin as it evaporates. The fan increases air movement, speeding up evaporation (evaporative cooling). The water carries away the absorbed heat."},
+  {u:1,q:"Why should you avoid treatments that induce shivering when treating hyperthermia?",a:"Shivering generates heat and vasoconstriction retains warm blood in the core -- both are homeostatic responses that would hinder cooling the body down."},
+  {u:1,q:"What type of bond holds hydrogen and oxygen atoms WITHIN a water molecule?",a:"Covalent bond."},
+  {u:1,q:"What type of bond forms BETWEEN water molecules?",a:"Hydrogen bond."},
+  {u:1,q:"How many water molecules can hydrogen bond with a single water molecule?",a:"4 water molecules."},
+  {u:1,q:"Why is water essential to life? (3 key properties)",a:"1) Solvent: dissolves charged/polar molecules for transport. 2) Temperature moderator: high heat capacity keeps body temp stable; evaporative cooling. 3) Lubricant & transport medium: cohesion/adhesion lets it flow through vessels, lubricates joints/eyes."},
+  {u:1,q:"Water is a _____ molecule that dissolves many substances, making it an excellent _____.",a:"Polar molecule. Excellent solvent."},
+  {u:1,q:"What is water intoxication?",a:"Excessive water dilutes solutes outside cells, creating a hypotonic environment. Water moves into cells by osmosis, causing swelling. Brain swelling increases intracranial pressure leading to headache, confusion, seizures, coma, and potentially death."},
+  {u:1,q:"Define acid and base.",a:"Acid: releases hydrogen ions (H+) in solution. Base: releases hydroxide ions (OH-) in solution."},
+  {u:1,q:"What is the pH scale?",a:"A negative log scale (0-14) measuring H+ concentration. Below 7 = acidic, 7 = neutral, above 7 = basic/alkaline."},
+  {u:1,q:"If pH changes from 6 to 4, how much does H+ concentration change?",a:"100-fold increase. Each pH unit = 10x change, so 2 units = 10 x 10 = 100x more H+ ions."},
+  {u:1,q:"What is a buffer and why is pH important in biology?",a:"A buffer resists changes in pH despite addition of acid or base. pH is critical because enzymes are proteins whose 3D shape (and function) depends on specific pH. Wrong pH = denatured enzyme = no cellular activity."},
+  {u:1,q:"Give examples of pH regulation in the body.",a:"Blood: pH ~7.4 (bicarbonate buffer, maintains hemoglobin function). Stomach: pH ~2 (parietal cells release HCl, activates pepsin). Small intestine: pH ~7 (pancreas releases bicarbonate, activates trypsin)."},
+  {u:1,q:"What are the 4 major classes of biomolecules?",a:"Carbohydrates, Proteins, Lipids, Nucleic acids."},
+  {u:1,q:"Define monomer, polymer, dehydration synthesis, and hydrolysis.",a:"Monomer: single building block unit. Polymer: chain of bonded monomers. Dehydration synthesis: bonds monomers by removing H+ and OH- to produce water. Hydrolysis: breaks polymers by adding water."},
+  {u:1,q:"What is the empirical formula for carbohydrates? Define mono-, di-, and polysaccharide.",a:"CH2O. Monosaccharide: single ring (glucose, fructose, galactose). Disaccharide: 2 bonded rings (maltose=glc+glc, sucrose=glc+fru, lactose=glc+gal). Polysaccharide: many rings (starch, cellulose, glycogen)."},
+  {u:1,q:"Name the 3 polysaccharides and their functions.",a:"Starch: storage form of glucose in plants (few side branches). Cellulose: structural component of plant cell walls (no side branches, alternating bonds). Glycogen: storage form of glucose in animals (many side branches)."},
+  {u:1,q:"Why is cellulose considered 'roughage'?",a:"Humans lack the enzyme to break the bonds in cellulose, so it has no nutritive value. It passes through the digestive system as fiber, helping maintain digestive health."},
+  {u:1,q:"What are the 3 major types of lipids and their functions?",a:"Neutral fats (triglycerides): long-term energy, insulation, padding. Phospholipids: form cell membrane bilayer. Steroids: hormones (testosterone, estrogen, cholesterol as precursor). Structure: 3 six-carbon rings bonded to 1 five-carbon ring."},
+  {u:1,q:"How do saturated and unsaturated fatty acids differ?",a:"Saturated: all single bonds between carbons, holds maximum hydrogen. Unsaturated: one or more double bonds between carbons, fewer hydrogens."},
+  {u:1,q:"What is a phospholipid? Define hydrophobic and hydrophilic.",a:"A lipid with a phosphate/nitrogen head and two fatty acid tails. Hydrophilic (water-loving): the polar phosphate head. Hydrophobic (water-hating): the nonpolar fatty acid tails. Forms the cell membrane bilayer."},
+  {u:1,q:"What is the basic building block (monomer) of proteins?",a:"Amino acids, joined by peptide bonds (formed by dehydration synthesis)."},
+  {u:1,q:"What are the 4 parts of an amino acid?",a:"Amino group (H2N-), Carboxyl group (-COOH), Hydrogen atom, R group (radical/variable group that makes each amino acid unique). All attached to a central carbon."},
+  {u:1,q:"Describe the 3 levels of protein structure.",a:"Primary: linear chain of amino acids linked by peptide bonds. Secondary: alpha helix folding held by hydrogen bonds. Tertiary: 3D globular shape held by ionic, covalent, hydrogen, and sulfur bonds."},
+  {u:1,q:"What does it mean to denature a protein? What causes it?",a:"High temperature or extreme pH changes cause the enzyme to lose its tertiary (3D) shape, destroying the active site so it can no longer bind its substrate. Also caused by heavy metals."},
+  {u:1,q:"Give 2 examples each of enzymes and structural proteins.",a:"Enzymes: maltase (digests maltose), carbonic anhydrase (maintains blood pH). Structural proteins: keratin (hair and nails), collagen (connective tissues), actin/myosin (muscle tissue)."},
+  {u:1,q:"What is the monomer of nucleic acids? What are its 3 parts?",a:"Nucleotide. Parts: phosphate group, pentose sugar (deoxyribose in DNA, ribose in RNA), nitrogenous base."},
+  {u:1,q:"What does ATP stand for and what is its function?",a:"Adenosine triphosphate. The energy currency of the cell. Energy is released when a phosphate bond is broken during hydrolysis (ATP -> ADP + Pi + energy)."},
+
+  // ===== UNIT 2: CELL STRUCTURE & MEMBRANE =====
+  {u:2,q:"What are the 2 key principles of cell theory?",a:"1) The cell is the basic unit of life; all organisms consist of one or more cells. 2) All cells come from pre-existing cells."},
+  {u:2,q:"How do prokaryotic and eukaryotic cells differ?",a:"Prokaryotes lack a true nucleus and membrane-bound organelles. Their reactions occur throughout the cytosol (less efficient). Eukaryotes have a nucleus and organelles that compartmentalize reactions (more efficient)."},
+  {u:2,q:"What organelles do animal cells have that plant cells do not?",a:"Centrioles and lysosomes. Animal cells also have smaller vacuoles. (Plant cells uniquely have chloroplasts, cell walls, and larger vacuoles.)"},
+  {u:2,q:"What is the function of the nucleus?",a:"Controls gene expression, mediates DNA replication during cell cycle. The control center of the cell."},
+  {u:2,q:"What is the function of the cell membrane?",a:"Controls what enters and exits the cell, defines cell boundaries, protects cell from external environment. Selectively permeable."},
+  {u:2,q:"What do mitochondria do?",a:"Convert glucose to ATP which powers energy-dependent cellular reactions."},
+  {u:2,q:"Compare rough ER and smooth ER.",a:"Rough ER: has ribosomes attached, makes/processes/transports proteins destined for organelles, membrane, or secretion. Smooth ER: no ribosomes, produces lipids (phospholipids for membranes, steroids for hormones), detoxifies drugs and alcohol."},
+  {u:2,q:"Why do testes, liver, and adrenal glands have extensive smooth ER?",a:"Testes: produce testosterone (steroid). Liver: detoxifies drugs and alcohol. Adrenal glands: produce steroid hormones (aldosterone, cortisol)."},
+  {u:2,q:"What do ribosomes do?",a:"'Protein factories' -- catalyze formation of peptide bonds between amino acids during translation. Found free in cytoplasm or attached to rough ER."},
+  {u:2,q:"What does the Golgi apparatus do?",a:"Further processes, sorts, and packages proteins destined for organelles, the cell membrane, or secretion. Like a shipping department."},
+  {u:2,q:"Where are hydrolytic enzymes predominantly found? What do lysosomes do?",a:"Lysosomes. They fuse with vacuoles containing food, damaged organelles, or pathogens so contents can be digested by hydrolysis."},
+  {u:2,q:"What is the nucleolus and what does it produce?",a:"A darker region within the nucleus. Produces mRNA which goes to the cytosol to help produce proteins (also produces ribosomal subunits)."},
+  {u:2,q:"How do ribosomes and Golgi bodies work together?",a:"Ribosomes produce proteins (including those for secretion/membrane). The Golgi apparatus then processes, sorts, and packages these proteins so vesicles can deliver them to their final destinations."},
+  {u:2,q:"How do the cell membrane and cytoskeleton work together?",a:"The cytoskeleton (protein fibers) supports and anchors organelles beneath the membrane. It allows the cell to be dynamic -- remodeling shape as needed for endocytosis or cell movement."},
+  {u:2,q:"List 5 activities ALL animal cells must perform to stay alive.",a:"1) Store/transmit genetic info (nucleus). 2) Convert glucose to ATP (mitochondria). 3) Produce proteins (ribosomes). 4) Process/package proteins (Golgi). 5) Transport proteins/lipids in and out (vesicles)."},
+  {u:2,q:"Describe the fluid mosaic model of the cell membrane.",a:"The membrane is a semi-fluid, dynamic phospholipid bilayer with a variety of proteins floating within it. Hydrophilic phosphate heads face outward, hydrophobic fatty acid tails face inward."},
+  {u:2,q:"What prefix indicates a carbohydrate chain attached to a protein or lipid?",a:"Glyco- (as in glycoprotein and glycolipid). These carbohydrate chains are on the outer surface of the membrane."},
+  {u:2,q:"What are intrinsic (integral) proteins?",a:"Proteins that span the entire phospholipid bilayer of the cell membrane. They serve as channels, carriers, or receptors."},
+  {u:2,q:"Define diffusion and give an example.",a:"Movement of particles from high concentration to low concentration. No membrane, carrier, or ATP required. Example: oxygen moving from air into blood."},
+  {u:2,q:"Define osmosis.",a:"Movement of water molecules from areas of high water concentration to low water concentration across a semi-permeable membrane until equilibrium. No carrier or ATP required."},
+  {u:2,q:"Define facilitated transport.",a:"Movement using a carrier or channel protein. Still moves WITH the concentration gradient, so no ATP is required. Example: glucose entering cells."},
+  {u:2,q:"Define active transport.",a:"Movement AGAINST the concentration gradient using a carrier protein and ATP energy. Example: sodium-potassium pump."},
+  {u:2,q:"Complete the transport table: which require membrane, carrier, ATP, and go with gradient?",a:"Diffusion: no membrane, no carrier, no ATP, with gradient. Osmosis: yes membrane, no carrier, no ATP, with gradient. Facilitated: yes membrane, yes carrier/channel, no ATP, with gradient. Active: yes membrane, yes carrier, yes ATP, AGAINST gradient."},
+  {u:2,q:"How does oxygen cross the cell membrane? Water? Sodium ions? Glucose?",a:"Oxygen: diffusion. Water: osmosis. Sodium ions: facilitated or active transport. Glucose: facilitated or active transport."},
+  {u:2,q:"What 5 factors influence diffusion rate?",a:"1) Surface area (greater = faster). 2) Temperature (higher = faster). 3) Concentration gradient (steeper = faster). 4) Particle size (smaller = faster). 5) Medium (gas fastest > liquid > solid slowest)."},
+  {u:2,q:"Compare isotonic, hypertonic, and hypotonic solutions.",a:"Isotonic: equal concentration inside/outside, no net water movement. Hypertonic: higher solute outside, water leaves cell, cell shrinks. Hypotonic: lower solute outside, water enters cell, cell swells/may burst (lysis)."},
+  {u:2,q:"Why does winter road salt damage roadside plants?",a:"Salt mixes with water creating a hypertonic environment around the plant roots. Water exits the plant cells by osmosis, dehydrating and damaging them."},
+  {u:2,q:"Compare endocytosis and exocytosis.",a:"Both are active transport using vesicles + ATP. Endocytosis: vesicles bring substances INTO the cell. Includes phagocytosis ('cell eating,' large particles like bacteria) and pinocytosis ('cell drinking,' fluids/small particles). Exocytosis: vesicles move substances OUT (e.g., collagen, membrane lipids)."},
+
+  // ===== UNIT 3: DNA, RNA, PROTEIN SYNTHESIS, ENZYMES, BIOTECH =====
+  {u:3,q:"DNA and RNA are polymers of what monomer?",a:"Nucleotides."},
+  {u:3,q:"What are the 3 parts of a nucleotide?",a:"Phosphate group, pentose sugar, nitrogenous base."},
+  {u:3,q:"In DNA, G pairs with ___ and A pairs with ___.",a:"G pairs with C (cytosine). A pairs with T (thymine). In RNA, A pairs with U (uracil) instead of T."},
+  {u:3,q:"If a DNA strand has 34% adenine, what are the percentages of T, G, and C?",a:"T = 34% (A=T). Remaining = 100% - 68% = 32%. G = 16%, C = 16% (G=C)."},
+  {u:3,q:"Compare DNA and RNA across 7 features.",a:"DNA: nucleus only, 2 strands, double helix, larger, deoxyribose sugar, bases A/G/C/T, controls cell activities. RNA: nucleus + cytoplasm, 1 strand, single strand, smaller, ribose sugar, bases A/G/C/U, protein synthesis. RNA types: mRNA, tRNA, rRNA."},
+  {u:3,q:"What is DNA replication? Why is it necessary?",a:"Making an identical copy of DNA. Necessary so each daughter cell gets a complete copy of genetic information during cell division. Called semi-conservative because each new helix has one parent strand and one new daughter strand."},
+  {u:3,q:"Describe the 3 steps of DNA replication.",a:"1) Helicase separates the double helix by breaking hydrogen bonds between base pairs, forming two template strands. 2) DNA polymerase brings in complementary base pairs to each parent strand. 3) Ligase bonds successive bases together, forming two identical DNA double helices."},
+  {u:3,q:"Where do replication, transcription, and translation occur?",a:"Replication: nucleus. Transcription: nucleus. Translation: cytosol (on ribosomes)."},
+  {u:3,q:"What is transcription?",a:"DNA is used as a template to make mRNA. RNA polymerase reads the DNA template strand and builds a complementary mRNA strand. Occurs in the nucleus. The immature mRNA is processed to become mature mRNA that exits to the cytosol."},
+  {u:3,q:"What is translation?",a:"mRNA is used to direct protein synthesis at the ribosome. The ribosome reads mRNA codons (3 bases each) and tRNA brings the matching amino acids. Occurs in the cytosol."},
+  {u:3,q:"Describe the 3 steps of translation.",a:"1) Initiation: small ribosomal subunit binds start codon (AUG), initiator tRNA binds, large subunit joins, tRNA in P site. 2) Elongation: new tRNA enters A site, ribosome catalyzes peptide bond, ribosome shifts, empty tRNA exits E site. 3) Termination: ribosome hits stop codon, release factor enters A site, polypeptide is released."},
+  {u:3,q:"Why is the genetic code considered 'universal'?",a:"The same codons code for the same amino acids in all living things."},
+  {u:3,q:"If an enzyme has 687 amino acids, how many bases does its mRNA have?",a:"2061 bases (687 x 3, since each codon = 3 bases)."},
+  {u:3,q:"The codon table reads the _____ sequence to determine amino acids.",a:"mRNA sequence."},
+  {u:3,q:"tRNA anticodons are the same as DNA except ___ replaces ___.",a:"U (uracil) replaces T (thymine)."},
+  {u:3,q:"What is a mutagen? Give 3 examples.",a:"An agent that causes a base pair to be removed, added, or replaced in a gene. Examples: X-ray radiation, UV rays, chemical poisons, pollution, environmental contaminants."},
+  {u:3,q:"What are the 3 types of point mutations?",a:"Silent: codon still codes for same amino acid (no effect). Nonsense: creates early stop codon (truncated, non-functional protein). Missense: codon codes for a different amino acid (may be partially or fully non-functional)."},
+  {u:3,q:"What is a deletion/frameshift mutation?",a:"A base pair is removed from a gene, shifting the entire reading frame downstream. All codons after the deletion are read incorrectly, likely producing a completely non-functional protein."},
+  {u:3,q:"What is an enzyme's activation site? What is the lock-and-key model?",a:"The activation site (active site) is the region where the substrate fits with proper geometry for a reaction. The 'lock and key' model describes how the enzyme's 3D shape is complementary and specific to its substrate's shape."},
+  {u:3,q:"Why does denaturation prevent an enzyme from functioning?",a:"Denaturation alters the enzyme's 3D shape so the active site no longer complements the substrate's shape. The substrate cannot bind, so the enzyme cannot catalyze the reaction."},
+  {u:3,q:"Compare competitive vs non-competitive inhibition.",a:"Competitive: inhibitor binds to the active site, blocking the substrate. Non-competitive: inhibitor binds to an allosteric site (different location), changing the enzyme's 3D shape so the substrate can no longer fit the active site. Both slow the reaction; both are used in negative feedback regulation."},
+  {u:3,q:"What happens to reaction rate when you add more enzyme vs more substrate?",a:"More enzyme: increases reaction rate (more collisions). More substrate: increases rate initially, but eventually plateaus when all enzyme active sites are saturated (maximum rate)."},
+  {u:3,q:"What 2 environmental factors change enzyme shape?",a:"pH changes (interfere with hydrogen bonds affecting 3D shape) and temperature increases (disrupt bonds influencing 3D shape)."},
+  {u:3,q:"What is thyroxin? What happens with too little or too much?",a:"Hormone made by the thyroid. Regulates oxygen consumption and overall metabolism. Too little (hypothyroidism): slow metabolism, lethargy, weight gain, enlarged thyroid. Too much (hyperthyroidism): fast metabolism, nervous energy, weight loss, bulging eyes."},
+  {u:3,q:"What are GMOs?",a:"Genetically modified organisms. Key steps: identify a trait of interest, isolate that trait (gene), insert it into a desired organism, then propagate that organism."},
+
+  // ===== UNIT 4: DIGESTIVE SYSTEM =====
+  {u:4,q:"Name the organs of the digestive system in order.",a:"Mouth (teeth, tongue, salivary glands) -> Pharynx -> Esophagus -> Stomach -> Duodenum -> Small intestine -> Large intestine (colon) -> Rectum -> Anus. Accessory: liver, gall bladder, pancreas."},
+  {u:4,q:"What happens in the mouth?",a:"Ingestion. Mechanical digestion via teeth (grinding) and tongue (moving food). Chemical digestion of starches by salivary amylase (from salivary glands). Food formed into a moist ball called a bolus."},
+  {u:4,q:"What is the epiglottis?",a:"Structure that closes the glottis (opening of trachea) to prevent food from entering the lungs during swallowing."},
+  {u:4,q:"What is the esophagus? What moves food through it?",a:"Muscular tube from mouth to stomach. Food is moved by peristalsis (rhythmic wave-like muscle contractions)."},
+  {u:4,q:"What are the cardiac and pyloric sphincters?",a:"Cardiac sphincter: circular muscle between esophagus and stomach, prevents acid reflux. Pyloric sphincter: circular muscle between stomach and small intestine, controls release of chyme."},
+  {u:4,q:"What happens in the stomach?",a:"J-shaped muscular organ (expands to ~1-4L). Churns food (mechanical digestion). Produces HCl (kills bacteria, pH ~2), activates pepsin (breaks proteins into peptides). Produces acidic chyme (soupy food mixture)."},
+  {u:4,q:"What is the duodenum?",a:"First ~30 cm of the small intestine. Receives pancreatic juices containing enzymes for digesting proteins, carbs, lipids, and nucleic acids. Also receives bile."},
+  {u:4,q:"What does the liver do in digestion?",a:"Produces bile, which emulsifies (mechanically breaks up) lipids into smaller droplets so lipase enzymes can access them for chemical digestion."},
+  {u:4,q:"What does the gall bladder do?",a:"Stores and concentrates bile produced by the liver. Releases bile into the duodenum when fats are present."},
+  {u:4,q:"What are the pancreas's exocrine vs endocrine functions?",a:"Exocrine (enzymes): trypsin (proteins->peptides), pancreatic amylase (starch->maltose), lipase (fats->glycerol+fatty acids), nucleases (nucleic acids). Also releases bicarbonate to neutralize acidic chyme. Endocrine (hormones): insulin (lowers blood glucose) and glucagon (raises blood glucose)."},
+  {u:4,q:"Match each digestive enzyme to its substrate, product, location, and pH.",a:"Salivary amylase: starch->maltose, mouth, pH 7. Pepsin: proteins->peptides, stomach, pH 2. Trypsin: proteins->peptides, small intestine, pH 7.5-8. Lipase: lipids->glycerol+fatty acids, SI, pH 7.5-8. Pancreatic amylase: starch->maltose, SI, pH 7.5-8. Maltase: maltose->glucose, SI, pH 7.5-8. Peptidase: peptides->amino acids, SI. Nucleosidases: nucleotides->phosphate+sugar+base, SI."},
+  {u:4,q:"What is the digestion order for carbohydrates?",a:"Salivary amylase (starch->maltose in mouth) -> Pancreatic amylase (starch->maltose in SI) -> Maltase (maltose->glucose in SI)."},
+  {u:4,q:"What is the digestion order for proteins?",a:"Pepsin (proteins->peptides in stomach) -> Trypsin (proteins->peptides in SI) -> Peptidase (peptides->amino acids in SI)."},
+  {u:4,q:"How are fats digested and absorbed?",a:"Bile (from liver/gall bladder) emulsifies lipids in the small intestine. Lipase (from pancreas) breaks fats into glycerol + 3 fatty acids. Glycerol and fatty acids are absorbed by lacteals (lymphatic vessels) in the villi, entering the lymphatic system."},
+  {u:4,q:"What is a villus? What does it absorb?",a:"A finger-like projection in the small intestine wall that increases surface area. Blood vessels absorb amino acids, simple sugars (glucose), and nucleotide products. Lacteals absorb glycerol and fatty acids (fat digestion products)."},
+  {u:4,q:"Compare exocrine and endocrine.",a:"Exocrine: secretion of enzymes into nearby structures (e.g., digestive enzymes into duodenum). Endocrine: release of hormones (chemical messengers) into the blood to influence nearby or distant organs."},
+  {u:4,q:"What does glucagon do? What does insulin do?",a:"Glucagon: released when blood glucose is LOW. Causes liver to convert glycogen->glucose, releasing it into blood. Insulin: released when blood glucose is HIGH. Causes cells to absorb glucose from blood and liver to convert glucose->glycogen for storage."},
+  {u:4,q:"What is the function of the large intestine?",a:"Absorption of salt, water, and vitamins. Storage of waste (feces). Elimination of waste (defecation)."},
+  {u:4,q:"What neutralizes acidic chyme in the small intestine?",a:"Sodium bicarbonate, released by the pancreas."},
+
+  // ===== UNIT 5: RESPIRATORY SYSTEM =====
+  {u:5,q:"Name the path of air from nose to alveoli.",a:"Nose/mouth -> Pharynx -> Glottis -> Trachea -> Bronchi -> Bronchioles -> Alveoli."},
+  {u:5,q:"What does the nasal cavity do?",a:"Warms, moistens, and filters incoming air."},
+  {u:5,q:"What is the trachea? What are bronchi and bronchioles?",a:"Trachea: carries air from pharynx to bronchi. Bronchi: two branches from trachea, one into each lung. Bronchioles: smaller branches off bronchial tubes leading to alveoli."},
+  {u:5,q:"What are alveoli?",a:"Blind air sacs at the ends of bronchioles where gas exchange occurs with surrounding capillaries. Thin walls allow diffusion of O2 and CO2."},
+  {u:5,q:"How is debris removed from the lungs?",a:"Mucus lining the trachea and lungs traps particles. Cilia propel mucus upward to the mouth where it is swallowed or spat out. Coughing helps move mucus upward."},
+  {u:5,q:"Where is the respiratory center? What stimulates breathing?",a:"Medulla oblongata of the brain. Increased CO2 and H+ concentration in the blood stimulates increased breathing rate."},
+  {u:5,q:"What prevents alveoli from overfilling during forced inhalation?",a:"Alveolar stretch receptors detect inflation and send a signal via the Vagus nerve to the medulla oblongata, which stops the phrenic and intercostal nerves from stimulating the diaphragm and intercostal muscles, causing exhalation."},
+  {u:5,q:"How does O2 move from alveoli to blood?",a:"Diffusion -- O2 moves from high concentration (alveolar air) to low concentration (capillary blood) across the thin alveolar and capillary walls."},
+  {u:5,q:"What is oxyhemoglobin? What is carbaminohemoglobin?",a:"Oxyhemoglobin (HbO2): hemoglobin bound to O2 for transport. Carbaminohemoglobin (HbCO2): hemoglobin bound to CO2 for transport."},
+  {u:5,q:"How is CO2 transported in the blood? (3 ways)",a:"1) Dissolved CO2 in plasma. 2) As bicarbonate ions (HCO3-) -- CO2 reacts with H2O via carbonic anhydrase to form H2CO3, which dissociates into H+ and HCO3-. 3) Bound to hemoglobin as carbaminohemoglobin (HbCO2)."},
+  {u:5,q:"What is reduced hemoglobin (HHb)?",a:"Hemoglobin that has bound excess hydrogen ions (H+) to help buffer the blood and maintain pH. Hb + H+ -> HHb."},
+  {u:5,q:"What is the diaphragm's role in breathing?",a:"Contracts (flattens) for inhalation, increasing thoracic volume and decreasing pressure so air flows in. Relaxes (domes up) for exhalation, decreasing volume and increasing pressure so air flows out."},
+  {u:5,q:"List the equations for external respiration (in alveoli).",a:"Hb + O2 -> HbO2 (oxygen loading). HbCO2 -> Hb + CO2 (CO2 unloading). HHb -> Hb + H+ (hydrogen release). H+ + HCO3- -> H2CO3 -> H2O + CO2 (bicarbonate converted back to CO2 for exhaling)."},
+  {u:5,q:"List the equations for internal respiration (in capillary beds).",a:"HbO2 -> Hb + O2 (oxygen unloading to tissues). H2O + CO2 -> H2CO3 -> H+ + HCO3- (CO2 converted to bicarbonate). Hb + CO2 -> HbCO2 (some CO2 binds hemoglobin). Hb + H+ -> HHb (hemoglobin buffers H+)."},
+
+  // ===== UNIT 6: CIRCULATORY SYSTEM =====
+  {u:6,q:"What is the pulmonary circuit? The systemic circuit?",a:"Pulmonary: heart -> lungs -> heart (picks up O2, drops off CO2). Systemic: heart -> body -> heart (delivers O2, picks up CO2)."},
+  {u:6,q:"Arteries carry blood _____ the heart. Veins carry blood _____ the heart.",a:"Away from. Towards."},
+  {u:6,q:"What does the aorta do? The superior/inferior vena cava?",a:"Aorta: carries oxygenated blood from left ventricle to the body. Superior vena cava: returns deoxygenated blood from head/upper body to right atrium. Inferior vena cava: returns deoxygenated blood from lower body to right atrium."},
+  {u:6,q:"What are the coronary arteries and veins?",a:"Coronary arteries: supply oxygenated blood to the heart muscle itself. Coronary veins: remove deoxygenated blood from heart muscle back to heart chambers."},
+  {u:6,q:"What is unique about pulmonary arteries and veins?",a:"Pulmonary arteries carry DEOXYGENATED blood (from right ventricle to lungs). Pulmonary veins carry OXYGENATED blood (from lungs to left atrium). Opposite of typical arteries/veins."},
+  {u:6,q:"What is the hepatic portal vein?",a:"Carries nutrient-rich, oxygenated blood from the small intestine to the liver for processing before it enters general circulation."},
+  {u:6,q:"In fetal circulation, what allows blood to bypass the lungs?",a:"Oval opening (foramen ovale): allows blood to pass from right atrium directly to left atrium. Ductus arteriosus: connects pulmonary artery to aorta, bypassing lungs. Venous duct: bypasses the liver."},
+  {u:6,q:"What causes a 'blue baby'?",a:"When the oval opening (foramen ovale) fails to close at birth, deoxygenated blood from the right atrium mixes with oxygenated blood in the left atrium, resulting in poorly oxygenated blood circulating throughout the body."},
+  {u:6,q:"What facilitates exchange between maternal and fetal blood?",a:"The placenta. Maternal and fetal blood do not mix, but nutrients, O2, CO2, waste, drugs, and alcohol can all be exchanged across the placental membrane."},
+  {u:6,q:"Compare red blood cells, white blood cells, and platelets.",a:"RBCs: biconcave discs, no nucleus, transport O2/CO2 via hemoglobin, ~5 million per mm3, ~120-day lifespan, ~200 million hemoglobin molecules each. WBCs: variable shape, have nuclei, fight infections. Platelets: cell fragments, assist in blood clotting."},
+  {u:6,q:"What are the 6 components of plasma?",a:"~90% water, proteins (albumin, fibrinogen for clotting, globulins for immunity), dissolved O2/CO2, nutrients (amino acids, sugars, glycerol), salts (regulate osmotic pressure), cell wastes."},
+  {u:6,q:"Describe the blood clotting process.",a:"Injury -> prothrombin converted to active thrombin (via thromboplastin) -> thrombin converts inactive fibrinogen to active fibrin -> fibrin forms a lattice network trapping blood cells = fibrin clot. After vessel repair, plasmin destroys the clot."},
+  {u:6,q:"Explain the ABO blood type system.",a:"Type A: A antigens on RBCs, anti-B antibodies. Type B: B antigens, anti-A antibodies. Type AB: both A and B antigens, no antibodies (universal recipient). Type O: no antigens, both anti-A and anti-B antibodies (universal donor)."},
+  {u:6,q:"What is Rh factor and why does it matter in pregnancy?",a:"Rh+ means you have Rh antigen on RBCs. If an Rh- mother carries an Rh+ fetus, the mother may produce antibodies against Rh+ blood, causing agglutination (clumping) that is dangerous to the fetus."},
+  {u:6,q:"What are the 4 main functions of the lymphatic system?",a:"1) Recover excess tissue fluid and return it to circulatory system. 2) Absorb glycerol and fatty acids from lacteals in small intestine villi. 3) Produce lymphocytes (B and T cells for immunity). 4) Filter and trap bacteria (lymph nodes)."},
+  {u:6,q:"What do lymph capillaries, lymph veins, lacteals, lymph nodes, and valves do?",a:"Lymph capillaries: absorb excess fluid from tissues. Lymph veins: carry fluid to circulatory system. Lacteals: absorb fat digestion products. Lymph nodes: filter pathogens, produce lymphocytes. Valves: prevent backflow."},
+  {u:6,q:"At the capillary bed, what forces drive fluid exchange?",a:"Arteriole end: blood pressure exceeds osmotic pressure, forcing nutrients OUT into tissue fluid. Venule end: osmotic pressure exceeds blood pressure, pulling wastes back IN. Capillaries are 1 cell thick for efficient diffusion; slow blood velocity gives time for exchange."},
+  {u:6,q:"Where in the circulatory system is blood velocity slowest? Why is this beneficial?",a:"In the capillaries. Slow velocity gives substances time to diffuse across the thin (1 cell thick) walls. Capillary beds are the most important part -- arteries and veins exist to service them."},
+  {u:6,q:"Name the 4 chambers of the heart and their functions.",a:"Right atrium: collects deoxygenated blood from body (via vena cava). Right ventricle: pumps deoxygenated blood to lungs. Left atrium: collects oxygenated blood from lungs (via pulmonary veins). Left ventricle: pumps oxygenated blood to body (via aorta)."},
+  {u:6,q:"What are AV valves, chordae tendineae, and semilunar valves?",a:"AV valves: between atria and ventricles, prevent backflow to atria during ventricular contraction. Chordae tendineae: attached to AV valves, ensure they stay closed. Semilunar valves: in aorta and pulmonary artery, prevent backflow into ventricles."},
+  {u:6,q:"What causes the 'lub-dub' heart sound?",a:"'Lub' = AV valves closing (start of ventricular systole). 'Dub' = semilunar valves closing (start of ventricular diastole)."},
+  {u:6,q:"What is systole and diastole?",a:"Systole: contraction of cardiac muscle (atria or ventricles). In blood pressure, systolic = higher number (pressure during ventricular contraction). Diastole: relaxation. Diastolic = lower number. Normal: 120/80 mmHg."},
+  {u:6,q:"Describe the nodal (intrinsic) conduction system of the heart.",a:"SA node (pacemaker, top right atrium) initiates atrial contraction every ~0.8 seconds -> AV node (bottom of right atrium) collects signal -> Bundle of His -> Purkinje fibers in ventricle walls, initiating contraction from bottom upward."},
+  {u:6,q:"Compare intrinsic vs extrinsic heart rate control.",a:"Intrinsic: SA node pacemaker sets rhythm without external input. Extrinsic: medulla oblongata regulates via autonomic nervous system. Parasympathetic (Vagus nerve, acetylcholine) slows heart. Sympathetic (accelerator nerve, norepinephrine) speeds heart. Triggered by blood pressure, CO2, O2, and H+ levels."},
+  {u:6,q:"Define hypotension and hypertension.",a:"Hypotension: low BP (below 90/60). Symptoms: dizziness, fainting, fatigue. May indicate dehydration or improper heartbeat. Hypertension: high BP (above 140/100). Causes: high salt diet (water retention), arterial plaques narrowing vessels."},
+
+  // ===== UNIT 7: NERVOUS SYSTEM =====
+  {u:7,q:"Label the parts of a neuron and their functions.",a:"Cell body: housekeeping functions. Dendrite: receives chemical signals from other neurons, conducts electrical messages to cell body. Axon: transmits electrical signals from cell body to axon terminal. Axon terminal: converts electrical signal to chemical signal by releasing neurotransmitter into the synaptic cleft."},
+  {u:7,q:"What are Schwann cells and Nodes of Ranvier?",a:"Schwann cells: myelinate the axon (insulation) to speed up the electrical signal. Nodes of Ranvier: gaps between Schwann cells where saltatory conduction ('signal jumping') occurs, greatly increasing signal speed."},
+  {u:7,q:"What is a reflex arc? What is its purpose?",a:"The simplest nerve pathway: receptor -> sensory neuron -> interneuron (in CNS) -> motor neuron -> effector (muscle/gland). Purpose: fastest possible reaction time, independent of brain processing. Protects from harm (pulling away from hot objects, blinking)."},
+  {u:7,q:"Compare sensory neurons, motor neurons, and interneurons.",a:"Sensory: long dendrites, short axons, carry signals from receptors to CNS. Motor: short dendrites, long axons, carry signals from CNS to effectors (muscles/glands). Interneurons: connect sensory to motor neurons within the CNS."},
+  {u:7,q:"What is an 'all-or-nothing' event in neurons?",a:"An electrical signal will NOT be initiated along an axon unless the threshold potential is reached at the dendrite. If threshold IS met, it triggers a domino effect of sodium channel openings that progresses along the axon in an unstoppable fashion. There is no partial firing."},
+  {u:7,q:"What is resting potential? How is it maintained?",a:"~-70 mV charge inside the neuron (at rest). Maintained by the sodium-potassium pump, which actively pumps 3 Na+ out and 2 K+ in, keeping more Na+ outside and more K+ inside. This pump runs continuously using ATP."},
+  {u:7,q:"Describe the phases of an action potential.",a:"Depolarization: stimulus opens Na+ channels, Na+ rushes IN, membrane potential rises to +30 mV. Repolarization: Na+ channels close, K+ channels open, K+ rushes OUT, potential drops toward -70 mV. Recovery: Na+/K+ pump restores ion distribution to resting positions."},
+  {u:7,q:"How does a synapse work? (step by step)",a:"1) Action potential arrives at axon terminal. 2) Ca2+ enters terminal. 3) Ca2+ causes synaptic vesicles to move to and fuse with presynaptic membrane. 4) Neurotransmitter released into synaptic cleft by exocytosis. 5) Neurotransmitter diffuses across cleft. 6) Binds receptors on postsynaptic membrane (dendrite). 7) May trigger new action potential if threshold is met."},
+  {u:7,q:"What is the role of Ca2+ at the synapse?",a:"Ca2+ ions enter the axon terminal and bind to contractile proteins, causing synaptic vesicles to move to and fuse with the presynaptic membrane, releasing neurotransmitter."},
+  {u:7,q:"What are the two major divisions of the nervous system?",a:"Central Nervous System (CNS): brain + spinal cord -- receives, integrates, and directs responses. Peripheral Nervous System (PNS): all nerves outside CNS -- detects stimuli and transmits information to/from CNS."},
+  {u:7,q:"What are the two divisions of the PNS?",a:"Somatic nervous system: voluntary, controls skeletal muscles, skin, sensory organs. Uses reflex arcs. Autonomic nervous system: involuntary, controls heart rate, digestion, respiration, pupil response, urination, arousal. Controls fight-or-flight."},
+  {u:7,q:"Compare sympathetic and parasympathetic divisions.",a:"Sympathetic ('fight or flight'): increases heart rate, breathing, dilates pupils, sends blood to skeletal muscles, limits digestion. Neurotransmitter: norepinephrine. Parasympathetic ('rest and digest'): decreases heart rate, breathing, constricts pupils, sends blood to digestive system, enhances digestion. Neurotransmitter: acetylcholine."},
+  {u:7,q:"How do adrenal glands contribute to the stress response?",a:"Sympathetic neurons release norepinephrine, which triggers adrenal glands to release adrenalin (epinephrine). This initiates fight-or-flight: increased heart/breathing rate, dilated pupils/airways, blood to muscles, decreased digestion, decreased saliva (dry mouth when stressed)."},
+  {u:7,q:"What is the general function of the brain?",a:"Receive/process/integrate sensory information, direct responses, store/retrieve memories, use past information to determine future responses."},
+  {u:7,q:"Name the brain structures and their functions.",a:"Medulla oblongata: respiratory/cardiac control, involuntary responses (coughing, vomiting). Cerebellum: balance and coordinated movement. Hypothalamus: homeostasis (temp, hunger, thirst, sleep), controls pituitary gland. Thalamus: relay station for sensory info to cerebrum. Pituitary gland: stores/produces hormones (growth hormone). Corpus callosum: connects left and right hemispheres. Cerebrum: conscious thought, sensory perception, voluntary movement."},
+  {u:7,q:"What are the 4 lobes of the cerebrum?",a:"Frontal: executive function, thinking, planning, emotions, personality, motor cortex. Parietal: sensory cortex, perception, arithmetic, spatial awareness. Temporal: memory, understanding, language. Occipital: vision."},
+
+  // ===== UNIT 8: URINARY SYSTEM =====
+  {u:8,q:"What is excretion?",a:"Removal of metabolic wastes (undesirable byproducts of cellular activities) from the body."},
+  {u:8,q:"What do each of these organs excrete?",a:"Sweat glands: water, salt, urea. Lungs: CO2. Liver: removes old RBCs, pigments, nitrogenous byproducts from protein metabolism. Kidneys: produces urine containing multiple waste products. Large intestine: excess salts (calcium, iron)."},
+  {u:8,q:"Name the structures of the urinary system and their functions.",a:"Kidneys: filter blood, produce urine. Ureters: carry urine from kidneys to bladder. Bladder: stores urine. Urethra: where urine exits the body."},
+  {u:8,q:"What are the main parts of a kidney?",a:"Renal cortex: outer region where ultrafiltration occurs. Medulla/renal pyramids: inner region, concentrates urine by salt and water reabsorption. Renal pelvis: collects urine. Ureter: transports urine to bladder."},
+  {u:8,q:"How does blood plasma compare to urine?",a:"Plasma: ~90% water, contains proteins, salts, nutrients (including glucose), and wastes. Urine: mostly water, contains salts, pigments from old RBCs, nitrogenous wastes, but should LACK proteins and glucose (their presence indicates disease)."},
+  {u:8,q:"Name and describe all parts of the nephron.",a:"Glomerulus: knot of capillaries where pressure filtration forces water, nutrients, and waste into Bowman's capsule. Bowman's capsule: collects filtrate. Proximal convoluted tubule (PCT): selectively reabsorbs nutrients (glucose, amino acids, vitamins, minerals, salts, water) back into blood. Loop of Henle: descending arm pumps salt out creating osmotic gradient; ascending arm -- water exits following gradient, reabsorbed into blood. Distal convoluted tubule (DCT): tubular excretion -- excess H+, histamine, creatine, antibiotics, ammonia excreted from blood into tubule. Collecting duct: collects concentrated urine from multiple nephrons."},
+  {u:8,q:"What are the renal arteriole and renal venule?",a:"Renal arteriole: carries unfiltered ('dirty') blood INTO the nephron/glomerulus. Renal venule: carries filtered ('clean') blood AWAY from the nephron."},
+  {u:8,q:"What is the peritubular capillary network?",a:"Capillaries surrounding the tubules where salt and water are reabsorbed from the tubule/tissue back into the blood."},
+  {u:8,q:"How do these events change urine volume/concentration?",a:"Dehydration: less urine, more concentrated. Exercise/sweating: less, more concentrated. Drinking 3L fluid: more urine, less concentrated. High salt: less urine, more concentrated (water retention). Alcohol: more urine, less concentrated (alcohol inhibits ADH)."},
+  {u:8,q:"How do blood salt levels affect blood volume and pressure?",a:"High blood salt creates blood that is hypertonic to urine, so more water is reabsorbed from urine into blood by osmosis. This increases blood volume, which increases blood pressure."},
+  {u:8,q:"Compare ADH and aldosterone in blood pressure regulation.",a:"ADH (from pituitary gland): released when hypothalamus detects high blood salt concentration (= low blood volume/pressure). Targets DCT and collecting duct to reabsorb more water from urine into blood. Aldosterone (from adrenal glands): released when kidneys detect low BP. Kidneys release renin -> angiotensin I -> angiotensin II (constricts blood vessels, raises local BP). Angiotensin II triggers aldosterone release, which increases salt reabsorption, pulling more water into blood."},
+
+  // ===== UNIT 9: REPRODUCTIVE SYSTEM =====
+  {u:9,q:"Name the male reproductive structures and their functions.",a:"Testes: produce sperm and testosterone. Scrotum: holds testes at slightly below body temp for healthy sperm. Epididymis: stores maturing sperm. Vas deferens: carries sperm to urethra. Seminal vesicle, prostate gland, bulbourethral (Cowper's) gland: all contribute to seminal fluid. Urethra: conducts sperm (and urine) out. Penis: organ of copulation."},
+  {u:9,q:"Why does sterility result if testes don't descend into the scrotum?",a:"Testes remain at body temperature, which is too high for healthy sperm production. The scrotum holds them slightly cooler than core body temperature."},
+  {u:9,q:"What is spermatogenesis? Where does it occur?",a:"The production/development of sperm. Occurs in the seminiferous tubules within the testes."},
+  {u:9,q:"What are interstitial (Leydig) cells?",a:"Cells adjacent to the seminiferous tubules in the testes. They produce testosterone."},
+  {u:9,q:"Name the 3 parts of a mature sperm and their functions.",a:"Head: contains DNA and the acrosomal cap (enzymes to penetrate egg). Mid-piece: packed with mitochondria to provide ATP for flagella movement. Tail/Flagella: propels the sperm."},
+  {u:9,q:"Explain the hormonal feedback loop regulating male reproduction.",a:"Hypothalamus releases GnRH -> anterior pituitary releases FSH and LH. FSH stimulates Sertoli cells (sperm development). LH stimulates Leydig cells (testosterone production). Testosterone further helps sperm development BUT rising testosterone levels create negative feedback on hypothalamus/pituitary, blocking GnRH/FSH/LH release. Testosterone drops, negative feedback is lost, cycle restarts."},
+  {u:9,q:"Name the female reproductive structures and their functions.",a:"Ovaries: produce eggs, estrogen, and progesterone. Fimbriae: sweep egg into oviduct. Oviduct (fallopian tube): site of fertilization, conducts egg to uterus. Uterus: site of fetal development. Cervix: entry between vagina and uterus. Vagina: receives sperm, birth canal, menstrual flow exit."},
+  {u:9,q:"How does the oviduct aid egg passage?",a:"1) Mucous lining secretes substances that aid egg movement. 2) Peristalsis (rhythmic contractions) moves the egg toward the uterus."},
+  {u:9,q:"List 5 effects of estrogen on the female body.",a:"1) Stimulates breast development at puberty. 2) Stimulates uterine maturation. 3) Prepares uterus to nourish a fetus. 4) Helps maintain bone density. 5) Development of secondary sex characteristics (wider hips, fat deposition, pubic hair)."},
+  {u:9,q:"Name the 5 key reproductive hormones, their sources, and effects.",a:"GnRH (hypothalamus): triggers pituitary to release LH and FSH. FSH (pituitary): causes ovaries to mature a follicle/egg. LH (pituitary): triggers ovulation (egg release). Estrogen (ovary): low levels build endometrium, high levels inhibit GnRH. Progesterone (ovary): thickens endometrium, high levels inhibit LH release."},
+  {u:9,q:"Describe the 3 phases of the ovarian cycle.",a:"Follicular phase (days 1-13): hypothalamus releases GnRH, pituitary releases FSH/LH, egg matures in follicle. Ovulation (day 14): high LH surge triggers egg release. Luteal phase (days 15-28): corpus luteum secretes estrogen and progesterone. If no pregnancy, corpus luteum degenerates, hormone levels drop, menstruation begins."},
+  {u:9,q:"Describe the 3 phases of the uterine cycle.",a:"Menstruation (days 1-5): low estrogen/progesterone, endometrium breaks down and is expelled. Proliferative phase (days 6-13): rising estrogen from maturing follicle rebuilds endometrium. Secretory phase (days 15-28): progesterone from corpus luteum doubles endometrium thickness, vascularizes it, produces mucus -- ready for implantation."},
+  {u:9,q:"What is implantation?",a:"When a fertilized egg (embryo stage) embeds itself in the endometrium of the uterus, several days after fertilization."},
+  {u:9,q:"What is HCG and what does it do?",a:"Human Chorionic Gonadotropin. Released by the membrane surrounding the embryo after implantation. Prevents corpus luteum from degenerating, maintaining estrogen and progesterone levels to sustain the endometrial lining. This is what pregnancy tests detect."},
+  {u:9,q:"Why must estrogen and progesterone remain high during pregnancy?",a:"They maintain the corpus luteum (via HCG from placenta) and prevent shedding of the endometrial lining. If they drop, the lining sheds along with the implanted embryo -- effectively a miscarriage."},
+  {u:9,q:"What is the placenta? What does it do?",a:"Formed from maternal and fetal tissues. Functions: produces HCG to maintain corpus luteum. Transfers nutrients from mother's blood to fetal blood. Transfers waste from fetal blood to mother's blood. Maternal and fetal blood do NOT mix directly."},
+  {u:9,q:"What is oxytocin and how does it relate to positive feedback?",a:"Hormone from posterior pituitary. Causes uterine contractions during labor. Contractions stimulate more oxytocin release, causing stronger contractions -- a positive feedback loop that continues until the baby is delivered. Also released during breastfeeding to trigger milk release."},
+];
+
+let cards = [...allCards];
+let idx = 0;
+let flipped = false;
+let activeUnits = new Set([1,2,3,4,5,6,7,8,9]);
+let seen = new Set();
+
+function init() {
+  const ctrl = document.getElementById('controls');
+  const allBtn = document.createElement('button');
+  allBtn.className = 'unit-btn active';
+  allBtn.textContent = 'All';
+  allBtn.onclick = () => toggleAll();
+  allBtn.id = 'all-btn';
+  ctrl.appendChild(allBtn);
+  for (let i = 1; i <= 9; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'unit-btn active';
+    btn.textContent = 'U' + i;
+    btn.id = 'u-btn-' + i;
+    btn.onclick = () => toggleUnit(i);
+    ctrl.appendChild(btn);
+  }
+  updateTotal();
+  render();
+}
+
+function toggleAll() {
+  if (activeUnits.size === 9) {
+    activeUnits.clear();
+  } else {
+    for (let i = 1; i <= 9; i++) activeUnits.add(i);
+  }
+  filterCards();
+}
+
+function toggleUnit(u) {
+  if (activeUnits.has(u)) activeUnits.delete(u); else activeUnits.add(u);
+  filterCards();
+}
+
+function filterCards() {
+  cards = allCards.filter(c => activeUnits.has(c.u));
+  idx = 0;
+  flipped = false;
+  seen.clear();
+  updateButtons();
+  updateTotal();
+  render();
+}
+
+function updateButtons() {
+  document.getElementById('all-btn').className = 'unit-btn' + (activeUnits.size === 9 ? ' active' : '');
+  for (let i = 1; i <= 9; i++) {
+    document.getElementById('u-btn-' + i).className = 'unit-btn' + (activeUnits.has(i) ? ' active' : '');
+  }
+  let names = [];
+  for (let u of activeUnits) names.push('U'+u+': '+unitNames[u]);
+  document.getElementById('unit-names').textContent = activeUnits.size <= 3 ? names.join(' | ') : '';
+}
+
+function updateTotal() {
+  document.getElementById('total-count').textContent = cards.length + ' cards';
+}
+
+function render() {
+  if (cards.length === 0) {
+    document.getElementById('card-text').textContent = 'No cards selected';
+    document.getElementById('card-unit').textContent = '';
+    document.getElementById('card-count').textContent = '';
+    document.getElementById('card-label').textContent = '';
+    document.getElementById('progress').style.width = '0%';
+    document.getElementById('seen-stat').textContent = '';
+    document.getElementById('remaining-stat').textContent = '';
+    return;
+  }
+  const c = cards[idx];
+  seen.add(idx);
+  const card = document.getElementById('card');
+  card.className = flipped ? 'card answer' : 'card';
+  document.getElementById('card-unit').textContent = 'U' + c.u + ': ' + unitNames[c.u];
+  document.getElementById('card-count').textContent = (idx + 1) + ' / ' + cards.length;
+  document.getElementById('card-text').textContent = flipped ? c.a : c.q;
+  document.getElementById('card-label').textContent = flipped ? 'answer' : 'tap to flip';
+  document.getElementById('prev-btn').disabled = idx === 0;
+  document.getElementById('next-btn').disabled = idx === cards.length - 1;
+  document.getElementById('progress').style.width = ((idx + 1) / cards.length * 100) + '%';
+  document.getElementById('seen-stat').textContent = seen.size + ' seen';
+  document.getElementById('remaining-stat').textContent = (cards.length - seen.size) + ' remaining';
+}
+
+function flip() { flipped = !flipped; render(); }
+function next() { if (idx < cards.length - 1) { idx++; flipped = false; render(); } }
+function prev() { if (idx > 0) { idx--; flipped = false; render(); } }
+
+function shuffle() {
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cards[i], cards[j]] = [cards[j], cards[i]];
+  }
+  idx = 0; flipped = false; seen.clear(); render();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') next();
+  else if (e.key === 'ArrowLeft') prev();
+  else if (e.key === ' ') { e.preventDefault(); flip(); }
+});
+
+init();
+</script>
+</body>
+</html>

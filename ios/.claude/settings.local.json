@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(xcodebuild -scheme Tally -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build 2>&1 | tail -5)",
+      "Bash(xcodebuild -scheme Tally -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build 2>&1 | tail -3)",
+      "Bash(/opt/homebrew/bin/xcodegen generate:*)",
+      "Bash(xcodebuild -scheme Tally -destination 'platform=iOS Simulator,name=iPhone 16' build 2>&1 | grep -E '\\(error:|BUILD|warning:.*\\\\.swift\\)' | head -40)",
+      "Bash(git restore:*)",
+      "Bash(git push:*)"
+    ]
+  }
+}
