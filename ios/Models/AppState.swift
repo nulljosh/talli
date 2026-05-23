@@ -61,7 +61,7 @@ final class AppState {
     }
 
     var paymentAmountText: String {
-        dashboard?.paymentAmount ?? "$0.00"
+        dashboard?.paymentAmount ?? "--"
     }
 
     var statusMessages: [String] {

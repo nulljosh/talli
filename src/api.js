@@ -824,7 +824,8 @@ app.get('/api/info', requireAuth, async (req, res) => {
 
     if (paymentSection && paymentSection.tableData) {
       for (const row of paymentSection.tableData) {
-        const amtMatch = row.match(/Amount:\s*(\$[\d,]+\.\d{2})/i);
+        const amtMatch = row.match(/(?:(?:payment\s+)?amount|cheque(?:\s+amount)?|monthly\s+(?:amount|benefit)|next\s+payment)[:\s]+(\$[\d,]+(?:\.\d{2})?)/i)
+          || row.match(/(\$\d{1,3}(?:,\d{3})+(?:\.\d{2})?)/);
         if (amtMatch) nextAmount = amtMatch[1];
         const dateMatch = row.match(/(\d{4}\s*\/\s*[A-Z]{3}\s*\/\s*\d{2})/);
         if (dateMatch && !nextDate) nextDate = dateMatch[1];
@@ -1006,9 +1007,11 @@ app.get('/api/summary', async (req, res) => {
     let shelterAmount = null;
 
     if (paymentSection && paymentSection.tableData) {
-      const totalRow = paymentSection.tableData.find(row => row.includes('Amount:'));
+      const totalRow = paymentSection.tableData.find(row =>
+        /amount|cheque|monthly|next\s+payment/i.test(row)
+      );
       if (totalRow) {
-        const match = totalRow.match(/\$[\d,]+\.\d{2}/);
+        const match = totalRow.match(/\$[\d,]+(?:\.\d{2})?/);
         if (match) totalPayment = match[0];
       }
 
@@ -1512,6 +1515,16 @@ async function loadUserBlob(userId, key, fallback) {
       const resp = await fetch(match.url);
       return await resp.json();
     }
+    // Legacy path fallback (pre-HMAC format — some results.json blobs were not migrated)
+    const legacyPath = `tally-cache/${userId}/${key}.json`;
+    const { blobs: legacyBlobs } = await list({ prefix: legacyPath });
+    const legacyMatch = legacyBlobs?.find(b => b.pathname === legacyPath);
+    if (legacyMatch) {
+      const resp = await fetch(legacyMatch.url);
+      const data = await resp.json();
+      saveUserBlob(userId, key, data).catch(() => {});
+      return data;
+    }
   } catch (err) {
     log(`[BLOB] Read ${key} failed:`, err.message);
   }
@@ -1939,7 +1952,9 @@ function extractMobileData(scraperResult) {
   const paymentData = (paymentSection.tableData || []).filter(s => typeof s === 'string');
   const paymentAllText = (paymentSection.allText || []).filter(s => typeof s === 'string');
   const raw = [...paymentData, ...paymentAllText].join('\n');
-  const amountMatch = raw.match(/Amount:\s*(\$[\d,]+(?:\.\d{2})?)/);
+  const amountMatch =
+    raw.match(/(?:(?:payment\s+)?amount|cheque(?:\s+amount)?|monthly\s+(?:amount|benefit)|next\s+payment)[:\s]+(\$[\d,]+(?:\.\d{2})?)/i) ||
+    raw.match(/(\$\d{1,3}(?:,\d{3})+(?:\.\d{2})?)/);
   const paymentAmount = amountMatch ? amountMatch[1] : null;
 
   // Fallback: if regex fails, provide designation-aware default
@@ -2003,6 +2018,16 @@ app.get('/api/mobile', requireAuth, async (req, res) => {
   }
 });
 
+
+app.get('/api/debug-payment', requireAuth, async (req, res) => {
+  try {
+    const result = await fetchOrLoadData(req);
+    const sections = result?.data?.sections || result?.sections || {};
+    res.json(sections['Payment Info'] || { error: 'Payment Info section not found', availableSections: Object.keys(sections) });
+  } catch (error) {
+    res.status(500).json({ error: safeApiError(error, 'Debug fetch failed') });
+  }
+});
 
 // 404 handler — must be last
 app.use((req, res) => {
