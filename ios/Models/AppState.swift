@@ -30,6 +30,7 @@ final class AppState {
 
     private let monitor = NWPathMonitor()
     private let monitorQueue = DispatchQueue(label: "com.heyitsmejosh.tally.network")
+    private var isRefreshing = false
 
     private var storedCredentials: KeychainHelper.Credentials?
 
@@ -378,10 +379,13 @@ final class AppState {
     }
 
     func refreshDashboard() async {
-        guard isAuthenticated else { return }
-
+        guard isAuthenticated, !isRefreshing else { return }
+        isRefreshing = true
         isLoading = true
-        defer { isLoading = false }
+        defer {
+            isLoading = false
+            isRefreshing = false
+        }
 
         do {
             async let dashTask = APIClient.shared.check()

@@ -23,9 +23,21 @@ targets:
           - "CLAUDE.md"
           - "architecture.svg"
           - UITests
+          - Tests
     settings:
       INFOPLIST_FILE: Info.plist
       PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally
+  TallyTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - Tests
+    dependencies:
+      - target: Tally
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally.tests
+        GENERATE_INFOPLIST_FILE: YES
   TallyUITests:
     type: bundle.ui-testing
     platform: iOS

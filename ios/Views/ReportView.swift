@@ -132,7 +132,7 @@ struct ReportView: View {
     }
 
     private var isFormValid: Bool {
-        sin.count == 9 && !digitsOnly(from: phone, maxCount: 20).isEmpty && !pin.isEmpty
+        sin.count == 9 && digitsOnly(from: phone, maxCount: 10).count == 10 && !pin.isEmpty
     }
 
     private var sinValidationMessage: String? {
@@ -234,7 +234,8 @@ struct ReportView: View {
     }
 
     private func parseDate(_ value: String?) -> Date? {
-        nil
+        guard let value else { return nil }
+        return DateParsing.parse(value)
     }
 
     private func digitsOnly(from value: String, maxCount: Int) -> String {
