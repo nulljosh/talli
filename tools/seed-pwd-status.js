@@ -36,7 +36,7 @@ async function main() {
     status: STATUS,
     submittedDate: '2026-01-14',
     deniedDate: STATUS === 'denied' ? '2026-05-14' : null,
-    notes: STATUS === 'denied' ? 'Late autism diagnosis. Ministry denied May 2026. Reconsideration pending.' : '',
+    notes: STATUS === 'denied' ? 'Late autism diagnosis. Ministry denied May 2026. Extension granted 2026-05-25. Hard deadline 2026-06-18. Fax 1-855-771-8784 or MYSS.' : '',
   };
   console.log(`Seeding ${BCEID_USERNAME} (userId: ${userId})`);
   console.log('Path:', blobPath);

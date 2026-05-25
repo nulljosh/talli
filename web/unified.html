@@ -635,31 +635,27 @@ function addBusinessDays(start, n) {
 // ════════════════════════════════════════════════════
 function PwdResubmitModal({dark, pwdDeniedDate, onClose}) {
   const t = tk(dark);
-  const deniedParsed = pwdDeniedDate ? new Date(String(pwdDeniedDate).replace(/\//g,'-')) : null;
-  const deadline = deniedParsed && !isNaN(deniedParsed) ? addBusinessDays(deniedParsed, 20) : null;
-  const daysLeft = deadline ? Math.ceil((deadline - new Date()) / 86400000) : null;
+  const deadline = new Date('2026-06-18');
+  const daysLeft = Math.ceil((deadline - new Date()) / 86400000);
   const steps = [
-    'Request your denial reason in writing from the ministry',
     'Collect updated letters from your GP and diagnosing clinician addressing daily living restrictions',
-    'Navigate to BC Self-Serve > PWD Applications > Reconsideration',
-    'Submit reconsideration request with supporting documentation',
+    'Fax documents to 1-855-771-8784, or submit via MYSS (myselfserve.gov.bc.ca)',
+    'Call 778-698-7750 (Recon Admin Team) to confirm receipt',
   ];
   return (
     <div style={{position:'fixed',inset:0,zIndex:999,display:'flex',flexDirection:'column',justifyContent:'flex-end',background:'rgba(0,0,0,0.5)'}} onClick={onClose}>
       <div style={{background:t.bg,borderRadius:'20px 20px 0 0',padding:'24px 20px',maxHeight:'82vh',overflowY:'auto',animation:'slideUp 0.25s ease-out'}} onClick={e=>e.stopPropagation()}>
         <div style={{width:36,height:4,borderRadius:2,background:t.border2,margin:'0 auto 20px'}}/>
-        <div style={{fontSize:18,fontWeight:700,letterSpacing:'-0.4px',color:t.text,marginBottom:4}}>PWD Reconsideration</div>
-        <div style={{fontSize:13,color:t.muted,marginBottom:20,lineHeight:1.5}}>Request a reconsideration of your denial from the Ministry of Social Development and Social Innovation.</div>
-        {deadline&&(
-          <div style={{padding:'12px 14px',borderRadius:10,background:daysLeft>0?`${t.warning}18`:`${t.error}18`,border:`1px solid ${daysLeft>0?t.warning:t.error}40`,marginBottom:20}}>
-            <div style={{fontSize:13,fontWeight:700,color:daysLeft>0?t.warning:t.error}}>
-              {daysLeft>0?`${daysLeft} day${daysLeft!==1?'s':''} remaining`:'Reconsideration window closed'}
-            </div>
-            <div style={{fontSize:11,color:t.muted,marginTop:2}}>
-              Deadline: {deadline.toLocaleDateString('en-CA',{weekday:'short',month:'long',day:'numeric',year:'numeric'})}
-            </div>
+        <div style={{fontSize:18,fontWeight:700,letterSpacing:'-0.4px',color:t.text,marginBottom:4}}>PWD Extension Granted</div>
+        <div style={{fontSize:13,color:t.muted,marginBottom:20,lineHeight:1.5}}>Extension granted May 25, 2026. Submit additional information by June 18th. No further extensions will be granted.</div>
+        <div style={{padding:'12px 14px',borderRadius:10,background:daysLeft>0?`${t.warning}18`:`${t.error}18`,border:`1px solid ${daysLeft>0?t.warning:t.error}40`,marginBottom:20}}>
+          <div style={{fontSize:13,fontWeight:700,color:daysLeft>0?t.warning:t.error}}>
+            {daysLeft>0?`${daysLeft} day${daysLeft!==1?'s':''} remaining`:'Deadline passed'}
           </div>
-        )}
+          <div style={{fontSize:11,color:t.muted,marginTop:2}}>
+            Hard deadline: Wed, June 18, 2026
+          </div>
+        </div>
         <div style={{fontSize:11,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:12}}>Steps</div>
         {steps.map((s,i)=>(
           <div key={i} style={{display:'flex',gap:10,marginBottom:12,alignItems:'flex-start'}}>
@@ -684,8 +680,7 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate,
   const reportFiled = !!(reportMonths && reportMonths[monthKey]);
   const isDenied = pwdStatus === 'denied';
   const isResubmitted = pwdStatus === 'resubmitted';
-  const deniedParsed = isDenied && pwdDeniedDate ? new Date(String(pwdDeniedDate).replace(/\//g,'-')) : null;
-  const reconDeadline = deniedParsed && !isNaN(deniedParsed) ? addBusinessDays(deniedParsed, 20) : null;
+  const reconDeadline = isDenied ? new Date('2026-06-18') : null;
   const reconDaysLeft = reconDeadline ? Math.ceil((reconDeadline - now) / 86400000) : null;
   const steps = [
     {label:'Application submitted',date:'Jan 14, 2026',done:true},
@@ -711,7 +706,7 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate,
         </div>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:13,fontWeight:700,color:t.text,letterSpacing:'-0.2px'}}>{isDenied?'PWD Application Denied':'Active — Receiving benefits'}</div>
-          <div style={{fontSize:12,color:t.mutedMid,marginTop:2}}>{isDenied?(pwdDeniedDate?`Denied ${pwdDeniedDate} · Resubmission available`:'Resubmission available'):`PWD application in progress · Step ${pwdApproved?'4':pwdMedicalDone?'3':'2'} of 4`}</div>
+          <div style={{fontSize:12,color:t.mutedMid,marginTop:2}}>{isDenied?`Extension granted May 25 · Due Jun 18, 2026`:`PWD application in progress · Step ${pwdApproved?'4':pwdMedicalDone?'3':'2'} of 4`}</div>
         </div>
         <div style={{fontSize:11,fontWeight:600,color:isDenied?t.error:t.accent,background:isDenied?`${t.error}18`:`${t.accent}18`,padding:'3px 9px',borderRadius:100,flexShrink:0}}>{isDenied?'Denied':isResubmitted?'Resubmitted':pwdApproved?'Approved':pwdMedicalDone?'With ministry':'In review'}</div>
       </div>
@@ -720,16 +715,15 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate,
       {isDenied&&<div style={{background:t.bg2,border:`1px solid ${t.border}`,borderRadius:12,padding:'14px 16px',marginBottom:28}}>
         <div style={{fontSize:12,fontWeight:600,color:t.text,marginBottom:6}}>Next steps</div>
         <ul style={{fontSize:12,color:t.mutedMid,paddingLeft:16,lineHeight:1.65,margin:0}}>
-          <li>Request denial reason in writing from ministry</li>
-          <li>File reconsideration within <b style={{color:t.warning}}>20 business days</b> of denial letter</li>
           <li>Get updated letters from GP + diagnosing clinician addressing daily living restrictions</li>
+          <li>Fax to <b style={{color:t.text}}>1-855-771-8784</b> or submit via MYSS</li>
           <li>If denied again: appeal to EAAT (Employment and Assistance Appeal Tribunal)</li>
         </ul>
         {reconDeadline&&<div style={{marginTop:10,padding:'8px 12px',borderRadius:8,background:reconDaysLeft>0?`${t.warning}18`:`${t.error}18`,border:`1px solid ${reconDaysLeft>0?t.warning:t.error}40`}}>
           <div style={{fontSize:12,fontWeight:700,color:reconDaysLeft>0?t.warning:t.error}}>
-            {reconDaysLeft>0?`${reconDaysLeft} day${reconDaysLeft!==1?'s':''} until reconsideration deadline`:'Reconsideration window closed'}
+            {reconDaysLeft>0?`${reconDaysLeft} day${reconDaysLeft!==1?'s':''} until extension deadline`:'Extension deadline passed'}
           </div>
-          <div style={{fontSize:11,color:t.muted,marginTop:1}}>{reconDeadline.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric',year:'numeric'})}</div>
+          <div style={{fontSize:11,color:t.muted,marginTop:1}}>Extension granted May 25 — hard deadline Jun 18, 2026</div>
         </div>}
         <button onClick={onPwdResubmit} style={{marginTop:12,background:t.accent,color:'#fff',border:'none',borderRadius:100,padding:'8px 18px',fontSize:12,fontWeight:700,fontFamily:'inherit',cursor:'pointer',letterSpacing:'-0.01em'}}>Resubmit PWD Application</button>
       </div>}

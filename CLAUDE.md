@@ -28,10 +28,11 @@ npm run upload-blob # upload to Vercel Blob
 - `web/benefits.html` -- benefits guide (disability, general BC/Canada, retirement)
 - `tools/dtc_apply.py` -- T2201/DTC helper
 
-## PWD Roadmap (Joshua's account — 2026-05-14)
-- Active PWD application was denied. Resubmission in progress.
-- **Feature needed**: PWD Resubmit button on Status tab — one-click to pre-fill and resubmit the PWD application directly from Tally, without navigating BC Self-Serve. Support queuing multiple submissions with deduplication tracking.
-- **Status tab**: Add reconsideration deadline tracker (20 business days from denial letter date).
+## PWD Roadmap (Joshua's account — updated 2026-05-25)
+- PWD application denied May 2026. **Extension granted 2026-05-25 by Ministry.**
+- Hard deadline: **June 18, 2026** — no further extensions. Submit via fax 1-855-771-8784 or MYSS.
+- Deadline is hardcoded in unified.html (not computed from denial date) since the extension overrides the standard 20-business-day window.
+- **Feature needed**: PWD Resubmit button on Status tab — one-click to pre-fill and resubmit the PWD application directly from Tally, without navigating BC Self-Serve.
 
 ## Changelog
 - v1.0.0 (2026-05-22): History reset. BC Self-Serve scraper with session-encrypted credentials, payment amount tracking, PWD application timeline, messages sync, Vercel Blob persistence, iOS + watchOS companion apps.
