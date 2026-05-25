@@ -171,14 +171,11 @@
       border-radius: 16px;
       padding: 24px;
       background: var(--bg);
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s;
     }
     .app-card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(26,22,18,0.08);
-    }
-    [data-theme="dark"] .app-card:hover {
-      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+      border-color: var(--text-tertiary);
     }
 
     .card-label {

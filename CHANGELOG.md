@@ -1,5 +1,18 @@
 # Changelog
 
+## [v3.1.2] — 2026-05-25
+
+- fix: auto-retry 401 responses before redirecting to login (session rehydration race)
+- fix: decrypt() wrapped in try-catch to prevent server crash on malformed session data
+- fix: blob persistence failures now logged instead of silently swallowed
+- fix: remove dead /api/submit-creds endpoint
+- feat: PWD reconsideration deadline tracker (20 business day countdown from denial date)
+- feat: PWD Resubmit button opens dedicated modal with steps and BC Self-Serve link
+- fix: skeleton shimmer replaced with opacity pulse (no gradient, design rule compliance)
+- fix: landing.html app-card hover removes box-shadow, uses border-color instead
+- fix: index.html redirects to /app (removes stale Tailwind debug page)
+- fix: vercel.json CSP updated — myselfserve.gov.bc.ca in connect-src, correct script-src
+
 ## [v3.1.1] — 2026-05-23
 
 - 80dd4305 chore: snow leopard pass (spark)

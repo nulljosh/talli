@@ -106,15 +106,20 @@ function encrypt(text) {
 
 function decrypt(encrypted) {
   if (!encrypted) return '';
-  const algorithm = 'aes-256-cbc';
-  const key = DERIVED_KEY;
-  const parts = encrypted.split(':');
-  const iv = Buffer.from(parts[0], 'hex');
-  const encryptedText = parts[1];
-  const decipher = crypto.createDecipheriv(algorithm, key, iv);
-  let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
-  decrypted += decipher.final('utf8');
-  return decrypted;
+  try {
+    const algorithm = 'aes-256-cbc';
+    const key = DERIVED_KEY;
+    const parts = encrypted.split(':');
+    if (parts.length < 2 || !parts[0] || !parts[1]) return '';
+    const iv = Buffer.from(parts[0], 'hex');
+    const encryptedText = parts[1];
+    const decipher = crypto.createDecipheriv(algorithm, key, iv);
+    let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+    return decrypted;
+  } catch {
+    return '';
+  }
 }
 
 function runCommand(command, args, options = {}) {
@@ -1107,7 +1112,7 @@ async function fetchOrLoadData(req) {
         log('[API] Live HTTP scrape succeeded');
         lastCheckResult = { ...result, checkedAt: new Date().toISOString() };
         // Write to Blob in background (fire-and-forget)
-        saveUserBlob(userId, 'results', lastCheckResult).catch(() => {});
+        saveUserBlob(userId, 'results', lastCheckResult).catch(err => log('[API] Blob persist failed:', err.message));
         const liveResult = { source: 'live', data: result };
         if (userId) {
           liveCache.set(userId, { ts: Date.now(), result: liveResult });
@@ -1782,11 +1787,6 @@ app.post('/api/avatar', requireAuth, async (req, res) => {
     log('[AVATAR] POST error:', err.message);
     res.status(500).json({ error: 'Failed to save avatar' });
   }
-});
-
-// Dev-only: serve .env submission credentials for auto-fill
-app.get('/api/submit-creds', requireAuth, (req, res) => {
-  res.json({});
 });
 
 // Submit monthly report
