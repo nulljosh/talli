@@ -939,9 +939,17 @@ function App() {
     });
   }, []);
 
+  async function fetchWithSessionRetry(url, opts, retries = 2) {
+    for (let i = 0; i <= retries; i++) {
+      const r = await fetch(url, opts);
+      if (r.status !== 401 || i === retries) return r;
+      await new Promise(res => setTimeout(res, 1500));
+    }
+  }
+
   const loadData = useCallback(async () => {
     try {
-      const r = await fetch('/api/latest', {credentials:'include'});
+      const r = await fetchWithSessionRetry('/api/latest', {credentials:'include'});
       if (r.status===401) { location.href='/login.html'; return; }
       if (!r.ok) return;
       const json = await r.json();
@@ -983,10 +991,12 @@ function App() {
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
     const mqH = e => setDark(e.matches);
     mq.addEventListener('change', mqH);
-    fetch('/api/me', {credentials:'include'})
-      .then(r=>{ if(!r.ok)throw new Error(); return r.json(); })
-      .then(d=>{
-        if(!d.authenticated){location.href='/login.html';return;}
+    (async () => {
+      try {
+        const r = await fetchWithSessionRetry('/api/me', {credentials:'include'});
+        if (!r.ok) { location.href='/login.html'; return; }
+        const d = await r.json();
+        if (!d.authenticated) { location.href='/login.html'; return; }
         setUsername(d.username);
         loadData();
         fetch('/api/paid-status',{credentials:'include'}).then(r=>r.json()).then(d=>setPaidMonths(d.paidMonths||{})).catch(()=>{});
@@ -1004,8 +1014,8 @@ function App() {
           if(p.skn) setSkn(p.skn);
           setPinSet(p.pinSet || false);
         }).catch(()=>{});
-      })
-      .catch(()=>{ location.href='/login.html'; });
+      } catch(e) { location.href='/login.html'; }
+    })();
     const clearPoll = visibilityInterval(loadData, 120000);
     if ('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js',{scope:'/'}).catch(console.error));
     return () => { mq.removeEventListener('change',mqH); clearPoll(); };
