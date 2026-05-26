@@ -21,6 +21,10 @@ enum APIClientError: Error, LocalizedError {
         case .decodingError(let error):
             return "Failed to parse server response: \(error.localizedDescription)"
         case .networkError(let error):
+            let nsError = error as NSError
+            if nsError.code == NSURLErrorSecureConnectionFailed {
+                return "TLS error — this network may use SSL inspection (school/work WiFi). Switch to cellular and try again."
+            }
             return "Network error: \(error.localizedDescription)"
         }
     }
