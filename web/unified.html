@@ -192,11 +192,11 @@ function parseDollar(s) { return parseFloat((s||'').replace(/[^0-9.]/g,'')) || 0
 
 // ── static past payments ──────────────────────────────
 const PAST_PAYMENTS = [
+  {year:2026,month:4,day:27,amount:'$1,060'},
   {year:2026,month:3,day:23,amount:'$1,060'},
   {year:2026,month:2,day:28,amount:'$1,060'},
   {year:2026,month:1,day:25,amount:'$1,060'},
   {year:2026,month:0,day:21,amount:'$1,060'},
-  {year:2025,month:11,day:16,amount:'$1,060'},
 ];
 
 // ── count-up ──────────────────────────────────────────
@@ -373,6 +373,32 @@ function HomeTab({dark, amount, daysUntil, paymentDate, paid, onPaidChange}) {
             );
           })}
         </div>
+      </div>
+
+      {/* Debt triage */}
+      <div style={{marginTop:28,animation:'fadeUp 0.45s 0.66s ease both'}}>
+        <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:12}}>Debt triage</div>
+        <div style={{background:t.bg2,border:`1px solid ${t.border}`,borderRadius:10,overflow:'hidden'}}>
+          {[
+            {label:'Transit pass top-up',  amount:'$50',  clearable:true},
+            {label:'Phone bill (May)',      amount:'$45',  clearable:true},
+            {label:'Grocery tab (Ben)',     amount:'$80',  clearable:true},
+            {label:'Prescription co-pay',  amount:'$25',  clearable:false},
+            {label:'BC Hydro arrears',      amount:'$140', clearable:false},
+          ].map(({label,amount,clearable},i,arr)=>(
+            <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 14px',borderBottom:i<arr.length-1?`1px solid ${t.border}`:'none'}}>
+              <div style={{display:'flex',alignItems:'center',gap:8}}>
+                <div style={{width:6,height:6,borderRadius:'50%',flexShrink:0,background:clearable?t.success:t.border2}}/>
+                <span style={{fontSize:13,color:t.text,letterSpacing:'-0.2px'}}>{label}</span>
+              </div>
+              <div style={{display:'flex',alignItems:'center',gap:8}}>
+                <span style={{fontSize:13,fontWeight:600,color:t.text,letterSpacing:'-0.5px'}}>{amount}</span>
+                {clearable&&<span style={{fontSize:10,fontWeight:700,color:t.success,background:`${t.success}18`,padding:'2px 7px',borderRadius:100,letterSpacing:'0.04em',textTransform:'uppercase'}}>Jun 1</span>}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div style={{marginTop:8,fontSize:11,color:t.muted}}>Green dot = clearable before Jun 1 income window</div>
       </div>
     </div>
   );
@@ -689,7 +715,7 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate,
     {label:'Backdated payments',date:pwdApproved?'Issued':'Upon approval',done:pwdApproved},
   ];
   const upcoming=[
-    {label:'Monthly report due',date:'May 5',warn:!reportFiled,action:!reportFiled,done:reportFiled},
+    {label:'Income report window',date:'Jun 1–5',warn:!reportFiled,action:!reportFiled,done:reportFiled},
     {label:'PharmaCare renewal',date:'Jun 1'},
     {label:'T4 slip available',date:'Feb 2027'},
   ];
