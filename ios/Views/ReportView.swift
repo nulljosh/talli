@@ -19,7 +19,16 @@ struct ReportView: View {
     var body: some View {
         Form {
             Section("Timing") {
-                Text("The period opens ~21st. Don't submit until after the 28th -- forms submitted in the first week don't clear by payday.")
+                if isFilingWindowOpen {
+                    HStack(spacing: 8) {
+                        Image(systemName: "exclamationmark.circle.fill")
+                            .foregroundStyle(Color.tallyOrange)
+                        Text("Filing window is open — closes the 5th")
+                            .font(.footnote.weight(.semibold))
+                            .foregroundStyle(Color.tallyOrange)
+                    }
+                }
+                Text("The filing window is open days 1–5 of each month. Submit during this window.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
@@ -163,19 +172,18 @@ struct ReportView: View {
         return "Last submitted: Never"
     }
 
+    private var isFilingWindowOpen: Bool {
+        Calendar.current.component(.day, from: Date()) <= 5
+    }
+
     private var nextDeadline: Date {
         let calendar = Calendar.current
         let now = Date()
-        let year = calendar.component(.year, from: now)
-        let month = calendar.component(.month, from: now)
-
-        let startOfThisMonth = calendar.date(from: DateComponents(year: year, month: month, day: 1)) ?? now
-        if now <= startOfThisMonth {
-            return startOfThisMonth
-        }
-
-        let nextMonth = calendar.date(byAdding: .month, value: 1, to: startOfThisMonth) ?? now
-        return nextMonth
+        var comps = calendar.dateComponents([.year, .month], from: now)
+        comps.day = 5
+        let deadline5 = calendar.date(from: comps) ?? now
+        if now <= deadline5 { return deadline5 }
+        return calendar.date(byAdding: .month, value: 1, to: deadline5) ?? now
     }
 
     private func loadSavedSecrets() {

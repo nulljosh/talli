@@ -276,6 +276,9 @@ function HomeTab({dark, amount, daysUntil, paymentDate, paid, onPaidChange}) {
   const handlePaid = () => { setBounce(true); setTimeout(()=>setBounce(false),350); onPaidChange(!paid); };
   const now2 = new Date();
   const ytd = PAST_PAYMENTS.filter(p=>p.year===now2.getFullYear()&&new Date(p.year,p.month,p.day)<now2).reduce((acc,p)=>acc+parseDollar(p.amount),0);
+  const isReportingWindow = now2.getDate() >= 1 && now2.getDate() <= 5;
+  const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const nextIncomeLabel = `${M[new Date(now2.getFullYear(), now2.getMonth()+1, 1).getMonth()]} 1`;
 
   if (!loaded) return (
     <div style={{flex:1,display:'flex',flexDirection:'column',padding:'32px 28px',gap:16}}>
@@ -290,6 +293,14 @@ function HomeTab({dark, amount, daysUntil, paymentDate, paid, onPaidChange}) {
 
   return (
     <div style={{flex:1,display:'flex',flexDirection:'column',overflowY:'auto',padding:'32px 28px 24px',animation:'fadeIn 0.3s ease both'}}>
+      {isReportingWindow&&<div style={{background:`${t.warning}14`,border:`1px solid ${t.warning}40`,borderRadius:10,padding:'11px 14px',marginBottom:18,display:'flex',alignItems:'center',gap:10,animation:'fadeUp 0.3s ease both'}}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={t.warning} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        <div style={{flex:1}}>
+          <span style={{fontSize:13,fontWeight:600,color:t.warning}}>Monthly report period is open</span>
+          <span style={{fontSize:12,color:t.muted,marginLeft:8}}>Window closes the 5th</span>
+        </div>
+      </div>}
+
       <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:18,animation:'fadeUp 0.45s 0s ease both'}}>
         Next payment
       </div>
@@ -393,12 +404,12 @@ function HomeTab({dark, amount, daysUntil, paymentDate, paid, onPaidChange}) {
               </div>
               <div style={{display:'flex',alignItems:'center',gap:8}}>
                 <span style={{fontSize:13,fontWeight:600,color:t.text,letterSpacing:'-0.5px'}}>{amount}</span>
-                {clearable&&<span style={{fontSize:10,fontWeight:700,color:t.success,background:`${t.success}18`,padding:'2px 7px',borderRadius:100,letterSpacing:'0.04em',textTransform:'uppercase'}}>Jun 1</span>}
+                {clearable&&<span style={{fontSize:10,fontWeight:700,color:t.success,background:`${t.success}18`,padding:'2px 7px',borderRadius:100,letterSpacing:'0.04em',textTransform:'uppercase'}}>{nextIncomeLabel}</span>}
               </div>
             </div>
           ))}
         </div>
-        <div style={{marginTop:8,fontSize:11,color:t.muted}}>Green dot = clearable before Jun 1 income window</div>
+        <div style={{marginTop:8,fontSize:11,color:t.muted}}>Green dot = clearable before {nextIncomeLabel} income window</div>
       </div>
     </div>
   );
@@ -714,8 +725,10 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate,
     {label:'Ministry decision',date:isDenied?'Denied':(isResubmitted?'Resubmitted':pwdApproved?'Approved':'Est. Jul 2026'),done:pwdApproved,denied:isDenied,resubmitted:isResubmitted,current:!isDenied&&!isResubmitted&&!pwdApproved&&pwdMedicalDone},
     {label:'Backdated payments',date:pwdApproved?'Issued':'Upon approval',done:pwdApproved},
   ];
+  const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const reportWindowDate=`${MONTHS[now.getMonth()]} 1–5`;
   const upcoming=[
-    {label:'Income report window',date:'Jun 1–5',warn:!reportFiled,action:!reportFiled,done:reportFiled},
+    {label:'Income report window',date:reportWindowDate,warn:!reportFiled,action:!reportFiled,done:reportFiled},
     {label:'PharmaCare renewal',date:'Jun 1'},
     {label:'T4 slip available',date:'Feb 2027'},
   ];

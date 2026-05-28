@@ -34,5 +34,12 @@ npm run upload-blob # upload to Vercel Blob
 - Deadline is hardcoded in unified.html (not computed from denial date) since the extension overrides the standard 20-business-day window.
 - **Feature needed**: PWD Resubmit button on Status tab — one-click to pre-fill and resubmit the PWD application directly from Tally, without navigating BC Self-Serve.
 
+## Reporting Period
+- Window is days 1–5 of every month. That's when to file.
+- Banner auto-shows on Home tab (web) and Dashboard (iOS) when day <= 5.
+- StatusTab "Income report window" date is computed dynamically from current month, not hardcoded.
+- Debt triage "clearable by X" label is also dynamic (next month's 1st).
+
 ## Changelog
+- v3.2.0 (2026-05-28): Dynamic reporting window dates (no more hardcoded "Jun 1–5"), filing period banner on web + iOS when days 1–5, fixed ReportView timing copy and nextDeadline logic.
 - v1.0.0 (2026-05-22): History reset. BC Self-Serve scraper with session-encrypted credentials, payment amount tracking, PWD application timeline, messages sync, Vercel Blob persistence, iOS + watchOS companion apps.

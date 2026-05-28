@@ -217,6 +217,10 @@ private struct DashboardScreen: View {
                     OfflineBanner()
                 }
 
+                if isFilingWindowOpen {
+                    ReportingWindowBanner()
+                }
+
                 paymentCard
                 paymentProgress
                 statsGrid
@@ -244,6 +248,10 @@ private struct DashboardScreen: View {
                 .buttonStyle(.plain)
             }
         }
+    }
+
+    private var isFilingWindowOpen: Bool {
+        Calendar.current.component(.day, from: now) <= 5
     }
 
     private var paymentCard: some View {
@@ -445,6 +453,27 @@ private struct OfflineBanner: View {
         }
         .padding(12)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+    }
+}
+
+private struct ReportingWindowBanner: View {
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "exclamationmark.circle.fill")
+                .foregroundStyle(Color.tallyOrange)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Monthly report period is open")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(Color.tallyOrange)
+                Text("Window closes the 5th")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+        }
+        .padding(12)
+        .background(Color.tallyOrange.opacity(0.1), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(Color.tallyOrange.opacity(0.3), lineWidth: 1))
     }
 }
 
