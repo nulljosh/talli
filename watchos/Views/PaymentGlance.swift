@@ -15,6 +15,10 @@ struct PaymentGlance: View {
         return calendar.dateComponents([.day], from: start, to: end).day
     }
 
+    private var isFilingWindow: Bool {
+        Calendar.current.component(.day, from: Date()) <= 5
+    }
+
     private var formattedDate: String {
         guard let summary else { return "--" }
         let formatter = DateFormatter()
@@ -28,6 +32,15 @@ struct PaymentGlance: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 8) {
+                if isFilingWindow {
+                    HStack(spacing: 4) {
+                        Text("REPORT WINDOW OPEN")
+                            .font(.system(size: 9, weight: .semibold))
+                            .foregroundStyle(Color.bcBlue)
+                        Spacer()
+                    }
+                }
+
                 Text("NEXT PAYMENT")
                     .font(.caption2)
                     .foregroundStyle(.secondary)

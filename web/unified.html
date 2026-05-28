@@ -261,7 +261,7 @@ function TabBar({tab, setTab, dark, msgBadge}) {
 // ════════════════════════════════════════════════════
 // HOME TAB
 // ════════════════════════════════════════════════════
-function HomeTab({dark, amount, daysUntil, paymentDate, paid, onPaidChange}) {
+function HomeTab({dark, amount, daysUntil, paymentDate, paid, onPaidChange, reportMonths, onSubmitReport}) {
   const t = tk(dark);
   const [loaded, setLoaded] = useState(false);
   const [bounce, setBounce] = useState(false);
@@ -279,6 +279,8 @@ function HomeTab({dark, amount, daysUntil, paymentDate, paid, onPaidChange}) {
   const isReportingWindow = now2.getDate() >= 1 && now2.getDate() <= 5;
   const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const nextIncomeLabel = `${M[new Date(now2.getFullYear(), now2.getMonth()+1, 1).getMonth()]} 1`;
+  const homeMonthKey = `${now2.getFullYear()}-${String(now2.getMonth()+1).padStart(2,'0')}`;
+  const reportFiled = !!(reportMonths && reportMonths[homeMonthKey]);
 
   if (!loaded) return (
     <div style={{flex:1,display:'flex',flexDirection:'column',padding:'32px 28px',gap:16}}>
@@ -293,12 +295,17 @@ function HomeTab({dark, amount, daysUntil, paymentDate, paid, onPaidChange}) {
 
   return (
     <div style={{flex:1,display:'flex',flexDirection:'column',overflowY:'auto',padding:'32px 28px 24px',animation:'fadeIn 0.3s ease both'}}>
-      {isReportingWindow&&<div style={{background:`${t.warning}14`,border:`1px solid ${t.warning}40`,borderRadius:10,padding:'11px 14px',marginBottom:18,display:'flex',alignItems:'center',gap:10,animation:'fadeUp 0.3s ease both'}}>
+      {isReportingWindow&&!reportFiled&&<div style={{background:`${t.warning}14`,border:`1px solid ${t.warning}40`,borderRadius:10,padding:'11px 14px',marginBottom:18,display:'flex',alignItems:'center',gap:10,animation:'fadeUp 0.3s ease both'}}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={t.warning} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
         <div style={{flex:1}}>
-          <span style={{fontSize:13,fontWeight:600,color:t.warning}}>Monthly report period is open</span>
-          <span style={{fontSize:12,color:t.muted,marginLeft:8}}>Window closes the 5th</span>
+          <span style={{fontSize:13,fontWeight:600,color:t.warning}}>Report window open</span>
+          <span style={{fontSize:12,color:t.muted,marginLeft:8}}>Closes the 5th</span>
         </div>
+        {onSubmitReport&&<button onClick={onSubmitReport} style={{padding:'4px 12px',borderRadius:100,background:t.warning,color:t.bg,border:'none',fontSize:11,fontWeight:700,fontFamily:'inherit',cursor:'pointer',flexShrink:0,WebkitTapHighlightColor:'transparent'}}>File now</button>}
+      </div>}
+      {isReportingWindow&&reportFiled&&<div style={{background:`${t.success}12`,border:`1px solid ${t.success}30`,borderRadius:10,padding:'11px 14px',marginBottom:18,display:'flex',alignItems:'center',gap:10,animation:'fadeUp 0.3s ease both'}}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={t.success} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <span style={{fontSize:13,fontWeight:600,color:t.success}}>Report filed this month</span>
       </div>}
 
       <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:18,animation:'fadeUp 0.45s 0s ease both'}}>
@@ -464,10 +471,10 @@ function CalendarTab({dark, payDateObj, amount, daysUntil}) {
           </div>
           <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)'}}>
             {cells.map((d,i)=>{
-              const next=isNextPay(d),past=pastPay(d),tod=isToday_(d),isP=isPast(d);
+              const next=isNextPay(d),past=pastPay(d),tod=isToday_(d),isP=isPast(d),isFilingDay=d&&d>=1&&d<=5;
               return (
                 <div key={i} style={{display:'flex',alignItems:'center',justifyContent:'center',height:44}}>
-                  <div style={{width:36,height:36,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:2,background:next?t.accent:'transparent',border:tod&&!next?`1px solid ${t.border2}`:'none',animation:next?'pulseRing 2.5s ease-out infinite':'none','--pc':dark?'rgba(255,133,27,0.2)':'rgba(255,133,27,0.2)',position:'relative'}}>
+                  <div style={{width:36,height:36,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:2,background:next?t.accent:'transparent',border:next?'none':tod?`1px solid ${t.border2}`:isFilingDay?`1px solid ${t.accent}50`:'none',animation:next?'pulseRing 2.5s ease-out infinite':'none','--pc':dark?'rgba(255,133,27,0.2)':'rgba(255,133,27,0.2)',position:'relative'}}>
                     <span style={{fontSize:14,fontWeight:(next||past)?600:400,lineHeight:1,color:d===null?'transparent':next?t.bg:isP&&!past?t.text:t.text,opacity:d===null?0:isP&&!past&&!tod?0.25:1}}>{d}</span>
                     {past&&!next&&<div style={{width:3,height:3,borderRadius:'50%',background:t.success,opacity:0.8,position:'absolute',bottom:5}}/>}
                   </div>
@@ -519,13 +526,17 @@ function CalendarTab({dark, payDateObj, amount, daysUntil}) {
           ))}
         </div>
 
-        <div style={{display:'flex',gap:18,paddingTop:20}}>
+        <div style={{display:'flex',gap:14,paddingTop:20,flexWrap:'wrap'}}>
           {[{fill:true,small:false,label:'Payment day'},{fill:false,small:false,label:'Today'},{fill:true,small:true,label:'Past payment'}].map(({fill,small,label},i)=>(
             <div key={i} style={{display:'flex',alignItems:'center',gap:5}}>
               <div style={{width:small?5:9,height:small?5:9,borderRadius:'50%',flexShrink:0,background:fill?(small?t.success:t.accent):'transparent',border:fill?'none':`1px solid ${t.border2}`}}/>
               <span style={{fontSize:10,color:t.muted}}>{label}</span>
             </div>
           ))}
+          <div style={{display:'flex',alignItems:'center',gap:5}}>
+            <div style={{width:9,height:9,borderRadius:'50%',flexShrink:0,background:'transparent',border:`1px solid ${t.accent}50`}}/>
+            <span style={{fontSize:10,color:t.muted}}>Filing window</span>
+          </div>
         </div>
       </div>
     </div>
@@ -992,7 +1003,7 @@ function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidC
         </button>
       </div>
 
-      {tab==='home'     &&<HomeTab     dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange}/>}
+      {tab==='home'     &&<HomeTab     dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange} reportMonths={reportMonths} onSubmitReport={()=>setShowSubmit(true)}/>}
       {tab==='calendar' &&<CalendarTab dark={dark} payDateObj={payDateObj} amount={amount} daysUntil={daysUntil}/>}
       {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} skn={skn} onSubmitReport={()=>setShowSubmit(true)} onPwdResubmit={()=>setShowPwdResubmit(true)} reportMonths={reportMonths} username={username} pinSet={pinSet} onSetPin={()=>setShowPinSheet(true)}/>}
       {tab==='messages' &&<MessagesTab dark={dark} messages={messages} readIds={readIds} onRead={onRead}/>}
@@ -1099,6 +1110,21 @@ function App() {
         loadData();
         fetch('/api/paid-status',{credentials:'include'}).then(r=>r.json()).then(d=>setPaidMonths(d.paidMonths||{})).catch(()=>{});
         fetch('/api/report-status',{credentials:'include'}).then(r=>r.json()).then(d=>setReportMonths(d.reportMonths||{})).catch(()=>{});
+        // Auto-scrape once per 6h during filing window (days 1-5) so MYSS messages appear automatically
+        (()=>{
+          const day=new Date().getDate();
+          if(day>=1&&day<=5){
+            const k='tallyLastAutoScrape';
+            const last=parseInt(localStorage.getItem(k)||'0');
+            if(Date.now()-last>6*60*60*1000){
+              localStorage.setItem(k,String(Date.now()));
+              fetch('/api/check',{method:'POST',credentials:'include'}).then(()=>{
+                loadData();
+                fetch('/api/report-status',{credentials:'include'}).then(r=>r.json()).then(d=>setReportMonths(d.reportMonths||{})).catch(()=>{});
+              }).catch(()=>{});
+            }
+          }
+        })();
         fetch('/api/profile',{credentials:'include'}).then(r=>r.json()).then(p=>{
           if(p.avatarUrl) setAvatarUrl(p.avatarUrl);
           else {

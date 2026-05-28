@@ -221,6 +221,10 @@ private struct DashboardScreen: View {
                     ReportingWindowBanner()
                 }
 
+                if isFiledThisWindow {
+                    ReportFiledBanner()
+                }
+
                 paymentCard
                 paymentProgress
                 statsGrid
@@ -251,7 +255,11 @@ private struct DashboardScreen: View {
     }
 
     private var isFilingWindowOpen: Bool {
-        Calendar.current.component(.day, from: now) <= 5
+        Calendar.current.component(.day, from: now) <= 5 && !appState.isCurrentMonthFiled
+    }
+
+    private var isFiledThisWindow: Bool {
+        Calendar.current.component(.day, from: now) <= 5 && appState.isCurrentMonthFiled
     }
 
     private var paymentCard: some View {
@@ -462,10 +470,10 @@ private struct ReportingWindowBanner: View {
             Image(systemName: "exclamationmark.circle.fill")
                 .foregroundStyle(Color.tallyOrange)
             VStack(alignment: .leading, spacing: 2) {
-                Text("Monthly report period is open")
+                Text("Report window open")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(Color.tallyOrange)
-                Text("Window closes the 5th")
+                Text("Closes the 5th")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
@@ -474,6 +482,22 @@ private struct ReportingWindowBanner: View {
         .padding(12)
         .background(Color.tallyOrange.opacity(0.1), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(Color.tallyOrange.opacity(0.3), lineWidth: 1))
+    }
+}
+
+private struct ReportFiledBanner: View {
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "checkmark.circle.fill")
+                .foregroundStyle(.green)
+            Text("Report filed this month")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.green)
+            Spacer()
+        }
+        .padding(12)
+        .background(Color.green.opacity(0.1), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(Color.green.opacity(0.3), lineWidth: 1))
     }
 }
 

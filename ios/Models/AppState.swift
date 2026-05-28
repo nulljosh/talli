@@ -22,6 +22,14 @@ final class AppState {
     var paidStatus: PaidStatus? = nil
     var readMessageIds: Set<String> = []
     var avatarImageData: Data? = nil
+    var reportMonths: [String: String] = [:]
+
+    var isCurrentMonthFiled: Bool {
+        let c = Calendar.current
+        let now = Date()
+        let key = String(format: "%04d-%02d", c.component(.year, from: now), c.component(.month, from: now))
+        return reportMonths[key] != nil
+    }
 
     private static let avatarFileURL: URL = {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -396,6 +404,9 @@ final class AppState {
             cacheDashboard(fresh)
             updateSyncDate()
             errorMessage = nil
+            if let months = try? await APIClient.shared.getReportStatus() {
+                reportMonths = months
+            }
         } catch APIClientError.unauthorized {
             isAuthenticated = false
             errorMessage = "Session expired. Please sign in again."

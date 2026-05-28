@@ -41,5 +41,6 @@ npm run upload-blob # upload to Vercel Blob
 - Debt triage "clearable by X" label is also dynamic (next month's 1st).
 
 ## Changelog
+- v3.3.0 (2026-05-28): Banner correctness (suppresses when already filed, shows "Filed" confirmation), "File now" button in banner, auto-scrape on mount days 1-5 (localStorage-gated 6h), calendar days 1-5 highlighted + legend entry, iOS report-filed state wired to AppState, watchOS filing window indicator, iOS "Filed" banner.
 - v3.2.0 (2026-05-28): Dynamic reporting window dates (no more hardcoded "Jun 1–5"), filing period banner on web + iOS when days 1–5, fixed ReportView timing copy and nextDeadline logic.
 - v1.0.0 (2026-05-22): History reset. BC Self-Serve scraper with session-encrypted credentials, payment amount tracking, PWD application timeline, messages sync, Vercel Blob persistence, iOS + watchOS companion apps.

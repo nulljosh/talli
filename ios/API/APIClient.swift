@@ -126,6 +126,11 @@ final class APIClient: @unchecked Sendable {
         )
     }
 
+    func getReportStatus() async throws -> [String: String] {
+        struct R: Decodable { let reportMonths: [String: String]? }
+        return (try await send(path: "api/report-status", responseType: R.self)).reportMonths ?? [:]
+    }
+
     func getPaidStatus() async throws -> PaidStatus {
         try await send(path: "api/paid-status", responseType: PaidStatus.self)
     }
