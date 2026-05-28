@@ -358,6 +358,7 @@ const scrapeLimiter = rateLimit({
 });
 
 app.use(session({
+  name: 'tally.sid',
   secret: ENCRYPTION_KEY,
   resave: false,
   saveUninitialized: false,
