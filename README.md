@@ -40,3 +40,10 @@ Deploy: `cd apps/tally && npx vercel --prod`
 ## License
 
 MIT 2026 Joshua Trommel
+
+## Roadmap
+- [ ] Avatar does not persist after refreshing in settings, and does not refresh in the top-right corner
+- [ ] Hide the settings entry in the bottom-right nav; make the top-right avatar the settings link
+- [ ] Sync mobile and web: web is missing the countdown the mobile app already has
+- [ ] Improve countdown functionality and UI
+- [ ] Rework the increasing-payment-per-hour model: pay is a monthly lump sum, so either remove the increasing-accrual visual or redesign it to read as a steady rate paid out monthly
