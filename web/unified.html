@@ -37,6 +37,7 @@
     @keyframes slideUp   { from { transform:translateY(100%); opacity:0; } to { transform:translateY(0); opacity:1; } }
     @keyframes slideInLeft  { from { opacity:0; transform:translateX(32px);  } to { opacity:1; transform:translateX(0); } }
     @keyframes slideInRight { from { opacity:0; transform:translateX(-32px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes spin { to { transform:rotate(360deg); } }
   </style>
 </head>
 <body>
@@ -234,7 +235,6 @@ const TABS = [
   {id:'calendar', label:'Calendar', icon:Icon.calendar},
   {id:'status',   label:'Status',   icon:Icon.status},
   {id:'messages', label:'Messages', icon:Icon.messages},
-  {id:'settings', label:'Settings', icon:Icon.settings},
 ];
 
 function TabBar({tab, setTab, dark, msgBadge}) {
@@ -913,17 +913,11 @@ function MessagesTab({dark, messages, readIds, onRead}) {
 // ════════════════════════════════════════════════════
 // SETTINGS TAB
 // ════════════════════════════════════════════════════
-function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, onLogout}) {
+function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, onLogout}) {
   const t = tk(dark);
-  const [refreshing, setRefreshing] = useState(false);
   const [imgError, setImgError] = useState(false);
   useEffect(() => { setImgError(false); }, [avatarUrl]);
-  const handleRefresh = async () => {
-    if (refreshing) return;
-    setRefreshing(true);
-    await onAvatarRefresh();
-    setRefreshing(false);
-  };
+  const handleRefresh = () => { if (!refreshing) onAvatarRefresh(); };
   const Row = ({label, value}) => (
     <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'14px 0',borderBottom:`1px solid ${t.border}`}}>
       <span style={{fontSize:13,color:t.muted}}>{label}</span>
@@ -938,8 +932,8 @@ function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, onLogout}) {
       <div style={{marginTop:20,marginBottom:24,display:'flex',flexDirection:'column',alignItems:'center',gap:12}}>
         <div style={{width:72,height:72,borderRadius:'50%',overflow:'hidden',background:t.bg2,border:`1px solid ${t.border2}`,display:'flex',alignItems:'center',justifyContent:'center'}}>
           {avatarUrl && !imgError
-            ? <img src={avatarUrl} width={72} height={72} style={{display:'block',borderRadius:'50%',objectFit:'cover'}} alt="avatar" onError={()=>setImgError(true)}/>
-            : <span style={{fontSize:24,fontWeight:700,color:t.accent}}>{(username||'J').slice(0,1).toUpperCase()}</span>}
+            ? <img src={avatarUrl} width={72} height={72} style={{display:'block',borderRadius:'50%',objectFit:'cover',animation:refreshing?'spin 0.8s linear infinite':'none'}} alt="avatar" onError={()=>setImgError(true)}/>
+            : <span style={{fontSize:24,fontWeight:700,color:t.accent,animation:refreshing?'spin 0.8s linear infinite':'none'}}>{(username||'J').slice(0,1).toUpperCase()}</span>}
         </div>
         <button onClick={handleRefresh} disabled={refreshing} style={{background:'none',border:`1px solid ${t.border2}`,borderRadius:100,padding:'7px 18px',fontSize:12,fontWeight:600,color:t.muted,cursor:refreshing?'not-allowed':'pointer',letterSpacing:'0.04em',textTransform:'uppercase',transition:'border-color 0.2s,color 0.2s',opacity:refreshing?0.5:1}}>
           {refreshing ? 'Generating...' : 'Refresh Avatar'}
@@ -966,13 +960,15 @@ function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, onLogout}) {
 // ════════════════════════════════════════════════════
 // SCREEN SHELL
 // ════════════════════════════════════════════════════
-const TAB_ORDER = ['home','calendar','status','messages','settings'];
+const TAB_ORDER = ['home','calendar','status','messages'];
 
 function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, username, onLogout, avatarUrl, onAvatarClick, skn, reportMonths, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
   const t = tk(dark);
   const [tab, setTab] = useState('home');
   const [showSubmit, setShowSubmit] = useState(false);
   const [showPwdResubmit, setShowPwdResubmit] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const doRefresh = async () => { if (refreshing) return; setRefreshing(true); try { await onAvatarClick(); } finally { setRefreshing(false); } };
   const touchX = useRef(null);
   const onTouchStart = (e) => { touchX.current = e.touches[0].clientX; };
   const onTouchEnd   = (e) => {
@@ -995,7 +991,7 @@ function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidC
         <span style={{fontSize:15,fontWeight:700,letterSpacing:'-0.04em',color:t.text}}>
           tally<span style={{color:t.accent}}>.</span>
         </span>
-        <button onClick={onAvatarClick} title="Tap to regenerate avatar" style={{width:28,height:28,borderRadius:'50%',background:avatarUrl?'transparent':t.accent,overflow:'hidden',display:'flex',alignItems:'center',justifyContent:'center',border:'none',cursor:'pointer',WebkitTapHighlightColor:'transparent',padding:0}}>
+        <button onClick={()=>setTab('settings')} title="Settings" style={{width:28,height:28,borderRadius:'50%',background:avatarUrl?'transparent':t.accent,overflow:'hidden',display:'flex',alignItems:'center',justifyContent:'center',border:'none',cursor:'pointer',WebkitTapHighlightColor:'transparent',padding:0,animation:refreshing?'spin 0.8s linear infinite':'none'}}>
           {avatarUrl
             ? <img src={avatarUrl} width={28} height={28} style={{display:'block',borderRadius:'50%',objectFit:'cover'}} alt="avatar" onError={e=>{e.target.style.display='none';e.target.nextSibling.style.display='flex';}} />
             : null}
@@ -1007,7 +1003,7 @@ function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidC
       {tab==='calendar' &&<CalendarTab dark={dark} payDateObj={payDateObj} amount={amount} daysUntil={daysUntil}/>}
       {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} skn={skn} onSubmitReport={()=>setShowSubmit(true)} onPwdResubmit={()=>setShowPwdResubmit(true)} reportMonths={reportMonths} username={username} pinSet={pinSet} onSetPin={()=>setShowPinSheet(true)}/>}
       {tab==='messages' &&<MessagesTab dark={dark} messages={messages} readIds={readIds} onRead={onRead}/>}
-      {tab==='settings' &&<SettingsTab dark={dark} username={username} avatarUrl={avatarUrl} onAvatarRefresh={onAvatarClick} onLogout={onLogout}/>}
+      {tab==='settings' &&<SettingsTab dark={dark} username={username} avatarUrl={avatarUrl} onAvatarRefresh={doRefresh} refreshing={refreshing} onLogout={onLogout}/>}
 
       <TabBar tab={tab} setTab={setTab} dark={dark} msgBadge={unread}/>
       {showSubmit&&<SubmitReportModal dark={dark} skn={skn} pinSet={pinSet} onPinSaved={()=>setPinSet(true)} onClose={()=>setShowSubmit(false)}/>}
