@@ -1,11 +1,11 @@
 {
   "name": "tally",
-  "version": "3.4.0",
+  "version": "3.4.1",
   "description": "Tally - BC Self-Serve Portal Scraper - Automated scraping of notifications, messages, payment info, and service requests",
   "main": "src/scraper.js",
   "scripts": {
     "check": "node src/scraper.js",
-    "test": "node tools/test-cors-utils.js && node tools/test-auth-cookie.js && node tools/test-paid-status.js && node tools/test-read-messages.js && node tools/test-csrf-origin.js && node tools/test-blob-helpers.js && node tools/test-mobile-data.js && node tools/test-dispute-wizard.js && node tools/test-dtc-navigator.js && node tools/test-http-scraper.js && node tools/test-http-scraper-integration.js",
+    "test": "node tools/test-cors-utils.js && node tools/test-auth-cookie.js && node tools/test-paid-status.js && node tools/test-read-messages.js && node tools/test-csrf-origin.js && node tools/test-blob-helpers.js && node tools/test-mobile-data.js && node tools/test-dispute-wizard.js && node tools/test-dtc-navigator.js && node tools/test-http-scraper.js && node tools/test-http-scraper-integration.js && node tools/test-i18n.js",
     "test:http-scraper-integration": "node tools/test-http-scraper-integration.js",
     "test:cors": "node tools/test-cors-utils.js",
     "test:auth-cookie": "node tools/test-auth-cookie.js",
@@ -19,7 +19,8 @@
     "upload-blob": "node scripts/upload-to-blob.js",
     "info": "bash scripts/tally-info.sh",
     "monthly-report": "python3 tools/monthly_report.py",
-    "screenshot:preview": "node scripts/preview-screenshot.js"
+    "screenshot:preview": "node scripts/preview-screenshot.js",
+    "test:i18n": "node tools/test-i18n.js"
   },
   "keywords": [],
   "author": "",
