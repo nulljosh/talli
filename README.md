@@ -2,7 +2,7 @@
 
 # Tally
 
-![version](https://img.shields.io/badge/version-v3.3.0-orange)
+![version](https://img.shields.io/badge/version-v3.4.0-orange)
 
 BC Self-Serve scraper and benefits dashboard. Tracks income, payment dates, PWD application status, and government messages.
 
@@ -19,6 +19,7 @@ BC Self-Serve scraper and benefits dashboard. Tracks income, payment dates, PWD 
 - Monthly report filing window banner (auto-shows days 1–5 of each month)
 - Monthly report submission with stored PIN
 - Persistent paid/report status (Vercel Blob)
+- Multilingual (en, fr, zh, pa): one master string source generates both the web i18next bundle and the Xcode String Catalog, plus `Intl` CAD currency/date formatting. Benefit strings flagged for human/DeepL review.
 - Dark mode auto-detect
 - PWA with offline mode
 - iOS companion app (parchment palette, orange accent, pixel-art avatar, top-right settings shortcut)
