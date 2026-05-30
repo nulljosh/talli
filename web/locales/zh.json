@@ -1,0 +1,14 @@
+{
+  "app.name": "Tally",
+  "app.loading": "加载中...",
+  "nav.upcoming": "即将到来",
+  "nav.submit": "提交",
+  "nav.reportsFiled": "已提交报告",
+  "nav.account": "账户",
+  "nav.messages": "消息",
+  "nav.settings": "设置",
+  "common.cancel": "取消",
+  "common.important": "重要",
+  "common.saved": "已保存",
+  "account.bceid": "BCeID"
+}
