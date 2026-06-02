@@ -1095,11 +1095,13 @@ async function mergeScrapedReportMonths(req, userId, scrapeResult) {
   const existing = req.session?.reportStatus?.reportMonths
     ? req.session.reportStatus
     : await loadUserBlob(userId, 'report-status', { reportMonths: {} });
-  const merged = { reportMonths: { ...(existing.reportMonths || {}) } };
+  const cleared = existing.clearedMonths || {};
+  const merged = { reportMonths: { ...(existing.reportMonths || {}) }, clearedMonths: { ...cleared } };
 
   let added = 0;
   for (const [month, ts] of Object.entries(scraped)) {
-    if (!merged.reportMonths[month]) {
+    // Respect manual un-toggles: a tombstoned month is never resurrected by a scrape.
+    if (!merged.reportMonths[month] && !cleared[month]) {
       merged.reportMonths[month] = ts;
       added += 1;
     }
@@ -1655,11 +1657,14 @@ app.post('/api/report-status', requireAuth, async (req, res) => {
     }
     const userId = req.session?.userId;
     const existing = req.session.reportStatus?.reportMonths ? req.session.reportStatus : await loadUserBlob(userId, 'report-status', { reportMonths: {} });
-    const data = { reportMonths: { ...(existing.reportMonths || {}) } };
+    const data = { reportMonths: { ...(existing.reportMonths || {}) }, clearedMonths: { ...(existing.clearedMonths || {}) } };
     if (filed) {
       data.reportMonths[month] = new Date().toISOString();
+      delete data.clearedMonths[month];
     } else {
       delete data.reportMonths[month];
+      // Tombstone: a manual un-toggle wins over a future scrape re-adding it.
+      data.clearedMonths[month] = new Date().toISOString();
     }
     req.session.reportStatus = data;
     await saveUserBlob(userId, 'report-status', data);
