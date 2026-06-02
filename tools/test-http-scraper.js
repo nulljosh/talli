@@ -582,6 +582,54 @@ Your cheque is ready for pickup.</div>
     assert.ok(d10 <= 18000, `attempt 10 delay ${d10} exceeds max`);
   });
 
+  test('periodToKey normalizes "Month YYYY" and "YYYY/MON" to YYYY-MM', () => {
+    const { periodToKey } = require('../src/http-scraper');
+    assert.strictEqual(periodToKey('July 2026'), '2026-07');
+    assert.strictEqual(periodToKey('2026/JUL'), '2026-07');
+    assert.strictEqual(periodToKey('January 2026'), '2026-01');
+    assert.strictEqual(periodToKey('garbage'), null);
+  });
+
+  test('parseReportMonths marks submitted periods from a history table', () => {
+    const { parseReportMonths } = require('../src/http-scraper');
+    const section = {
+      tableData: [
+        'January 2026 | Submitted | $1,060',
+        'June 2026 | Submitted | $1,060',
+        'July 2026 | Submitted | $1,060',
+        'August 2026 | Due | Action required'
+      ],
+      allText: [],
+      pageTitle: 'Monthly Reports'
+    };
+    const months = parseReportMonths(section);
+    assert.ok(months['2026-07'], 'July should be filed');
+    assert.ok(months['2026-01'], 'January should be filed');
+    assert.ok(!months['2026-08'], 'August (open) should not be filed');
+  });
+
+  test('parseReportMonths infers prior months as filed from the open period', () => {
+    const { parseReportMonths } = require('../src/http-scraper');
+    const section = {
+      tableData: [],
+      allText: [
+        'Your August 2026 report is due. Start now.',
+        'Past reports: May 2026 June 2026 July 2026'
+      ],
+      pageTitle: ''
+    };
+    const months = parseReportMonths(section);
+    assert.ok(months['2026-07'], 'July (before open) inferred filed');
+    assert.ok(months['2026-05'], 'May (before open) inferred filed');
+    assert.ok(!months['2026-08'], 'August (open) not filed');
+  });
+
+  test('parseReportMonths returns empty for a page with no periods', () => {
+    const { parseReportMonths } = require('../src/http-scraper');
+    assert.deepStrictEqual(parseReportMonths({ tableData: [], allText: [] }), {});
+    assert.deepStrictEqual(parseReportMonths(null), {});
+  });
+
   console.log(`\n${passed} passed, ${failed} failed`);
   if (failed > 0) process.exit(1);
 }

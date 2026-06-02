@@ -1086,6 +1086,31 @@ function getSessionCredentials(req) {
   return { username, password };
 }
 
+// Merge auto-detected filed-report months from a live scrape into the user's
+// report-status Blob. Union only: never deletes a user-confirmed month.
+async function mergeScrapedReportMonths(req, userId, scrapeResult) {
+  const scraped = scrapeResult?.sections?.['Monthly Reports']?.reportMonths;
+  if (!scraped || Object.keys(scraped).length === 0) return;
+
+  const existing = req.session?.reportStatus?.reportMonths
+    ? req.session.reportStatus
+    : await loadUserBlob(userId, 'report-status', { reportMonths: {} });
+  const merged = { reportMonths: { ...(existing.reportMonths || {}) } };
+
+  let added = 0;
+  for (const [month, ts] of Object.entries(scraped)) {
+    if (!merged.reportMonths[month]) {
+      merged.reportMonths[month] = ts;
+      added += 1;
+    }
+  }
+  if (added === 0) return;
+
+  if (req.session) req.session.reportStatus = merged;
+  await saveUserBlob(userId, 'report-status', merged);
+  log(`[REPORT] Merged ${added} scraped report month(s) for user ${userId}`);
+}
+
 // Helper: try live HTTP scrape, fall back to Blob cache, fall back to local files
 async function fetchOrLoadData(req) {
   const creds = getSessionCredentials(req);
@@ -1114,6 +1139,9 @@ async function fetchOrLoadData(req) {
         lastCheckResult = { ...result, checkedAt: new Date().toISOString() };
         // Write to Blob in background (fire-and-forget)
         saveUserBlob(userId, 'results', lastCheckResult).catch(err => log('[API] Blob persist failed:', err.message));
+        // Merge scraped report-submission months into report-status (fire-and-forget,
+        // guarded so a parse miss never breaks the scrape). Scrape only adds months.
+        mergeScrapedReportMonths(req, userId, result).catch(err => log('[API] Report-month merge failed:', err.message));
         const liveResult = { source: 'live', data: result };
         if (userId) {
           liveCache.set(userId, { ts: Date.now(), result: liveResult });

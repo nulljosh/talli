@@ -22,8 +22,24 @@ const SECTION_CONFIG = [
       `${BASE_URL}/PaymentInfo`
     ]
   },
-  { name: 'Service Requests', urls: [`${BASE_URL}/Auth/ServiceRequests`] }
+  { name: 'Service Requests', urls: [`${BASE_URL}/Auth/ServiceRequests`] },
+  { name: 'Monthly Reports', urls: [`${BASE_URL}/Auth/MonthlyReports`] }
 ];
+
+// Month-name -> 1-based index, for normalizing report periods to YYYY-MM keys.
+const MONTH_INDEX = {
+  january: 1, february: 2, march: 3, april: 4, may: 5, june: 6,
+  july: 7, august: 8, september: 9, october: 10, november: 11, december: 12,
+  jan: 1, feb: 2, mar: 3, apr: 4, jun: 6, jul: 7,
+  aug: 8, sep: 9, sept: 9, oct: 10, nov: 11, dec: 12
+};
+
+// Matches "January 2026" or "2026/JAN" report-period labels.
+const PERIOD_REGEX = /((?:january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{4}|\d{4}\s*\/\s*[a-z]{3})/gi;
+// A period counts as filed when its row/line carries one of these statuses.
+const FILED_STATUS_REGEX = /(submitted|completed|received|processed|filed|complete)/i;
+// Signals a still-open / not-yet-filed report period.
+const OPEN_STATUS_REGEX = /(due|pending|not submitted|incomplete|in progress|start|resume|overdue|action required)/i;
 
 const KEYWORD_REGEX = /(.{0,150}(payment|paid|pending|processed|deposit|amount|balance|invoice|status|notification|message).{0,150})/gi;
 
@@ -750,6 +766,78 @@ function extractSectionData(html, url) {
   };
 }
 
+// Normalize a report-period label ("July 2026" / "2026/JUL") to a "YYYY-MM" key.
+function periodToKey(period) {
+  if (!period) return null;
+  const text = period.toLowerCase().trim();
+  let year;
+  let monthName;
+  // "2026 / jul"
+  const slash = text.match(/(\d{4})\s*\/\s*([a-z]{3,})/);
+  if (slash) {
+    year = slash[1];
+    monthName = slash[2];
+  } else {
+    // "july 2026"
+    const named = text.match(/([a-z]+)\s+(\d{4})/);
+    if (!named) return null;
+    monthName = named[1];
+    year = named[2];
+  }
+  const month = MONTH_INDEX[monthName] || MONTH_INDEX[monthName.slice(0, 3)];
+  if (!month) return null;
+  return `${year}-${String(month).padStart(2, '0')}`;
+}
+
+// Derive which monthly reports are filed from the scraped Monthly Reports section.
+// Only ever marks months whose period label literally appears on the page (no
+// fabrication). Two signals combine:
+//   1. Explicit status: a line carrying the period + a "submitted/completed" word.
+//   2. Sequential inference: BC reports are sequential, so any period listed on
+//      the page that falls before the earliest still-open period is filed.
+// Returns { "YYYY-MM": <ISO timestamp> }.
+function parseReportMonths(sectionData) {
+  if (!sectionData) return {};
+  const lines = [
+    ...(sectionData.tableData || []),
+    ...(sectionData.allText || []),
+    sectionData.pageTitle || ''
+  ].filter(Boolean);
+
+  const filed = new Set();
+  const open = new Set();
+  const seen = new Set();
+
+  for (const line of lines) {
+    const periods = line.match(PERIOD_REGEX);
+    if (!periods) continue;
+    const hasFiled = FILED_STATUS_REGEX.test(line);
+    const hasOpen = OPEN_STATUS_REGEX.test(line);
+    for (const period of periods) {
+      const key = periodToKey(period);
+      if (!key) continue;
+      seen.add(key);
+      if (hasFiled) filed.add(key);
+      else if (hasOpen) open.add(key);
+    }
+  }
+
+  // Sequential inference: everything listed before the earliest open period is filed.
+  const earliestOpen = [...open].sort()[0];
+  if (earliestOpen) {
+    for (const key of seen) {
+      if (key < earliestOpen) filed.add(key);
+    }
+    // An open period is not filed, even if a stray "complete" word matched.
+    for (const key of open) filed.delete(key);
+  }
+
+  const now = new Date().toISOString();
+  const result = {};
+  for (const key of filed) result[key] = now;
+  return result;
+}
+
 async function fetchProtectedPage(url, jar, retries = TRANSIENT_RETRY_COUNT) {
   let lastError = null;
 
@@ -927,6 +1015,12 @@ async function fetchAllSections(credentials = {}) {
       throw new Error(`All sections failed: ${errors.map(e => `${e.section}: ${e.error}`).join('; ')}`);
     }
 
+    // Derive filed-report months from the Monthly Reports page so the dashboard
+    // reflects submission status without manual entry.
+    if (sections['Monthly Reports']) {
+      sections['Monthly Reports'].reportMonths = parseReportMonths(sections['Monthly Reports']);
+    }
+
     return {
       success: true,
       timestamp: new Date().toISOString(),
@@ -965,5 +1059,7 @@ module.exports = {
   getCookieHeader,
   validateSession,
   backoffDelay,
-  parseCookieExpiry
+  parseCookieExpiry,
+  parseReportMonths,
+  periodToKey
 };
