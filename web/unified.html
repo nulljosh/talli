@@ -659,7 +659,7 @@ function addBusinessDays(start, n) {
 // ════════════════════════════════════════════════════
 // PWD RESUBMIT MODAL
 // ════════════════════════════════════════════════════
-function PwdResubmitModal({dark, pwdDeniedDate, onClose}) {
+function PwdResubmitModal({dark, pwdDeniedDate, onClose, onResubmitted}) {
   const t = tk(dark);
   const deadline = new Date('2026-06-18');
   const daysLeft = Math.ceil((deadline - new Date()) / 86400000);
@@ -690,6 +690,7 @@ function PwdResubmitModal({dark, pwdDeniedDate, onClose}) {
           </div>
         ))}
         <a href="https://myselfserve.gov.bc.ca/myselfserve/welcome.do" target="_blank" rel="noopener" style={{display:'block',textAlign:'center',marginTop:8,marginBottom:10,padding:'13px',borderRadius:10,background:t.accent,color:'#fff',fontWeight:700,fontSize:15,letterSpacing:'-0.01em',textDecoration:'none',fontFamily:'inherit'}}>Open BC Self-Serve</a>
+        {onResubmitted&&<button onClick={async()=>{try{await fetch('/api/pwd-profile',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'resubmitted'})});}catch(e){}onResubmitted();onClose();}} style={{width:'100%',padding:'11px',borderRadius:10,background:`${t.success}18`,border:`1px solid ${t.success}40`,color:t.success,fontWeight:600,fontSize:14,fontFamily:'inherit',cursor:'pointer',marginBottom:8}}>Mark as Resubmitted</button>}
         <button onClick={onClose} style={{width:'100%',padding:'11px',borderRadius:10,background:'transparent',border:`1px solid ${t.border2}`,color:t.muted,fontWeight:500,fontSize:14,fontFamily:'inherit',cursor:'pointer'}}>Cancel</button>
       </div>
     </div>
@@ -940,7 +941,7 @@ function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, on
 // ════════════════════════════════════════════════════
 const TAB_ORDER = ['home','calendar','status','messages'];
 
-function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, username, onLogout, avatarUrl, onAvatarClick, skn, reportMonths, onMarkFiled, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
+function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, username, onLogout, avatarUrl, onAvatarClick, skn, reportMonths, onMarkFiled, onPwdResubmitted, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
   const t = tk(dark);
   const [tab, setTab] = useState('home');
   const [showSubmit, setShowSubmit] = useState(false);
@@ -985,7 +986,7 @@ function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidC
 
       <TabBar tab={tab} setTab={setTab} dark={dark} msgBadge={unread}/>
       {showSubmit&&<SubmitReportModal dark={dark} skn={skn} pinSet={pinSet} onPinSaved={()=>setPinSet(true)} onClose={()=>setShowSubmit(false)}/>}
-      {showPwdResubmit&&<PwdResubmitModal dark={dark} pwdDeniedDate={pwdDeniedDate} onClose={()=>setShowPwdResubmit(false)}/>}
+      {showPwdResubmit&&<PwdResubmitModal dark={dark} pwdDeniedDate={pwdDeniedDate} onClose={()=>setShowPwdResubmit(false)} onResubmitted={onPwdResubmitted}/>}
       {showPinSheet&&<PinSheet dark={dark} onClose={()=>setShowPinSheet(false)} onSaved={()=>{setPinSet(true);setShowPinSheet(false);}}/>}
     </div>
   );
@@ -1143,6 +1144,8 @@ function App() {
     } catch {}
   };
 
+  const handlePwdResubmitted = () => setPwdStatus('resubmitted');
+
   const handleMarkFiled = async (month) => {
     try {
       await fetch('/api/report-status',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({month,filed:true})});
@@ -1151,7 +1154,7 @@ function App() {
   };
 
   return (
-    <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} readIds={readIds} onRead={mergeReadIds} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} skn={skn} reportMonths={reportMonths} onMarkFiled={handleMarkFiled} pinSet={pinSet} setPinSet={setPinSet} showPinSheet={showPinSheet} setShowPinSheet={setShowPinSheet}/>
+    <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} readIds={readIds} onRead={mergeReadIds} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} skn={skn} reportMonths={reportMonths} onMarkFiled={handleMarkFiled} onPwdResubmitted={handlePwdResubmitted} pinSet={pinSet} setPinSet={setPinSet} showPinSheet={showPinSheet} setShowPinSheet={setShowPinSheet}/>
   );
 }
 

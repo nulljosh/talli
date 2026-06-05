@@ -154,6 +154,21 @@ final class AppState {
         return date.formatted(.dateTime.month(.abbreviated).day())
     }
 
+    func refreshReportStatus() async {
+        guard isAuthenticated else { return }
+        if let months = try? await APIClient.shared.getReportStatus() {
+            reportMonths = months
+        }
+    }
+
+    func markMonthFiled() async {
+        let c = Calendar.current
+        let now = Date()
+        let key = String(format: "%04d-%02d", c.component(.year, from: now), c.component(.month, from: now))
+        try? await APIClient.shared.setReportStatus(month: key, filed: true)
+        await refreshReportStatus()
+    }
+
     func loadPaidStatus() async {
         guard isAuthenticated else { return }
         do {

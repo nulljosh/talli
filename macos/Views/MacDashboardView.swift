@@ -10,6 +10,12 @@ struct MacDashboardView: View {
                     offlineBanner
                 }
 
+                if appState.isFilingWindowOpen && !appState.isCurrentMonthFiled {
+                    filingWindowBanner
+                } else if appState.isFilingWindowOpen && appState.isCurrentMonthFiled {
+                    reportFiledBanner
+                }
+
                 // Payment hero card
                 paymentCard
 
@@ -154,6 +160,44 @@ struct MacDashboardView: View {
     }
 
     // MARK: - Shared
+
+    private var filingWindowBanner: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "exclamationmark.circle.fill")
+                .foregroundStyle(Color.orange)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Report window open")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(Color.orange)
+                Text("Closes the 5th")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+            Button("Already filed") {
+                Task { await appState.markMonthFiled() }
+            }
+            .font(.caption.weight(.semibold))
+            .controlSize(.small)
+        }
+        .padding(12)
+        .background(Color.orange.opacity(0.1), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(Color.orange.opacity(0.3), lineWidth: 1))
+    }
+
+    private var reportFiledBanner: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "checkmark.circle.fill")
+                .foregroundStyle(Color.green)
+            Text("Report filed this month")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(Color.green)
+            Spacer()
+        }
+        .padding(12)
+        .background(Color.green.opacity(0.1), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(Color.green.opacity(0.3), lineWidth: 1))
+    }
 
     private var offlineBanner: some View {
         HStack {

@@ -465,6 +465,8 @@ private struct OfflineBanner: View {
 }
 
 private struct ReportingWindowBanner: View {
+    @Environment(AppState.self) private var appState
+
     var body: some View {
         HStack(spacing: 10) {
             Image(systemName: "exclamationmark.circle.fill")
@@ -478,6 +480,12 @@ private struct ReportingWindowBanner: View {
                     .foregroundStyle(.secondary)
             }
             Spacer()
+            Button("Already filed") {
+                Task { await appState.markMonthFiled() }
+            }
+            .font(.caption.weight(.semibold))
+            .buttonStyle(.bordered)
+            .controlSize(.mini)
         }
         .padding(12)
         .background(Color.tallyOrange.opacity(0.1), in: RoundedRectangle(cornerRadius: 12, style: .continuous))

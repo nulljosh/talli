@@ -73,6 +73,17 @@ final class MacAPIClient: @unchecked Sendable {
         return try await send(path: "api/mobile", responseType: MacDashboardData.self)
     }
 
+    func getReportStatus() async throws -> [String: String] {
+        struct R: Decodable { let reportMonths: [String: String]? }
+        return (try await send(path: "api/report-status", responseType: R.self)).reportMonths ?? [:]
+    }
+
+    func setReportStatus(month: String, filed: Bool) async throws {
+        struct Body: Encodable { let month: String; let filed: Bool }
+        struct Resp: Decodable { let reportMonths: [String: String]? }
+        _ = try await send(path: "api/report-status", method: "POST", body: Body(month: month, filed: filed), responseType: Resp.self)
+    }
+
     private func send<Response: Decodable>(
         path: String,
         method: String = "GET",

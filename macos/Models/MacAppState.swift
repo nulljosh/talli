@@ -17,6 +17,18 @@ final class MacAppState {
     var dashboard: MacDashboardData?
     var isOffline = false
     var selectedSection: AppSection = .dashboard
+    var reportMonths: [String: String] = [:]
+
+    var isCurrentMonthFiled: Bool {
+        let c = Calendar.current
+        let now = Date()
+        let key = String(format: "%04d-%02d", c.component(.year, from: now), c.component(.month, from: now))
+        return reportMonths[key] != nil
+    }
+
+    var isFilingWindowOpen: Bool {
+        Calendar.current.component(.day, from: Date()) <= 5
+    }
 
     private let monitor = NWPathMonitor()
     private let monitorQueue = DispatchQueue(label: "com.jt.tally.mac.network")
@@ -92,6 +104,7 @@ final class MacAppState {
                 isAuthenticated = true
                 try? await loadLatest()
                 Task { await refresh() }
+                Task { await refreshReportStatus() }
                 return
             }
             // Slow path: full login against BC Self-Serve
@@ -132,6 +145,21 @@ final class MacAppState {
 
     // MARK: - Data
 
+    func refreshReportStatus() async {
+        guard isAuthenticated else { return }
+        if let months = try? await MacAPIClient.shared.getReportStatus() {
+            reportMonths = months
+        }
+    }
+
+    func markMonthFiled() async {
+        let c = Calendar.current
+        let now = Date()
+        let key = String(format: "%04d-%02d", c.component(.year, from: now), c.component(.month, from: now))
+        try? await MacAPIClient.shared.setReportStatus(month: key, filed: true)
+        await refreshReportStatus()
+    }
+
     func loadLatest() async throws {
         let data = try await MacAPIClient.shared.latest()
         dashboard = data
@@ -145,7 +173,10 @@ final class MacAppState {
         defer { isLoading = false }
 
         do {
-            let fresh = try await MacAPIClient.shared.check()
+            async let dashTask = MacAPIClient.shared.check()
+            async let reportTask: Void = refreshReportStatus()
+            let fresh = try await dashTask
+            _ = await reportTask
             dashboard = fresh
             cacheDashboard(fresh)
             syncToWidgets(fresh)
