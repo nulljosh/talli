@@ -263,7 +263,7 @@ function TabBar({tab, setTab, dark, msgBadge}) {
 // ════════════════════════════════════════════════════
 // HOME TAB
 // ════════════════════════════════════════════════════
-function HomeTab({dark, amount, daysUntil, paymentDate, paid, onPaidChange, reportMonths, onSubmitReport}) {
+function HomeTab({dark, amount, daysUntil, paymentDate, paid, onPaidChange, reportMonths, onSubmitReport, onMarkFiled}) {
   const t = tk(dark);
   const [loaded, setLoaded] = useState(false);
   const [bounce, setBounce] = useState(false);
@@ -303,6 +303,7 @@ function HomeTab({dark, amount, daysUntil, paymentDate, paid, onPaidChange, repo
           <span style={{fontSize:13,fontWeight:600,color:t.warning}}>Report window open</span>
           <span style={{fontSize:12,color:t.muted,marginLeft:8}}>Closes the 5th</span>
         </div>
+        {onMarkFiled&&<button onClick={()=>onMarkFiled(homeMonthKey)} style={{padding:'4px 10px',borderRadius:100,background:'none',color:t.muted,border:`1px solid ${t.border}`,fontSize:11,fontWeight:600,fontFamily:'inherit',cursor:'pointer',flexShrink:0,WebkitTapHighlightColor:'transparent'}}>Already filed</button>}
         {onSubmitReport&&<button onClick={onSubmitReport} style={{padding:'4px 12px',borderRadius:100,background:t.warning,color:t.bg,border:'none',fontSize:11,fontWeight:700,fontFamily:'inherit',cursor:'pointer',flexShrink:0,WebkitTapHighlightColor:'transparent'}}>File now</button>}
       </div>}
       {isReportingWindow&&reportFiled&&<div style={{background:`${t.success}12`,border:`1px solid ${t.success}30`,borderRadius:10,padding:'11px 14px',marginBottom:18,display:'flex',alignItems:'center',gap:10,animation:'fadeUp 0.3s ease both'}}>
@@ -395,31 +396,6 @@ function HomeTab({dark, amount, daysUntil, paymentDate, paid, onPaidChange, repo
         </div>
       </div>
 
-      {/* Debt triage */}
-      <div style={{marginTop:28,animation:'fadeUp 0.45s 0.66s ease both'}}>
-        <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:12}}>Debt triage</div>
-        <div style={{background:t.bg2,border:`1px solid ${t.border}`,borderRadius:10,overflow:'hidden'}}>
-          {[
-            {label:'Transit pass top-up',  amount:'$50',  clearable:true},
-            {label:'Phone bill (May)',      amount:'$45',  clearable:true},
-            {label:'Grocery tab (Ben)',     amount:'$80',  clearable:true},
-            {label:'Prescription co-pay',  amount:'$25',  clearable:false},
-            {label:'BC Hydro arrears',      amount:'$140', clearable:false},
-          ].map(({label,amount,clearable},i,arr)=>(
-            <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 14px',borderBottom:i<arr.length-1?`1px solid ${t.border}`:'none'}}>
-              <div style={{display:'flex',alignItems:'center',gap:8}}>
-                <div style={{width:6,height:6,borderRadius:'50%',flexShrink:0,background:clearable?t.success:t.border2}}/>
-                <span style={{fontSize:13,color:t.text,letterSpacing:'-0.2px'}}>{label}</span>
-              </div>
-              <div style={{display:'flex',alignItems:'center',gap:8}}>
-                <span style={{fontSize:13,fontWeight:600,color:t.text,letterSpacing:'-0.5px'}}>{amount}</span>
-                {clearable&&<span style={{fontSize:10,fontWeight:700,color:t.success,background:`${t.success}18`,padding:'2px 7px',borderRadius:100,letterSpacing:'0.04em',textTransform:'uppercase'}}>{nextIncomeLabel}</span>}
-              </div>
-            </div>
-          ))}
-        </div>
-        <div style={{marginTop:8,fontSize:11,color:t.muted}}>Green dot = clearable before {nextIncomeLabel} income window</div>
-      </div>
     </div>
   );
 }
@@ -964,7 +940,7 @@ function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, on
 // ════════════════════════════════════════════════════
 const TAB_ORDER = ['home','calendar','status','messages'];
 
-function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, username, onLogout, avatarUrl, onAvatarClick, skn, reportMonths, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
+function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, username, onLogout, avatarUrl, onAvatarClick, skn, reportMonths, onMarkFiled, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
   const t = tk(dark);
   const [tab, setTab] = useState('home');
   const [showSubmit, setShowSubmit] = useState(false);
@@ -1001,7 +977,7 @@ function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidC
         </button>
       </div>
 
-      {tab==='home'     &&<HomeTab     dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange} reportMonths={reportMonths} onSubmitReport={()=>setShowSubmit(true)}/>}
+      {tab==='home'     &&<HomeTab     dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange} reportMonths={reportMonths} onSubmitReport={()=>setShowSubmit(true)} onMarkFiled={onMarkFiled}/>}
       {tab==='calendar' &&<CalendarTab dark={dark} payDateObj={payDateObj} amount={amount} daysUntil={daysUntil}/>}
       {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} skn={skn} onSubmitReport={()=>setShowSubmit(true)} onPwdResubmit={()=>setShowPwdResubmit(true)} reportMonths={reportMonths} username={username} pinSet={pinSet} onSetPin={()=>setShowPinSheet(true)}/>}
       {tab==='messages' &&<MessagesTab dark={dark} messages={messages} readIds={readIds} onRead={onRead}/>}
@@ -1167,8 +1143,15 @@ function App() {
     } catch {}
   };
 
+  const handleMarkFiled = async (month) => {
+    try {
+      await fetch('/api/report-status',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({month,filed:true})});
+      fetch('/api/report-status',{credentials:'include'}).then(r=>r.json()).then(d=>setReportMonths(d.reportMonths||{})).catch(()=>{});
+    } catch(e){}
+  };
+
   return (
-    <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} readIds={readIds} onRead={mergeReadIds} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} skn={skn} reportMonths={reportMonths} pinSet={pinSet} setPinSet={setPinSet} showPinSheet={showPinSheet} setShowPinSheet={setShowPinSheet}/>
+    <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} readIds={readIds} onRead={mergeReadIds} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} skn={skn} reportMonths={reportMonths} onMarkFiled={handleMarkFiled} pinSet={pinSet} setPinSet={setPinSet} showPinSheet={showPinSheet} setShowPinSheet={setShowPinSheet}/>
   );
 }
 
