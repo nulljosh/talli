@@ -1191,12 +1191,22 @@ app.get('/api/latest', requireAuth, async (req, res) => {
     log('[API] /api/latest called');
     const userId = req.session?.userId;
     const pwdProfile = await loadUserBlob(userId, 'pwd-profile', { status: 'applied' }).catch(() => ({ status: 'applied' }));
+    const rdspProfile = await loadUserBlob(userId, 'rdsp-profile', { status: 'pending' }).catch(() => ({ status: 'pending' }));
+    const cdbProfile = await loadUserBlob(userId, 'cdb-profile', { status: 'pending' }).catch(() => ({ status: 'pending' }));
     const uiConfig = {
       pwdApproved: pwdProfile.status === 'approved' || PWD_APPROVED,
       pwdMedicalDone: pwdProfile.status === 'medical_done' || pwdProfile.status === 'approved' || PWD_MEDICAL_DONE,
       pwdStatus: PWD_RESUBMITTED ? 'resubmitted' : PWD_DENIED ? 'denied' : pwdProfile.status,
       pwdDeniedDate: pwdProfile.deniedDate || PWD_DENIED_DATE,
       pwdSubmittedDate: pwdProfile.submittedDate || null,
+      rdspStatus: rdspProfile.status,
+      rdspAccountOpenedDate: rdspProfile.accountOpenedDate || null,
+      rdspAccountNumber: rdspProfile.accountNumber || null,
+      cdbStatus: cdbProfile.status,
+      cdbAppliedDate: cdbProfile.appliedDate || null,
+      cdbApprovalDate: cdbProfile.approvalDate || null,
+      cdbMonthlyAmount: cdbProfile.monthlyAmount || null,
+      cdbRetroactiveEligible: cdbProfile.retroactiveEligible || false,
     };
 
     const result = await fetchOrLoadData(req);
@@ -1775,6 +1785,82 @@ app.post('/api/pwd-profile', requireAuth, async (req, res) => {
   } catch (err) {
     log('[PWD] POST error:', err.message);
     res.status(500).json({ error: 'Failed to save PWD profile' });
+  }
+});
+
+// RDSP profile -- per-user application status (pending/dtc_required/account_opened/funded/active/closed)
+const VALID_RDSP_STATUSES = new Set(['pending','dtc_required','account_opened','funded','active','closed']);
+
+app.get('/api/rdsp-profile', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    const data = await loadUserBlob(userId, 'rdsp-profile', { status: 'pending', accountOpenedDate: null, accountNumber: null, notes: '' });
+    res.json(data);
+  } catch (err) {
+    log('[RDSP] GET error:', err.message);
+    res.json({ status: 'pending', accountOpenedDate: null, accountNumber: null, notes: '' });
+  }
+});
+
+app.post('/api/rdsp-profile', requireAuth, async (req, res) => {
+  try {
+    const { status, accountOpenedDate, accountNumber, notes } = req.body || {};
+    if (status && !VALID_RDSP_STATUSES.has(status)) {
+      return res.status(400).json({ error: 'Invalid status' });
+    }
+    const userId = req.session?.userId;
+    const existing = await loadUserBlob(userId, 'rdsp-profile', { status: 'pending' });
+    const data = {
+      ...existing,
+      ...(status !== undefined && { status }),
+      ...(accountOpenedDate !== undefined && { accountOpenedDate }),
+      ...(accountNumber !== undefined && { accountNumber }),
+      ...(notes !== undefined && { notes }),
+    };
+    await saveUserBlob(userId, 'rdsp-profile', data);
+    res.json(data);
+  } catch (err) {
+    log('[RDSP] POST error:', err.message);
+    res.status(500).json({ error: 'Failed to save RDSP profile' });
+  }
+});
+
+// CDB profile -- per-user application status (pending/applied/under_review/approved/rejected/funded)
+const VALID_CDB_STATUSES = new Set(['pending','applied','under_review','approved','rejected','funded']);
+
+app.get('/api/cdb-profile', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    const data = await loadUserBlob(userId, 'cdb-profile', { status: 'pending', appliedDate: null, approvalDate: null, monthlyAmount: null, retroactiveEligible: false, notes: '' });
+    res.json(data);
+  } catch (err) {
+    log('[CDB] GET error:', err.message);
+    res.json({ status: 'pending', appliedDate: null, approvalDate: null, monthlyAmount: null, retroactiveEligible: false, notes: '' });
+  }
+});
+
+app.post('/api/cdb-profile', requireAuth, async (req, res) => {
+  try {
+    const { status, appliedDate, approvalDate, monthlyAmount, retroactiveEligible, notes } = req.body || {};
+    if (status && !VALID_CDB_STATUSES.has(status)) {
+      return res.status(400).json({ error: 'Invalid status' });
+    }
+    const userId = req.session?.userId;
+    const existing = await loadUserBlob(userId, 'cdb-profile', { status: 'pending' });
+    const data = {
+      ...existing,
+      ...(status !== undefined && { status }),
+      ...(appliedDate !== undefined && { appliedDate }),
+      ...(approvalDate !== undefined && { approvalDate }),
+      ...(monthlyAmount !== undefined && { monthlyAmount }),
+      ...(retroactiveEligible !== undefined && { retroactiveEligible }),
+      ...(notes !== undefined && { notes }),
+    };
+    await saveUserBlob(userId, 'cdb-profile', data);
+    res.json(data);
+  } catch (err) {
+    log('[CDB] POST error:', err.message);
+    res.status(500).json({ error: 'Failed to save CDB profile' });
   }
 });
 

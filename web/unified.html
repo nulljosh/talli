@@ -700,7 +700,7 @@ function PwdResubmitModal({dark, pwdDeniedDate, onClose, onResubmitted}) {
 // ════════════════════════════════════════════════════
 // STATUS TAB
 // ════════════════════════════════════════════════════
-function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, skn, onSubmitReport, onPwdResubmit, reportMonths, username, pinSet, onSetPin}) {
+function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, skn, onSubmitReport, onPwdResubmit, reportMonths, username, pinSet, onSetPin}) {
   const t = tk(dark);
   const now = new Date();
   const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
@@ -762,6 +762,72 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate,
         <div style={{borderLeft:`1.5px solid ${t.border}`,marginLeft:5,paddingLeft:18}}>
           {steps.map((s,i)=>(
             <div key={i} style={{position:'relative',paddingBottom:i<steps.length-1?22:0}}>
+              <div style={{position:'absolute',left:-24,top:s.current?10:4,width:10,height:10,borderRadius:'50%',background:(s.done||s.current)?t.text:t.bg3,border:`2px solid ${t.bg}`,animation:s.current?'breathe 2.2s ease-in-out infinite':'none'}}/>
+              {s.current?(
+                <div style={{background:t.bg2,border:`1px solid ${t.border2}`,borderRadius:10,padding:'10px 12px',marginBottom:4}}>
+                  <div style={{fontSize:14,fontWeight:700,color:t.text,letterSpacing:'-0.3px',marginBottom:3}}>{s.label}</div>
+                  <div style={{fontSize:12,color:t.warning,fontWeight:600}}>{s.date}</div>
+                </div>
+              ):(
+                <>
+                  <div style={{fontSize:14,fontWeight:400,color:s.done?t.mutedMid:t.text,letterSpacing:'-0.2px',textDecoration:s.done?'line-through':'none',textDecorationColor:t.border2}}>{s.label}</div>
+                  <div style={{fontSize:12,marginTop:2,color:t.muted}}>{s.date}</div>
+                </>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{height:1,background:t.border,marginBottom:24}}/>
+
+      <div style={{marginBottom:28}}>
+        <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:16}}>RDSP Application</div>
+        <div style={{borderLeft:`1.5px solid ${t.border}`,marginLeft:5,paddingLeft:18}}>
+          {[
+            {label:'Account opened',date:rdspAccountOpenedDate?new Date(rdspAccountOpenedDate).toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'}):'Pending',done:rdspStatus!=='pending'&&rdspStatus!=='dtc_required'},
+            {label:'DTC certificate submitted',date:rdspStatus==='account_opened'||rdspStatus==='funded'||rdspStatus==='active'?'In progress':'Pending',done:rdspStatus==='funded'||rdspStatus==='active',current:rdspStatus==='account_opened'},
+            {label:'Account funded',date:rdspStatus==='funded'||rdspStatus==='active'?'Complete':'Pending',done:rdspStatus==='funded'||rdspStatus==='active'},
+            {label:'Active RDSP',date:rdspStatus==='active'?'Active':'Upon funding',done:rdspStatus==='active'},
+          ].map((s,i)=>(
+            <div key={i} style={{position:'relative',paddingBottom:i<3?22:0}}>
+              <div style={{position:'absolute',left:-24,top:s.current?10:4,width:10,height:10,borderRadius:'50%',background:(s.done||s.current)?t.text:t.bg3,border:`2px solid ${t.bg}`,animation:s.current?'breathe 2.2s ease-in-out infinite':'none'}}/>
+              {s.current?(
+                <div style={{background:t.bg2,border:`1px solid ${t.border2}`,borderRadius:10,padding:'10px 12px',marginBottom:4}}>
+                  <div style={{fontSize:14,fontWeight:700,color:t.text,letterSpacing:'-0.3px',marginBottom:3}}>{s.label}</div>
+                  <div style={{fontSize:12,color:t.warning,fontWeight:600}}>{s.date}</div>
+                </div>
+              ):(
+                <>
+                  <div style={{fontSize:14,fontWeight:400,color:s.done?t.mutedMid:t.text,letterSpacing:'-0.2px',textDecoration:s.done?'line-through':'none',textDecorationColor:t.border2}}>{s.label}</div>
+                  <div style={{fontSize:12,marginTop:2,color:t.muted}}>{s.date}</div>
+                </>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{height:1,background:t.border,marginBottom:24}}/>
+
+      <div style={{marginBottom:28}}>
+        <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:16}}>Canada Disability Benefit</div>
+        {cdbStatus!=='pending'&&(
+          <div style={{background:t.accentBg,border:`1px solid ${t.accent}30`,borderRadius:12,padding:'12px 14px',marginBottom:16,display:'flex',alignItems:'center',gap:10}}>
+            <div style={{flex:1}}>
+              <div style={{fontSize:13,fontWeight:700,color:t.text,letterSpacing:'-0.2px'}}>Monthly benefit</div>
+              <div style={{fontSize:12,color:t.mutedMid,marginTop:1}}>$2,000/month if approved</div>
+              {cdbRetroactiveEligible&&<div style={{fontSize:11,color:t.accent,marginTop:3}}>Retroactive to 2 years back</div>}
+            </div>
+          </div>
+        )}
+        <div style={{borderLeft:`1.5px solid ${t.border}`,marginLeft:5,paddingLeft:18}}>
+          {[
+            {label:'Application submitted',date:cdbAppliedDate?new Date(cdbAppliedDate).toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'}):'Pending',done:cdbStatus!=='pending'&&cdbStatus!=='applied'},
+            {label:'Under review',date:cdbStatus==='under_review'||cdbStatus==='approved'?'In progress':'Pending',done:cdbStatus==='approved',current:cdbStatus==='under_review'},
+            {label:'Approval decision',date:cdbApprovalDate?new Date(cdbApprovalDate).toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'}):'Pending',done:cdbStatus==='approved'},
+          ].map((s,i)=>(
+            <div key={i} style={{position:'relative',paddingBottom:i<2?22:0}}>
               <div style={{position:'absolute',left:-24,top:s.current?10:4,width:10,height:10,borderRadius:'50%',background:(s.done||s.current)?t.text:t.bg3,border:`2px solid ${t.bg}`,animation:s.current?'breathe 2.2s ease-in-out infinite':'none'}}/>
               {s.current?(
                 <div style={{background:t.bg2,border:`1px solid ${t.border2}`,borderRadius:10,padding:'10px 12px',marginBottom:4}}>
@@ -980,7 +1046,7 @@ function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidC
 
       {tab==='home'     &&<HomeTab     dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange} reportMonths={reportMonths} onSubmitReport={()=>setShowSubmit(true)} onMarkFiled={onMarkFiled}/>}
       {tab==='calendar' &&<CalendarTab dark={dark} payDateObj={payDateObj} amount={amount} daysUntil={daysUntil}/>}
-      {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} skn={skn} onSubmitReport={()=>setShowSubmit(true)} onPwdResubmit={()=>setShowPwdResubmit(true)} reportMonths={reportMonths} username={username} pinSet={pinSet} onSetPin={()=>setShowPinSheet(true)}/>}
+      {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} skn={skn} onSubmitReport={()=>setShowSubmit(true)} onPwdResubmit={()=>setShowPwdResubmit(true)} reportMonths={reportMonths} username={username} pinSet={pinSet} onSetPin={()=>setShowPinSheet(true)}/>}
       {tab==='messages' &&<MessagesTab dark={dark} messages={messages} readIds={readIds} onRead={onRead}/>}
       {tab==='settings' &&<SettingsTab dark={dark} username={username} avatarUrl={avatarUrl} onAvatarRefresh={doRefresh} refreshing={refreshing} onLogout={onLogout}/>}
 
@@ -1008,6 +1074,14 @@ function App() {
   const [pwdMedicalDone, setPwdMedicalDone] = useState(false);
   const [pwdStatus, setPwdStatus] = useState('applied');
   const [pwdDeniedDate, setPwdDeniedDate] = useState(null);
+  const [rdspStatus, setRdspStatus] = useState('pending');
+  const [rdspAccountOpenedDate, setRdspAccountOpenedDate] = useState(null);
+  const [rdspAccountNumber, setRdspAccountNumber] = useState(null);
+  const [cdbStatus, setCdbStatus] = useState('pending');
+  const [cdbAppliedDate, setCdbAppliedDate] = useState(null);
+  const [cdbApprovalDate, setCdbApprovalDate] = useState(null);
+  const [cdbMonthlyAmount, setCdbMonthlyAmount] = useState(null);
+  const [cdbRetroactiveEligible, setCdbRetroactiveEligible] = useState(false);
   const [avatarUrl,   setAvatarUrl]   = useState(null);
   const [skn,         setSkn]         = useState(null);
   const [reportMonths, setReportMonths] = useState({});
@@ -1062,6 +1136,14 @@ function App() {
       setPwdMedicalDone(json.uiConfig?.pwdMedicalDone||false);
       setPwdStatus(json.uiConfig?.pwdStatus||'applied');
       setPwdDeniedDate(json.uiConfig?.pwdDeniedDate||null);
+      setRdspStatus(json.uiConfig?.rdspStatus||'pending');
+      setRdspAccountOpenedDate(json.uiConfig?.rdspAccountOpenedDate||null);
+      setRdspAccountNumber(json.uiConfig?.rdspAccountNumber||null);
+      setCdbStatus(json.uiConfig?.cdbStatus||'pending');
+      setCdbAppliedDate(json.uiConfig?.cdbAppliedDate||null);
+      setCdbApprovalDate(json.uiConfig?.cdbApprovalDate||null);
+      setCdbMonthlyAmount(json.uiConfig?.cdbMonthlyAmount||null);
+      setCdbRetroactiveEligible(json.uiConfig?.cdbRetroactiveEligible||false);
       fetch('/api/read-messages', {credentials:'include'})
         .then(r=>r.json()).then(d=>{ if(d.readIds?.length) mergeReadIds(d.readIds); }).catch(()=>{});
     } catch(e) { setAmount(v=>v??'$0'); setDaysUntil(v=>v??0); }

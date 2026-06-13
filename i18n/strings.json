@@ -41,5 +41,17 @@
   "account.biAssistance": { "en": "BC Income Assistance", "fr": "Aide au revenu de la C.-B.", "zh": "", "pa": "", "review": true },
   "account.pin": { "en": "PIN", "fr": "NIP", "zh": "", "pa": "" },
   "account.bceid": { "en": "BCeID", "fr": "BCeID", "zh": "BCeID", "pa": "BCeID" },
-  "account.sin": { "en": "SIN", "fr": "NAS", "zh": "", "pa": "", "review": true }
+  "account.sin": { "en": "SIN", "fr": "NAS", "zh": "", "pa": "", "review": true },
+  "rdsp.application": { "en": "RDSP Application", "fr": "Demande REER-Invalidité", "zh": "", "pa": "", "review": true },
+  "rdsp.accountOpened": { "en": "Account opened", "fr": "Compte ouvert", "zh": "", "pa": "", "review": true },
+  "rdsp.dtcSubmitted": { "en": "DTC certificate submitted", "fr": "Certificat DTC soumis", "zh": "", "pa": "", "review": true },
+  "rdsp.accountFunded": { "en": "Account funded", "fr": "Compte financé", "zh": "", "pa": "", "review": true },
+  "rdsp.active": { "en": "Active RDSP", "fr": "REER-Invalidité actif", "zh": "", "pa": "", "review": true },
+  "cdb.application": { "en": "Canada Disability Benefit", "fr": "Prestation invalidité canadienne", "zh": "", "pa": "", "review": true },
+  "cdb.monthlyBenefit": { "en": "Monthly benefit", "fr": "Prestation mensuelle", "zh": "", "pa": "", "review": true },
+  "cdb.amount": { "en": "$2,000/month if approved", "fr": "2 000 $/mois si approuvé", "zh": "", "pa": "", "review": true },
+  "cdb.retroactive": { "en": "Retroactive to 2 years back", "fr": "Rétroactif pendant 2 ans", "zh": "", "pa": "", "review": true },
+  "cdb.submitted": { "en": "Application submitted", "fr": "Demande soumise", "zh": "", "pa": "", "review": true },
+  "cdb.underReview": { "en": "Under review", "fr": "En examen", "zh": "", "pa": "", "review": true },
+  "cdb.decision": { "en": "Approval decision", "fr": "Décision d'approbation", "zh": "", "pa": "", "review": true }
 }
