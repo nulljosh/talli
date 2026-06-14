@@ -958,11 +958,11 @@ function MessagesTab({dark, messages, readIds, onRead}) {
 // ════════════════════════════════════════════════════
 // SETTINGS TAB
 // ════════════════════════════════════════════════════
-function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, onLogout}) {
+function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, avatarError, setAvatarError, onLogout}) {
   const t = tk(dark);
   const [imgError, setImgError] = useState(false);
   useEffect(() => { setImgError(false); }, [avatarUrl]);
-  const handleRefresh = () => { if (!refreshing) onAvatarRefresh(); };
+  const handleRefresh = async () => { if (!refreshing) { setAvatarError(null); await onAvatarRefresh(); } };
   const Row = ({label, value}) => (
     <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'14px 0',borderBottom:`1px solid ${t.border}`}}>
       <span style={{fontSize:13,color:t.muted}}>{label}</span>
@@ -983,6 +983,7 @@ function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, on
         <button onClick={handleRefresh} disabled={refreshing} style={{background:'none',border:`1px solid ${t.border2}`,borderRadius:100,padding:'7px 18px',fontSize:12,fontWeight:600,color:t.muted,cursor:refreshing?'not-allowed':'pointer',letterSpacing:'0.04em',textTransform:'uppercase',transition:'border-color 0.2s,color 0.2s',opacity:refreshing?0.5:1}}>
           {refreshing ? 'Generating...' : 'Refresh Avatar'}
         </button>
+        {avatarError && <p style={{fontSize:12,color:'#d94f3d',marginTop:8,textAlign:'center'}}>{avatarError}</p>}
       </div>
 
       {/* Account section */}
@@ -1007,13 +1008,13 @@ function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, on
 // ════════════════════════════════════════════════════
 const TAB_ORDER = ['home','calendar','status','messages'];
 
-function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, username, onLogout, avatarUrl, onAvatarClick, skn, reportMonths, onMarkFiled, onPwdResubmitted, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
+function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, username, onLogout, avatarUrl, onAvatarClick, avatarError, setAvatarError, skn, reportMonths, onMarkFiled, onPwdResubmitted, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
   const t = tk(dark);
   const [tab, setTab] = useState('home');
   const [showSubmit, setShowSubmit] = useState(false);
   const [showPwdResubmit, setShowPwdResubmit] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const doRefresh = async () => { if (refreshing) return; setRefreshing(true); try { await onAvatarClick(); } finally { setRefreshing(false); } };
+  const doRefresh = async () => { if (refreshing) return; setRefreshing(true); setAvatarError(null); try { await onAvatarClick(); } catch (e) { setAvatarError('Failed to refresh avatar. Please try again.'); } finally { setRefreshing(false); } };
   const touchX = useRef(null);
   const onTouchStart = (e) => { touchX.current = e.touches[0].clientX; };
   const onTouchEnd   = (e) => {
@@ -1048,7 +1049,7 @@ function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidC
       {tab==='calendar' &&<CalendarTab dark={dark} payDateObj={payDateObj} amount={amount} daysUntil={daysUntil}/>}
       {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} skn={skn} onSubmitReport={()=>setShowSubmit(true)} onPwdResubmit={()=>setShowPwdResubmit(true)} reportMonths={reportMonths} username={username} pinSet={pinSet} onSetPin={()=>setShowPinSheet(true)}/>}
       {tab==='messages' &&<MessagesTab dark={dark} messages={messages} readIds={readIds} onRead={onRead}/>}
-      {tab==='settings' &&<SettingsTab dark={dark} username={username} avatarUrl={avatarUrl} onAvatarRefresh={doRefresh} refreshing={refreshing} onLogout={onLogout}/>}
+      {tab==='settings' &&<SettingsTab dark={dark} username={username} avatarUrl={avatarUrl} onAvatarRefresh={doRefresh} refreshing={refreshing} avatarError={avatarError} setAvatarError={setAvatarError} onLogout={onLogout}/>}
 
       <TabBar tab={tab} setTab={setTab} dark={dark} msgBadge={unread}/>
       {showSubmit&&<SubmitReportModal dark={dark} skn={skn} pinSet={pinSet} onPinSaved={()=>setPinSet(true)} onClose={()=>setShowSubmit(false)}/>}
@@ -1083,6 +1084,7 @@ function App() {
   const [cdbMonthlyAmount, setCdbMonthlyAmount] = useState(null);
   const [cdbRetroactiveEligible, setCdbRetroactiveEligible] = useState(false);
   const [avatarUrl,   setAvatarUrl]   = useState(null);
+  const [avatarError, setAvatarError] = useState(null);
   const [skn,         setSkn]         = useState(null);
   const [reportMonths, setReportMonths] = useState({});
   const [pinSet, setPinSet] = useState(false);
@@ -1218,12 +1220,20 @@ function App() {
   const handleAvatarClick = async () => {
     const svg = generateNodeGraphSVG();
     const b64 = btoa(unescape(encodeURIComponent(svg)));
-    setAvatarUrl(`data:image/svg+xml;base64,${b64}`);
+    const previewUrl = `data:image/svg+xml;base64,${b64}`;
+    setAvatarUrl(previewUrl);
     try {
       const r = await fetch('/api/avatar',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({svgBase64:b64})});
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
       const d = await r.json();
-      if(d.avatarUrl) setAvatarUrl(d.avatarUrl);
-    } catch {}
+      if(d.error) throw new Error(d.error);
+      if(d.avatarUrl) { setAvatarUrl(d.avatarUrl); setAvatarError(null); }
+      else throw new Error('No avatar URL in response');
+    } catch (err) {
+      setAvatarUrl(previewUrl);
+      setAvatarError('Failed to save avatar. Please try again.');
+      console.error('[AVATAR] Error:', err.message);
+    }
   };
 
   const handlePwdResubmitted = () => setPwdStatus('resubmitted');
@@ -1236,7 +1246,7 @@ function App() {
   };
 
   return (
-    <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} readIds={readIds} onRead={mergeReadIds} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} skn={skn} reportMonths={reportMonths} onMarkFiled={handleMarkFiled} onPwdResubmitted={handlePwdResubmitted} pinSet={pinSet} setPinSet={setPinSet} showPinSheet={showPinSheet} setShowPinSheet={setShowPinSheet}/>
+    <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} readIds={readIds} onRead={mergeReadIds} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} setAvatarError={setAvatarError} skn={skn} reportMonths={reportMonths} onMarkFiled={handleMarkFiled} onPwdResubmitted={handlePwdResubmitted} pinSet={pinSet} setPinSet={setPinSet} showPinSheet={showPinSheet} setShowPinSheet={setShowPinSheet}/>
   );
 }
 
