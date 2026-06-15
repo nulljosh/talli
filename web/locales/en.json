@@ -36,5 +36,17 @@
   "account.biAssistance": "BC Income Assistance",
   "account.pin": "PIN",
   "account.bceid": "BCeID",
-  "account.sin": "SIN"
+  "account.sin": "SIN",
+  "rdsp.application": "RDSP Application",
+  "rdsp.accountOpened": "Account opened",
+  "rdsp.dtcSubmitted": "DTC certificate submitted",
+  "rdsp.accountFunded": "Account funded",
+  "rdsp.active": "Active RDSP",
+  "cdb.application": "Canada Disability Benefit",
+  "cdb.monthlyBenefit": "Monthly benefit",
+  "cdb.amount": "$2,000/month if approved",
+  "cdb.retroactive": "Retroactive to 2 years back",
+  "cdb.submitted": "Application submitted",
+  "cdb.underReview": "Under review",
+  "cdb.decision": "Approval decision"
 }

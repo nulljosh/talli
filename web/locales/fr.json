@@ -36,5 +36,17 @@
   "account.biAssistance": "Aide au revenu de la C.-B.",
   "account.pin": "NIP",
   "account.bceid": "BCeID",
-  "account.sin": "NAS"
+  "account.sin": "NAS",
+  "rdsp.application": "Demande REER-Invalidité",
+  "rdsp.accountOpened": "Compte ouvert",
+  "rdsp.dtcSubmitted": "Certificat DTC soumis",
+  "rdsp.accountFunded": "Compte financé",
+  "rdsp.active": "REER-Invalidité actif",
+  "cdb.application": "Prestation invalidité canadienne",
+  "cdb.monthlyBenefit": "Prestation mensuelle",
+  "cdb.amount": "2 000 $/mois si approuvé",
+  "cdb.retroactive": "Rétroactif pendant 2 ans",
+  "cdb.submitted": "Demande soumise",
+  "cdb.underReview": "En examen",
+  "cdb.decision": "Décision d'approbation"
 }
