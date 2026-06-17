@@ -1,11 +1,12 @@
 # school
 
-> Add a one-line description here.
+Static dashboard tracking high school progress (grades, active/finished courses, university applications). Deployed to school.heyitsmejosh.com.
 
 ## Setup
 
 ```bash
-# Add setup instructions
+cd docs/school
+vercel --prod
 ```
 
 ## License
