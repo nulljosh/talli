@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biology 12 Masterclass — All Units</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+:root{--bg:#0a0a12;--s:rgba(255,255,255,0.05);--s2:rgba(0,0,0,0.35);--b:rgba(255,255,255,0.09);--t:#f0f0f8;--td:rgba(240,240,248,0.5);--acc:#0071e3;--green:#34c759;--orange:#ff9f0a;--red:#ff453a;--blue:#0a84ff;--pink:#bf5af2;--yellow:#ffd60a;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,sans-serif;background:var(--bg);color:var(--t);line-height:1.65;display:flex;min-height:100vh;}
+.sidebar{position:fixed;top:0;left:0;width:260px;height:100vh;background:rgba(10,10,18,0.75);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border-right:1px solid var(--b);overflow-y:auto;padding:1.5rem 0;z-index:100;}
+.sidebar-title{padding:0 1.5rem 1rem;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);}
+.sidebar a{display:block;padding:.55rem 1.5rem;font-size:.83rem;color:var(--td);text-decoration:none;border-left:3px solid transparent;transition:all .15s;}
+.sidebar a:hover,.sidebar a.active{color:var(--t);background:rgba(108,99,255,.1);border-left-color:var(--acc);}
+.sidebar .grp{font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--td);padding:.9rem 1.5rem .3rem;opacity:.6;}
+.main{margin-left:260px;padding:3rem 4rem;max-width:960px;width:100%;}
+@media(max-width:900px){.sidebar{display:none;}.main{margin-left:0;padding:2rem 1.5rem;}}
+h1{font-size:2rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.25rem;}
+.meta{font-size:.83rem;color:var(--td);margin-bottom:3rem;}
+h2{font-size:1.3rem;font-weight:700;color:var(--t);margin:3rem 0 .5rem;padding-top:1rem;}
+h2 .unit-tag{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--acc);display:block;margin-bottom:.3rem;}
+h3{font-size:.85rem;font-weight:600;color:var(--orange);margin:1.2rem 0 .5rem;text-transform:uppercase;letter-spacing:.05em;}
+p,li{font-size:.875rem;color:var(--td);margin:.2rem 0;}
+ul,ol{padding-left:1.2rem;}
+strong{color:var(--t);}
+hr{border:none;border-top:1px solid var(--b);margin:2.5rem 0;}
+.f{font-family:'JetBrains Mono',monospace;background:var(--s2);border:1px solid var(--b);border-radius:6px;padding:.4rem .8rem;font-size:.8rem;display:block;margin:.3rem 0;color:var(--blue);}
+.fi{font-family:'JetBrains Mono',monospace;background:var(--s2);border-radius:4px;padding:.1rem .4rem;font-size:.78rem;color:var(--blue);}
+.warn{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.25);border-radius:8px;padding:.8rem 1rem;margin:.75rem 0;}
+.warn .warn-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--red);margin-bottom:.3rem;}
+.warn p,.warn li{color:#fca5a5;}
+.tip{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.25);border-radius:8px;padding:.8rem 1rem;margin:.75rem 0;}
+.tip .tip-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--green);margin-bottom:.3rem;}
+.tip p,.tip li{color:#86efac;}
+.info{background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.2);border-radius:8px;padding:.8rem 1rem;margin:.75rem 0;}
+.info p{color:#93c5fd;}
+.ex{background:var(--s);border:1px solid var(--b);border-radius:8px;padding:1rem 1.2rem;margin:.75rem 0;}
+.ex-title{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--yellow);margin-bottom:.6rem;}
+.ex .step{font-size:.83rem;color:var(--td);margin:.25rem 0;}
+.ex .step span{color:var(--t);}
+.fc-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:.75rem 0;}
+@media(max-width:700px){.fc-grid{grid-template-columns:1fr;}}
+.fc{background:var(--s);border:1px solid var(--b);border-radius:8px;padding:.9rem 1rem;}
+.fc-q{font-size:.82rem;font-weight:600;color:var(--t);margin-bottom:.5rem;}
+.fc-a{font-size:.8rem;color:var(--green);border-top:1px solid var(--b);padding-top:.5rem;margin-top:.5rem;}
+table{width:100%;border-collapse:collapse;margin:.75rem 0;font-size:.85rem;}
+th{background:var(--s2);color:var(--td);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;padding:.6rem .9rem;text-align:left;border:1px solid var(--b);}
+td{padding:.55rem .9rem;border:1px solid var(--b);color:var(--td);}
+.grade-a{color:var(--green);font-weight:600;}
+.grade-b{color:var(--orange);font-weight:600;}
+.grade-pend{color:var(--td);}
+.mod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin:.75rem 0;}
+@media(max-width:600px){.mod-grid{grid-template-columns:1fr;}}
+.mod{background:var(--s);border:1px solid var(--b);border-radius:8px;padding:.9rem 1rem;}
+.mod-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--acc);margin-bottom:.4rem;}
+.mod li{font-size:.8rem;color:var(--td);}
+.section{padding-top:1rem;}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="sidebar-title">Biology 12 Masterclass</div>
+  <div class="grp">Overview</div>
+  <a href="#overview">Module Map</a>
+  <a href="#strategy">Study Strategy</a>
+  <div class="grp">Units</div>
+  <a href="#u1">U1 · Homeostasis &amp; Biomolecules</a>
+  <a href="#u2">U2 · Cell Structure &amp; Function</a>
+  <a href="#u3">U3 · DNA, Protein Synthesis &amp; Enzymes</a>
+  <a href="#u4">U4 · Digestive System</a>
+  <a href="#u5">U5 · Respiratory System</a>
+  <a href="#u6">U6 · Circulatory System</a>
+  <a href="#u7">U7 · Nervous System</a>
+  <a href="#u8">U8 · Excretory System</a>
+  <a href="#u9">U9 · Reproductive System</a>
+  <div class="grp">Review</div>
+  <a href="#flashcards">All Flashcards</a>
+</nav>
+
+<main class="main">
+
+<h1>Biology 12 Masterclass</h1>
+<p class="meta">All 9 units · A&amp;P 12 / Biology 12</p>
+
+<section id="overview" class="section">
+<h2><span class="unit-tag">Overview</span>Module Map</h2>
+<div class="mod-grid">
+  <div class="mod"><div class="mod-title">Molecular Foundation</div><ul><li>U1 · Homeostasis &amp; Biomolecules</li><li>U2 · Cell Structure</li><li>U3 · DNA &amp; Protein Synthesis</li></ul></div>
+  <div class="mod"><div class="mod-title">Intake &amp; Transport</div><ul><li>U4 · Digestive System</li><li>U5 · Respiratory System</li><li>U6 · Circulatory System</li></ul></div>
+  <div class="mod"><div class="mod-title">Control &amp; Continuity</div><ul><li>U7 · Nervous System</li><li>U8 · Excretory System</li><li>U9 · Reproductive System</li></ul></div>
+</div>
+<div class="info"><p><strong>Big picture:</strong> Biology Builds From Small To Big — molecules → cells → tissues → organs → systems → organisms. Units 1–3 (molecular/cellular) are the foundation everything else depends on.</p></div>
+</section>
+
+<section id="strategy" class="section">
+<h2><span class="unit-tag">Overview</span>Study Strategy</h2>
+<div class="tip"><div class="tip-title">Review schedule</div><ul>
+<li>Daily: 15–20 min on current unit notes</li>
+<li>Weekly: practice questions — if you can't answer them, you don't know the material</li>
+<li>Bi-weekly: revisit old units</li>
+<li>Before exams: focus on how units connect</li>
+</ul></div>
+<div class="warn"><div class="warn-title">Reality check</div><p>Systems units build on each other — digestive needs circulatory needs respiratory, etc. Falling behind in Bio 12 is brutal to recover from.</p></div>
+</section>
+
+<hr>
+
+<section id="u1" class="section">
+<h2><span class="unit-tag">Unit 1</span>Homeostasis &amp; Biological Molecules</h2>
+
+<h3>Homeostasis</h3>
+<p><strong>Definition:</strong> body maintaining internal balance despite external changes.</p>
+<p><strong>Mechanism:</strong> negative feedback loops — Receptors detect change → Control center processes → Effectors respond.</p>
+<p><strong>Examples:</strong> temperature regulation, blood glucose control, pH balance.</p>
+
+<h3>Water Properties</h3>
+<ul>
+<li>Polar molecule, partial charges; covalent bonds within, hydrogen bonds between molecules</li>
+<li>Solvent, temperature moderator (high specific heat, evaporative cooling), cohesion/adhesion, transport medium</li>
+</ul>
+
+<h3>pH &amp; Acids/Bases</h3>
+<ul>
+<li>0–6 acidic, 7 neutral, 8–14 basic</li>
+<li>Acids release H⁺, bases release OH⁻</li>
+<li>Buffers resist pH change — crucial for enzyme function</li>
+<li>Blood pH ≈ 7.4, stomach pH ≈ 2</li>
+</ul>
+
+<h3>Biomolecules</h3>
+<div class="ex">
+<div class="ex-title">Macromolecule cheat sheet</div>
+<div class="step"><span>Carbohydrates</span> — monomers: monosaccharides; quick energy, structural support, energy storage</div>
+<div class="step"><span>Lipids</span> — triglycerides (long-term energy, insulation), phospholipids (membranes), steroids (hormones)</div>
+<div class="step"><span>Proteins</span> — monomers: amino acids; primary → secondary → tertiary structure; shape determines function</div>
+<div class="step"><span>Nucleic acids</span> — DNA/RNA, nucleotides (phosphate + sugar + base); store/transmit genetic info; ATP = energy currency</div>
+</div>
+
+<div class="tip"><div class="tip-title">Memory hacks</div><ul>
+<li><span class="fi">CLPN</span> — Carbs quick energy, Lipids long-term, Proteins do work, Nucleic acids store info</li>
+<li>Organelles: "Never Call My Rough English, Go Learn Coding" (Nucleus, Cytoplasm, Mitochondria, Ribosomes, ER, Golgi, Lysosomes, Chloroplasts)</li>
+</ul></div>
+</section>
+
+<hr>
+
+<section id="u2" class="section">
+<h2><span class="unit-tag">Unit 2</span>Cell Structure &amp; Function</h2>
+
+<h3>Cell Theory</h3>
+<ol><li>All living things are made of cells</li><li>Cells are the basic unit of life</li><li>All cells come from pre-existing cells</li></ol>
+
+<h3>Prokaryotes vs Eukaryotes</h3>
+<p>Prokaryotes: no nucleus, less efficient (bacteria). Eukaryotes: have nucleus, more efficient (plants, animals).</p>
+
+<h3>Organelles &amp; Functions</h3>
+<div class="mod-grid">
+  <div class="mod"><div class="mod-title">Both</div><ul><li>Nucleus — control center, DNA</li><li>Mitochondria — ATP</li><li>Ribosomes — protein factories</li><li>ER — transport (rough has ribosomes)</li><li>Golgi — processes/packages proteins</li><li>Cytoskeleton — shape</li></ul></div>
+  <div class="mod"><div class="mod-title">Animal only</div><ul><li>Lysosomes — digest waste</li><li>Centrioles — cell division</li><li>Small vacuoles — storage</li></ul></div>
+  <div class="mod"><div class="mod-title">Plant only</div><ul><li>Chloroplasts — photosynthesis</li><li>Cell wall — structure/protection</li><li>Large vacuole — storage/support</li></ul></div>
+</div>
+
+<h3>Membrane Transport</h3>
+<p><strong>Passive (no energy):</strong> diffusion, osmosis, facilitated diffusion.</p>
+<p><strong>Active (requires energy):</strong> primary (ATP direct), secondary (gradients), endocytosis, exocytosis.</p>
+<p><strong>Tonicity:</strong> isotonic — no net movement; hypertonic — cell shrinks; hypotonic — cell swells.</p>
+
+<div class="tip"><div class="tip-title">Memory hacks</div><ul>
+<li>"Water follows salt" for osmosis</li>
+<li>"HYPE-rtonic makes cells shrink from HYPE-rdehydration"</li>
+</ul></div>
+<div class="warn"><div class="warn-title">Foundation warning</div><p>If you don't understand transport, every other unit gets harder — this connects to everything.</p></div>
+</section>
+
+<hr>
+
+<section id="u3" class="section">
+<h2><span class="unit-tag">Unit 3</span>DNA, Protein Synthesis &amp; Enzymes</h2>
+
+<h3>DNA Structure &amp; Replication</h3>
+<ul>
+<li>Double helix; base pairing A-T, C-G; phosphate + deoxyribose + nitrogenous base</li>
+<li>Semi-conservative replication: Helicase unzips, DNA polymerase adds nucleotides, Ligase seals fragments</li>
+</ul>
+
+<h3>RNA &amp; Protein Synthesis</h3>
+<p>RNA differs from DNA: single strand, ribose sugar, uracil instead of thymine. Types: mRNA (messenger), tRNA (transfer), rRNA (ribosomal).</p>
+<div class="ex">
+<div class="ex-title">Central dogma</div>
+<div class="step"><span>Transcription</span> (nucleus): RNA polymerase reads DNA template → mRNA</div>
+<div class="step"><span>Translation</span> (ribosomes): Initiation → Elongation (tRNA brings amino acids) → Termination (stop codon, protein released)</div>
+</div>
+
+<h3>Mutations</h3>
+<p>Point mutations: silent (no effect), missense (different amino acid), nonsense (premature stop). Frameshift: insertion/deletion shifts reading frame.</p>
+
+<h3>Enzymes</h3>
+<ul>
+<li>Biological catalysts, lower activation energy; lock-and-key active site</li>
+<li>Affected by temperature (denaturation past optimum), pH, concentration</li>
+<li>Inhibition: competitive (competes for active site) vs non-competitive (binds elsewhere, changes shape)</li>
+</ul>
+
+<div class="tip"><div class="tip-title">Memory hacks</div><ul>
+<li>Base pairs: "Apple Tree, Car Garage" (A-T, C-G)</li>
+<li>Central dogma: "DNA makes RNA makes Protein" (DRP)</li>
+<li>Replication: "Helicase Helps, Polymerase Produces, Ligase Links"</li>
+<li>Restaurant analogy: DNA = recipe book, mRNA = order ticket, tRNA = waiters, ribosome = kitchen</li>
+</ul></div>
+</section>
+
+<hr>
+
+<section id="u4" class="section">
+<h2><span class="unit-tag">Unit 4</span>Digestive System</h2>
+<p><strong>Pathway:</strong> Mouth → Esophagus → Stomach → Small intestine → Large intestine → Rectum.</p>
+<ul>
+<li>Mechanical digestion: physical breakdown (chewing, churning)</li>
+<li>Chemical digestion: enzyme breakdown — amylase (starch), pepsin (protein), lipase (fats)</li>
+<li>Absorption mainly in small intestine, optimized via villi</li>
+</ul>
+<div class="tip"><div class="tip-title">Memory hack</div><p>"My Mouth Eats Small Lunch Regularly" — trace the pathway first, then layer in enzymes/absorption.</p></div>
+</section>
+
+<hr>
+
+<section id="u5" class="section">
+<h2><span class="unit-tag">Unit 5</span>Respiratory System</h2>
+<ul>
+<li>External respiration: gas exchange in lungs (O₂ in, CO₂ out)</li>
+<li>Internal respiration: gas exchange at tissues</li>
+<li>Alveoli: tiny air sacs for gas exchange; hemoglobin carries O₂</li>
+<li>Medulla monitors CO₂ levels and adjusts breathing rate</li>
+</ul>
+<div class="tip"><div class="tip-title">Memory hack</div><p><span class="fi">BRIN</span> — Breathe, Ribs expand, Internal gas exchange, Nose/mouth entry.</p></div>
+</section>
+
+<hr>
+
+<section id="u6" class="section">
+<h2><span class="unit-tag">Unit 6</span>Circulatory System</h2>
+<ul>
+<li>Heart: 2 atria (receive blood), 2 ventricles (pump blood)</li>
+<li>Blood flow: right side → lungs → left side → body</li>
+<li>Arteries: away from heart, thick walls, high pressure. Veins: return to heart, valves, lower pressure. Capillaries: thin walls, gas/nutrient exchange</li>
+<li>Blood: RBCs (O₂ transport), WBCs (immune), platelets (clotting), plasma (liquid)</li>
+</ul>
+<div class="tip"><div class="tip-title">Memory hacks</div><p>"Right Ventricle Leaves, Left Ventricle Arrives"; "Arteries Away, Veins Venture back".</p></div>
+</section>
+
+<hr>
+
+<section id="u7" class="section">
+<h2><span class="unit-tag">Unit 7</span>Nervous System</h2>
+<ul>
+<li>CNS: brain and spinal cord. PNS: all other nerves</li>
+<li>Neurons: electrical signals within cell, chemical signals between cells</li>
+<li>Reflexes: automatic protective responses</li>
+<li>Brain processes sensory info and controls responses</li>
+</ul>
+<div class="tip"><div class="tip-title">Memory hack</div><p>"CNS Controls, PNS Provides".</p></div>
+</section>
+
+<hr>
+
+<section id="u8" class="section">
+<h2><span class="unit-tag">Unit 8</span>Excretory System</h2>
+<ul>
+<li>Filters blood, removes wastes, maintains water/salt balance</li>
+<li>Nephrons: functional units of kidneys</li>
+<li>Process: Filtration → Reabsorption → Secretion → Excretion</li>
+<li>Hormones: ADH (water retention), aldosterone (salt retention)</li>
+</ul>
+<div class="tip"><div class="tip-title">Memory hack</div><p>"Kidneys Keep Blood Clean".</p></div>
+</section>
+
+<hr>
+
+<section id="u9" class="section">
+<h2><span class="unit-tag">Unit 9</span>Reproductive System</h2>
+<ul>
+<li>Male: testes produce sperm and testosterone</li>
+<li>Female: ovaries produce eggs, estrogen, progesterone</li>
+<li>Menstrual cycle: hormone-controlled monthly cycle</li>
+<li>Fertilization in fallopian tube; development: embryo → fetus → baby</li>
+</ul>
+<div class="tip"><div class="tip-title">Memory hack</div><p>"Hormones Control Everything" in reproduction.</p></div>
+</section>
+
+<hr>
+
+<section id="flashcards" class="section">
+<h2><span class="unit-tag">Review</span>All Flashcards</h2>
+<div class="fc-grid">
+<div class="fc"><div class="fc-q">What are the 4 components of a negative feedback loop?</div><div class="fc-a">Stimulus → receptor → control center → effector → response</div></div>
+<div class="fc"><div class="fc-q">Why is water a good solvent?</div><div class="fc-a">It's polar, so it dissolves polar/ionic substances</div></div>
+<div class="fc"><div class="fc-q">What's the difference between passive and active transport?</div><div class="fc-a">Passive needs no energy (diffusion, osmosis, facilitated diffusion); active requires ATP</div></div>
+<div class="fc"><div class="fc-q">What happens to a cell in a hypertonic solution?</div><div class="fc-a">It shrinks — water leaves the cell</div></div>
+<div class="fc"><div class="fc-q">Name the 3 enzymes in DNA replication.</div><div class="fc-a">Helicase (unzips), DNA polymerase (adds nucleotides), Ligase (seals fragments)</div></div>
+<div class="fc"><div class="fc-q">Where do transcription and translation happen?</div><div class="fc-a">Transcription in the nucleus; translation at ribosomes in the cytoplasm</div></div>
+<div class="fc"><div class="fc-q">What's the digestive pathway in order?</div><div class="fc-a">Mouth → esophagus → stomach → small intestine → large intestine → rectum</div></div>
+<div class="fc"><div class="fc-q">What does hemoglobin do?</div><div class="fc-a">Carries oxygen in the blood</div></div>
+<div class="fc"><div class="fc-q">What are the heart's 4 chambers and their roles?</div><div class="fc-a">2 atria receive blood, 2 ventricles pump blood</div></div>
+<div class="fc"><div class="fc-q">CNS vs PNS?</div><div class="fc-a">CNS = brain + spinal cord; PNS = all other nerves</div></div>
+<div class="fc"><div class="fc-q">What are the 4 steps of kidney filtration?</div><div class="fc-a">Filtration → reabsorption → secretion → excretion</div></div>
+<div class="fc"><div class="fc-q">What hormones control the menstrual cycle?</div><div class="fc-a">Estrogen and progesterone</div></div>
+</div>
+</section>
+
+</main>
+</body>
+</html>

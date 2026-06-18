@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PC12 Masterclass — All Units</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+:root{--bg:#0a0a12;--s:rgba(255,255,255,0.05);--s2:rgba(0,0,0,0.35);--b:rgba(255,255,255,0.09);--t:#f0f0f8;--td:rgba(240,240,248,0.5);--acc:#0071e3;--green:#34c759;--orange:#ff9f0a;--red:#ff453a;--blue:#0a84ff;--pink:#bf5af2;--yellow:#ffd60a;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,sans-serif;background:var(--bg);color:var(--t);line-height:1.65;display:flex;min-height:100vh;}
+/* SIDEBAR */
+.sidebar{position:fixed;top:0;left:0;width:260px;height:100vh;background:rgba(10,10,18,0.75);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border-right:1px solid var(--b);overflow-y:auto;padding:1.5rem 0;z-index:100;}
+.sidebar-title{padding:0 1.5rem 1rem;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);}
+.sidebar a{display:block;padding:.55rem 1.5rem;font-size:.83rem;color:var(--td);text-decoration:none;border-left:3px solid transparent;transition:all .15s;}
+.sidebar a:hover,.sidebar a.active{color:var(--t);background:rgba(108,99,255,.1);border-left-color:var(--acc);}
+.sidebar .grp{font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--td);padding:.9rem 1.5rem .3rem;opacity:.6;}
+/* MAIN */
+.main{margin-left:260px;padding:3rem 4rem;max-width:960px;width:100%;}
+@media(max-width:900px){.sidebar{display:none;}.main{margin-left:0;padding:2rem 1.5rem;}}
+/* TYPOGRAPHY */
+h1{font-size:2rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.25rem;}
+.meta{font-size:.83rem;color:var(--td);margin-bottom:3rem;}
+h2{font-size:1.3rem;font-weight:700;color:var(--t);margin:3rem 0 .5rem;padding-top:1rem;}
+h2 .unit-tag{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--acc);display:block;margin-bottom:.3rem;}
+h3{font-size:.85rem;font-weight:600;color:var(--orange);margin:1.2rem 0 .5rem;text-transform:uppercase;letter-spacing:.05em;}
+p,li{font-size:.875rem;color:var(--td);margin:.2rem 0;}
+ul,ol{padding-left:1.2rem;}
+strong{color:var(--t);}
+hr{border:none;border-top:1px solid var(--b);margin:2.5rem 0;}
+/* FORMULA */
+.f{font-family:'JetBrains Mono',monospace;background:var(--s2);border:1px solid var(--b);border-radius:6px;padding:.4rem .8rem;font-size:.8rem;display:block;margin:.3rem 0;color:var(--blue);}
+.fi{font-family:'JetBrains Mono',monospace;background:var(--s2);border-radius:4px;padding:.1rem .4rem;font-size:.78rem;color:var(--blue);}
+/* CALLOUTS */
+.warn{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.25);border-radius:8px;padding:.8rem 1rem;margin:.75rem 0;}
+.warn .warn-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--red);margin-bottom:.3rem;}
+.warn p,.warn li{color:#fca5a5;}
+.tip{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.25);border-radius:8px;padding:.8rem 1rem;margin:.75rem 0;}
+.tip .tip-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--green);margin-bottom:.3rem;}
+.tip p,.tip li{color:#86efac;}
+.info{background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.2);border-radius:8px;padding:.8rem 1rem;margin:.75rem 0;}
+.info p{color:#93c5fd;}
+/* WORKED EXAMPLE */
+.ex{background:var(--s);border:1px solid var(--b);border-radius:8px;padding:1rem 1.2rem;margin:.75rem 0;}
+.ex-title{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--yellow);margin-bottom:.6rem;}
+.ex .step{font-size:.83rem;color:var(--td);margin:.25rem 0;}
+.ex .step span{color:var(--t);}
+/* FLASHCARDS */
+.fc-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:.75rem 0;}
+@media(max-width:700px){.fc-grid{grid-template-columns:1fr;}}
+.fc{background:var(--s);border:1px solid var(--b);border-radius:8px;padding:.9rem 1rem;}
+.fc-q{font-size:.82rem;font-weight:600;color:var(--t);margin-bottom:.5rem;}
+.fc-a{font-size:.8rem;color:var(--green);border-top:1px solid var(--b);padding-top:.5rem;margin-top:.5rem;}
+/* GRADE TABLE */
+table{width:100%;border-collapse:collapse;margin:.75rem 0;font-size:.85rem;}
+th{background:var(--s2);color:var(--td);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;padding:.6rem .9rem;text-align:left;border:1px solid var(--b);}
+td{padding:.55rem .9rem;border:1px solid var(--b);color:var(--td);}
+.grade-a{color:var(--green);font-weight:600;}
+.grade-b{color:var(--orange);font-weight:600;}
+.grade-pend{color:var(--td);}
+/* MODULE MAP */
+.mod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin:.75rem 0;}
+@media(max-width:600px){.mod-grid{grid-template-columns:1fr;}}
+.mod{background:var(--s);border:1px solid var(--b);border-radius:8px;padding:.9rem 1rem;}
+.mod-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--acc);margin-bottom:.4rem;}
+.mod li{font-size:.8rem;color:var(--td);}
+/* SECTION DIVIDER */
+.section{padding-top:1rem;}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="sidebar-title">PC12 Masterclass</div>
+  <div class="grp">Overview</div>
+  <a href="#overview">Grades + Module Map</a>
+  <a href="#errors">Known Errors</a>
+  <div class="grp">Units</div>
+  <a href="#u1">U1 · Sequences &amp; Series</a>
+  <a href="#u2">U2 · Transformations</a>
+  <a href="#u3">U3 · Polynomials</a>
+  <a href="#u4">U4 · Exponents &amp; Logs</a>
+  <a href="#u5">U5 · Rational Expressions</a>
+  <a href="#u6">U6 · Sinusoidal Functions</a>
+  <a href="#u7">U7 · Trig Identities</a>
+  <div class="grp">Review</div>
+  <a href="#flashcards">All Flashcards</a>
+</nav>
+
+<main class="main">
+
+<h1>PC12 Masterclass</h1>
+<p class="meta">Pre-Calculus 12 · LEC 25–26 · Joshua Trommel · All 7 Units</p>
+
+<!-- OVERVIEW -->
+<section id="overview" class="section">
+<h2><span class="unit-tag">Overview</span>Grades &amp; Module Map</h2>
+
+<table>
+<tr><th>Unit</th><th>Topic</th><th>Grade</th><th>Module</th></tr>
+<tr><td>U1</td><td>Sequences &amp; Series</td><td class="grade-b">88%</td><td>M1</td></tr>
+<tr><td>U2</td><td>Transformations</td><td class="grade-b">78%</td><td>M1</td></tr>
+<tr><td>U3</td><td>Polynomials</td><td class="grade-pend">est. ~92%</td><td>M1</td></tr>
+<tr><td>U4</td><td>Exponents &amp; Logs</td><td class="grade-pend">est. ~90%</td><td>M2</td></tr>
+<tr><td>U5</td><td>Rational Expressions</td><td class="grade-pend">pending</td><td>M2</td></tr>
+<tr><td>U6</td><td>Sinusoidal Functions</td><td class="grade-pend">pending</td><td>M3</td></tr>
+<tr><td>U7</td><td>Trig Identities</td><td class="grade-pend">pending</td><td>M3</td></tr>
+<tr><td colspan="2"><strong>Quizzes (all units)</strong></td><td class="grade-a">97% avg</td><td>—</td></tr>
+</table>
+
+<div class="mod-grid">
+<div class="mod"><div class="mod-title">Module 1 · Rewrite done</div><ul><li>U1 Sequences &amp; Series</li><li>U2 Transformations</li><li>U3 Polynomials</li></ul></div>
+<div class="mod"><div class="mod-title">Module 2</div><ul><li>U4 Exponents &amp; Logs</li><li>U5 Rational Expressions</li></ul></div>
+<div class="mod"><div class="mod-title">Module 3</div><ul><li>U6 Sinusoidal Functions</li><li>U7 Trig Identities</li></ul></div>
+</div>
+</section>
+
+<!-- KNOWN ERRORS -->
+<section id="errors" class="section">
+<h2><span class="unit-tag">Cross-unit</span>Known Errors to Fix</h2>
+<div class="warn">
+<div class="warn-title">U1 — Convergent/Divergent</div>
+<p>Marked r=−0.99 series as divergent. Wrong. |−0.99| = 0.99 &lt; 1 → CONVERGES. Always take absolute value of r first.</p>
+</div>
+<div class="warn">
+<div class="warn-title">U4 — Q8 Half-life (4.6)</div>
+<p>Got 15.1 years. Correct answer is 15.8 years. Arithmetic slip in log calculation: h = 20·log(0.5)/log(5/12) = 20·(−0.301)/(−0.380) = 15.8, not 15.1.</p>
+</div>
+<div class="info">
+<p><strong>U4 Q1b source typo:</strong> Question prints "6²=17" — this is a misprint in the WCLN guide. 6²=36, so the correct log form is log₆(36)=2. Flag to teacher.</p>
+</div>
+</section>
+
+<hr>
+
+<!-- U1 -->
+<section id="u1" class="section">
+<h2><span class="unit-tag">Unit 1</span>Sequences &amp; Series</h2>
+
+<h3>Arithmetic</h3>
+<span class="f">aₙ = a₁ + (n − 1)d</span>
+<span class="f">Sₙ = n/2 · (a₁ + aₙ)  =  n/2 · (2a₁ + (n−1)d)</span>
+<ul>
+  <li><strong>d</strong> = common difference = a₂ − a₁ (constant gap)</li>
+  <li>Finding n: sub known values into aₙ formula, solve for n</li>
+  <li>Partial sum (terms i to j): Sⱼ − Sᵢ₋₁</li>
+</ul>
+
+<h3>Geometric</h3>
+<span class="f">aₙ = a₁ · r^(n−1)</span>
+<span class="f">Sₙ = a₁(1 − rⁿ) / (1 − r)    [r ≠ 1]</span>
+<span class="f">S∞ = a₁ / (1 − r)              [only when |r| &lt; 1]</span>
+<ul>
+  <li><strong>r</strong> = common ratio = a₂/a₁</li>
+  <li>Finding n: aₙ = a₁rⁿ⁻¹ → take log both sides → n = 1 + log(aₙ/a₁)/log(r)</li>
+</ul>
+
+<div class="warn">
+<div class="warn-title">Convergent vs Divergent — most tested concept</div>
+<p><strong>Converges</strong> (S∞ exists) iff |r| &lt; 1</p>
+<p><strong>Diverges</strong> (no S∞) iff |r| ≥ 1</p>
+<p>r = −0.99 → |r| = 0.99 &lt; 1 → CONVERGES. Negative r ≠ divergent.</p>
+<p>r = 1.01 → |r| = 1.01 ≥ 1 → DIVERGES.</p>
+</div>
+
+<h3>Sigma Notation</h3>
+<span class="f">Σᵢ₌₁ⁿ (a₁ + (i−1)d)   ← arithmetic sum to n terms</span>
+<span class="f">Σᵢ₌₁ⁿ a₁·r^(i−1)      ← geometric sum to n terms</span>
+<p>Bottom of sigma = starting index; top = ending index; expression = general term.</p>
+
+<div class="ex">
+<div class="ex-title">Worked Example — Find S∞</div>
+<div class="step"><strong>Q:</strong> Σᵢ₌₁^∞ 8·(−0.5)^(i−1). Find S∞.</div>
+<div class="step">1. a₁ = 8, r = −0.5</div>
+<div class="step">2. |r| = 0.5 &lt; 1 → converges</div>
+<div class="step">3. <span>S∞ = 8 / (1−(−0.5)) = 8/1.5 = 16/3 ≈ 5.33</span></div>
+</div>
+
+<div class="ex">
+<div class="ex-title">Worked Example — Find n</div>
+<div class="step"><strong>Q:</strong> Arithmetic seq, a₁=3, d=4. Which term equals 87?</div>
+<div class="step">1. aₙ = 3 + (n−1)·4 = 87</div>
+<div class="step">2. (n−1)·4 = 84 → n−1 = 21 → <span>n = 22</span></div>
+</div>
+
+<div class="tip">
+<div class="tip-title">Tip</div>
+<p>If asked for "sum of terms from term 5 to term 10": compute S₁₀ − S₄. The −1 offset on the start matters.</p>
+</div>
+</section>
+
+<hr>
+
+<!-- U2 -->
+<section id="u2" class="section">
+<h2><span class="unit-tag">Unit 2</span>Transformations</h2>
+
+<h3>General Form</h3>
+<span class="f">y = a · f( b(x − h) ) + k</span>
+<span class="f">Mapping rule:  (x, y) → (x/b + h,  a·y + k)</span>
+
+<table>
+<tr><th>Parameter</th><th>Effect</th><th>Trap</th></tr>
+<tr><td><span class="fi">a</span></td><td>Vertical stretch by |a|; a&lt;0 reflects over x-axis</td><td>|a|&lt;1 = compression, not stretch</td></tr>
+<tr><td><span class="fi">b</span></td><td>Horizontal stretch by 1/|b|; b&lt;0 reflects over y-axis</td><td>b=2 means compress by ½, NOT stretch by 2</td></tr>
+<tr><td><span class="fi">h</span></td><td>Shifts RIGHT by h (for positive h)</td><td>y=f(x−3) shifts RIGHT 3, NOT left</td></tr>
+<tr><td><span class="fi">k</span></td><td>Shifts UP by k</td><td>Nothing tricky here</td></tr>
+</table>
+
+<div class="warn">
+<div class="warn-title">h direction — most common error</div>
+<p>y = f(x − h) → shifts RIGHT. The h inside the bracket is subtracted. Positive h = right.</p>
+<p>y = f(x − 3): h = 3, shifts 3 right. y = f(x + 3): h = −3, shifts 3 left.</p>
+</div>
+
+<h3>Reflections</h3>
+<ul>
+  <li>Over x-axis: multiply outside → <span class="fi">y = −f(x)</span></li>
+  <li>Over y-axis: negate x inside → <span class="fi">y = f(−x)</span></li>
+  <li>Over y = x: swap x and y (this is the inverse)</li>
+</ul>
+
+<h3>Inverse Functions</h3>
+<span class="f">To find f⁻¹(x): swap x and y, then solve for y</span>
+<ul>
+  <li>Domain of f = Range of f⁻¹</li>
+  <li>Range of f = Domain of f⁻¹</li>
+  <li>Graph of f⁻¹ is reflection of f over the line y = x</li>
+</ul>
+
+<div class="ex">
+<div class="ex-title">Worked Example — Identify Transformations</div>
+<div class="step"><strong>Q:</strong> y = −2f(3(x+1)) − 4. State all transformations.</div>
+<div class="step">1. a = −2 → <span>vertical stretch ×2, reflect over x-axis</span></div>
+<div class="step">2. b = 3 → <span>horizontal compression to 1/3</span></div>
+<div class="step">3. h = −1 → <span>shift LEFT 1</span></div>
+<div class="step">4. k = −4 → <span>shift DOWN 4</span></div>
+<div class="step">Mapping: (x,y) → (x/3 − 1, −2y − 4)</div>
+</div>
+
+<div class="tip">
+<div class="tip-title">Tip — Applying the mapping rule</div>
+<p>Take key points from the original function. Apply (x/b+h, ay+k) to each. Mapping order: horizontal changes first (divide x by b, shift by h), then vertical (multiply y by a, shift by k).</p>
+</div>
+</section>
+
+<hr>
+
+<!-- U3 -->
+<section id="u3" class="section">
+<h2><span class="unit-tag">Unit 3</span>Polynomials</h2>
+
+<h3>Factoring Decision Tree</h3>
+<ol>
+  <li>Always factor GCF first</li>
+  <li>2 terms: diff of squares or sum/diff of cubes</li>
+  <li>3 terms, leading coeff = 1: simple trinomial (find p,q)</li>
+  <li>3 terms, leading coeff ≠ 1: AC method</li>
+  <li>4 terms: factor by grouping</li>
+  <li>Degree 4 with x² pattern: substitution (let u = x²)</li>
+  <li>Degree 3+: rational root theorem + synthetic division</li>
+</ol>
+
+<h3>Special Products</h3>
+<span class="f">a² − b²     = (a − b)(a + b)</span>
+<span class="f">a³ + b³     = (a + b)(a² − ab + b²)</span>
+<span class="f">a³ − b³     = (a − b)(a² + ab + b²)</span>
+
+<div class="warn">
+<div class="warn-title">Cubes — middle sign trap</div>
+<p>Sum of cubes (a³+b³): middle term in trinomial is <strong>MINUS</strong> (a²−ab+b²)</p>
+<p>Diff of cubes (a³−b³): middle term is <strong>PLUS</strong> (a²+ab+b²)</p>
+<p>Memory aid: SOAP — Same, Opposite, Always Positive</p>
+</div>
+
+<h3>AC Method (Messy Trinomials)</h3>
+<span class="f">ax² + bx + c:  find p,q where p·q = a·c  AND  p+q = b</span>
+<span class="f">Split middle: ax² + px + qx + c, then group</span>
+
+<div class="ex">
+<div class="ex-title">Worked Example — AC Method</div>
+<div class="step"><strong>Q:</strong> Factor 6x² − 13x + 6</div>
+<div class="step">1. ac = 6·6 = 36. Find p,q: p·q=36, p+q=−13 → <span>p=−9, q=−4</span></div>
+<div class="step">2. 6x² − 9x − 4x + 6</div>
+<div class="step">3. 3x(2x − 3) − 2(2x − 3)</div>
+<div class="step">4. <span>(3x − 2)(2x − 3)</span></div>
+</div>
+
+<h3>Remainder &amp; Factor Theorems</h3>
+<span class="f">P(a) = remainder when P(x) ÷ (x − a)     [Remainder Theorem]</span>
+<span class="f">P(a) = 0  ↔  (x − a) is a factor          [Factor Theorem]</span>
+<span class="f">Rational roots: ±(factors of constant) / (factors of leading coeff)</span>
+
+<div class="ex">
+<div class="ex-title">Worked Example — Factor Cubic</div>
+<div class="step"><strong>Q:</strong> Factor P(x) = x³ − 5x² − 12x + 36</div>
+<div class="step">1. Try rational roots: ±1,±2,±3,±4,±6,±9,±12,±18,±36</div>
+<div class="step">2. P(2) = 8−20−24+36 = 0 ✓ → (x−2) is a factor</div>
+<div class="step">3. Synthetic division → x³−5x²−12x+36 = (x−2)(x²−3x−18)</div>
+<div class="step">4. x²−3x−18 = (x−6)(x+3)</div>
+<div class="step">5. <span>P(x) = (x−2)(x−6)(x+3)</span></div>
+</div>
+
+<h3>Polynomial Graph Characteristics</h3>
+<ul>
+  <li><strong>Degree n</strong> → max n x-intercepts, max n−1 turning points</li>
+  <li><strong>Leading coeff +, even degree</strong> → both ends go UP (U shape)</li>
+  <li><strong>Leading coeff −, even degree</strong> → both ends go DOWN</li>
+  <li><strong>Leading coeff +, odd degree</strong> → left DOWN, right UP</li>
+  <li><strong>Leading coeff −, odd degree</strong> → left UP, right DOWN</li>
+  <li><strong>Odd multiplicity</strong> at root → graph CROSSES x-axis</li>
+  <li><strong>Even multiplicity</strong> at root → graph BOUNCES off x-axis</li>
+</ul>
+</section>
+
+<hr>
+
+<!-- U4 -->
+<section id="u4" class="section">
+<h2><span class="unit-tag">Unit 4</span>Exponents &amp; Logs</h2>
+
+<h3>Exponent Laws</h3>
+<span class="f">xᵃ · xᵇ = xᵃ⁺ᵇ         (product — add exponents)</span>
+<span class="f">xᵃ / xᵇ = xᵃ⁻ᵇ         (quotient — subtract)</span>
+<span class="f">(xᵃ)ᵇ  = xᵃᵇ           (power of power — multiply)</span>
+<span class="f">x⁰     = 1              (zero exponent)</span>
+<span class="f">x⁻ⁿ   = 1/xⁿ           (negative — flip)</span>
+<span class="f">x^(m/n) = ⁿ√(xᵐ)       (rational — root of power)</span>
+
+<h3>Logarithms</h3>
+<span class="f">log_b(A) = E  ↔  bᴱ = A     (definition: log = exponent)</span>
+<span class="f">log_b(AB)  = log_b(A) + log_b(B)    (product rule)</span>
+<span class="f">log_b(A/B) = log_b(A) − log_b(B)    (quotient rule)</span>
+<span class="f">log_b(Aⁿ)  = n · log_b(A)            (power rule)</span>
+<span class="f">log_b(x)   = log(x) / log(b)         (change of base)</span>
+
+<div class="tip">
+<div class="tip-title">Log = "what exponent do I need?"</div>
+<p>log₂(8) = 3 because 2³ = 8. The log is the exponent. B = base, E = exponent, A = answer (result).</p>
+</div>
+
+<h3>Solving Exponential Equations</h3>
+<ul>
+  <li><strong>Same base:</strong> 2^(x+1) = 2^5 → x+1 = 5 → x = 4</li>
+  <li><strong>Different base:</strong> take log both sides, use power rule</li>
+</ul>
+<span class="f">3^x = 10  →  x·log3 = log10  →  x = log10/log3 ≈ 2.096</span>
+
+<h3>Growth &amp; Decay</h3>
+<span class="f">A = A₀ · b^(t/p)     [b = growth factor, p = period for one cycle]</span>
+<span class="f">A = A₀ · (1/2)^(t/h)  [half-life: h = half-life period]</span>
+
+<div class="warn">
+<div class="warn-title">Known Error — U4 Q8 Half-life</div>
+<p>When computing h = 20·log(0.5)/log(5/12): use exact fractions, don't round intermediate steps.</p>
+<p>log(0.5) = −0.30103, log(5/12) = log(0.41667) = −0.37967</p>
+<p>h = 20 · (−0.30103)/(−0.37967) = <strong>15.84 ≈ 15.8 years</strong></p>
+</div>
+
+<h3>Log Scale Applications</h3>
+<ul>
+  <li><strong>Richter:</strong> difference in readings = exponent of 10× power. Δ=3.8 → 10³·⁸≈6310× more powerful</li>
+  <li><strong>pH:</strong> pH = −log[H⁺]; more acidic = lower pH; ratio of acidity = 10^(pH₂−pH₁)</li>
+  <li><strong>Decibels:</strong> dB = 10·log(I/I₀); increase of 10 dB = 10× louder</li>
+</ul>
+
+<div class="ex">
+<div class="ex-title">Worked Example — Change of Base</div>
+<div class="step"><strong>Q:</strong> Solve 5^x = 500</div>
+<div class="step">1. log both sides: x·log5 = log500</div>
+<div class="step">2. x = log500/log5</div>
+<div class="step">3. <span>x = 2.699/0.699 ≈ 3.86</span></div>
+</div>
+
+<div class="ex">
+<div class="ex-title">Worked Example — Log Rules Combined</div>
+<div class="step"><strong>Q:</strong> Write log x + 5 log y − 3 log x as single log</div>
+<div class="step">1. Combine x terms: (1−3)logx = −2logx</div>
+<div class="step">2. Power rule: log(x⁻²) + log(y⁵)</div>
+<div class="step">3. Product rule: <span>log(y⁵/x²)</span></div>
+</div>
+</section>
+
+<hr>
+
+<!-- U5 -->
+<section id="u5" class="section">
+<h2><span class="unit-tag">Unit 5</span>Rational Expressions</h2>
+
+<h3>Fundamentals</h3>
+<p>A rational expression is <strong>polynomial / polynomial</strong>. The denominator cannot equal zero.</p>
+<span class="f">Non-permissible values: set denominator = 0 and solve → those are EXCLUDED</span>
+
+<h3>Operations</h3>
+<table>
+<tr><th>Operation</th><th>Method</th></tr>
+<tr><td>Simplify</td><td>Factor top and bottom fully, cancel common factors, state restrictions</td></tr>
+<tr><td>Multiply</td><td>Factor everything, cancel across numerators/denominators, multiply remaining</td></tr>
+<tr><td>Divide</td><td>Multiply by reciprocal of second fraction, then same as multiply</td></tr>
+<tr><td>Add/Subtract</td><td>Find LCD (LCM of denominators), convert each fraction, combine numerators, simplify</td></tr>
+</table>
+
+<div class="warn">
+<div class="warn-title">Restrictions after cancelling</div>
+<p>State ALL non-permissible values from the ORIGINAL denominators — even if a factor was cancelled. Restrictions come from before simplification.</p>
+</div>
+
+<h3>Graphing y = a/(x−h) + k</h3>
+<span class="f">Vertical asymptote:   x = h  (denominator = 0)</span>
+<span class="f">Horizontal asymptote: y = k  (what y approaches as x → ±∞)</span>
+<span class="f">a: steepness; a > 0 → Q1/Q3 relative to asymptotes; a &lt; 0 → Q2/Q4</span>
+
+<div class="tip">
+<div class="tip-title">Cheat code — finding 'a' from a graph</div>
+<p>Pick any obvious grid point on the graph. Sub its (x,y) into y = a/(x−h)+k and solve for a. Always works.</p>
+</div>
+
+<h3>Solving Rational Equations</h3>
+<ol>
+  <li>Identify all non-permissible values first</li>
+  <li>Multiply every term by the LCD to clear fractions</li>
+  <li>Solve the resulting polynomial equation</li>
+  <li>Check solutions against non-permissible values — reject any that match</li>
+</ol>
+
+<div class="ex">
+<div class="ex-title">Worked Example — Find Equation from Graph</div>
+<div class="step"><strong>Q:</strong> Graph has VA at x=3, HA at y=2, passes through (4,7)</div>
+<div class="step">1. h=3, k=2. Form: y = a/(x−3) + 2</div>
+<div class="step">2. Sub (4,7): 7 = a/(4−3) + 2 = a + 2</div>
+<div class="step">3. <span>a = 5 → y = 5/(x−3) + 2</span></div>
+</div>
+</section>
+
+<hr>
+
+<!-- U6 -->
+<section id="u6" class="section">
+<h2><span class="unit-tag">Unit 6</span>Sinusoidal Functions</h2>
+
+<h3>General Form</h3>
+<span class="f">y = a · sin( b(x − h) ) + k</span>
+<span class="f">y = a · cos( b(x − h) ) + k</span>
+
+<table>
+<tr><th>Parameter</th><th>What it does</th><th>How to find from graph</th></tr>
+<tr><td><strong>a</strong></td><td>Amplitude = |a|; a&lt;0 flips vertically</td><td>a = (max − min) / 2</td></tr>
+<tr><td><strong>b</strong></td><td>Period = 2π/|b| (in radians) or 360°/|b| (degrees)</td><td>b = 2π / period</td></tr>
+<tr><td><strong>h</strong></td><td>Phase shift: moves graph right by h</td><td>Read from graph where cycle starts</td></tr>
+<tr><td><strong>k</strong></td><td>Vertical displacement (midline = y=k)</td><td>k = (max + min) / 2</td></tr>
+</table>
+
+<h3>Graphing — 5 Key Points Method</h3>
+<p>For one full period of y = a·sin(b(x−h))+k:</p>
+<ul>
+  <li>Start at phase shift h: y = k (zero)</li>
+  <li>Quarter period: y = k+a (max)</li>
+  <li>Half period: y = k (zero)</li>
+  <li>Three-quarter period: y = k−a (min)</li>
+  <li>Full period: y = k (zero, cycle repeats)</li>
+</ul>
+<p>For cosine: starts at max (k+a), not zero.</p>
+
+<div class="ex">
+<div class="ex-title">Worked Example — Equation from Graph</div>
+<div class="step"><strong>Q:</strong> Graph has max=7, min=1, period=4π, starts at x=π</div>
+<div class="step">1. a = (7−1)/2 = <span>3</span></div>
+<div class="step">2. k = (7+1)/2 = <span>4</span></div>
+<div class="step">3. b = 2π/4π = <span>1/2</span></div>
+<div class="step">4. h = π (phase shift right)</div>
+<div class="step">5. <span>y = 3·sin(½(x−π)) + 4</span></div>
+</div>
+
+<div class="tip">
+<div class="tip-title">Radians vs Degrees</div>
+<p>Standard PC12 uses radians. Period formula: T = 2π/|b|. If period is given as "360°" then in radians that is 2π. Always match units.</p>
+</div>
+
+<div class="warn">
+<div class="warn-title">Phase shift direction</div>
+<p>y = sin(x − π/3): phase shift = +π/3 (shifts RIGHT). Same h-direction trap as U2 transformations.</p>
+</div>
+</section>
+
+<hr>
+
+<!-- U7 -->
+<section id="u7" class="section">
+<h2><span class="unit-tag">Unit 7</span>Trig Identities</h2>
+
+<h3>Foundational Identities</h3>
+<span class="f">Reciprocal:   csc θ = 1/sin θ    sec θ = 1/cos θ    cot θ = 1/tan θ</span>
+<span class="f">Quotient:     tan θ = sin θ/cos θ    cot θ = cos θ/sin θ</span>
+<span class="f">Pythagorean:  sin²θ + cos²θ = 1</span>
+<span class="f">Derived:      tan²θ + 1 = sec²θ      1 + cot²θ = csc²θ</span>
+
+<div class="tip">
+<div class="tip-title">Deriving Pythagorean identities</div>
+<p>Start from sin²θ+cos²θ=1. Divide both sides by cos²θ → tan²θ+1=sec²θ. Divide by sin²θ → 1+cot²θ=csc²θ. Don't memorize three — derive from one.</p>
+</div>
+
+<h3>Proving Identities — Strategy</h3>
+<ol>
+  <li><strong>Work ONE side only</strong> — never move terms across the = sign</li>
+  <li>Pick the more complex side to transform</li>
+  <li>Common techniques (in order to try):</li>
+</ol>
+<ul>
+  <li>Rewrite everything in terms of sin and cos</li>
+  <li>Factor out common terms</li>
+  <li>Get a common denominator to combine fractions</li>
+  <li>Multiply top and bottom by conjugate (1+sinθ, 1−cosθ, etc.)</li>
+  <li>Use a Pythagorean identity to substitute (sin²=1−cos² etc.)</li>
+</ul>
+
+<div class="warn">
+<div class="warn-title">Never cross-multiply to "prove"</div>
+<p>Moving terms across the = sign assumes what you're trying to prove. Work one side only.</p>
+</div>
+
+<h3>Sum &amp; Difference Formulas</h3>
+<span class="f">sin(A ± B) = sinA·cosB ± cosA·sinB</span>
+<span class="f">cos(A ± B) = cosA·cosB ∓ sinA·sinB   (note: ∓ flips the sign)</span>
+<span class="f">tan(A ± B) = (tanA ± tanB) / (1 ∓ tanA·tanB)</span>
+
+<h3>Double Angle Formulas</h3>
+<span class="f">sin(2A) = 2·sinA·cosA</span>
+<span class="f">cos(2A) = cos²A − sin²A  =  1 − 2sin²A  =  2cos²A − 1</span>
+<span class="f">tan(2A) = 2·tanA / (1 − tan²A)</span>
+
+<div class="tip">
+<div class="tip-title">Three forms of cos(2A)</div>
+<p>All three are equivalent via sin²+cos²=1. Pick whichever form makes the target expression cleanest. If the target has only cos, use 2cos²A−1.</p>
+</div>
+
+<h3>Solving Trig Equations</h3>
+<ol>
+  <li>Isolate the trig function (treat sinθ or cosθ like a variable)</li>
+  <li>Find the reference angle using inverse trig</li>
+  <li>Identify which quadrants give the correct sign</li>
+  <li>List all solutions in the given domain</li>
+  <li>General solution: add 2πn (for sin/cos period 2π) or πn (for tan period π)</li>
+</ol>
+
+<div class="ex">
+<div class="ex-title">Worked Example — Solving with Identity</div>
+<div class="step"><strong>Q:</strong> Solve 2sin²θ − sinθ − 1 = 0, θ ∈ [0, 2π]</div>
+<div class="step">1. Factor: (2sinθ + 1)(sinθ − 1) = 0</div>
+<div class="step">2. sinθ = −½ → θ = 7π/6, 11π/6</div>
+<div class="step">3. sinθ = 1 → <span>θ = π/2</span></div>
+<div class="step">Solutions: <span>θ = π/2, 7π/6, 11π/6</span></div>
+</div>
+</section>
+
+<hr>
+
+<!-- FLASHCARDS -->
+<section id="flashcards" class="section">
+<h2><span class="unit-tag">All Units</span>Flashcards</h2>
+
+<h3>Unit 1 — Sequences &amp; Series</h3>
+<div class="fc-grid">
+<div class="fc"><div class="fc-q">What are the two conditions for a geometric series to have an infinite sum?</div><div class="fc-a">|r| &lt; 1 (converges). Formula: S∞ = a₁/(1−r)</div></div>
+<div class="fc"><div class="fc-q">Arithmetic sequence: a₁=5, d=3. Find a₁₀.</div><div class="fc-a">a₁₀ = 5 + 9·3 = 5+27 = 32</div></div>
+<div class="fc"><div class="fc-q">r = −0.5. Does the series converge?</div><div class="fc-a">Yes. |r| = 0.5 &lt; 1. S∞ = a₁/(1.5)</div></div>
+</div>
+
+<h3>Unit 2 — Transformations</h3>
+<div class="fc-grid">
+<div class="fc"><div class="fc-q">y = 3f(2(x−4)) + 1. State all 4 transformations.</div><div class="fc-a">V-stretch ×3; H-compress to ½; shift right 4; shift up 1</div></div>
+<div class="fc"><div class="fc-q">What is the mapping rule for y = af(b(x−h))+k?</div><div class="fc-a">(x,y) → (x/b + h, ay + k)</div></div>
+<div class="fc"><div class="fc-q">How do you find the inverse of f(x) = 2x+3?</div><div class="fc-a">Swap x,y: x=2y+3 → y=(x−3)/2 → f⁻¹(x) = (x−3)/2</div></div>
+</div>
+
+<h3>Unit 3 — Polynomials</h3>
+<div class="fc-grid">
+<div class="fc"><div class="fc-q">Factor 8x³ − 27y³</div><div class="fc-a">(2x−3y)(4x²+6xy+9y²) — diff of cubes, middle term PLUS</div></div>
+<div class="fc"><div class="fc-q">P(x) = x³−2x²−5x+6. Is (x−3) a factor?</div><div class="fc-a">P(3) = 27−18−15+6 = 0. Yes, (x−3) is a factor.</div></div>
+<div class="fc"><div class="fc-q">What does even multiplicity mean for a graph?</div><div class="fc-a">Graph BOUNCES off x-axis at that root (touches, doesn't cross)</div></div>
+</div>
+
+<h3>Unit 4 — Exponents &amp; Logs</h3>
+<div class="fc-grid">
+<div class="fc"><div class="fc-q">Convert to exponential: log₂(32) = 5</div><div class="fc-a">2⁵ = 32</div></div>
+<div class="fc"><div class="fc-q">Simplify: log₃(x²y) − log₃(x)</div><div class="fc-a">log₃(x²y/x) = log₃(xy)</div></div>
+<div class="fc"><div class="fc-q">Solve 4^x = 7 using change of base.</div><div class="fc-a">x = log7/log4 ≈ 1.404</div></div>
+</div>
+
+<h3>Unit 5 — Rational Expressions</h3>
+<div class="fc-grid">
+<div class="fc"><div class="fc-q">Non-permissible values of (x+2)/(x²−9)</div><div class="fc-a">x²−9=(x−3)(x+3). NPVs: x=3, x=−3</div></div>
+<div class="fc"><div class="fc-q">y = 3/(x+2) − 1. State asymptotes.</div><div class="fc-a">VA: x = −2 (denom=0). HA: y = −1 (k value)</div></div>
+<div class="fc"><div class="fc-q">Simplify (x²−4)/(x²+4x+4)</div><div class="fc-a">(x−2)(x+2)/(x+2)² = (x−2)/(x+2), x≠−2</div></div>
+</div>
+
+<h3>Unit 6 — Sinusoidal Functions</h3>
+<div class="fc-grid">
+<div class="fc"><div class="fc-q">y = 4sin(2(x−π/3)) + 1. State amplitude, period, phase shift.</div><div class="fc-a">Amplitude=4; Period=2π/2=π; Phase shift=π/3 right; midline y=1</div></div>
+<div class="fc"><div class="fc-q">Graph has max=10, min=2. What are a and k?</div><div class="fc-a">a = (10−2)/2 = 4; k = (10+2)/2 = 6</div></div>
+<div class="fc"><div class="fc-q">What does a negative 'a' do to a sinusoidal graph?</div><div class="fc-a">Reflects (flips) the graph vertically — starts at minimum instead of maximum</div></div>
+</div>
+
+<h3>Unit 7 — Trig Identities</h3>
+<div class="fc-grid">
+<div class="fc"><div class="fc-q">Derive tan²θ + 1 = sec²θ from sin²θ+cos²θ=1</div><div class="fc-a">Divide everything by cos²θ: sin²/cos² + 1 = 1/cos² → tan²θ+1=sec²θ</div></div>
+<div class="fc"><div class="fc-q">Expand sin(A+B)</div><div class="fc-a">sinA·cosB + cosA·sinB</div></div>
+<div class="fc"><div class="fc-q">Three equivalent forms of cos(2A)</div><div class="fc-a">cos²A−sin²A = 1−2sin²A = 2cos²A−1</div></div>
+</div>
+
+</section>
+
+<p style="text-align:center;font-size:.75rem;color:var(--td);padding:3rem 0 1rem;">PC12 · LEC 25–26 · Joshua Trommel · Generated 2026-05-28</p>
+
+</main>
+
+<script>
+const links = document.querySelectorAll('.sidebar a');
+const sections = document.querySelectorAll('section[id]');
+function setActive(){
+  let cur='';
+  sections.forEach(s=>{if(window.scrollY>=s.offsetTop-120)cur=s.id;});
+  links.forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+cur);});
+}
+window.addEventListener('scroll',setActive,{passive:true});
+setActive();
+</script>
+</body>
+</html>
