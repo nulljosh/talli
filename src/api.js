@@ -10,6 +10,7 @@ const { checkAllSections, runSubmitMonthlyReport, getAuthenticatedCookies } = re
 const { createCorsOptionsDelegate, parseAllowedOrigins } = require('./cors-utils');
 const { parseCookies, unsealAuthPayload, setAuthCookie, clearAuthCookie } = require('./auth-cookie');
 const { attemptHttpLogin, fetchAllSections } = require('./http-scraper');
+const { PROFILE_PROGRAMS } = require('./programs/profiles');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -1751,118 +1752,47 @@ app.post('/api/profile/pin', requireAuth, async (req, res) => {
   }
 });
 
-// PWD profile -- per-user application status (applied/in_review/medical_done/denied/resubmitted/approved)
-const VALID_PWD_STATUSES = new Set(['applied','in_review','medical_done','denied','resubmitted','approved']);
+// Per-program profile endpoints (PWD/RDSP/CDB/...) -- per-user application
+// status, generated from PROFILE_PROGRAMS (src/programs/profiles.js).
+// Adding a new program is a data-only change there; no new routes needed.
+function registerProfileRoutes(program) {
+  const { route, logTag, defaults } = program;
+  const validStatuses = new Set(program.validStatuses);
+  const fields = Object.keys(defaults).filter((f) => f !== 'status');
 
-app.get('/api/pwd-profile', requireAuth, async (req, res) => {
-  try {
-    const userId = req.session?.userId;
-    const data = await loadUserBlob(userId, 'pwd-profile', { status: 'applied', submittedDate: null, deniedDate: null, notes: '' });
-    res.json(data);
-  } catch (err) {
-    log('[PWD] GET error:', err.message);
-    res.json({ status: 'applied', submittedDate: null, deniedDate: null, notes: '' });
-  }
-});
-
-app.post('/api/pwd-profile', requireAuth, async (req, res) => {
-  try {
-    const { status, submittedDate, deniedDate, notes } = req.body || {};
-    if (status && !VALID_PWD_STATUSES.has(status)) {
-      return res.status(400).json({ error: 'Invalid status' });
+  app.get(`/api/${route}`, requireAuth, async (req, res) => {
+    try {
+      const userId = req.session?.userId;
+      const data = await loadUserBlob(userId, route, defaults);
+      res.json(data);
+    } catch (err) {
+      log(`[${logTag}] GET error:`, err.message);
+      res.json(defaults);
     }
-    const userId = req.session?.userId;
-    const existing = await loadUserBlob(userId, 'pwd-profile', { status: 'applied' });
-    const data = {
-      ...existing,
-      ...(status !== undefined && { status }),
-      ...(submittedDate !== undefined && { submittedDate }),
-      ...(deniedDate !== undefined && { deniedDate }),
-      ...(notes !== undefined && { notes }),
-    };
-    await saveUserBlob(userId, 'pwd-profile', data);
-    res.json(data);
-  } catch (err) {
-    log('[PWD] POST error:', err.message);
-    res.status(500).json({ error: 'Failed to save PWD profile' });
-  }
-});
+  });
 
-// RDSP profile -- per-user application status (pending/dtc_required/account_opened/funded/active/closed)
-const VALID_RDSP_STATUSES = new Set(['pending','dtc_required','account_opened','funded','active','closed']);
-
-app.get('/api/rdsp-profile', requireAuth, async (req, res) => {
-  try {
-    const userId = req.session?.userId;
-    const data = await loadUserBlob(userId, 'rdsp-profile', { status: 'pending', accountOpenedDate: null, accountNumber: null, notes: '' });
-    res.json(data);
-  } catch (err) {
-    log('[RDSP] GET error:', err.message);
-    res.json({ status: 'pending', accountOpenedDate: null, accountNumber: null, notes: '' });
-  }
-});
-
-app.post('/api/rdsp-profile', requireAuth, async (req, res) => {
-  try {
-    const { status, accountOpenedDate, accountNumber, notes } = req.body || {};
-    if (status && !VALID_RDSP_STATUSES.has(status)) {
-      return res.status(400).json({ error: 'Invalid status' });
+  app.post(`/api/${route}`, requireAuth, async (req, res) => {
+    try {
+      const { status } = req.body || {};
+      if (status && !validStatuses.has(status)) {
+        return res.status(400).json({ error: 'Invalid status' });
+      }
+      const userId = req.session?.userId;
+      const existing = await loadUserBlob(userId, route, { status: defaults.status });
+      const data = { ...existing, ...(status !== undefined && { status }) };
+      for (const field of fields) {
+        if (req.body?.[field] !== undefined) data[field] = req.body[field];
+      }
+      await saveUserBlob(userId, route, data);
+      res.json(data);
+    } catch (err) {
+      log(`[${logTag}] POST error:`, err.message);
+      res.status(500).json({ error: `Failed to save ${logTag} profile` });
     }
-    const userId = req.session?.userId;
-    const existing = await loadUserBlob(userId, 'rdsp-profile', { status: 'pending' });
-    const data = {
-      ...existing,
-      ...(status !== undefined && { status }),
-      ...(accountOpenedDate !== undefined && { accountOpenedDate }),
-      ...(accountNumber !== undefined && { accountNumber }),
-      ...(notes !== undefined && { notes }),
-    };
-    await saveUserBlob(userId, 'rdsp-profile', data);
-    res.json(data);
-  } catch (err) {
-    log('[RDSP] POST error:', err.message);
-    res.status(500).json({ error: 'Failed to save RDSP profile' });
-  }
-});
+  });
+}
 
-// CDB profile -- per-user application status (pending/applied/under_review/approved/rejected/funded)
-const VALID_CDB_STATUSES = new Set(['pending','applied','under_review','approved','rejected','funded']);
-
-app.get('/api/cdb-profile', requireAuth, async (req, res) => {
-  try {
-    const userId = req.session?.userId;
-    const data = await loadUserBlob(userId, 'cdb-profile', { status: 'pending', appliedDate: null, approvalDate: null, monthlyAmount: null, retroactiveEligible: false, notes: '' });
-    res.json(data);
-  } catch (err) {
-    log('[CDB] GET error:', err.message);
-    res.json({ status: 'pending', appliedDate: null, approvalDate: null, monthlyAmount: null, retroactiveEligible: false, notes: '' });
-  }
-});
-
-app.post('/api/cdb-profile', requireAuth, async (req, res) => {
-  try {
-    const { status, appliedDate, approvalDate, monthlyAmount, retroactiveEligible, notes } = req.body || {};
-    if (status && !VALID_CDB_STATUSES.has(status)) {
-      return res.status(400).json({ error: 'Invalid status' });
-    }
-    const userId = req.session?.userId;
-    const existing = await loadUserBlob(userId, 'cdb-profile', { status: 'pending' });
-    const data = {
-      ...existing,
-      ...(status !== undefined && { status }),
-      ...(appliedDate !== undefined && { appliedDate }),
-      ...(approvalDate !== undefined && { approvalDate }),
-      ...(monthlyAmount !== undefined && { monthlyAmount }),
-      ...(retroactiveEligible !== undefined && { retroactiveEligible }),
-      ...(notes !== undefined && { notes }),
-    };
-    await saveUserBlob(userId, 'cdb-profile', data);
-    res.json(data);
-  } catch (err) {
-    log('[CDB] POST error:', err.message);
-    res.status(500).json({ error: 'Failed to save CDB profile' });
-  }
-});
+PROFILE_PROGRAMS.forEach(registerProfileRoutes);
 
 // Avatar -- pixel art SVG stored in Vercel Blob
 app.get('/api/avatar', requireAuth, async (req, res) => {

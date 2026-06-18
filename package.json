@@ -5,7 +5,7 @@
   "main": "src/scraper.js",
   "scripts": {
     "check": "node src/scraper.js",
-    "test": "node tools/test-cors-utils.js && node tools/test-auth-cookie.js && node tools/test-paid-status.js && node tools/test-read-messages.js && node tools/test-csrf-origin.js && node tools/test-blob-helpers.js && node tools/test-mobile-data.js && node tools/test-dispute-wizard.js && node tools/test-dtc-navigator.js && node tools/test-http-scraper.js && node tools/test-http-scraper-integration.js && node tools/test-i18n.js",
+    "test": "node tools/test-cors-utils.js && node tools/test-auth-cookie.js && node tools/test-paid-status.js && node tools/test-read-messages.js && node tools/test-csrf-origin.js && node tools/test-blob-helpers.js && node tools/test-mobile-data.js && node tools/test-dispute-wizard.js && node tools/test-dtc-navigator.js && node tools/test-program-schema.js && node tools/test-http-scraper.js && node tools/test-http-scraper-integration.js && node tools/test-i18n.js",
     "test:http-scraper-integration": "node tools/test-http-scraper-integration.js",
     "test:cors": "node tools/test-cors-utils.js",
     "test:auth-cookie": "node tools/test-auth-cookie.js",
