@@ -2058,10 +2058,7 @@ function extractMobileData(scraperResult) {
 app.get('/api/mobile', requireAuth, async (req, res) => {
   try {
     const result = await fetchOrLoadData(req);
-    if (!result || !result.data || !result.data.sections) {
-      return res.status(404).json({ error: 'No data available' });
-    }
-    res.json(extractMobileData(result.data));
+    res.json(extractMobileData(result?.data || null));
   } catch (error) {
     console.error('[API] /api/mobile error:', error);
     res.status(500).json({ error: safeApiError(error, 'Failed to load data') });
