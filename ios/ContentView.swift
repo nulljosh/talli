@@ -202,14 +202,6 @@ private struct DashboardScreen: View {
         return String(format: "%02d:%02d:%02d", hrs, mins, secs)
     }
 
-    private var earningsRateText: String? {
-        guard let date = appState.parsedNextPaymentDate, let amount = appState.parsedPaymentAmount else { return nil }
-        let target = Calendar.current.startOfDay(for: date)
-        let hoursLeft = max(0, target.timeIntervalSince(now)) / 3600
-        guard hoursLeft > 0 else { return nil }
-        return String(format: "$%.2f/hr", amount / hoursLeft)
-    }
-
     var body: some View {
         ScrollView {
             VStack(spacing: 18) {
@@ -368,21 +360,6 @@ private struct DashboardScreen: View {
                 Text(liveCountdownText)
                     .font(.subheadline.weight(.bold).monospacedDigit())
                     .contentTransition(.numericText())
-            }
-            if let rate = earningsRateText {
-                HStack {
-                    Text("Earning")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                    Spacer()
-                    Text(rate)
-                        .font(.subheadline.weight(.bold))
-                        .contentTransition(.numericText())
-                }
-                Text("payment amount / hours remaining -- increases as date approaches")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
         .padding()

@@ -49,3 +49,13 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally.uitests
         GENERATE_INFOPLIST_FILE: YES
+schemes:
+  TallyUITests:
+    build:
+      targets:
+        Tally: all
+        TallyUITests: all
+    test:
+      targets:
+        - TallyUITests
+    shared: true

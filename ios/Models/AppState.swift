@@ -47,6 +47,19 @@ final class AppState {
     }
 
     init() {
+        if CommandLine.arguments.contains("UITEST_SNAPSHOT") {
+            isAuthenticated = true
+            dashboard = DashboardData(
+                paymentAmount: "$1,234.56",
+                nextPaymentDate: "2026-07-25",
+                statusMessages: [
+                    .init(text: "Your monthly report has been received.", timestamp: "2026-06-02"),
+                    .init(text: "PWD application resubmitted.", timestamp: "2026-06-19")
+                ]
+            )
+            reportMonths = [String(format: "%04d-%02d", Calendar.current.component(.year, from: Date()), Calendar.current.component(.month, from: Date())): "filed"]
+            return
+        }
         startNetworkMonitoring()
         dashboard = Self.loadCached(DashboardData.self, forKey: Constants.dashboardCacheKey)
         lastSyncDate = UserDefaults.standard.object(forKey: Constants.lastSyncKey) as? Date
@@ -265,6 +278,7 @@ final class AppState {
     }
 
     func bootstrap() async {
+        if CommandLine.arguments.contains("UITEST_SNAPSHOT") { return }
         // Optimistic: show cached dashboard immediately while session check runs
         if storedCredentials != nil, dashboard != nil {
             isAuthenticated = true

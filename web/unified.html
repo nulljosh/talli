@@ -1083,7 +1083,7 @@ function App() {
   const [cdbApprovalDate, setCdbApprovalDate] = useState(null);
   const [cdbMonthlyAmount, setCdbMonthlyAmount] = useState(null);
   const [cdbRetroactiveEligible, setCdbRetroactiveEligible] = useState(false);
-  const [avatarUrl,   setAvatarUrl]   = useState(null);
+  const [avatarUrl,   setAvatarUrl]   = useState(() => localStorage.getItem('tallyAvatarUrl') || null);
   const [avatarError, setAvatarError] = useState(null);
   const [skn,         setSkn]         = useState(null);
   const [reportMonths, setReportMonths] = useState({});
@@ -1185,14 +1185,15 @@ function App() {
           }
         })();
         fetch('/api/profile',{credentials:'include'}).then(r=>r.json()).then(p=>{
-          if(p.avatarUrl) setAvatarUrl(p.avatarUrl);
+          const persistAvatar = (url) => { setAvatarUrl(url); localStorage.setItem('tallyAvatarUrl', url); };
+          if(p.avatarUrl) persistAvatar(p.avatarUrl);
           else {
             // No avatar yet -- generate and save one silently
             const svg = generateNodeGraphSVG();
             const b64 = btoa(unescape(encodeURIComponent(svg)));
-            setAvatarUrl(`data:image/svg+xml;base64,${b64}`);
+            persistAvatar(`data:image/svg+xml;base64,${b64}`);
             fetch('/api/avatar',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({svgBase64:b64})})
-              .then(r=>r.json()).then(res=>{ if(res.avatarUrl) setAvatarUrl(res.avatarUrl); }).catch(()=>{});
+              .then(r=>r.json()).then(res=>{ if(res.avatarUrl) persistAvatar(res.avatarUrl); }).catch(()=>{});
           }
           if(p.skn) setSkn(p.skn);
           setPinSet(p.pinSet || false);
@@ -1227,7 +1228,7 @@ function App() {
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       const d = await r.json();
       if(d.error) throw new Error(d.error);
-      if(d.avatarUrl) { setAvatarUrl(d.avatarUrl); setAvatarError(null); }
+      if(d.avatarUrl) { setAvatarUrl(d.avatarUrl); localStorage.setItem('tallyAvatarUrl', d.avatarUrl); setAvatarError(null); }
       else throw new Error('No avatar URL in response');
     } catch (err) {
       setAvatarUrl(previewUrl);
