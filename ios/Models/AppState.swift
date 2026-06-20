@@ -43,7 +43,8 @@ final class AppState {
     private var storedCredentials: KeychainHelper.Credentials?
 
     var username: String? {
-        KeychainHelper.loadCredentials()?.username
+        if CommandLine.arguments.contains("UITEST_SNAPSHOT") { return "demo.user" }
+        return KeychainHelper.loadCredentials()?.username
     }
 
     init() {
@@ -58,6 +59,7 @@ final class AppState {
                 ]
             )
             reportMonths = [String(format: "%04d-%02d", Calendar.current.component(.year, from: Date()), Calendar.current.component(.month, from: Date())): "filed"]
+            avatarImageData = Self.generateNodeGraphAvatar().pngData()
             return
         }
         startNetworkMonitoring()
