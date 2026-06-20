@@ -59,6 +59,20 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally.uitests
         GENERATE_INFOPLIST_FILE: YES
 schemes:
+  Talli:
+    build:
+      targets:
+        Talli: all
+        TalliTests: [test]
+        TalliUITests: [test]
+    run:
+      config: Debug
+    archive:
+      config: Release
+    test:
+      targets:
+        - TalliTests
+    shared: true
   TalliUITests:
     build:
       targets:
