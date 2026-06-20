@@ -24,6 +24,7 @@ targets:
           - "architecture.svg"
           - UITests
           - Tests
+          - fastlane
     settings:
       INFOPLIST_FILE: Info.plist
       PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally
