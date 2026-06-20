@@ -45,5 +45,10 @@
     </dict>
     <key>NSFaceIDUsageDescription</key>
     <string>Sign in to Talli with Face ID</string>
+    <key>UIAppFonts</key>
+    <array>
+        <string>Resources/Fonts/Fraunces-Variable.ttf</string>
+        <string>Resources/Fonts/DMSans-Variable.ttf</string>
+    </array>
 </dict>
 </plist>
