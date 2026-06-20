@@ -49,3 +49,11 @@ MIT 2026 Joshua Trommel
 - [ ] Sync mobile and web: web is missing the countdown the mobile app already has
 - [ ] Improve countdown functionality and UI
 - [ ] Rework the increasing-payment-per-hour model: pay is a monthly lump sum, so either remove the increasing-accrual visual or redesign it to read as a steady rate paid out monthly
+
+### App Store submission (free, keep BC Self-Serve auto-login)
+Tally ships FREE — audience is income-assistance recipients, never paywall it. It's the proof-of-competence flagship, not a revenue line.
+- [ ] Register a free Basic BCeID (throwaway email) as the App Store review login — no benefits file behind it, genuine empty state, no fake data
+- [ ] App Store Connect review notes: explain the personal-account model + attach a populated-dashboard screenshot (Guideline 5.2.2 defense)
+- [ ] Add `ios/PrivacyInfo.xcprivacy` privacy manifest + App Store privacy nutrition label
+- [ ] Audit `src/api.js` + `src/scraper.js`: confirm BCeID creds are HTTPS-only and never logged at the Puppeteer hop
+- [ ] Archive build, upload to App Store Connect, submit for review
