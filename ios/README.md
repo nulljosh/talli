@@ -34,13 +34,11 @@ open Tally.xcodeproj
 
 Requires Xcode 26.2 beta, iOS 17+ simulator.
 
-To regenerate App Store screenshots:
+To regenerate App Store screenshots (runs `UITests/PreviewScreenshot.swift` against a mocked authenticated session via the `UITEST_SNAPSHOT` launch argument — no real BC Self-Serve credentials needed — then commits + pushes):
 
 ```bash
-fastlane snapshot
+./scripts/update_screenshots.sh
 ```
-
-Runs `UITests/PreviewScreenshot.swift` against a mocked authenticated session (`UITEST_SNAPSHOT` launch argument, no real BC Self-Serve credentials needed) across the devices listed in `fastlane/Snapfile`.
 
 ## Roadmap
 
