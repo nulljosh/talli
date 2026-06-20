@@ -8,7 +8,7 @@
 const puppeteer = require('puppeteer-core');
 const fs = require('fs').promises;
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '../.env') });
+require('dotenv').config({ path: path.join(__dirname, '../.env'), quiet: true });
 
 const DATA_DIR = path.join(__dirname, '../data/monthly-reports-discovery');
 

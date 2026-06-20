@@ -1,19 +1,21 @@
-/* Benefits page styles -- portfolio vibe */
+/* Benefits page styles -- portfolio vibe (heyitsmejosh.com tokens, see portfolio-tokens.css) */
 
 :root {
-  --bg-primary: #fafafa;
-  --bg-secondary: #f5f5f5;
-  --text-primary: #000;
-  --text-secondary: rgba(0, 0, 0, 0.5);
-  --border: rgba(0, 0, 0, 0.1);
+  --bg-primary: #ffffff;
+  --bg-secondary: #bfddf0;
+  --text-primary: #1a1a1a;
+  --text-secondary: #4a4a4a;
+  --border: rgba(26, 26, 26, 0.12);
+  --accent: #5b9bd5;
 }
 
 [data-theme="dark"] {
-  --bg-primary: #111;
-  --bg-secondary: #1a1a1a;
-  --text-primary: #e8e8e8;
-  --text-secondary: rgba(255, 255, 255, 0.5);
-  --border: rgba(255, 255, 255, 0.1);
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2a2a2a;
+  --text-primary: #fff8f0;
+  --text-secondary: rgba(255, 248, 240, 0.6);
+  --border: rgba(255, 248, 240, 0.12);
+  --accent: #5b9bd5;
 }
 
 *, *::before, *::after {
@@ -23,13 +25,17 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', Roboto, sans-serif;
   background: var(--bg-primary);
   color: var(--text-primary);
   padding: 0 1rem 2rem;
   line-height: 1.6;
   overflow-x: hidden;
   transition: background 0.4s ease-out, color 0.4s ease-out;
+}
+
+h1, h2, h3, .title {
+  font-family: Fraunces, Georgia, serif;
 }
 
 .container {
@@ -52,15 +58,15 @@ body {
 }
 
 .hero {
-  background: var(--text-primary);
-  color: var(--bg-primary);
+  background: var(--accent);
+  color: #ffffff;
   padding: 2.5rem 2rem;
   margin-bottom: 2.5rem;
-  border-radius: 4px;
+  border-radius: 14px;
 }
 
 .hero h1, .hero p, .hero a, .hero span, .hero strong, .hero em {
-  color: var(--bg-primary);
+  color: #ffffff;
 }
 
 .money {
@@ -77,7 +83,7 @@ body {
   background: var(--bg-primary);
   padding: 2rem;
   margin-bottom: 1.5rem;
-  border-radius: 4px;
+  border-radius: 14px;
 }
 
 .box.celebration {
@@ -104,7 +110,7 @@ a:hover {
 
 table {
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: 14px;
   overflow: hidden;
   width: 100%;
   border-collapse: collapse;
@@ -303,6 +309,6 @@ select {
   color: var(--text-primary);
   border: 1px solid var(--border);
   padding: 0.5rem;
-  border-radius: 4px;
+  border-radius: 14px;
   font: inherit;
 }

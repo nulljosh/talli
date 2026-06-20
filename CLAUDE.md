@@ -2,13 +2,13 @@
 
 ## Rules
 - No emojis anywhere
-- Warm parchment aesthetic: Light (#faf7f4 bg / #1a1612 text), Dark (#0d0c0b bg / #f2ede8 text)
-- Accent: #FF851B (clrs.cc orange)
-- Font: Space Grotesk (Google Fonts) + system fallback
+- Portfolio-vibe aesthetic (matches heyitsmejosh.com, see `portfolio-tokens.css`): Light (#ffffff bg / #1a1a1a text), Dark (#1a1a1a bg / #fff8f0 text)
+- Accent: #5B9BD5 (blue), secondary #BFDDF0
+- Fonts: DM Sans (body) + Fraunces (headings), Geist for code/mono
 - 430px max-width shell centered on desktop
 - 640px max-width, single-column, text-first
 - Theme toggle: sun/moon SVG, View Transitions API, `[data-theme="dark"]`
-- No glass morphism, no noise texture, no gradients -- solid colors only
+- 14px border-radius standard; glass/blur accents allowed on sticky/floating elements (toggle, banners)
 - Spring hover: `transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)`
 - Never use raw `setInterval` for API polling -- always use `visibilityInterval()` helper (pauses when tab hidden, prevents Vercel invocation burn)
 
