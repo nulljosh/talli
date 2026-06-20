@@ -1,7 +1,7 @@
 <img src="icon.svg" width="80">
 
 # Talli iOS
-![version](https://img.shields.io/badge/version-v2.4.1-orange)
+![version](https://img.shields.io/badge/version-v2.4.2-orange)
 
 <p align="center">
   <img src="screenshots/appstore/01-home.png" width="200">
@@ -48,6 +48,13 @@ To regenerate App Store screenshots (runs `UITests/PreviewScreenshot.swift` agai
 - [ ] PDF report export
 
 ## Changelog
+
+### v2.4.2 (2026-06-20)
+- Bundled and registered Fraunces (headings) + DM Sans (body) per portfolio-vibe spec; splash screen no longer falls back to system font.
+- Fixed `UIAppFonts` paths — Xcode flattens resource subfolders to the bundle root, so font registration was silently failing on device.
+- Locked `TARGETED_DEVICE_FAMILY` to iPhone-only and disabled Mac/Vision "designed for iPad" destinations, so `xcodegen generate` stops re-adding iPad/Mac/Vision Pro to the destination list every run.
+- Baked `CFBundleDisplayName` and `LSApplicationCategoryType` (Utilities) into `Info.plist` so they survive regeneration instead of resetting.
+- Excluded `build/` from `project.yml` sources — a stray local CLI build dir was getting scanned as project resources, causing hundreds of "duplicate output file" errors.
 
 ### v2.4.1 (2026-05-07)
 - Fixed app icon: SVG was rasterized without scaling, placing the design in the top-left 200px of a 1024x1024 canvas. Regenerated light, dark, and tinted variants via cairosvg at full scale.

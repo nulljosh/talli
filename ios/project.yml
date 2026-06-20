@@ -3,11 +3,13 @@ options:
   bundleIdPrefix: com.heyitsmejosh
   deploymentTarget:
     iOS: "17.0"
+attributes:
+  LastUpgradeCheck: "2650"
 settings:
   DEVELOPMENT_TEAM: QMM486NPYC
   SWIFT_VERSION: "6.0"
-  MARKETING_VERSION: "2.4.1"
-  CURRENT_PROJECT_VERSION: "5"
+  MARKETING_VERSION: "2.4.2"
+  CURRENT_PROJECT_VERSION: "6"
 targets:
   Talli:
     type: application
@@ -25,9 +27,15 @@ targets:
           - UITests
           - Tests
           - fastlane
+          - build
     settings:
-      INFOPLIST_FILE: Info.plist
-      PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally
+      base:
+        INFOPLIST_FILE: Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally
+        TARGETED_DEVICE_FAMILY: "1"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+        SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: NO
   TalliTests:
     type: bundle.unit-test
     platform: iOS
