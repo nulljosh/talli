@@ -4,6 +4,14 @@
 
 ![version](https://img.shields.io/badge/version-v3.5.0-orange)
 
+<p align="center">
+  <img src="ios/screenshots/appstore/01-home.png" width="200">
+  <img src="ios/screenshots/appstore/02-reports.png" width="200">
+  <img src="ios/screenshots/appstore/03-benefits.png" width="200">
+  <img src="ios/screenshots/appstore/04-messages.png" width="200">
+  <img src="ios/screenshots/appstore/05-settings.png" width="200">
+</p>
+
 BC Self-Serve scraper and benefits dashboard. Tracks income, payment dates, PWD application status, and government messages.
 
 ## Features
