@@ -16,7 +16,7 @@ struct BenefitsProvider: TimelineProvider {
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<BenefitsEntry>) -> Void) {
         Task {
-            var summary: TallySummary?
+            var summary: TalliSummary?
             do { summary = try await WidgetAPI.fetchSummary() } catch { summary = WidgetAPI.cachedSummary() }
             let entry = buildEntry(from: summary)
             let nextUpdate = Calendar.current.date(byAdding: .minute, value: 15, to: .now)!
@@ -24,7 +24,7 @@ struct BenefitsProvider: TimelineProvider {
         }
     }
 
-    private func buildEntry(from summary: TallySummary?) -> BenefitsEntry {
+    private func buildEntry(from summary: TalliSummary?) -> BenefitsEntry {
         let updated: String
         if let ts = summary?.lastUpdated {
             let formatter = DateFormatter()

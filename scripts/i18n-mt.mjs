@@ -2,7 +2,7 @@
 // i18n-mt: fill empty non-en values in strings.json via DeepL.
 // SKIPS any key with review:true (finance/health stay human-authored).
 // DeepL key from macOS Keychain, never plaintext:
-//   security add-generic-password -s deepl-api -a tally -w <KEY>
+//   security add-generic-password -s deepl-api -a talli -w <KEY>
 //   node scripts/i18n-mt.mjs        # writes back into i18n/strings.json
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -16,9 +16,9 @@ const { sourceLanguage, locales } = src._meta;
 
 let key;
 try {
-  key = execFileSync("security", ["find-generic-password", "-s", "deepl-api", "-a", "tally", "-w"], { encoding: "utf8" }).trim();
+  key = execFileSync("security", ["find-generic-password", "-s", "deepl-api", "-a", "talli", "-w"], { encoding: "utf8" }).trim();
 } catch {
-  console.error("No DeepL key in Keychain. Add: security add-generic-password -s deepl-api -a tally -w <KEY>");
+  console.error("No DeepL key in Keychain. Add: security add-generic-password -s deepl-api -a talli -w <KEY>");
   process.exit(1);
 }
 

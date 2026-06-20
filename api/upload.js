@@ -5,7 +5,7 @@ function blobPrefix(userId) {
   const secret = process.env.SESSION_SECRET;
   if (!secret) throw new Error('SESSION_SECRET must be set');
   const hmac = crypto.createHmac('sha256', secret).update(userId).digest('hex').slice(0, 12);
-  return `tally-cache/${hmac}-${userId}`;
+  return `talli-cache/${hmac}-${userId}`;
 }
 
 module.exports = async function handler(req, res) {

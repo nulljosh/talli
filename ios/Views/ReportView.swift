@@ -22,10 +22,10 @@ struct ReportView: View {
                 if isFilingWindowOpen {
                     HStack(spacing: 8) {
                         Image(systemName: "exclamationmark.circle.fill")
-                            .foregroundStyle(Color.tallyOrange)
+                            .foregroundStyle(Color.talliOrange)
                         Text("Filing window is open — closes the 5th")
                             .font(.footnote.weight(.semibold))
-                            .foregroundStyle(Color.tallyOrange)
+                            .foregroundStyle(Color.talliOrange)
                     }
                 }
                 Text("The filing window is open days 1–5 of each month. Submit during this window.")

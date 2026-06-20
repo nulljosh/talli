@@ -1,4 +1,4 @@
-name: Tally
+name: Talli
 options:
   bundleIdPrefix: com.heyitsmejosh
   deploymentTarget:
@@ -9,7 +9,7 @@ settings:
   MARKETING_VERSION: "2.4.1"
   CURRENT_PROJECT_VERSION: "5"
 targets:
-  Tally:
+  Talli:
     type: application
     platform: iOS
     sources:
@@ -28,35 +28,35 @@ targets:
     settings:
       INFOPLIST_FILE: Info.plist
       PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally
-  TallyTests:
+  TalliTests:
     type: bundle.unit-test
     platform: iOS
     sources:
       - Tests
     dependencies:
-      - target: Tally
+      - target: Talli
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally.tests
         GENERATE_INFOPLIST_FILE: YES
-  TallyUITests:
+  TalliUITests:
     type: bundle.ui-testing
     platform: iOS
     sources:
       - UITests
     dependencies:
-      - target: Tally
+      - target: Talli
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally.uitests
         GENERATE_INFOPLIST_FILE: YES
 schemes:
-  TallyUITests:
+  TalliUITests:
     build:
       targets:
-        Tally: all
-        TallyUITests: all
+        Talli: all
+        TalliUITests: all
     test:
       targets:
-        - TallyUITests
+        - TalliUITests
     shared: true

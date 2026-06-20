@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// preview-screenshot.js -- spawn tally locally, log in via auto-login, capture
+// preview-screenshot.js -- spawn talli locally, log in via auto-login, capture
 // the dashboard at iPhone 17 Pro dimensions, write to web/preview.png and copy
 // to the portfolio repo.
 
@@ -10,10 +10,10 @@ const net = require('net');
 const os = require('os');
 const puppeteer = require('puppeteer-core');
 
-// Load BCeID creds from ~/.config/tally/credentials.env (mode 600, never committed)
+// Load BCeID creds from ~/.config/talli/credentials.env (mode 600, never committed)
 // so the screenshot can authenticate against the real account.
 function loadCreds() {
-  const file = path.join(os.homedir(), '.config', 'tally', 'credentials.env');
+  const file = path.join(os.homedir(), '.config', 'talli', 'credentials.env');
   if (!fs.existsSync(file)) return {};
   const out = {};
   for (const line of fs.readFileSync(file, 'utf8').split('\n')) {
@@ -28,7 +28,7 @@ const REPO_ROOT = path.resolve(__dirname, '..');
 const OUT_REPO = path.join(REPO_ROOT, 'preview.png');
 const OUT_PORTFOLIO = path.resolve(
   process.env.HOME,
-  'Documents/Code/nulljosh.github.io/images/tally-preview.png'
+  'Documents/Code/nulljosh.github.io/images/talli-preview.png'
 );
 const CHROME = process.env.PUPPETEER_EXECUTABLE_PATH
   || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
@@ -58,7 +58,7 @@ function waitForServer(port, timeoutMs = 15000) {
       sock.once('connect', () => { sock.destroy(); resolve(); });
       sock.once('error', () => {
         sock.destroy();
-        if (Date.now() > deadline) return reject(new Error('tally server did not start in time'));
+        if (Date.now() > deadline) return reject(new Error('talli server did not start in time'));
         setTimeout(tick, 200);
       });
     };
@@ -68,7 +68,7 @@ function waitForServer(port, timeoutMs = 15000) {
 
 (async () => {
   const port = await getFreePort();
-  console.log(`[preview] starting tally on port ${port}`);
+  console.log(`[preview] starting talli on port ${port}`);
 
   const creds = loadCreds();
   const env = {
@@ -87,8 +87,8 @@ function waitForServer(port, timeoutMs = 15000) {
     env,
     stdio: ['ignore', 'pipe', 'pipe'],
   });
-  server.stdout.on('data', (b) => process.stdout.write(`[tally] ${b}`));
-  server.stderr.on('data', (b) => process.stderr.write(`[tally] ${b}`));
+  server.stdout.on('data', (b) => process.stdout.write(`[talli] ${b}`));
+  server.stderr.on('data', (b) => process.stderr.write(`[talli] ${b}`));
 
   const cleanup = () => { try { server.kill('SIGTERM'); } catch {} };
   process.on('exit', cleanup);

@@ -3,7 +3,7 @@ import SwiftUI
 // Minimal color extensions used across views
 extension Color {
     static let appleBlue = Color(red: 0, green: 0.44, blue: 0.89)
-    static let tallyOrange = Color(hex: "FF851B")
+    static let talliOrange = Color(hex: "FF851B")
     static let gradeGreen = Color.green
     static let gradeRed = Color.red
     static let gradeAmber = Color.orange
@@ -49,5 +49,5 @@ extension View {
 }
 
 extension Animation {
-    static let tallySpring = Animation.spring(response: 0.35, dampingFraction: 0.85)
+    static let talliSpring = Animation.spring(response: 0.35, dampingFraction: 0.85)
 }

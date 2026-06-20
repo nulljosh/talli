@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# tally-info.sh — Print payment summary from local Tally server
-# Usage: npm run info  (or bash scripts/tally-info.sh)
+# talli-info.sh — Print payment summary from local Talli server
+# Usage: npm run info  (or bash scripts/talli-info.sh)
 # Requires: npm start running on localhost:3000 with .env credentials
 
 set -euo pipefail
@@ -18,7 +18,7 @@ BASE="http://localhost:3000"
 COOKIE_JAR=$(mktemp)
 trap 'rm -f "$COOKIE_JAR"' EXIT
 
-echo "Tally — local info check"
+echo "Talli — local info check"
 echo "------------------------"
 
 # Login — blank body triggers server .env fallback

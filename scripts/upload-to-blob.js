@@ -27,7 +27,7 @@ async function uploadToBlob() {
 
   // Upload to Vercel
   const UPLOAD_SECRET = process.env.UPLOAD_SECRET;
-  const VERCEL_URL = process.env.VERCEL_URL || 'https://tally-production.vercel.app';
+  const VERCEL_URL = process.env.VERCEL_URL || 'https://talli-production.vercel.app';
   const bceidUsername = process.env.BCEID_USERNAME || '';
   const userId = crypto.createHash('sha256').update(bceidUsername).digest('hex').slice(0, 16);
 

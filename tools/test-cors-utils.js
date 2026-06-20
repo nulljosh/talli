@@ -10,28 +10,28 @@ const {
 function run() {
   const parsed = parseAllowedOrigins(
     undefined,
-    'http://localhost:3000, http://127.0.0.1:3000, https://tally-production.vercel.app'
+    'http://localhost:3000, http://127.0.0.1:3000, https://talli-production.vercel.app'
   );
   assert.deepStrictEqual(parsed, [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
-    'https://tally-production.vercel.app'
+    'https://talli-production.vercel.app'
   ]);
 
-  assert.strictEqual(getOriginHost('https://tally-production.vercel.app/login'), 'tally-production.vercel.app');
+  assert.strictEqual(getOriginHost('https://talli-production.vercel.app/login'), 'talli-production.vercel.app');
   assert.strictEqual(getOriginHost('not-a-url'), '');
 
-  const reqA = { headers: { host: 'tally-production.vercel.app' } };
-  const reqB = { headers: { host: 'localhost:3000', 'x-forwarded-host': 'tally-production.vercel.app' } };
-  assert.strictEqual(getRequestHost(reqA), 'tally-production.vercel.app');
-  assert.strictEqual(getRequestHost(reqB), 'tally-production.vercel.app');
+  const reqA = { headers: { host: 'talli-production.vercel.app' } };
+  const reqB = { headers: { host: 'localhost:3000', 'x-forwarded-host': 'talli-production.vercel.app' } };
+  assert.strictEqual(getRequestHost(reqA), 'talli-production.vercel.app');
+  assert.strictEqual(getRequestHost(reqB), 'talli-production.vercel.app');
 
   assert.strictEqual(
-    isOriginAllowed('https://tally-production.vercel.app', 'tally-production.vercel.app', parsed),
+    isOriginAllowed('https://talli-production.vercel.app', 'talli-production.vercel.app', parsed),
     true
   );
   assert.strictEqual(
-    isOriginAllowed('https://evil.example', 'tally-production.vercel.app', parsed),
+    isOriginAllowed('https://evil.example', 'talli-production.vercel.app', parsed),
     false
   );
   assert.strictEqual(
@@ -46,7 +46,7 @@ function run() {
   const delegate = createCorsOptionsDelegate(parsed);
 
   delegate(
-    { headers: { host: 'tally-production.vercel.app', origin: 'https://tally-production.vercel.app' } },
+    { headers: { host: 'talli-production.vercel.app', origin: 'https://talli-production.vercel.app' } },
     (error, options) => {
       assert.ifError(error);
       assert.deepStrictEqual(options, { origin: true });
@@ -54,7 +54,7 @@ function run() {
   );
 
   delegate(
-    { headers: { host: 'tally-production.vercel.app', origin: 'https://unknown.example' } },
+    { headers: { host: 'talli-production.vercel.app', origin: 'https://unknown.example' } },
     (error, options) => {
       assert(error instanceof Error);
       assert.strictEqual(error.message, 'CORS origin not allowed');

@@ -1,9 +1,9 @@
 import Foundation
 
-struct TallySummary: Codable {
+struct TalliSummary: Codable {
     let paymentAmount: String
     let nextDate: String
-    let messages: [TallyMessage]
+    let messages: [TalliMessage]
 
     enum CodingKeys: String, CodingKey {
         case paymentAmount = "payment_amount"
@@ -12,7 +12,7 @@ struct TallySummary: Codable {
     }
 }
 
-struct TallyMessage: Codable, Identifiable {
+struct TalliMessage: Codable, Identifiable {
     let id: String
     let text: String
     let timestamp: String

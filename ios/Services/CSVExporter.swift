@@ -35,7 +35,7 @@ enum CSVExporter {
         ].joined(separator: "\n")
 
         let timestamp = ISO8601DateFormatter().string(from: Date()).replacingOccurrences(of: ":", with: "-")
-        let url = FileManager.default.temporaryDirectory.appendingPathComponent("tally-benefits-\(timestamp).csv")
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("talli-benefits-\(timestamp).csv")
 
         do {
             try csv.write(to: url, atomically: true, encoding: .utf8)

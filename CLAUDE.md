@@ -1,4 +1,4 @@
-# Tally
+# Talli
 
 ## Rules
 - No emojis anywhere
@@ -32,7 +32,7 @@ npm run upload-blob # upload to Vercel Blob
 - PWD application denied May 2026. **Extension granted 2026-05-25 by Ministry.**
 - Hard deadline: **June 18, 2026** — no further extensions. Submit via fax 1-855-771-8784 or MYSS.
 - Deadline is hardcoded in unified.html (not computed from denial date) since the extension overrides the standard 20-business-day window.
-- **Feature needed**: PWD Resubmit button on Status tab — one-click to pre-fill and resubmit the PWD application directly from Tally, without navigating BC Self-Serve.
+- **Feature needed**: PWD Resubmit button on Status tab — one-click to pre-fill and resubmit the PWD application directly from Talli, without navigating BC Self-Serve.
 
 ## Reporting Period
 - Window is days 1–5 of every month. That's when to file.
@@ -43,7 +43,7 @@ npm run upload-blob # upload to Vercel Blob
 ## Changelog
 - v3.5.0 (2026-06-01): Auto-detect monthly report submission status from BC Self-Serve. http-scraper now fetches `/Auth/MonthlyReports` as a section and `parseReportMonths()` derives filed months from the page (explicit per-period status + sequential inference from the open period — only marks periods literally shown, no fabrication). On each live scrape, `mergeScrapedReportMonths()` unions detected months into the `report-status` Blob (never deletes user-confirmed months), so the Home banner and Status "Reports Filed" list reflect filed-through state with no manual entry. Propagates to iOS/watchOS automatically via the shared `/api/report-status` endpoint. Parser unit tests added to `tools/test-http-scraper.js`.
 - v3.4.1 (2026-05-29): i18n test suite (`tools/test-i18n.js`, wired into `npm test` + `test:i18n`). 11 tests: strings.json validity, generated web/native output drift checks, and the real `web/js/i18n.js` runtime loaded in a mocked-browser vm sandbox (t() en-fallback + Intl CAD currency/date/number formatting across en/fr/zh/pa). Caught fr-CA `$CA` currency suffix.
-- v3.4.0 (2026-05-29): i18n pipeline. Master string source (`i18n/strings.json`) generates web i18next JSON (`web/locales/*.json`) + Xcode String Catalog (`ios/Tally/Localizable.xcstrings`) via `scripts/i18n-gen.mjs`. Vanilla runtime `web/js/i18n.js` with `Intl` CAD currency/date/number formatters + localStorage persistence + en fallback. DeepL fill (`scripts/i18n-mt.mjs`) skips `review:true` finance/benefit strings. Locales en/fr full, zh/pa generic UI. unified.html loads the runtime; JSX literal retrofit + native SwiftUI wiring are the next step.
+- v3.4.0 (2026-05-29): i18n pipeline. Master string source (`i18n/strings.json`) generates web i18next JSON (`web/locales/*.json`) + Xcode String Catalog (`ios/Talli/Localizable.xcstrings`) via `scripts/i18n-gen.mjs`. Vanilla runtime `web/js/i18n.js` with `Intl` CAD currency/date/number formatters + localStorage persistence + en fallback. DeepL fill (`scripts/i18n-mt.mjs`) skips `review:true` finance/benefit strings. Locales en/fr full, zh/pa generic UI. unified.html loads the runtime; JSX literal retrofit + native SwiftUI wiring are the next step.
 - v3.3.0 (2026-05-28): Banner correctness (suppresses when already filed, shows "Filed" confirmation), "File now" button in banner, auto-scrape on mount days 1-5 (localStorage-gated 6h), calendar days 1-5 highlighted + legend entry, iOS report-filed state wired to AppState, watchOS filing window indicator, iOS "Filed" banner.
 - v3.2.0 (2026-05-28): Dynamic reporting window dates (no more hardcoded "Jun 1–5"), filing period banner on web + iOS when days 1–5, fixed ReportView timing copy and nextDeadline logic.
 - v1.0.0 (2026-05-22): History reset. BC Self-Serve scraper with session-encrypted credentials, payment amount tracking, PWD application timeline, messages sync, Vercel Blob persistence, iOS + watchOS companion apps.

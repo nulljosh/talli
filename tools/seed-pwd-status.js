@@ -26,7 +26,7 @@ function deriveUserId(username) {
 
 function blobPrefix(userId) {
   const hmac = crypto.createHmac('sha256', ENCRYPTION_KEY).update(userId).digest('hex').slice(0, 12);
-  return `tally-cache/${hmac}-${userId}`;
+  return `talli-cache/${hmac}-${userId}`;
 }
 
 async function main() {

@@ -32,7 +32,7 @@ fi
 
 echo "==> Committing"
 git commit -m "$(cat <<'EOF'
-Update Tally iOS App Store screenshots
+Update Talli iOS App Store screenshots
 
 Regenerated via fastlane snapshot.
 

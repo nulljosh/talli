@@ -33,7 +33,7 @@ final class AppState {
 
     private static let avatarFileURL: URL = {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("tally_avatar.png")
+            .appendingPathComponent("talli_avatar.png")
     }()
 
     private let monitor = NWPathMonitor()
@@ -514,6 +514,6 @@ final class AppState {
 
     private func authenticateWithBiometrics() async throws {
         let context = LAContext()
-        try await context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "Sign in to Tally")
+        try await context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "Sign in to Talli")
     }
 }

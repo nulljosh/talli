@@ -38,10 +38,10 @@ for (const k of keys) {
   strings[k] = { extractionState: "manual", localizations };
 }
 const catalog = { sourceLanguage, strings, version: "1.0" };
-const catDir = resolve(root, "ios/Tally");
+const catDir = resolve(root, "ios/Talli");
 mkdirSync(catDir, { recursive: true });
 writeFileSync(resolve(catDir, "Localizable.xcstrings"), JSON.stringify(catalog, null, 2) + "\n");
 
 const translated = (lng) => keys.filter((k) => lng === sourceLanguage || (src[k][lng] && src[k][lng].length)).length;
-console.log(`i18n-gen: ${keys.length} keys -> web/locales/*.json + ios/Tally/Localizable.xcstrings`);
+console.log(`i18n-gen: ${keys.length} keys -> web/locales/*.json + ios/Talli/Localizable.xcstrings`);
 for (const lng of locales) console.log(`  ${lng}: ${translated(lng)}/${keys.length} translated`);

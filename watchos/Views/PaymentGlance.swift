@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct PaymentGlance: View {
-    @State private var summary: TallySummary?
+    @State private var summary: TalliSummary?
     @State private var isLoading = true
 
     private var daysUntilPayment: Int? {

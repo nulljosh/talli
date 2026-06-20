@@ -1,10 +1,10 @@
-// Tally i18n runtime (vanilla, no framework). Loads generated locale JSON,
+// Talli i18n runtime (vanilla, no framework). Loads generated locale JSON,
 // swaps [data-i18n] text, and exposes locale-correct formatters.
 // The formatting helpers are the part browser auto-translate can never do.
 (function () {
   const SUPPORTED = ["en", "fr", "zh", "pa"];
   const FALLBACK = "en";
-  const stored = localStorage.getItem("tally.lang");
+  const stored = localStorage.getItem("talli.lang");
   const detected = (navigator.language || "en").slice(0, 2);
   let lang = SUPPORTED.includes(stored) ? stored : SUPPORTED.includes(detected) ? detected : FALLBACK;
 
@@ -38,7 +38,7 @@
   async function setLang(lng) {
     if (!SUPPORTED.includes(lng)) return;
     lang = lng;
-    localStorage.setItem("tally.lang", lng);
+    localStorage.setItem("talli.lang", lng);
     dict = await loadDict(lng);
     apply();
     window.dispatchEvent(new CustomEvent("i18n:changed", { detail: { lang } }));

@@ -7,9 +7,9 @@ const {
 } = require('../src/auth-cookie');
 
 function testCookieParsing() {
-  const parsed = parseCookies('a=1; tally_auth=abc%2Edef; empty=');
+  const parsed = parseCookies('a=1; talli_auth=abc%2Edef; empty=');
   assert.strictEqual(parsed.a, '1');
-  assert.strictEqual(parsed.tally_auth, 'abc.def');
+  assert.strictEqual(parsed.talli_auth, 'abc.def');
   assert.strictEqual(parsed.empty, '');
 }
 
@@ -38,13 +38,13 @@ function testTamperDetection() {
 }
 
 function testCookieSerialization() {
-  const serialized = buildCookieString('tally_auth', 'x.y.z', {
+  const serialized = buildCookieString('talli_auth', 'x.y.z', {
     maxAgeMs: 60_000,
     secure: true,
     httpOnly: true,
     sameSite: 'Strict'
   });
-  assert(serialized.includes('tally_auth=x.y.z'));
+  assert(serialized.includes('talli_auth=x.y.z'));
   assert(serialized.includes('Max-Age=60'));
   assert(serialized.includes('HttpOnly'));
   assert(serialized.includes('SameSite=Strict'));

@@ -1,5 +1,5 @@
-const STATIC_CACHE = 'tally-static-v3';
-const API_CACHE = 'tally-api-v2';
+const STATIC_CACHE = 'talli-static-v3';
+const API_CACHE = 'talli-api-v2';
 
 const STATIC_ASSETS = [
   '/landing.html',

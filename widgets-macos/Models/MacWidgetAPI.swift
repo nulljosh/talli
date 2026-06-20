@@ -2,7 +2,7 @@ import Foundation
 
 struct MacWidgetAPI {
     static let baseURL = "https://tally.heyitsmejosh.com"
-    private static let defaults = UserDefaults(suiteName: "group.com.jt.tally")
+    private static let defaults = UserDefaults(suiteName: "group.com.jt.talli")
 
     private static var session: URLSession {
         let config = URLSessionConfiguration.default
@@ -23,7 +23,7 @@ struct MacWidgetAPI {
 
     // MARK: - Fetch
 
-    static func fetchSummary() async throws -> MacTallySummary {
+    static func fetchSummary() async throws -> MacTalliSummary {
         guard let token = apiToken, !token.isEmpty else {
             throw URLError(.userAuthenticationRequired)
         }
@@ -36,14 +36,14 @@ struct MacWidgetAPI {
         guard let http = response as? HTTPURLResponse, 200..<300 ~= http.statusCode else {
             throw URLError(.badServerResponse)
         }
-        let summary = try JSONDecoder().decode(MacTallySummary.self, from: data)
+        let summary = try JSONDecoder().decode(MacTalliSummary.self, from: data)
         cache(data)
         return summary
     }
 
-    static func cachedSummary() -> MacTallySummary? {
+    static func cachedSummary() -> MacTalliSummary? {
         guard let data = defaults?.data(forKey: "widget_summary_mac") else { return nil }
-        return try? JSONDecoder().decode(MacTallySummary.self, from: data)
+        return try? JSONDecoder().decode(MacTalliSummary.self, from: data)
     }
 
     // MARK: - Next Payment Date

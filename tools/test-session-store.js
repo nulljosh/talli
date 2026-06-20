@@ -54,7 +54,7 @@ function testStoreLifecycle() {
   return new Promise((resolve, reject) => {
     store.set(sid, payload, (setErr) => {
       if (setErr) return reject(setErr);
-      assert.strictEqual(redis.ttlByKey.get('tally:sess:' + sid), 45);
+      assert.strictEqual(redis.ttlByKey.get('talli:sess:' + sid), 45);
 
       store.get(sid, (getErr, result) => {
         if (getErr) return reject(getErr);
@@ -62,7 +62,7 @@ function testStoreLifecycle() {
 
         store.destroy(sid, (destroyErr) => {
           if (destroyErr) return reject(destroyErr);
-          assert.strictEqual(redis.map.has('tally:sess:' + sid), false);
+          assert.strictEqual(redis.map.has('talli:sess:' + sid), false);
           resolve();
         });
       });

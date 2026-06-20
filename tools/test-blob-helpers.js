@@ -56,15 +56,15 @@ function run() {
   test('blob path construction is correct', () => {
     const userId = 'abc123';
     const key = 'paid-status';
-    const blobPath = `tally-cache/${userId}/${key}.json`;
-    assert.strictEqual(blobPath, 'tally-cache/abc123/paid-status.json');
+    const blobPath = `talli-cache/${userId}/${key}.json`;
+    assert.strictEqual(blobPath, 'talli-cache/abc123/paid-status.json');
   });
 
   test('blob path handles special characters in userId', () => {
     const userId = 'a1b2c3d4e5f6';
     const key = 'read-messages';
-    const blobPath = `tally-cache/${userId}/${key}.json`;
-    assert.ok(blobPath.startsWith('tally-cache/'));
+    const blobPath = `talli-cache/${userId}/${key}.json`;
+    assert.ok(blobPath.startsWith('talli-cache/'));
     assert.ok(blobPath.endsWith('.json'));
   });
 

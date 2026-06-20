@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct TallyMacApp: App {
+struct TalliMacApp: App {
     @State private var appState = MacAppState()
 
     var body: some Scene {
@@ -17,7 +17,7 @@ struct TallyMacApp: App {
         .windowToolbarStyle(.unified)
         .defaultSize(width: 900, height: 640)
 
-        MenuBarExtra("Tally", systemImage: "chart.bar.doc.horizontal") {
+        MenuBarExtra("Talli", systemImage: "chart.bar.doc.horizontal") {
             MenuBarView()
                 .environment(appState)
         }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct MessagesView: View {
-    @State private var messages: [TallyMessage] = []
+    @State private var messages: [TalliMessage] = []
     @State private var isLoading = true
 
     var body: some View {

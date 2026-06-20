@@ -16,7 +16,8 @@ platform :ios do
     )
     sh("cd .. && xcodegen generate")
     gym(
-      scheme: "Tally",
+      project: "Talli.xcodeproj",
+      scheme: "Talli",
       export_method: "app-store",
       xcargs: "-allowProvisioningUpdates",
       clean: true

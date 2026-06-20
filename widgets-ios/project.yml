@@ -1,4 +1,4 @@
-name: TallyWidgets
+name: TalliWidgets
 options:
   bundleIdPrefix: com.heyitsmejosh
   deploymentTarget:
@@ -10,7 +10,7 @@ settings:
   CURRENT_PROJECT_VERSION: "1"
   CODE_SIGN_STYLE: Automatic
 targets:
-  TallyWidgetsExtension:
+  TalliWidgetsExtension:
     type: app-extension
     platform: iOS
     sources:
@@ -22,8 +22,8 @@ targets:
           - "*.svg"
     settings:
       GENERATE_INFOPLIST_FILE: YES
-      INFOPLIST_KEY_CFBundleDisplayName: Tally Widgets
+      INFOPLIST_KEY_CFBundleDisplayName: Talli Widgets
       INFOPLIST_KEY_NSHumanReadableCopyright: "Copyright 2026 Joshua Trommel"
       PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally.widgets
       ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME: WidgetBackground
-      PRODUCT_NAME: TallyWidgets
+      PRODUCT_NAME: TalliWidgets

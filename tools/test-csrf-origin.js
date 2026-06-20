@@ -21,7 +21,7 @@ function run() {
   const allowedOrigins = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
-    'https://tally-production.vercel.app',
+    'https://talli-production.vercel.app',
     'https://tally.heyitsmejosh.com'
   ];
   const ALLOWED_ORIGINS = new Set(allowedOrigins);
@@ -59,7 +59,7 @@ function run() {
   });
 
   test('POST from Vercel preview passes', () => {
-    assert.strictEqual(checkOrigin('POST', 'https://tally-production.vercel.app'), 'pass');
+    assert.strictEqual(checkOrigin('POST', 'https://talli-production.vercel.app'), 'pass');
   });
 
   test('POST from evil origin is blocked', () => {

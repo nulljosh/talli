@@ -8,7 +8,7 @@ struct SplashView: View {
                 .scaledToFit()
                 .frame(width: 88, height: 88)
 
-            Text("Tally")
+            Text("Talli")
                 .font(.system(size: 38, weight: .bold))
                 .foregroundStyle(.primary)
 

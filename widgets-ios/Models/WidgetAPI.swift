@@ -2,7 +2,7 @@ import Foundation
 
 struct WidgetAPI {
     static let baseURL = "https://tally.heyitsmejosh.com"
-    private static let defaults = UserDefaults(suiteName: "group.com.jt.tally")
+    private static let defaults = UserDefaults(suiteName: "group.com.jt.talli")
 
     private static var session: URLSession {
         let config = URLSessionConfiguration.default
@@ -23,7 +23,7 @@ struct WidgetAPI {
 
     // MARK: - Fetch
 
-    static func fetchSummary() async throws -> TallySummary {
+    static func fetchSummary() async throws -> TalliSummary {
         guard let token = apiToken, !token.isEmpty else {
             throw URLError(.userAuthenticationRequired)
         }
@@ -36,14 +36,14 @@ struct WidgetAPI {
         guard let http = response as? HTTPURLResponse, 200..<300 ~= http.statusCode else {
             throw URLError(.badServerResponse)
         }
-        let summary = try JSONDecoder().decode(TallySummary.self, from: data)
+        let summary = try JSONDecoder().decode(TalliSummary.self, from: data)
         cache(data)
         return summary
     }
 
-    static func cachedSummary() -> TallySummary? {
+    static func cachedSummary() -> TalliSummary? {
         guard let data = defaults?.data(forKey: "widget_summary") else { return nil }
-        return try? JSONDecoder().decode(TallySummary.self, from: data)
+        return try? JSONDecoder().decode(TalliSummary.self, from: data)
     }
 
     // MARK: - Next Payment Date

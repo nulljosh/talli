@@ -14,7 +14,7 @@
   </style>
 
   <rect class="bg" x="0" y="0" width="980" height="1200" rx="16"/>
-  <text class="title" x="490" y="52" text-anchor="middle">Tally User and Data Workflow</text>
+  <text class="title" x="490" y="52" text-anchor="middle">Talli User and Data Workflow</text>
 
   <rect class="card-auth" x="320" y="90" width="340" height="72" rx="12"/>
   <text class="label" x="490" y="120" text-anchor="middle">1. Open Root URL</text>
@@ -46,7 +46,7 @@
 
   <rect class="card-cloud" x="540" y="715" width="340" height="96" rx="12"/>
   <text class="label" x="710" y="748" text-anchor="middle">6. Blob Storage</text>
-  <text class="sub" x="710" y="770" text-anchor="middle">tally-cache/&lt;userId&gt;/results.json</text>
+  <text class="sub" x="710" y="770" text-anchor="middle">talli-cache/&lt;userId&gt;/results.json</text>
   <text class="sub" x="710" y="788" text-anchor="middle">no cross-user cache contamination</text>
 
   <rect class="card-ok" x="320" y="865" width="340" height="92" rx="12"/>

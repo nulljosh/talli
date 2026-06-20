@@ -10,7 +10,7 @@ function writeJson(filePath, data) {
 }
 
 (function run() {
-  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'tally-school-grades-'));
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'talli-school-grades-'));
   const freshPath = path.join(tmpDir, 'fresh.json');
   const stalePath = path.join(tmpDir, 'stale.json');
   const invalidJsonPath = path.join(tmpDir, 'invalid.json');

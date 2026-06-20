@@ -3,13 +3,13 @@
 ## Overview
 Native iOS 17 + macOS 14 app for school.heyitsmejosh.com. SwiftUI, Swift 6, no external dependencies. Two tabs: live D2L grades + multiple-choice quizzes.
 
-Data source: `https://school.heyitsmejosh.com` (Vercel — separate project from tally, must `vercel --prod` from `tally/school/` to deploy).
+Data source: `https://school.heyitsmejosh.com` (Vercel — separate project from talli, must `vercel --prod` from `talli/school/` to deploy).
 
 Subject structure mirrors `~/Documents/School/`:
 - **math**: units 1-7 (Pre-Calculus 12)
 - **science**: units 1-9 (Biology/A&P 12)
 
-If a unit is added to `~/Documents/School/`, add quiz data for it via `tally/school/tools/generate_quizzes.py` and update `Subject.units` in `Models/Models.swift`.
+If a unit is added to `~/Documents/School/`, add quiz data for it via `talli/school/tools/generate_quizzes.py` and update `Subject.units` in `Models/Models.swift`.
 
 ## Build
 ```bash

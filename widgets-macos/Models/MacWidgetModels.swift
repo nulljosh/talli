@@ -2,7 +2,7 @@ import WidgetKit
 
 // MARK: - API Response (matches iOS)
 
-struct MacTallySummary: Codable {
+struct MacTalliSummary: Codable {
     let payment: PaymentInfo
     let counts: CountsInfo
     let lastUpdated: String?

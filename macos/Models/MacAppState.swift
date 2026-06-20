@@ -8,7 +8,7 @@ final class MacAppState {
     private enum Constants {
         static let dashboardCacheKey = "cached-dashboard-data"
         static let lastSyncKey = "last-sync-date"
-        static let appGroup = "group.com.jt.tally"
+        static let appGroup = "group.com.jt.talli"
     }
 
     var isAuthenticated = false
@@ -31,7 +31,7 @@ final class MacAppState {
     }
 
     private let monitor = NWPathMonitor()
-    private let monitorQueue = DispatchQueue(label: "com.jt.tally.mac.network")
+    private let monitorQueue = DispatchQueue(label: "com.jt.talli.mac.network")
 
     enum AppSection: String, CaseIterable, Identifiable {
         case dashboard = "Dashboard"

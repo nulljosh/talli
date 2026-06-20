@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 
-const AUTH_COOKIE_NAME = 'tally_auth';
+const AUTH_COOKIE_NAME = 'talli_auth';
 
 function parseCookies(cookieHeader) {
   const header = String(cookieHeader || '');

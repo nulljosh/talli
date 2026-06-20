@@ -7,9 +7,9 @@ enum MacKeychainHelper {
         let password: String
     }
 
-    private static let service = "com.jt.tally.mac"
-    private static let usernameKey = "tally-mac-username"
-    private static let passwordKey = "tally-mac-password"
+    private static let service = "com.jt.talli.mac"
+    private static let usernameKey = "talli-mac-username"
+    private static let passwordKey = "talli-mac-password"
 
     static func saveCredentials(username: String, password: String) {
         save(key: usernameKey, value: username)

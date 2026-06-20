@@ -1,5 +1,5 @@
 const DEFAULT_TTL_SECONDS = 2 * 60 * 60; // 2 hours
-const PREFIX = 'tally:sess:';
+const PREFIX = 'talli:sess:';
 
 function getSessionTtlSeconds(sessionData) {
   const maxAgeMs = Number(sessionData?.cookie?.maxAge);

@@ -16,7 +16,7 @@ struct MessagesProvider: TimelineProvider {
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<MessagesEntry>) -> Void) {
         Task {
-            var summary: TallySummary?
+            var summary: TalliSummary?
             do { summary = try await WidgetAPI.fetchSummary() } catch { summary = WidgetAPI.cachedSummary() }
             let entry = buildEntry(from: summary)
             let nextUpdate = Calendar.current.date(byAdding: .minute, value: 15, to: .now)!
@@ -24,7 +24,7 @@ struct MessagesProvider: TimelineProvider {
         }
     }
 
-    private func buildEntry(from summary: TallySummary?) -> MessagesEntry {
+    private func buildEntry(from summary: TalliSummary?) -> MessagesEntry {
         MessagesEntry(
             date: .now,
             unreadCount: summary?.counts.messages ?? 0,

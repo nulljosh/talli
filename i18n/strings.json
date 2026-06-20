@@ -2,9 +2,9 @@
   "_meta": {
     "sourceLanguage": "en",
     "locales": ["en", "fr", "zh", "pa"],
-    "note": "Master string source for Tally (web + native). `review:true` marks finance/benefit strings that must be human-authored or DeepL-reviewed, never blind MT. Empty non-en values fall back to en on web and show as missing in the Xcode catalog."
+    "note": "Master string source for Talli (web + native). `review:true` marks finance/benefit strings that must be human-authored or DeepL-reviewed, never blind MT. Empty non-en values fall back to en on web and show as missing in the Xcode catalog."
   },
-  "app.name": { "en": "Tally", "fr": "Tally", "zh": "Tally", "pa": "Tally" },
+  "app.name": { "en": "Talli", "fr": "Talli", "zh": "Talli", "pa": "Talli" },
   "app.loading": { "en": "Loading...", "fr": "Chargement...", "zh": "加载中...", "pa": "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ..." },
   "nav.upcoming": { "en": "Upcoming", "fr": "À venir", "zh": "即将到来", "pa": "ਆਉਣ ਵਾਲੇ" },
   "nav.submit": { "en": "Submit", "fr": "Soumettre", "zh": "提交", "pa": "ਜਮ੍ਹਾਂ ਕਰੋ" },

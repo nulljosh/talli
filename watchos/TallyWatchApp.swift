@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct TallyWatchApp: App {
+struct TalliWatchApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#faf7f4" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0d0c0b" media="(prefers-color-scheme: dark)">
-  <title>Tally</title>
+  <title>Talli</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -45,7 +45,7 @@
   <div id="root" style="width:100%;height:100%;display:block;font-family:'Space Grotesk',sans-serif;color:#737373;font-size:0.9rem;">Loading...</div>
 </div>
 <script>
-function _tallyScriptError() {
+function _talliScriptError() {
   var r = document.getElementById('root');
   if (!r) return;
   r.style.flexDirection = 'column'; r.style.gap = '1rem';
@@ -56,9 +56,9 @@ function _tallyScriptError() {
   r.textContent = ''; r.appendChild(msg); r.appendChild(btn);
 }
 </script>
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous" onerror="_tallyScriptError()"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous" onerror="_tallyScriptError()"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous" onerror="_tallyScriptError()"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous" onerror="_talliScriptError()"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous" onerror="_talliScriptError()"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous" onerror="_talliScriptError()"></script>
 <!-- i18n runtime: exposes window.I18N (t, setLang, fmtMoney/fmtDate/fmtNum). Retrofit JSX literals to I18N.t() to activate. -->
 <script src="/js/i18n.js"></script>
 <script type="text/babel">
@@ -1035,7 +1035,7 @@ function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidC
       {/* Header */}
       <div style={{padding:'4px 24px 0',flexShrink:0,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
         <span style={{fontSize:15,fontWeight:700,letterSpacing:'-0.04em',color:t.text}}>
-          tally<span style={{color:t.accent}}>.</span>
+          talli<span style={{color:t.accent}}>.</span>
         </span>
         <button onClick={()=>setTab('settings')} title="Settings" style={{width:28,height:28,borderRadius:'50%',background:avatarUrl?'transparent':t.accent,overflow:'hidden',display:'flex',alignItems:'center',justifyContent:'center',border:'none',cursor:'pointer',WebkitTapHighlightColor:'transparent',padding:0,animation:refreshing?'spin 0.8s linear infinite':'none'}}>
           {avatarUrl
@@ -1083,7 +1083,7 @@ function App() {
   const [cdbApprovalDate, setCdbApprovalDate] = useState(null);
   const [cdbMonthlyAmount, setCdbMonthlyAmount] = useState(null);
   const [cdbRetroactiveEligible, setCdbRetroactiveEligible] = useState(false);
-  const [avatarUrl,   setAvatarUrl]   = useState(() => localStorage.getItem('tallyAvatarUrl') || null);
+  const [avatarUrl,   setAvatarUrl]   = useState(() => localStorage.getItem('talliAvatarUrl') || null);
   const [avatarError, setAvatarError] = useState(null);
   const [skn,         setSkn]         = useState(null);
   const [reportMonths, setReportMonths] = useState({});
@@ -1173,7 +1173,7 @@ function App() {
         (()=>{
           const day=new Date().getDate();
           if(day>=1&&day<=5){
-            const k='tallyLastAutoScrape';
+            const k='talliLastAutoScrape';
             const last=parseInt(localStorage.getItem(k)||'0');
             if(Date.now()-last>6*60*60*1000){
               localStorage.setItem(k,String(Date.now()));
@@ -1185,7 +1185,7 @@ function App() {
           }
         })();
         fetch('/api/profile',{credentials:'include'}).then(r=>r.json()).then(p=>{
-          const persistAvatar = (url) => { setAvatarUrl(url); localStorage.setItem('tallyAvatarUrl', url); };
+          const persistAvatar = (url) => { setAvatarUrl(url); localStorage.setItem('talliAvatarUrl', url); };
           if(p.avatarUrl) persistAvatar(p.avatarUrl);
           else {
             // No avatar yet -- generate and save one silently
@@ -1228,7 +1228,7 @@ function App() {
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       const d = await r.json();
       if(d.error) throw new Error(d.error);
-      if(d.avatarUrl) { setAvatarUrl(d.avatarUrl); localStorage.setItem('tallyAvatarUrl', d.avatarUrl); setAvatarError(null); }
+      if(d.avatarUrl) { setAvatarUrl(d.avatarUrl); localStorage.setItem('talliAvatarUrl', d.avatarUrl); setAvatarError(null); }
       else throw new Error('No avatar URL in response');
     } catch (err) {
       setAvatarUrl(previewUrl);

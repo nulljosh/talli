@@ -5,7 +5,7 @@ const vm = require('vm');
 
 // In-process tests for the i18n pipeline:
 //   - i18n/strings.json master source validity
-//   - generated web/locales/*.json + ios/Tally/Localizable.xcstrings (correct + not stale)
+//   - generated web/locales/*.json + ios/Talli/Localizable.xcstrings (correct + not stale)
 //   - web/js/i18n.js runtime: real t() fallback + Intl currency/date/number formatting
 
 const ROOT = path.resolve(__dirname, '..');
@@ -100,7 +100,7 @@ async function main() {
   });
 
   await test('Localizable.xcstrings: valid, en source, no drift, fr/zh state', () => {
-    const cat = readJSON('ios/Tally/Localizable.xcstrings');
+    const cat = readJSON('ios/Talli/Localizable.xcstrings');
     assert.strictEqual(cat.sourceLanguage, 'en');
     assert.strictEqual(cat.version, '1.0');
     assert.strictEqual(Object.keys(cat.strings).length, keys.length);
@@ -148,7 +148,7 @@ async function main() {
     await new Promise((r) => setTimeout(r, 20));
 
     assert.strictEqual(I18N.t('nav.account'), 'Account', 'default en t()');
-    assert.strictEqual(I18N.t('totally.unknown.key'), 'totally.unknown.key', 'unknown key passthrough');
+    assert.strictEqual(I18N.t('totalli.unknown.key'), 'totalli.unknown.key', 'unknown key passthrough');
 
     await I18N.setLang('fr');
     assert.strictEqual(I18N.t('nav.account'), 'Compte', 'fr t()');

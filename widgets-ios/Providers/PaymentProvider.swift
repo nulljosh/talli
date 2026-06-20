@@ -16,7 +16,7 @@ struct PaymentProvider: TimelineProvider {
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<PaymentEntry>) -> Void) {
         Task {
-            var summary: TallySummary?
+            var summary: TalliSummary?
             do { summary = try await WidgetAPI.fetchSummary() } catch { summary = WidgetAPI.cachedSummary() }
             let entry = buildEntry(from: summary)
             let nextUpdate = Calendar.current.date(byAdding: .minute, value: 15, to: .now)!
@@ -24,7 +24,7 @@ struct PaymentProvider: TimelineProvider {
         }
     }
 
-    private func buildEntry(from summary: TallySummary?) -> PaymentEntry {
+    private func buildEntry(from summary: TalliSummary?) -> PaymentEntry {
         let payDate = WidgetAPI.nextPaymentDate()
         return PaymentEntry(
             date: .now,

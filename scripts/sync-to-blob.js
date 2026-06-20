@@ -25,7 +25,7 @@ async function main() {
   const userId = crypto.createHash('sha256').update(username).digest('hex').slice(0, 16);
   const secret = process.env.SESSION_SECRET || '';
   const hmac = crypto.createHmac('sha256', secret).update(userId).digest('hex').slice(0, 12);
-  const blobPath = `tally-cache/${hmac}-${userId}/results.json`;
+  const blobPath = `talli-cache/${hmac}-${userId}/results.json`;
 
   // Run Puppeteer scraper
   console.log('[sync] Starting Puppeteer scrape...');

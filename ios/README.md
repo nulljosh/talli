@@ -1,6 +1,6 @@
 <img src="icon.svg" width="80">
 
-# Tally iOS
+# Talli iOS
 ![version](https://img.shields.io/badge/version-v2.4.1-orange)
 
 <p align="center">
@@ -11,7 +11,7 @@
   <img src="screenshots/appstore/05-settings.png" width="200">
 </p>
 
-iOS companion for [Tally](https://tally.heyitsmejosh.com), the BC benefits tracker. SwiftUI (iOS 17+, Swift 6), `@Observable` state, URLSession cookie jar auth, xcodegen. Backend: Vercel + Puppeteer at tally.heyitsmejosh.com.
+iOS companion for [Talli](https://tally.heyitsmejosh.com), the BC benefits tracker. SwiftUI (iOS 17+, Swift 6), `@Observable` state, URLSession cookie jar auth, xcodegen. Backend: Vercel + Puppeteer at tally.heyitsmejosh.com.
 
 [Architecture](architecture.svg)
 
@@ -24,13 +24,13 @@ iOS companion for [Tally](https://tally.heyitsmejosh.com), the BC benefits track
 - Offline caching with instant launch
 - CSV export
 - Pixel-art avatar (Core Graphics, 6 palettes)
-- Warm parchment palette, tallyOrange accent, solid cards
+- Warm parchment palette, talliOrange accent, solid cards
 
 ## Run
 
 ```bash
 xcodegen generate
-open Tally.xcodeproj
+open Talli.xcodeproj
 ```
 
 Requires Xcode 26.2 beta, iOS 17+ simulator.
@@ -51,14 +51,14 @@ To regenerate App Store screenshots (runs `UITests/PreviewScreenshot.swift` agai
 
 ### v2.4.1 (2026-05-07)
 - Fixed app icon: SVG was rasterized without scaling, placing the design in the top-left 200px of a 1024x1024 canvas. Regenerated light, dark, and tinted variants via cairosvg at full scale.
-- Splash screen: tally marks on dark background (#1a1612) via UILaunchScreen + named color/image assets.
+- Splash screen: talli marks on dark background (#1a1612) via UILaunchScreen + named color/image assets.
 
 ### v2.4.0 (2026-05-07)
-- tallyOrange accent throughout (button, tabs, calendar, avatar)
+- talliOrange accent throughout (button, tabs, calendar, avatar)
 - Solid cards replace glass (no ultraThinMaterial)
 - Pixel-art avatar via Core Graphics (6 palettes, mirrors web generatePixelArtSVG)
 - Login screen: orange icon, BCEID section labels, solid fields, orange Sign In button
-- App icon updated to orange tally-mark design
+- App icon updated to orange talli-mark design
 - Splash tagline aligned with web: "Your benefits. No bureaucracy."
 
 ### v2.3.0 (2026-03-28)
@@ -80,7 +80,7 @@ To regenerate App Store screenshots (runs `UITests/PreviewScreenshot.swift` agai
 
 ### v2.0.0 (2026-03-18)
 - Added RDSP guide (eligibility, key features, CRA resource links)
-- Synced with tally web v2.4.0
+- Synced with talli web v2.4.0
 
 ## License
 

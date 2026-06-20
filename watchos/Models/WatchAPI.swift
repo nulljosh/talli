@@ -15,7 +15,7 @@ final class WatchAPI {
         session = URLSession(configuration: config)
     }
 
-    func fetchSummary(token: String) async throws -> TallySummary {
+    func fetchSummary(token: String) async throws -> TalliSummary {
         guard let url = URL(string: baseURL + "/api/summary") else {
             throw URLError(.badURL)
         }
@@ -25,14 +25,14 @@ final class WatchAPI {
         guard let http = response as? HTTPURLResponse, 200..<300 ~= http.statusCode else {
             throw URLError(.badServerResponse)
         }
-        let summary = try decoder.decode(TallySummary.self, from: data)
+        let summary = try decoder.decode(TalliSummary.self, from: data)
         cache(data)
         return summary
     }
 
-    func cachedSummary() -> TallySummary? {
+    func cachedSummary() -> TalliSummary? {
         guard let data = defaults.data(forKey: "cache_summary") else { return nil }
-        return try? decoder.decode(TallySummary.self, from: data)
+        return try? decoder.decode(TalliSummary.self, from: data)
     }
 
     var apiToken: String {

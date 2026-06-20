@@ -13,7 +13,7 @@ struct MacLoginView: View {
                 .font(.system(size: 56))
                 .foregroundStyle(Color.bcPrimary)
 
-            Text("Tally")
+            Text("Talli")
                 .font(.system(size: 36, weight: .bold))
 
             Text("Sign in to see what you're owed")

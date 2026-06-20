@@ -91,7 +91,7 @@ function clearAllAuthState(req, res, done) {
 }
 
 // Encryption helpers for session credential storage
-const DERIVED_SALT = crypto.createHash('sha256').update(ENCRYPTION_KEY + 'tally-salt').digest().slice(0, 16);
+const DERIVED_SALT = crypto.createHash('sha256').update(ENCRYPTION_KEY + 'talli-salt').digest().slice(0, 16);
 const DERIVED_KEY = crypto.scryptSync(ENCRYPTION_KEY, DERIVED_SALT, 32);
 
 function encrypt(text) {
@@ -333,7 +333,7 @@ async function fetchAllSectionsWithHybridAuth(username, password) {
 
 const allowedOrigins = parseAllowedOrigins(
   process.env.CORS_ORIGINS,
-  'http://localhost:3000,http://127.0.0.1:3000,https://tally-production.vercel.app,https://tally.heyitsmejosh.com'
+  'http://localhost:3000,http://127.0.0.1:3000,https://talli-production.vercel.app,https://tally.heyitsmejosh.com'
 );
 
 app.use(cors(createCorsOptionsDelegate(allowedOrigins)));
@@ -359,7 +359,7 @@ const scrapeLimiter = rateLimit({
 });
 
 app.use(session({
-  name: 'tally.sid',
+  name: 'talli.sid',
   secret: ENCRYPTION_KEY,
   resave: false,
   saveUninitialized: false,
@@ -384,7 +384,7 @@ app.use((req, res, next) => {
   if (!process.env.SESSION_SECRET) return next();
 
   const cookies = parseCookies(req.headers.cookie);
-  const authToken = cookies.tally_auth;
+  const authToken = cookies.talli_auth;
   if (!authToken) return next();
 
   const payload = unsealAuthPayload(authToken, ENCRYPTION_KEY);
@@ -1545,7 +1545,7 @@ function blobPrefix(userId) {
   let cached = blobPrefixCache.get(userId);
   if (cached) return cached;
   const hmac = crypto.createHmac('sha256', ENCRYPTION_KEY).update(userId).digest('hex').slice(0, 12);
-  cached = `tally-cache/${hmac}-${userId}`;
+  cached = `talli-cache/${hmac}-${userId}`;
   blobPrefixCache.set(userId, cached);
   return cached;
 }
@@ -1563,7 +1563,7 @@ async function loadUserBlob(userId, key, fallback) {
       return await resp.json();
     }
     // Legacy path fallback (pre-HMAC format — some results.json blobs were not migrated)
-    const legacyPath = `tally-cache/${userId}/${key}.json`;
+    const legacyPath = `talli-cache/${userId}/${key}.json`;
     const { blobs: legacyBlobs } = await list({ prefix: legacyPath });
     const legacyMatch = legacyBlobs?.find(b => b.pathname === legacyPath);
     if (legacyMatch) {
@@ -2086,7 +2086,7 @@ app.use((req, res) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>404 — Tally</title>
+  <title>404 — Talli</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #0c1220; color: #e8e4da; font-family: -apple-system, BlinkMacSystemFont, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; }

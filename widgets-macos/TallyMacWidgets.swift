@@ -2,7 +2,7 @@ import WidgetKit
 import SwiftUI
 
 @main
-struct TallyMacWidgets: WidgetBundle {
+struct TalliMacWidgets: WidgetBundle {
     var body: some Widget {
         MacPaymentWidget()
         MacBenefitsWidget()

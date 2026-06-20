@@ -44,6 +44,6 @@
         <false/>
     </dict>
     <key>NSFaceIDUsageDescription</key>
-    <string>Sign in to Tally with Face ID</string>
+    <string>Sign in to Talli with Face ID</string>
 </dict>
 </plist>

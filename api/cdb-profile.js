@@ -8,7 +8,7 @@ function blobPrefix(userId) {
   let cached = blobPrefixCache.get(userId);
   if (cached) return cached;
   const hmac = crypto.createHmac('sha256', ENCRYPTION_KEY).update(userId).digest('hex').slice(0, 12);
-  cached = `tally-cache/${hmac}-${userId}`;
+  cached = `talli-cache/${hmac}-${userId}`;
   blobPrefixCache.set(userId, cached);
   return cached;
 }
@@ -24,7 +24,7 @@ async function loadUserBlob(userId, key, fallback) {
       const resp = await fetch(match.url);
       return await resp.json();
     }
-    const legacyPath = `tally-cache/${userId}/${key}.json`;
+    const legacyPath = `talli-cache/${userId}/${key}.json`;
     const { blobs: legacyBlobs } = await list({ prefix: legacyPath });
     const legacyMatch = legacyBlobs?.find(b => b.pathname === legacyPath);
     if (legacyMatch) {

@@ -16,7 +16,7 @@ struct MacPaymentProvider: TimelineProvider {
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<MacPaymentEntry>) -> Void) {
         Task {
-            var summary: MacTallySummary?
+            var summary: MacTalliSummary?
             do { summary = try await MacWidgetAPI.fetchSummary() } catch { summary = MacWidgetAPI.cachedSummary() }
             let entry = buildEntry(from: summary)
             let nextUpdate = Calendar.current.date(byAdding: .minute, value: 15, to: .now)!
@@ -24,7 +24,7 @@ struct MacPaymentProvider: TimelineProvider {
         }
     }
 
-    private func buildEntry(from summary: MacTallySummary?) -> MacPaymentEntry {
+    private func buildEntry(from summary: MacTalliSummary?) -> MacPaymentEntry {
         let payDate = MacWidgetAPI.nextPaymentDate()
         return MacPaymentEntry(
             date: .now,
