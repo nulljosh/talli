@@ -99,8 +99,10 @@ final class APIClient: @unchecked Sendable {
     }
 
     func check() async throws -> DashboardData {
-        // Trigger fresh scrape, then fetch parsed mobile data
-        _ = try await send(path: "api/check", responseType: CheckResponse.self)
+        // Trigger fresh scrape, then fetch parsed mobile data.
+        // A failed/slow live scrape must not block reading the dashboard --
+        // api/mobile always returns usable (cached or computed) data on its own.
+        _ = try? await send(path: "api/check", responseType: CheckResponse.self)
         return try await send(path: "api/mobile", responseType: DashboardData.self)
     }
 
