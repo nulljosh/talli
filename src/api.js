@@ -1115,7 +1115,7 @@ async function mergeScrapedReportMonths(req, userId, scrapeResult) {
 }
 
 // Helper: try live HTTP scrape, fall back to Blob cache, fall back to local files
-async function fetchOrLoadData(req) {
+async function fetchOrLoadData(req, { allowLiveScrape = true } = {}) {
   const creds = getSessionCredentials(req);
   const userId = req.session?.userId;
 
@@ -1130,7 +1130,7 @@ async function fetchOrLoadData(req) {
   }
 
   // Try live HTTP scrape (45s timeout)
-  if (creds) {
+  if (creds && allowLiveScrape) {
     try {
       log('[API] Attempting live HTTP scrape...');
       const result = await Promise.race([
@@ -2057,7 +2057,10 @@ function extractMobileData(scraperResult) {
 
 app.get('/api/mobile', requireAuth, async (req, res) => {
   try {
-    const result = await fetchOrLoadData(req);
+    // Read-only: never trigger a live scrape here, that's what /api/check is for.
+    // The myselfserve.gov.bc.ca ChequeInfo/Payment page can hang for 60-90s+ on
+    // transient errors, which made this endpoint time out client-side.
+    const result = await fetchOrLoadData(req, { allowLiveScrape: false });
     res.json(extractMobileData(result?.data || null));
   } catch (error) {
     console.error('[API] /api/mobile error:', error);
