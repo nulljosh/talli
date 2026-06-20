@@ -19,3 +19,6 @@ api-calls-*.json
 **/.DS_Store
 *.profraw
 .env*
+*.dSYM.zip
+ios/fastlane/README.md
+ios/fastlane/report.xml
