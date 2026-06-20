@@ -12,10 +12,16 @@ fastlane snapshot
 DEVICE="iPhone 17 Pro"
 SHOTS=("01-Home" "02-Reports" "03-Benefits" "04-Messages" "05-Settings")
 
+echo "==> Copying screenshots into screenshots/appstore (no-space filenames for GitHub rendering)"
+mkdir -p screenshots/appstore
+for shot in "${SHOTS[@]}"; do
+  cp "fastlane/screenshots/en-US/${DEVICE}-${shot}.png" "screenshots/appstore/$(echo "$shot" | tr '[:upper:]' '[:lower:]').png"
+done
+
 echo "==> Staging screenshots + README"
 cd ..
 for shot in "${SHOTS[@]}"; do
-  git add -f "ios/fastlane/screenshots/en-US/${DEVICE}-${shot}.png"
+  git add -f "ios/screenshots/appstore/$(echo "$shot" | tr '[:upper:]' '[:lower:]').png"
 done
 git add ios/README.md
 

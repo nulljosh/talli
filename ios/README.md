@@ -4,11 +4,11 @@
 ![version](https://img.shields.io/badge/version-v2.4.1-orange)
 
 <p align="center">
-  <img src="fastlane/screenshots/en-US/iPhone 17 Pro-01-Home.png" width="200">
-  <img src="fastlane/screenshots/en-US/iPhone 17 Pro-02-Reports.png" width="200">
-  <img src="fastlane/screenshots/en-US/iPhone 17 Pro-03-Benefits.png" width="200">
-  <img src="fastlane/screenshots/en-US/iPhone 17 Pro-04-Messages.png" width="200">
-  <img src="fastlane/screenshots/en-US/iPhone 17 Pro-05-Settings.png" width="200">
+  <img src="screenshots/appstore/01-home.png" width="200">
+  <img src="screenshots/appstore/02-reports.png" width="200">
+  <img src="screenshots/appstore/03-benefits.png" width="200">
+  <img src="screenshots/appstore/04-messages.png" width="200">
+  <img src="screenshots/appstore/05-settings.png" width="200">
 </p>
 
 iOS companion for [Tally](https://tally.heyitsmejosh.com), the BC benefits tracker. SwiftUI (iOS 17+, Swift 6), `@Observable` state, URLSession cookie jar auth, xcodegen. Backend: Vercel + Puppeteer at tally.heyitsmejosh.com.
