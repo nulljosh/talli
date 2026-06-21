@@ -2,6 +2,7 @@ import SwiftUI
 
 struct MacDashboardView: View {
     @Environment(MacAppState.self) private var appState
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         ScrollView {
@@ -62,14 +63,14 @@ struct MacDashboardView: View {
         .padding(20)
         .background {
             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(.ultraThinMaterial)
+                .fill(colorScheme == .dark ? .regularMaterial : .ultraThinMaterial)
                 .overlay(
                     RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .fill(Color.bcPrimary.opacity(0.08))
+                        .fill(Color.bcLight.opacity(colorScheme == .dark ? 0.14 : 0.08))
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .strokeBorder(Color.bcPrimary.opacity(0.2), lineWidth: 0.5)
+                        .strokeBorder(Color.bcLight.opacity(colorScheme == .dark ? 0.4 : 0.2), lineWidth: colorScheme == .dark ? 1 : 0.5)
                 )
         }
     }
@@ -213,7 +214,11 @@ struct MacDashboardView: View {
 
     private var macCard: some View {
         RoundedRectangle(cornerRadius: 16, style: .continuous)
-            .fill(.ultraThinMaterial)
-            .shadow(color: .black.opacity(0.06), radius: 10, y: 3)
+            .fill(colorScheme == .dark ? .regularMaterial : .ultraThinMaterial)
+            .shadow(color: .black.opacity(colorScheme == .dark ? 0.25 : 0.06), radius: 10, y: 3)
+            .overlay(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .strokeBorder(Color.primary.opacity(colorScheme == .dark ? 0.12 : 0.05), lineWidth: 1)
+            )
     }
 }

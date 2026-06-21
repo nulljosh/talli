@@ -24,3 +24,8 @@ api-calls-*.json
 *.dSYM.zip
 ios/fastlane/README.md
 ios/fastlane/report.xml
+macos/Talli.app/
+macos/Talli.pkg
+macos/TalliMac.xcodeproj/project.xcworkspace/xcuserdata/
+macos/fastlane/report.xml
+macos/fastlane/README.md
