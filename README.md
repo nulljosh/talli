@@ -74,6 +74,6 @@ Talli ships FREE — audience is income-assistance recipients, never paywall it.
 - [x] Submitted for review 2026-06-20 — status: Waiting for Review
 - [ ] Fix Xcode Cloud workflow: still points at old `Tally.xcodeproj`, needs repoint to `Talli.xcodeproj` in Manage Workflows
 
-## Known issues / next session (macOS companion, scaffolded 2026-06-20)
-- **Root cause confirmed**: the macOS app process launches and stays alive (verified via `ps`), but never creates an actual visible window — confirmed by direct launch + `osascript`/System Events lookup finding no window for the process. This explains both the screenshot capture failures and the generic Dock icon (no window = nothing properly rendered). Needs investigation into `TallyMacApp.swift`'s `WindowGroup`/`MenuBarExtra` scene setup — likely the `MenuBarExtra` scene is taking over as the "main" scene instead of the `WindowGroup`, or the window is failing to open on launch for some other reason.
-- watchOS screenshot lane works and is verified (real payment data, not blank).
+### macOS companion (scaffolded 2026-06-20, not yet working)
+- [ ] **Window never opens**: the macOS app process launches and stays alive (confirmed via `ps`), but never creates a visible window (confirmed via direct launch + `osascript`/System Events finding no window for the process). This is the root cause behind both the screenshot capture failures and the broken Dock icon (nothing ever renders). Suspect `TallyMacApp.swift`'s `MenuBarExtra` scene is taking over as the primary scene instead of `WindowGroup` — needs a code fix, not more rebuild-and-guess cycles.
+- [x] watchOS screenshot lane works and is verified (real payment data, not blank).
