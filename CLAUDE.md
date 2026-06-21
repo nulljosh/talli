@@ -50,3 +50,7 @@ npm run upload-blob # upload to Vercel Blob
 - v3.3.0 (2026-05-28): Banner correctness (suppresses when already filed, shows "Filed" confirmation), "File now" button in banner, auto-scrape on mount days 1-5 (localStorage-gated 6h), calendar days 1-5 highlighted + legend entry, iOS report-filed state wired to AppState, watchOS filing window indicator, iOS "Filed" banner.
 - v3.2.0 (2026-05-28): Dynamic reporting window dates (no more hardcoded "Jun 1–5"), filing period banner on web + iOS when days 1–5, fixed ReportView timing copy and nextDeadline logic.
 - v1.0.0 (2026-05-22): History reset. BC Self-Serve scraper with session-encrypted credentials, payment amount tracking, PWD application timeline, messages sync, Vercel Blob persistence, iOS + watchOS companion apps.
+
+## Imported from Talli.pdf (2026-06-21)
+- [ ] Web login issue — could not reproduce; no real BC Self-Serve creds available in this environment, no error logs found. Likely fine or an intermittent portal outage (already handled distinctly in code).
+- [ ] macOS App Store Connect app record — doesn't exist yet for `com.heyitsmejosh.tally.mac`; `fastlane mac_beta` builds clean but upload fails until the record is created manually in ASC (same flow used to fix Epiphany macOS — see epiphany/CLAUDE.md).
