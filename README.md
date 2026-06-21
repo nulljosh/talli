@@ -72,6 +72,7 @@ Talli ships FREE — audience is income-assistance recipients, never paywall it.
 - [x] Screenshots regenerated at correct App Store resolutions (1242×2688 / 1284×2778)
 - [x] Submitted for review 2026-06-20 — status: Waiting for Review
 - [ ] Fix Xcode Cloud workflow: still points at old `Tally.xcodeproj`, needs repoint to `Talli.xcodeproj` in Manage Workflows
+- [ ] Mac TestFlight: `fastlane mac_beta` lane added 2026-06-21, archive builds clean, but upload fails — no macOS app record exists yet in App Store Connect for `com.heyitsmejosh.tally.mac`. Create the app record (one-time, manual) then re-run `fastlane mac_beta` in `macos/fastlane`.
 
 ### macOS companion (scaffolded 2026-06-20, partially working)
 - [x] Window now opens correctly — root cause was a stale macOS window-restoration state (`~/Library/Saved Application State/com.heyitsmejosh.tally.mac.savedState`) corrupted by repeated forced-quits during today's testing, not a code bug. Confirmed fixed after clearing it.
