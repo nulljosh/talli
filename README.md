@@ -2,7 +2,10 @@
 
 # Talli
 
-![version](https://img.shields.io/badge/version-v3.5.0-orange)
+![version](https://img.shields.io/badge/version-v3.5.1-orange)
+![App Store](https://img.shields.io/badge/App%20Store-Waiting%20for%20Review-yellow)
+
+Live at [talli.heyitsmejosh.com](https://talli.heyitsmejosh.com)
 
 <p align="center">
   <img src="ios/screenshots/appstore/01-home.png" width="200">
@@ -34,7 +37,7 @@ BC Self-Serve scraper and benefits dashboard. Tracks income, payment dates, PWD 
 
 ## Design
 
-Space Grotesk font, warm parchment palette (`#faf7f4` light / `#0d0c0b` dark), clrs.cc orange (`#FF851B`) accent. 430px centered shell on desktop. iOS matches web: solid cards, orange accents, 8×8 pixel-art avatar generated with Core Graphics.
+DM Sans (body) + Fraunces (headings), warm parchment palette (`#faf7f4` light / `#0d0c0b` dark), clrs.cc orange (`#FF851B`) accent. 430px centered shell on desktop. iOS matches web: solid cards, orange accents, 8×8 pixel-art avatar generated with Core Graphics.
 
 ## Run
 
@@ -44,7 +47,7 @@ npm install && npm start
 
 Open http://localhost:3000. Copy `.env.example` to `.env`.
 
-Deploy: `cd apps/talli && npx vercel --prod`
+Deploy: push to `main` — GitHub Actions auto-deploys to Vercel prod on every push (see `.github/workflows/deploy.yml`).
 
 ## License
 
@@ -60,8 +63,8 @@ MIT 2026 Joshua Trommel
 
 ### App Store submission (free, keep BC Self-Serve auto-login)
 Talli ships FREE — audience is income-assistance recipients, never paywall it. It's the proof-of-competence flagship, not a revenue line.
-- [ ] Register a free Basic BCeID (throwaway email) as the App Store review login — no benefits file behind it, genuine empty state, no fake data
-- [ ] App Store Connect review notes: explain the personal-account model + attach a populated-dashboard screenshot (Guideline 5.2.2 defense)
-- [ ] Add `ios/PrivacyInfo.xcprivacy` privacy manifest + App Store privacy nutrition label
-- [ ] Audit `src/api.js` + `src/scraper.js`: confirm BCeID creds are HTTPS-only and never logged at the Puppeteer hop
-- [ ] Archive build, upload to App Store Connect, submit for review
+- [x] Privacy policy page (`web/privacy.html`, live at `/privacy`)
+- [x] App Store Connect listing complete (category, subtitle, age rating, content rights)
+- [x] Screenshots regenerated at correct App Store resolutions (1242×2688 / 1284×2778)
+- [x] Submitted for review 2026-06-20 — status: Waiting for Review
+- [ ] Fix Xcode Cloud workflow: still points at old `Tally.xcodeproj`, needs repoint to `Talli.xcodeproj` in Manage Workflows

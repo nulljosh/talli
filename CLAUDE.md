@@ -2,9 +2,11 @@
 
 ## Rules
 - No emojis anywhere
+- Live at talli.heyitsmejosh.com (renamed from tally.heyitsmejosh.com 2026-06-20 — repo, domain, and portfolio link all updated; old `tally` subdomain still resolves but is not the canonical link)
+- Push to `main` auto-deploys to Vercel prod via `.github/workflows/deploy.yml` (VERCEL_TOKEN/ORG_ID/PROJECT_ID repo secrets) — no more manual `vercel --prod` needed
 - Portfolio-vibe aesthetic (matches heyitsmejosh.com, see `portfolio-tokens.css`): Light (#ffffff bg / #1a1a1a text), Dark (#1a1a1a bg / #fff8f0 text)
 - Accent: #5B9BD5 (blue), secondary #BFDDF0
-- Fonts: DM Sans (body) + Fraunces (headings), Geist for code/mono
+- Fonts: DM Sans (body) + Fraunces (headings), Geist for code/mono — `web/landing.html` was found loading the old Space Grotesk font on 2026-06-20, fixed to match design tokens
 - 430px max-width shell centered on desktop
 - 640px max-width, single-column, text-first
 - Theme toggle: sun/moon SVG, View Transitions API, `[data-theme="dark"]`
@@ -41,6 +43,7 @@ npm run upload-blob # upload to Vercel Blob
 - Debt triage "clearable by X" label is also dynamic (next month's 1st).
 
 ## Changelog
+- v3.5.1 (2026-06-20): Submitted iOS App 1.0 (build 2.4.2/6) to App Store review. Added `web/privacy.html` (required for submission). Fixed live deploy pipeline — GitHub Actions only ran lint checks before, never deployed, so the font/footer fixes weren't reaching production; added auto-deploy job + Vercel secrets. Fixed `web/landing.html` still loading old Space Grotesk font + stale `nulljosh/apps` monorepo footer links. Renamed domain tally→talli.heyitsmejosh.com, updated portfolio card. Regenerated App Store screenshots at correct resolutions (iPhone 11 Pro Max / 14 Plus sims, not newest models — see project memory on App Store screenshot resolutions). Known issue: Xcode Cloud workflow still references old `Tally.xcodeproj` path, needs manual repoint in Manage Workflows.
 - v3.5.0 (2026-06-01): Auto-detect monthly report submission status from BC Self-Serve. http-scraper now fetches `/Auth/MonthlyReports` as a section and `parseReportMonths()` derives filed months from the page (explicit per-period status + sequential inference from the open period — only marks periods literally shown, no fabrication). On each live scrape, `mergeScrapedReportMonths()` unions detected months into the `report-status` Blob (never deletes user-confirmed months), so the Home banner and Status "Reports Filed" list reflect filed-through state with no manual entry. Propagates to iOS/watchOS automatically via the shared `/api/report-status` endpoint. Parser unit tests added to `tools/test-http-scraper.js`.
 - v3.4.1 (2026-05-29): i18n test suite (`tools/test-i18n.js`, wired into `npm test` + `test:i18n`). 11 tests: strings.json validity, generated web/native output drift checks, and the real `web/js/i18n.js` runtime loaded in a mocked-browser vm sandbox (t() en-fallback + Intl CAD currency/date/number formatting across en/fr/zh/pa). Caught fr-CA `$CA` currency suffix.
 - v3.4.0 (2026-05-29): i18n pipeline. Master string source (`i18n/strings.json`) generates web i18next JSON (`web/locales/*.json`) + Xcode String Catalog (`ios/Talli/Localizable.xcstrings`) via `scripts/i18n-gen.mjs`. Vanilla runtime `web/js/i18n.js` with `Intl` CAD currency/date/number formatters + localStorage persistence + en fallback. DeepL fill (`scripts/i18n-mt.mjs`) skips `review:true` finance/benefit strings. Locales en/fr full, zh/pa generic UI. unified.html loads the runtime; JSX literal retrofit + native SwiftUI wiring are the next step.
