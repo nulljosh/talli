@@ -134,7 +134,7 @@ final class MacAppState {
         do {
             let response = try await MacAPIClient.shared.login(username: username, password: password)
             guard response.success else {
-                errorMessage = "Login failed. Check your credentials."
+                errorMessage = response.error ?? "Login failed. Check your credentials."
                 return
             }
             isAuthenticated = true

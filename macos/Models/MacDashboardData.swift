@@ -60,4 +60,5 @@ private struct MacMessageObject: Codable {
 
 struct MacLoginResponse: Codable {
     let success: Bool
+    let error: String?
 }

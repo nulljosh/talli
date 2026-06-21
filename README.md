@@ -75,7 +75,7 @@ Talli ships FREE — audience is income-assistance recipients, never paywall it.
 
 ### macOS companion (scaffolded 2026-06-20, partially working)
 - [x] Window now opens correctly — root cause was a stale macOS window-restoration state (`~/Library/Saved Application State/com.heyitsmejosh.tally.mac.savedState`) corrupted by repeated forced-quits during today's testing, not a code bug. Confirmed fixed after clearing it.
-- [ ] **App icon still shows generic placeholder** in the Dock despite a generated `AppIcon.appiconset` — real bug, needs investigation (separate from the window issue).
-- [ ] **Sign-in doesn't work** — submitting username/password on the real login screen shows "Sign in to load your dashboard" without succeeding. Untested macOS auth path; needs investigation against the real API (the `UITEST_SNAPSHOT` mock-data path bypasses this entirely, which is why it wasn't caught earlier).
+- [ ] **App icon still shows generic placeholder** in the Dock despite a correct `AppIcon.appiconset` + `ASSETCATALOG_COMPILER_APPICON_NAME` — assets/config both check out, this looks like a stale LaunchServices/Dock icon cache from rebuilding under the same bundle ID, not a code defect. Fix: after a clean rebuild, clear the cache (`killall Dock` and/or `qlmanage -r cache`) rather than chasing it as a code bug.
+- [x] **Sign-in fixed** — root cause: `MacAPIClient.execute()` short-circuited every HTTP 401 to a generic "Session expired" error before decoding the body, but the server also returns 401 with the real BC Self-Serve failure reason on a fresh failed login (not just on session expiry). `login()` now decodes the body directly and surfaces `error` from the response instead of swallowing it. Verified via `xcodebuild build` (BUILD SUCCEEDED); live-credential UI test still pending.
 - [x] watchOS screenshot lane works and is verified (real payment data, not blank).
-- [ ] macOS screenshot removed from README below until icon + sign-in are fixed — not representative yet.
+- [ ] macOS screenshot still pending — re-add once the icon cache issue above is cleared (sign-in is no longer a blocker).

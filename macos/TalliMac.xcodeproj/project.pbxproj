@@ -11,16 +11,15 @@
 		170DED2AAD7B3037534ED350 /* MacLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712C08E52D3C020E27D13B54 /* MacLoginView.swift */; };
 		190C9A49755892F5842E7855 /* MacMessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB8A17CA2D95C67235E3EB7 /* MacMessagesView.swift */; };
 		1F33700CFE6CC60045C2907B /* MacContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78526D808FDBBD806F7EF05 /* MacContentView.swift */; };
-		20F63DF00971763FD2E2B77B /* TallyMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD2295C1037108B2A8EF570 /* TallyMacApp.swift */; };
 		2549FEFAACF6366B21309CAB /* MacBenefitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B92B5AB892DBD4B963F8656 /* MacBenefitsView.swift */; };
 		334EA37E0B895B20EF2496BB /* MacPaymentCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B87D84FEC8981517B9093CB /* MacPaymentCalendarView.swift */; };
 		37291C624EBCC18BA59688CA /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4671E8BA45907193EDB8BC4 /* MenuBarView.swift */; };
+		4BCA3DBEDCAA96B862C734FA /* TalliMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD291A0A6F3E178AE7DBC14D /* TalliMacApp.swift */; };
 		648A1E6A1C557E43E91DD2AB /* MacKeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D46509CD0CB994360A6EE /* MacKeychainHelper.swift */; };
 		A1B3992F899C2CC9E4CD2DFC /* MacAppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD19AB31AA4F0A6DD858E063 /* MacAppState.swift */; };
 		A4F29351A1EDEEA85B7B12D7 /* MacDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 253DEBB17503562A3842CF40 /* MacDashboardView.swift */; };
 		A839CE61888A245D80B8D1F0 /* MacAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE374C826B98CFF02FCED84 /* MacAPIClient.swift */; };
 		B2B60C9015E6163943DC89CF /* MacTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829CFD35783E267E334AD80F /* MacTheme.swift */; };
-		B455CDF235D6DAB3F0246739 /* 1-main.png in Resources */ = {isa = PBXBuildFile; fileRef = 72152705F536EFA5B8C4C583 /* 1-main.png */; };
 		B884C9F0B1B9912B814147B5 /* MacDashboardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE300DF4D1CB8C872ECF1C6 /* MacDashboardData.swift */; };
 		F4FDF05C00F33D7F703A260E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEEEC581169CEBE335A51EF3 /* Assets.xcassets */; };
 		F70A221F7E7CE17DEFD24A8F /* MacScreenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1777E1F0FD107545870F598B /* MacScreenshot.swift */; };
@@ -38,13 +37,11 @@
 
 /* Begin PBXFileReference section */
 		1777E1F0FD107545870F598B /* MacScreenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacScreenshot.swift; sourceTree = "<group>"; };
-		1BD2295C1037108B2A8EF570 /* TallyMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TallyMacApp.swift; sourceTree = "<group>"; };
 		253DEBB17503562A3842CF40 /* MacDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDashboardView.swift; sourceTree = "<group>"; };
 		4BA58147703D20028DCD974A /* TalliMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TalliMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50A47B05EAD85383E2010850 /* Fastfile */ = {isa = PBXFileReference; path = Fastfile; sourceTree = "<group>"; };
 		6CE300DF4D1CB8C872ECF1C6 /* MacDashboardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDashboardData.swift; sourceTree = "<group>"; };
 		712C08E52D3C020E27D13B54 /* MacLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacLoginView.swift; sourceTree = "<group>"; };
-		72152705F536EFA5B8C4C583 /* 1-main.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1-main.png"; sourceTree = "<group>"; };
 		7B87D84FEC8981517B9093CB /* MacPaymentCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPaymentCalendarView.swift; sourceTree = "<group>"; };
 		829CFD35783E267E334AD80F /* MacTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTheme.swift; sourceTree = "<group>"; };
 		8B92B5AB892DBD4B963F8656 /* MacBenefitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBenefitsView.swift; sourceTree = "<group>"; };
@@ -54,20 +51,13 @@
 		BE52B7411BB64FCBF55E718E /* MacDateParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDateParsing.swift; sourceTree = "<group>"; };
 		BEEEC581169CEBE335A51EF3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CD19AB31AA4F0A6DD858E063 /* MacAppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAppState.swift; sourceTree = "<group>"; };
+		CD291A0A6F3E178AE7DBC14D /* TalliMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalliMacApp.swift; sourceTree = "<group>"; };
 		DDE374C826B98CFF02FCED84 /* MacAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAPIClient.swift; sourceTree = "<group>"; };
 		DFB8A17CA2D95C67235E3EB7 /* MacMessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMessagesView.swift; sourceTree = "<group>"; };
 		E78526D808FDBBD806F7EF05 /* MacContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
-		0E51C542C67B56F5611FECA5 /* screenshots */ = {
-			isa = PBXGroup;
-			children = (
-				7C9DF52239D34390F66BEB7A /* mac */,
-			);
-			path = screenshots;
-			sourceTree = "<group>";
-		};
 		2C7C8436AFBC9B947CB4B56A = {
 			isa = PBXGroup;
 			children = (
@@ -100,14 +90,6 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		7C9DF52239D34390F66BEB7A /* mac */ = {
-			isa = PBXGroup;
-			children = (
-				72152705F536EFA5B8C4C583 /* 1-main.png */,
-			);
-			path = mac;
-			sourceTree = "<group>";
-		};
 		8B12F9F9BDDCEFD58632185A /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -121,7 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				BEEEC581169CEBE335A51EF3 /* Assets.xcassets */,
-				1BD2295C1037108B2A8EF570 /* TallyMacApp.swift */,
+				CD291A0A6F3E178AE7DBC14D /* TalliMacApp.swift */,
 				D2F09362310FBA9BC12F44AF /* API */,
 				FC5B378005FE0FB8E81CCDEA /* fastlane */,
 				78C63CA92784404D8EC46A10 /* Models */,
@@ -158,9 +140,15 @@
 			isa = PBXGroup;
 			children = (
 				50A47B05EAD85383E2010850 /* Fastfile */,
-				0E51C542C67B56F5611FECA5 /* screenshots */,
 			);
 			path = fastlane;
+			sourceTree = "<group>";
+		};
+		"TEMP_157507FB-A86B-4508-83C5-FE140C45F461" /* screenshots */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = screenshots;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -245,7 +233,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B455CDF235D6DAB3F0246739 /* 1-main.png in Resources */,
 				F4FDF05C00F33D7F703A260E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -270,7 +257,7 @@
 				334EA37E0B895B20EF2496BB /* MacPaymentCalendarView.swift in Sources */,
 				B2B60C9015E6163943DC89CF /* MacTheme.swift in Sources */,
 				37291C624EBCC18BA59688CA /* MenuBarView.swift in Sources */,
-				20F63DF00971763FD2E2B77B /* TallyMacApp.swift in Sources */,
+				4BCA3DBEDCAA96B862C734FA /* TalliMacApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

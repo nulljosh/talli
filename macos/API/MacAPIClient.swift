@@ -39,12 +39,27 @@ final class MacAPIClient: @unchecked Sendable {
     }
 
     func login(username: String, password: String) async throws -> MacLoginResponse {
-        try await send(
-            path: "api/login",
-            method: "POST",
-            body: MacLoginRequest(username: username, password: password),
-            responseType: MacLoginResponse.self
-        )
+        var request = URLRequest(url: baseURL.appending(path: "api/login"))
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try encoder.encode(MacLoginRequest(username: username, password: password))
+
+        let data: Data
+        do {
+            (data, _) = try await session.data(for: request)
+        } catch {
+            throw MacAPIError.networkError(error)
+        }
+
+        // A fresh login attempt's 401 means BC Self-Serve rejected the credentials,
+        // not that an existing session expired -- decode it like a normal response
+        // so the real failure reason reaches the UI instead of a generic message.
+        do {
+            return try decoder.decode(MacLoginResponse.self, from: data)
+        } catch {
+            throw MacAPIError.decodingError(error)
+        }
     }
 
     func sessionCheck() async throws -> Bool {
