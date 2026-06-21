@@ -44,6 +44,7 @@
     { "src": "/api/(.*)", "dest": "/src/api.js" },
     { "src": "/data/(.*)", "dest": "/src/api.js" },
     { "src": "^/dispute$", "dest": "/web/dispute.html" },
+    { "src": "^/privacy$", "dest": "/web/privacy.html" },
 
     { "src": "^/$", "dest": "/web/landing.html" },
     { "src": "^/app$", "dest": "/src/api.js" },
