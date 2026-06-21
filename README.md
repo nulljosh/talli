@@ -75,6 +75,5 @@ Talli ships FREE — audience is income-assistance recipients, never paywall it.
 - [ ] Fix Xcode Cloud workflow: still points at old `Tally.xcodeproj`, needs repoint to `Talli.xcodeproj` in Manage Workflows
 
 ## Known issues / next session (macOS companion, scaffolded 2026-06-20)
-- macOS app's UI test still fails to launch a window reliably ("App window never appeared") — screenshot automation not working yet for macOS.
-- macOS app icon not displaying correctly (showing generic placeholder in Dock) despite `AppIcon.appiconset` being generated from the iOS source icon — likely an asset catalog compile or `ASSETCATALOG_COMPILER_APPICON_NAME` wiring issue, needs a clean investigation, not another guess-and-rebuild pass.
+- **Root cause confirmed**: the macOS app process launches and stays alive (verified via `ps`), but never creates an actual visible window — confirmed by direct launch + `osascript`/System Events lookup finding no window for the process. This explains both the screenshot capture failures and the generic Dock icon (no window = nothing properly rendered). Needs investigation into `TallyMacApp.swift`'s `WindowGroup`/`MenuBarExtra` scene setup — likely the `MenuBarExtra` scene is taking over as the "main" scene instead of the `WindowGroup`, or the window is failing to open on launch for some other reason.
 - watchOS screenshot lane works and is verified (real payment data, not blank).
