@@ -16,7 +16,6 @@ Live at [talli.heyitsmejosh.com](https://talli.heyitsmejosh.com)
 </p>
 
 <p align="center">
-  <img src="macos/fastlane/screenshots/mac/1-main.png" width="320">
   <img src="watchos/fastlane/screenshots/watch/1-main.png" width="120">
 </p>
 
@@ -74,6 +73,9 @@ Talli ships FREE — audience is income-assistance recipients, never paywall it.
 - [x] Submitted for review 2026-06-20 — status: Waiting for Review
 - [ ] Fix Xcode Cloud workflow: still points at old `Tally.xcodeproj`, needs repoint to `Talli.xcodeproj` in Manage Workflows
 
-### macOS companion (scaffolded 2026-06-20, not yet working)
-- [ ] **Window never opens**: the macOS app process launches and stays alive (confirmed via `ps`), but never creates a visible window (confirmed via direct launch + `osascript`/System Events finding no window for the process). This is the root cause behind both the screenshot capture failures and the broken Dock icon (nothing ever renders). Suspect `TallyMacApp.swift`'s `MenuBarExtra` scene is taking over as the primary scene instead of `WindowGroup` — needs a code fix, not more rebuild-and-guess cycles.
+### macOS companion (scaffolded 2026-06-20, partially working)
+- [x] Window now opens correctly — root cause was a stale macOS window-restoration state (`~/Library/Saved Application State/com.heyitsmejosh.tally.mac.savedState`) corrupted by repeated forced-quits during today's testing, not a code bug. Confirmed fixed after clearing it.
+- [ ] **App icon still shows generic placeholder** in the Dock despite a generated `AppIcon.appiconset` — real bug, needs investigation (separate from the window issue).
+- [ ] **Sign-in doesn't work** — submitting username/password on the real login screen shows "Sign in to load your dashboard" without succeeding. Untested macOS auth path; needs investigation against the real API (the `UITEST_SNAPSHOT` mock-data path bypasses this entirely, which is why it wasn't caught earlier).
 - [x] watchOS screenshot lane works and is verified (real payment data, not blank).
+- [ ] macOS screenshot removed from README below until icon + sign-in are fixed — not representative yet.
