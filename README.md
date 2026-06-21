@@ -15,6 +15,11 @@ Live at [talli.heyitsmejosh.com](https://talli.heyitsmejosh.com)
   <img src="ios/screenshots/appstore/05-settings.png" width="200">
 </p>
 
+<p align="center">
+  <img src="macos/fastlane/screenshots/mac/1-main.png" width="320">
+  <img src="watchos/fastlane/screenshots/watch/1-main.png" width="120">
+</p>
+
 BC Self-Serve scraper and benefits dashboard. Tracks income, payment dates, PWD application status, and government messages.
 
 ## Features

@@ -50,6 +50,18 @@ final class MacAppState {
     }
 
     init() {
+        if CommandLine.arguments.contains("UITEST_SNAPSHOT") {
+            isAuthenticated = true
+            dashboard = MacDashboardData(
+                paymentAmount: "$1,234.56",
+                nextPaymentDate: "2026-07-25",
+                statusMessages: [
+                    .init(text: "Your monthly report has been received.", timestamp: "2026-06-02"),
+                    .init(text: "PWD application resubmitted.", timestamp: "2026-06-19")
+                ]
+            )
+            return
+        }
         startNetworkMonitoring()
         dashboard = loadCached()
     }

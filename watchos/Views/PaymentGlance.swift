@@ -88,6 +88,11 @@ struct PaymentGlance: View {
     }
 
     private func loadData() async {
+        if CommandLine.arguments.contains("UITEST_SNAPSHOT") {
+            summary = TalliSummary(paymentAmount: "$1,234.56", nextDate: "2026-07-25", messages: [])
+            isLoading = false
+            return
+        }
         if let cached = WatchAPI.shared.cachedSummary() {
             summary = cached
             isLoading = false

@@ -1,0 +1,518 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0BDFE2F644478B6E4DE81162 /* MacDateParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE52B7411BB64FCBF55E718E /* MacDateParsing.swift */; };
+		170DED2AAD7B3037534ED350 /* MacLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712C08E52D3C020E27D13B54 /* MacLoginView.swift */; };
+		190C9A49755892F5842E7855 /* MacMessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB8A17CA2D95C67235E3EB7 /* MacMessagesView.swift */; };
+		1F33700CFE6CC60045C2907B /* MacContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78526D808FDBBD806F7EF05 /* MacContentView.swift */; };
+		20F63DF00971763FD2E2B77B /* TallyMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD2295C1037108B2A8EF570 /* TallyMacApp.swift */; };
+		2549FEFAACF6366B21309CAB /* MacBenefitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B92B5AB892DBD4B963F8656 /* MacBenefitsView.swift */; };
+		334EA37E0B895B20EF2496BB /* MacPaymentCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B87D84FEC8981517B9093CB /* MacPaymentCalendarView.swift */; };
+		37291C624EBCC18BA59688CA /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4671E8BA45907193EDB8BC4 /* MenuBarView.swift */; };
+		648A1E6A1C557E43E91DD2AB /* MacKeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D46509CD0CB994360A6EE /* MacKeychainHelper.swift */; };
+		A1B3992F899C2CC9E4CD2DFC /* MacAppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD19AB31AA4F0A6DD858E063 /* MacAppState.swift */; };
+		A4F29351A1EDEEA85B7B12D7 /* MacDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 253DEBB17503562A3842CF40 /* MacDashboardView.swift */; };
+		A839CE61888A245D80B8D1F0 /* MacAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE374C826B98CFF02FCED84 /* MacAPIClient.swift */; };
+		B2B60C9015E6163943DC89CF /* MacTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829CFD35783E267E334AD80F /* MacTheme.swift */; };
+		B455CDF235D6DAB3F0246739 /* 1-main.png in Resources */ = {isa = PBXBuildFile; fileRef = 72152705F536EFA5B8C4C583 /* 1-main.png */; };
+		B884C9F0B1B9912B814147B5 /* MacDashboardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE300DF4D1CB8C872ECF1C6 /* MacDashboardData.swift */; };
+		F70A221F7E7CE17DEFD24A8F /* MacScreenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1777E1F0FD107545870F598B /* MacScreenshot.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		428A12E6DB8EC47AF83D62DC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6EE1CDECF7802FA09B2D71D6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CA1CD7044DAB973754F775E5;
+			remoteInfo = TalliMac;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1777E1F0FD107545870F598B /* MacScreenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacScreenshot.swift; sourceTree = "<group>"; };
+		1BD2295C1037108B2A8EF570 /* TallyMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TallyMacApp.swift; sourceTree = "<group>"; };
+		253DEBB17503562A3842CF40 /* MacDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDashboardView.swift; sourceTree = "<group>"; };
+		4BA58147703D20028DCD974A /* TalliMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TalliMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		50A47B05EAD85383E2010850 /* Fastfile */ = {isa = PBXFileReference; path = Fastfile; sourceTree = "<group>"; };
+		6CE300DF4D1CB8C872ECF1C6 /* MacDashboardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDashboardData.swift; sourceTree = "<group>"; };
+		712C08E52D3C020E27D13B54 /* MacLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacLoginView.swift; sourceTree = "<group>"; };
+		72152705F536EFA5B8C4C583 /* 1-main.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1-main.png"; sourceTree = "<group>"; };
+		7B87D84FEC8981517B9093CB /* MacPaymentCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPaymentCalendarView.swift; sourceTree = "<group>"; };
+		829CFD35783E267E334AD80F /* MacTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTheme.swift; sourceTree = "<group>"; };
+		8B92B5AB892DBD4B963F8656 /* MacBenefitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBenefitsView.swift; sourceTree = "<group>"; };
+		A03D46509CD0CB994360A6EE /* MacKeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacKeychainHelper.swift; sourceTree = "<group>"; };
+		AF4D522BAA69042C54EEA0D3 /* TalliMacUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalliMacUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B4671E8BA45907193EDB8BC4 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		BE52B7411BB64FCBF55E718E /* MacDateParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDateParsing.swift; sourceTree = "<group>"; };
+		CD19AB31AA4F0A6DD858E063 /* MacAppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAppState.swift; sourceTree = "<group>"; };
+		DDE374C826B98CFF02FCED84 /* MacAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAPIClient.swift; sourceTree = "<group>"; };
+		DFB8A17CA2D95C67235E3EB7 /* MacMessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMessagesView.swift; sourceTree = "<group>"; };
+		E78526D808FDBBD806F7EF05 /* MacContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacContentView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0E51C542C67B56F5611FECA5 /* screenshots */ = {
+			isa = PBXGroup;
+			children = (
+				7C9DF52239D34390F66BEB7A /* mac */,
+			);
+			path = screenshots;
+			sourceTree = "<group>";
+		};
+		2C7C8436AFBC9B947CB4B56A = {
+			isa = PBXGroup;
+			children = (
+				D2F09362310FBA9BC12F44AF /* API */,
+				FC5B378005FE0FB8E81CCDEA /* fastlane */,
+				B95C375D38861B1A1EDE2090 /* macos */,
+				78C63CA92784404D8EC46A10 /* Models */,
+				2ED134DA62A66DFB27FEA399 /* UITests-mac */,
+				EFA8EBF78F5183CCF1769CF9 /* Views */,
+				8B12F9F9BDDCEFD58632185A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2ED134DA62A66DFB27FEA399 /* UITests-mac */ = {
+			isa = PBXGroup;
+			children = (
+				1777E1F0FD107545870F598B /* MacScreenshot.swift */,
+			);
+			path = "UITests-mac";
+			sourceTree = "<group>";
+		};
+		78C63CA92784404D8EC46A10 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				CD19AB31AA4F0A6DD858E063 /* MacAppState.swift */,
+				6CE300DF4D1CB8C872ECF1C6 /* MacDashboardData.swift */,
+				BE52B7411BB64FCBF55E718E /* MacDateParsing.swift */,
+				A03D46509CD0CB994360A6EE /* MacKeychainHelper.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		7C9DF52239D34390F66BEB7A /* mac */ = {
+			isa = PBXGroup;
+			children = (
+				72152705F536EFA5B8C4C583 /* 1-main.png */,
+			);
+			path = mac;
+			sourceTree = "<group>";
+		};
+		8B12F9F9BDDCEFD58632185A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4BA58147703D20028DCD974A /* TalliMac.app */,
+				AF4D522BAA69042C54EEA0D3 /* TalliMacUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B95C375D38861B1A1EDE2090 /* macos */ = {
+			isa = PBXGroup;
+			children = (
+				1BD2295C1037108B2A8EF570 /* TallyMacApp.swift */,
+				D2F09362310FBA9BC12F44AF /* API */,
+				FC5B378005FE0FB8E81CCDEA /* fastlane */,
+				78C63CA92784404D8EC46A10 /* Models */,
+				EFA8EBF78F5183CCF1769CF9 /* Views */,
+			);
+			name = macos;
+			path = .;
+			sourceTree = "<group>";
+		};
+		D2F09362310FBA9BC12F44AF /* API */ = {
+			isa = PBXGroup;
+			children = (
+				DDE374C826B98CFF02FCED84 /* MacAPIClient.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		EFA8EBF78F5183CCF1769CF9 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8B92B5AB892DBD4B963F8656 /* MacBenefitsView.swift */,
+				E78526D808FDBBD806F7EF05 /* MacContentView.swift */,
+				253DEBB17503562A3842CF40 /* MacDashboardView.swift */,
+				712C08E52D3C020E27D13B54 /* MacLoginView.swift */,
+				DFB8A17CA2D95C67235E3EB7 /* MacMessagesView.swift */,
+				7B87D84FEC8981517B9093CB /* MacPaymentCalendarView.swift */,
+				829CFD35783E267E334AD80F /* MacTheme.swift */,
+				B4671E8BA45907193EDB8BC4 /* MenuBarView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		FC5B378005FE0FB8E81CCDEA /* fastlane */ = {
+			isa = PBXGroup;
+			children = (
+				50A47B05EAD85383E2010850 /* Fastfile */,
+				0E51C542C67B56F5611FECA5 /* screenshots */,
+			);
+			path = fastlane;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BCF0D51D160B18E2451B3FFB /* TalliMacUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2B856D87E8B5C53F479A496F /* Build configuration list for PBXNativeTarget "TalliMacUITests" */;
+			buildPhases = (
+				E78224797AB73FFCC0E037A9 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				68A15C10CFC205EF414ABDE8 /* PBXTargetDependency */,
+			);
+			name = TalliMacUITests;
+			packageProductDependencies = (
+			);
+			productName = TalliMacUITests;
+			productReference = AF4D522BAA69042C54EEA0D3 /* TalliMacUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		CA1CD7044DAB973754F775E5 /* TalliMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 279E024B816A7FC43B6CFD93 /* Build configuration list for PBXNativeTarget "TalliMac" */;
+			buildPhases = (
+				D2FF0BDC067BB3836A7E5E48 /* Sources */,
+				CCEBCDD3BC72FBD140412ECA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TalliMac;
+			packageProductDependencies = (
+			);
+			productName = TalliMac;
+			productReference = 4BA58147703D20028DCD974A /* TalliMac.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6EE1CDECF7802FA09B2D71D6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					BCF0D51D160B18E2451B3FFB = {
+						DevelopmentTeam = QMM486NPYC;
+						TestTargetID = CA1CD7044DAB973754F775E5;
+					};
+					CA1CD7044DAB973754F775E5 = {
+						DevelopmentTeam = QMM486NPYC;
+					};
+				};
+			};
+			buildConfigurationList = 884B2991F11AC2BF80D8D3E1 /* Build configuration list for PBXProject "TalliMac" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 2C7C8436AFBC9B947CB4B56A;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 8B12F9F9BDDCEFD58632185A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CA1CD7044DAB973754F775E5 /* TalliMac */,
+				BCF0D51D160B18E2451B3FFB /* TalliMacUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CCEBCDD3BC72FBD140412ECA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B455CDF235D6DAB3F0246739 /* 1-main.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D2FF0BDC067BB3836A7E5E48 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A839CE61888A245D80B8D1F0 /* MacAPIClient.swift in Sources */,
+				A1B3992F899C2CC9E4CD2DFC /* MacAppState.swift in Sources */,
+				2549FEFAACF6366B21309CAB /* MacBenefitsView.swift in Sources */,
+				1F33700CFE6CC60045C2907B /* MacContentView.swift in Sources */,
+				B884C9F0B1B9912B814147B5 /* MacDashboardData.swift in Sources */,
+				A4F29351A1EDEEA85B7B12D7 /* MacDashboardView.swift in Sources */,
+				0BDFE2F644478B6E4DE81162 /* MacDateParsing.swift in Sources */,
+				648A1E6A1C557E43E91DD2AB /* MacKeychainHelper.swift in Sources */,
+				170DED2AAD7B3037534ED350 /* MacLoginView.swift in Sources */,
+				190C9A49755892F5842E7855 /* MacMessagesView.swift in Sources */,
+				334EA37E0B895B20EF2496BB /* MacPaymentCalendarView.swift in Sources */,
+				B2B60C9015E6163943DC89CF /* MacTheme.swift in Sources */,
+				37291C624EBCC18BA59688CA /* MenuBarView.swift in Sources */,
+				20F63DF00971763FD2E2B77B /* TallyMacApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E78224797AB73FFCC0E037A9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F70A221F7E7CE17DEFD24A8F /* MacScreenshot.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		68A15C10CFC205EF414ABDE8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CA1CD7044DAB973754F775E5 /* TalliMac */;
+			targetProxy = 428A12E6DB8EC47AF83D62DC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1DD27AE31E8969927CD5B45E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.heyitsmejosh.tally.mac;
+				PRODUCT_NAME = Talli;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		4ABFC6C31ED1635A84A688C5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = QMM486NPYC;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		A8A48C76CD81F364C69B7C45 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = QMM486NPYC;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		DF5BF49BE3F79B9E96F21EF4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.heyitsmejosh.tally.mac;
+				PRODUCT_NAME = Talli;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		E0238FFF4628744E2D038911 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.heyitsmejosh.tally.mac.uitests;
+				SDKROOT = macosx;
+				TEST_TARGET_NAME = TalliMac;
+			};
+			name = Release;
+		};
+		E9B653BE27C7904875ACD1EC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.heyitsmejosh.tally.mac.uitests;
+				SDKROOT = macosx;
+				TEST_TARGET_NAME = TalliMac;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		279E024B816A7FC43B6CFD93 /* Build configuration list for PBXNativeTarget "TalliMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DF5BF49BE3F79B9E96F21EF4 /* Debug */,
+				1DD27AE31E8969927CD5B45E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		2B856D87E8B5C53F479A496F /* Build configuration list for PBXNativeTarget "TalliMacUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E9B653BE27C7904875ACD1EC /* Debug */,
+				E0238FFF4628744E2D038911 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		884B2991F11AC2BF80D8D3E1 /* Build configuration list for PBXProject "TalliMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A8A48C76CD81F364C69B7C45 /* Debug */,
+				4ABFC6C31ED1635A84A688C5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6EE1CDECF7802FA09B2D71D6 /* Project object */;
+}

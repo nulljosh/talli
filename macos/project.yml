@@ -1,0 +1,60 @@
+name: TalliMac
+options:
+  bundleIdPrefix: com.heyitsmejosh
+  deploymentTarget:
+    macOS: "14.0"
+settings:
+  DEVELOPMENT_TEAM: QMM486NPYC
+  SWIFT_VERSION: "6.0"
+  MARKETING_VERSION: "1.0.0"
+  CURRENT_PROJECT_VERSION: "1"
+targets:
+  TalliMac:
+    type: application
+    platform: macOS
+    sources:
+      - path: .
+        excludes:
+          - "*.xcodeproj"
+          - "*.yml"
+          - ".git"
+          - ".gitignore"
+          - "*.md"
+          - UITests-mac
+    settings:
+      base:
+        INFOPLIST_FILE: ""
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally.mac
+        PRODUCT_NAME: Talli
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+  TalliMacUITests:
+    type: bundle.ui-testing
+    platform: macOS
+    sources:
+      - UITests-mac
+    dependencies:
+      - target: TalliMac
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally.mac.uitests
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  TalliMac:
+    build:
+      targets:
+        TalliMac: all
+    run:
+      config: Debug
+    archive:
+      config: Release
+    shared: true
+  TalliMacUITests:
+    build:
+      targets:
+        TalliMac: all
+        TalliMacUITests: all
+    test:
+      targets:
+        - TalliMacUITests
+    shared: true

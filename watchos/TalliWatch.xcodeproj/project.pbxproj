@@ -1,0 +1,379 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2AEA7AA2E9CC5E990E13B2C9 /* WatchModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E030B571DA8767E818B6FF8C /* WatchModels.swift */; };
+		52E266A233C47D119A869D89 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BB9D788EBC974FA512EE6C /* ContentView.swift */; };
+		69388B3D57CAFBF8BF427160 /* PaymentGlance.swift in Sources */ = {isa = PBXBuildFile; fileRef = B283DB2161DC9443E164B5D3 /* PaymentGlance.swift */; };
+		90980628C2C7A26214D0E517 /* MessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20757C432BD6D90E0DDF267B /* MessagesView.swift */; };
+		AAFED37D10B48706CCEA3FCF /* WatchAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE149F270874070C21C023FD /* WatchAPI.swift */; };
+		AB13809A096641A6DBDF3582 /* TallyWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B498219E2A3B3FB3BF389023 /* TallyWatchApp.swift */; };
+		B96D506DA8D48E779E52D9E8 /* BenefitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B03FEF3506A072AB6E871A9 /* BenefitsView.swift */; };
+		BC7186A7F1DAB6CAEE8CB756 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C60DB201F45D83E31CBEED4C /* Assets.xcassets */; };
+		E1E85C7744F06C7B4AFC56AA /* 1-main.png in Resources */ = {isa = PBXBuildFile; fileRef = 547C5557B7FF201673CFDDB5 /* 1-main.png */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		20757C432BD6D90E0DDF267B /* MessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesView.swift; sourceTree = "<group>"; };
+		27EB02C2757EBE4E94313A69 /* TalliWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TalliWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		547C5557B7FF201673CFDDB5 /* 1-main.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1-main.png"; sourceTree = "<group>"; };
+		719C55B4C62BC55C69E70C42 /* Fastfile */ = {isa = PBXFileReference; path = Fastfile; sourceTree = "<group>"; };
+		9B03FEF3506A072AB6E871A9 /* BenefitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenefitsView.swift; sourceTree = "<group>"; };
+		B283DB2161DC9443E164B5D3 /* PaymentGlance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentGlance.swift; sourceTree = "<group>"; };
+		B498219E2A3B3FB3BF389023 /* TallyWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TallyWatchApp.swift; sourceTree = "<group>"; };
+		C60DB201F45D83E31CBEED4C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E030B571DA8767E818B6FF8C /* WatchModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchModels.swift; sourceTree = "<group>"; };
+		EE149F270874070C21C023FD /* WatchAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchAPI.swift; sourceTree = "<group>"; };
+		F9BB9D788EBC974FA512EE6C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		115296DD6B5FC70D4D03F267 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				EE149F270874070C21C023FD /* WatchAPI.swift */,
+				E030B571DA8767E818B6FF8C /* WatchModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		1CE2653A809B993B0C04F7E7 = {
+			isa = PBXGroup;
+			children = (
+				2BDCDDECBFBBEA8480E8E5D1 /* fastlane */,
+				115296DD6B5FC70D4D03F267 /* Models */,
+				EA75598F479E6CC2D563643F /* Views */,
+				BB2E195822D682B4EC71733B /* watchos */,
+				592789682682AE7B6D2C20F3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2BDCDDECBFBBEA8480E8E5D1 /* fastlane */ = {
+			isa = PBXGroup;
+			children = (
+				719C55B4C62BC55C69E70C42 /* Fastfile */,
+				9967A34576B8886B4873B9FA /* screenshots */,
+			);
+			path = fastlane;
+			sourceTree = "<group>";
+		};
+		592789682682AE7B6D2C20F3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				27EB02C2757EBE4E94313A69 /* TalliWatch.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9967A34576B8886B4873B9FA /* screenshots */ = {
+			isa = PBXGroup;
+			children = (
+				E482E0CCCA46D56BB55B17CB /* watch */,
+			);
+			path = screenshots;
+			sourceTree = "<group>";
+		};
+		BB2E195822D682B4EC71733B /* watchos */ = {
+			isa = PBXGroup;
+			children = (
+				C60DB201F45D83E31CBEED4C /* Assets.xcassets */,
+				F9BB9D788EBC974FA512EE6C /* ContentView.swift */,
+				B498219E2A3B3FB3BF389023 /* TallyWatchApp.swift */,
+				2BDCDDECBFBBEA8480E8E5D1 /* fastlane */,
+				115296DD6B5FC70D4D03F267 /* Models */,
+				EA75598F479E6CC2D563643F /* Views */,
+			);
+			name = watchos;
+			path = .;
+			sourceTree = "<group>";
+		};
+		E482E0CCCA46D56BB55B17CB /* watch */ = {
+			isa = PBXGroup;
+			children = (
+				547C5557B7FF201673CFDDB5 /* 1-main.png */,
+			);
+			path = watch;
+			sourceTree = "<group>";
+		};
+		EA75598F479E6CC2D563643F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9B03FEF3506A072AB6E871A9 /* BenefitsView.swift */,
+				20757C432BD6D90E0DDF267B /* MessagesView.swift */,
+				B283DB2161DC9443E164B5D3 /* PaymentGlance.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		428942E41AF87FFE1F87DE60 /* TalliWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 287191F70670DD2496E83BC7 /* Build configuration list for PBXNativeTarget "TalliWatch" */;
+			buildPhases = (
+				BAC9032D9CDD0A4B3C45D173 /* Sources */,
+				692AF2A5026272A20AD5663B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TalliWatch;
+			packageProductDependencies = (
+			);
+			productName = TalliWatch;
+			productReference = 27EB02C2757EBE4E94313A69 /* TalliWatch.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1D8CCC7520B65E021637231B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					428942E41AF87FFE1F87DE60 = {
+						DevelopmentTeam = QMM486NPYC;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 29432F632E5F075AE3DD4AD2 /* Build configuration list for PBXProject "TalliWatch" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 1CE2653A809B993B0C04F7E7;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 592789682682AE7B6D2C20F3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				428942E41AF87FFE1F87DE60 /* TalliWatch */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		692AF2A5026272A20AD5663B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E1E85C7744F06C7B4AFC56AA /* 1-main.png in Resources */,
+				BC7186A7F1DAB6CAEE8CB756 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BAC9032D9CDD0A4B3C45D173 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B96D506DA8D48E779E52D9E8 /* BenefitsView.swift in Sources */,
+				52E266A233C47D119A869D89 /* ContentView.swift in Sources */,
+				90980628C2C7A26214D0E517 /* MessagesView.swift in Sources */,
+				69388B3D57CAFBF8BF427160 /* PaymentGlance.swift in Sources */,
+				AB13809A096641A6DBDF3582 /* TallyWatchApp.swift in Sources */,
+				AAFED37D10B48706CCEA3FCF /* WatchAPI.swift in Sources */,
+				2AEA7AA2E9CC5E990E13B2C9 /* WatchModels.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0B03B2ED060628F807E85F7E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = QMM486NPYC;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		99FAD46380D1BC0FCAD60B9C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "";
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.heyitsmejosh.tally.watchos;
+				PRODUCT_NAME = Talli;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
+		D2AE85732E684E2D30486333 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = QMM486NPYC;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		D57019AC0461B01CA8FFC4FF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "";
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.heyitsmejosh.tally.watchos;
+				PRODUCT_NAME = Talli;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		287191F70670DD2496E83BC7 /* Build configuration list for PBXNativeTarget "TalliWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				99FAD46380D1BC0FCAD60B9C /* Debug */,
+				D57019AC0461B01CA8FFC4FF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		29432F632E5F075AE3DD4AD2 /* Build configuration list for PBXProject "TalliWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0B03B2ED060628F807E85F7E /* Debug */,
+				D2AE85732E684E2D30486333 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1D8CCC7520B65E021637231B /* Project object */;
+}

@@ -1,0 +1,10 @@
+default_platform(:mac)
+
+platform :mac do
+  desc "Capture macOS screenshot"
+  lane :mac_screenshots do
+    sh("cd .. && xcodegen generate")
+    scan(project: "../TalliMac.xcodeproj", scheme: "TalliMacUITests")
+    sh("mkdir -p ../fastlane/screenshots/mac && cp ~/Library/Containers/com.heyitsmejosh.tally.mac.uitests.xctrunner/Data/tmp/talli-mac-screenshots/*.png ../fastlane/screenshots/mac/")
+  end
+end
