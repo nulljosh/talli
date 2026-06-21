@@ -13,7 +13,11 @@ final class MacScreenshot: XCTestCase {
         app.launch()
         sleep(5)
 
-        let screenshot = XCUIScreen.main.screenshot()
+        app.activate()
+        sleep(1)
+        XCTAssertTrue(app.windows.firstMatch.waitForExistence(timeout: 10), "App window never appeared")
+        let window = app.windows.allElementsBoundByIndex.first { $0.frame.width > 200 && $0.frame.height > 200 } ?? app.windows.firstMatch
+        let screenshot = window.screenshot()
         let dir = NSTemporaryDirectory() + "talli-mac-screenshots"
         do {
             try FileManager.default.createDirectory(atPath: dir, withIntermediateDirectories: true)

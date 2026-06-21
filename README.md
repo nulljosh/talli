@@ -73,3 +73,8 @@ Talli ships FREE — audience is income-assistance recipients, never paywall it.
 - [x] Screenshots regenerated at correct App Store resolutions (1242×2688 / 1284×2778)
 - [x] Submitted for review 2026-06-20 — status: Waiting for Review
 - [ ] Fix Xcode Cloud workflow: still points at old `Tally.xcodeproj`, needs repoint to `Talli.xcodeproj` in Manage Workflows
+
+## Known issues / next session (macOS companion, scaffolded 2026-06-20)
+- macOS app's UI test still fails to launch a window reliably ("App window never appeared") — screenshot automation not working yet for macOS.
+- macOS app icon not displaying correctly (showing generic placeholder in Dock) despite `AppIcon.appiconset` being generated from the iOS source icon — likely an asset catalog compile or `ASSETCATALOG_COMPILER_APPICON_NAME` wiring issue, needs a clean investigation, not another guess-and-rebuild pass.
+- watchOS screenshot lane works and is verified (real payment data, not blank).
