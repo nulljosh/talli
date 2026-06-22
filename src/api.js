@@ -1129,10 +1129,40 @@ async function fetchOrLoadData(req, { allowLiveScrape = true } = {}) {
     liveCache.delete(userId);
   }
 
-  // Try live HTTP scrape (45s timeout)
+  // Background refresh helper: runs the live scrape without blocking the response,
+  // and updates the TTL cache + Blob for the next request.
+  function refreshLiveInBackground() {
+    if (!creds || !allowLiveScrape) return;
+    fetchAllSectionsWithHybridAuth(creds.username, creds.password).then(result => {
+      if (result && result.success) {
+        log('[API] Background live HTTP scrape succeeded');
+        lastCheckResult = { ...result, checkedAt: new Date().toISOString() };
+        saveUserBlob(userId, 'results', lastCheckResult).catch(err => log('[API] Blob persist failed:', err.message));
+        mergeScrapedReportMonths(req, userId, result).catch(err => log('[API] Report-month merge failed:', err.message));
+        if (userId) {
+          liveCache.set(userId, { ts: Date.now(), result: { source: 'live', data: result } });
+        }
+      } else {
+        log('[API] Background live scrape returned failure:', result?.error);
+      }
+    }).catch(err => log('[API] Background live scrape failed:', err.message));
+  }
+
+  // Stale-while-revalidate: if we already have cached data (Blob/in-memory), return it
+  // immediately and refresh live in the background instead of blocking the response
+  // on a fresh ~30s scrape. Only block on a live scrape when there is no cache at all
+  // (e.g. first login ever for this user).
+  const blobData = await loadUserBlob(userId, 'results', null);
+  if (blobData) {
+    refreshLiveInBackground();
+    log('[API] Returning data from Vercel Blob (refreshing live in background)');
+    return { source: 'vercel-blob', data: blobData };
+  }
+
+  // No cache yet: block on a live HTTP scrape (45s timeout)
   if (creds && allowLiveScrape) {
     try {
-      log('[API] Attempting live HTTP scrape...');
+      log('[API] No cache available, attempting live HTTP scrape...');
       const result = await Promise.race([
         fetchAllSectionsWithHybridAuth(creds.username, creds.password),
         new Promise((_, reject) => setTimeout(() => reject(new Error('Live scrape timeout')), 45000))
@@ -1140,10 +1170,7 @@ async function fetchOrLoadData(req, { allowLiveScrape = true } = {}) {
       if (result && result.success) {
         log('[API] Live HTTP scrape succeeded');
         lastCheckResult = { ...result, checkedAt: new Date().toISOString() };
-        // Write to Blob in background (fire-and-forget)
         saveUserBlob(userId, 'results', lastCheckResult).catch(err => log('[API] Blob persist failed:', err.message));
-        // Merge scraped report-submission months into report-status (fire-and-forget,
-        // guarded so a parse miss never breaks the scrape). Scrape only adds months.
         mergeScrapedReportMonths(req, userId, result).catch(err => log('[API] Report-month merge failed:', err.message));
         const liveResult = { source: 'live', data: result };
         if (userId) {
@@ -1155,13 +1182,6 @@ async function fetchOrLoadData(req, { allowLiveScrape = true } = {}) {
     } catch (err) {
       log('[API] Live scrape failed:', err.message);
     }
-  }
-
-  // Fall back to Blob cache
-  const blobData = await loadUserBlob(userId, 'results', null);
-  if (blobData) {
-    log('[API] Returning data from Vercel Blob');
-    return { source: 'vercel-blob', data: blobData };
   }
 
   // Fall back to in-memory

@@ -1008,7 +1008,7 @@ function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, av
 // ════════════════════════════════════════════════════
 const TAB_ORDER = ['home','calendar','status','messages'];
 
-function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, username, onLogout, avatarUrl, onAvatarClick, avatarError, setAvatarError, skn, reportMonths, onMarkFiled, onPwdResubmitted, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
+function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, username, onLogout, avatarUrl, onAvatarClick, avatarError, setAvatarError, skn, reportMonths, onMarkFiled, onPwdResubmitted, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
   const t = tk(dark);
   const [tab, setTab] = useState('home');
   const [showSubmit, setShowSubmit] = useState(false);
@@ -1247,7 +1247,7 @@ function App() {
   };
 
   return (
-    <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} readIds={readIds} onRead={mergeReadIds} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} setAvatarError={setAvatarError} skn={skn} reportMonths={reportMonths} onMarkFiled={handleMarkFiled} onPwdResubmitted={handlePwdResubmitted} pinSet={pinSet} setPinSet={setPinSet} showPinSheet={showPinSheet} setShowPinSheet={setShowPinSheet}/>
+    <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} readIds={readIds} onRead={mergeReadIds} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} setAvatarError={setAvatarError} skn={skn} reportMonths={reportMonths} onMarkFiled={handleMarkFiled} onPwdResubmitted={handlePwdResubmitted} pinSet={pinSet} setPinSet={setPinSet} showPinSheet={showPinSheet} setShowPinSheet={setShowPinSheet}/>
   );
 }
 
