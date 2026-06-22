@@ -22,6 +22,7 @@ function run() {
     'http://localhost:3000',
     'http://127.0.0.1:3000',
     'https://talli-production.vercel.app',
+    'https://talli.heyitsmejosh.com',
     'https://tally.heyitsmejosh.com'
   ];
   const ALLOWED_ORIGINS = new Set(allowedOrigins);
@@ -55,6 +56,10 @@ function run() {
   });
 
   test('POST from production origin passes', () => {
+    assert.strictEqual(checkOrigin('POST', 'https://talli.heyitsmejosh.com'), 'pass');
+  });
+
+  test('POST from old tally domain still passes (not yet decommissioned)', () => {
     assert.strictEqual(checkOrigin('POST', 'https://tally.heyitsmejosh.com'), 'pass');
   });
 

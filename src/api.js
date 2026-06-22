@@ -333,7 +333,7 @@ async function fetchAllSectionsWithHybridAuth(username, password) {
 
 const allowedOrigins = parseAllowedOrigins(
   process.env.CORS_ORIGINS,
-  'http://localhost:3000,http://127.0.0.1:3000,https://talli-production.vercel.app,https://tally.heyitsmejosh.com'
+  'http://localhost:3000,http://127.0.0.1:3000,https://talli-production.vercel.app,https://talli.heyitsmejosh.com,https://tally.heyitsmejosh.com'
 );
 
 app.use(cors(createCorsOptionsDelegate(allowedOrigins)));
