@@ -22,7 +22,7 @@ final class MacAPIClient: @unchecked Sendable {
     static let shared = MacAPIClient()
 
     // swiftlint:disable:next force_unwrapping
-    private let baseURL = URL(string: "https://tally.heyitsmejosh.com")!
+    private let baseURL = URL(string: "https://talli.heyitsmejosh.com")!
     private let session: URLSession
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
