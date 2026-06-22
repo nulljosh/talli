@@ -2,7 +2,7 @@
 
 # Talli
 
-![version](https://img.shields.io/badge/version-v3.5.1-orange)
+![version](https://img.shields.io/badge/version-v3.5.2-orange)
 ![App Store](https://img.shields.io/badge/App%20Store-Waiting%20for%20Review-yellow)
 
 Live at [talli.heyitsmejosh.com](https://talli.heyitsmejosh.com)
