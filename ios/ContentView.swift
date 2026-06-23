@@ -349,14 +349,6 @@ private struct DashboardScreen: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 Spacer()
-                Text(appState.countdownText)
-                    .font(.subheadline.weight(.bold))
-            }
-            HStack {
-                Text("Countdown")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                Spacer()
                 Text(liveCountdownText)
                     .font(.subheadline.weight(.bold).monospacedDigit())
                     .contentTransition(.numericText())

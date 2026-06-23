@@ -9,11 +9,11 @@ struct SplashView: View {
                 .frame(width: 88, height: 88)
 
             Text("Talli")
-                .font(.custom("Fraunces-9ptBlack", size: 38))
+                .font(.system(size: 38, weight: .bold))
                 .foregroundStyle(.primary)
 
             Text("Your benefits. No bureaucracy.")
-                .font(.custom("DMSans-9ptRegular", size: 15))
+                .font(.system(size: 15))
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
