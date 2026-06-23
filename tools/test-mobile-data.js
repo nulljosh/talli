@@ -17,7 +17,7 @@ function extractMobileData(scraperResult) {
   const fallbackAmount = designationMatch ? '~$1,500-1,700/mo' : '~$1,000/mo';
 
   const payDates2026 = {
-    0: 21, 1: 25, 2: 25, 3: 23, 4: 27, 5: 25,
+    0: 21, 1: 25, 2: 25, 3: 23, 4: 27, 5: 24,
     6: 23, 7: 26, 8: 24, 9: 28, 10: 25, 11: 16
   };
   const now = new Date();
