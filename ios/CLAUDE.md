@@ -1,6 +1,6 @@
 # Talli iOS
 
-v2.4.2
+v2.4.3
 
 ## Rules
 
@@ -44,3 +44,4 @@ xcodebuild -scheme Talli -destination 'platform=iOS Simulator,name=iPhone 17 Pro
 - API/APIClient.swift: BC Self-Serve networking with cookie-based auth
 - KeychainHelper.swift: secure credential storage for biometric sign-in
 - Services/CSVExporter.swift: dashboard CSV export
+- Changelog v2.4.3 (2026-06-28): Replaced plain TabView with custom FloatingTabBar (regularMaterial capsule, haptics, fill/unfill SF symbol variants, symbolEffect bounce on selection). New tab symbols: house/house.fill, list.bullet.clipboard/fill, heart.text.clipboard/fill, message/message.fill, gearshape/gearshape.fill. MessagesView always visible (stable tab indices), unread count shown as orange dot badge.
