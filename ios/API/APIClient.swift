@@ -143,11 +143,11 @@ final class APIClient: @unchecked Sendable {
         try await send(path: "api/paid-status", responseType: PaidStatus.self)
     }
 
-    func setPaidStatus(paid: Bool) async throws -> PaidStatus {
+    func setPaidStatus(paid: Bool, month: String) async throws -> PaidStatus {
         try await send(
             path: "api/paid-status",
             method: "POST",
-            body: PaidStatusRequest(paid: paid),
+            body: PaidStatusRequest(paid: paid, month: month),
             responseType: PaidStatus.self
         )
     }
@@ -257,6 +257,7 @@ private struct CheckResponse: Decodable {
 
 private struct PaidStatusRequest: Encodable {
     let paid: Bool
+    let month: String
 }
 
 private struct ReadMessagesRequest: Encodable {

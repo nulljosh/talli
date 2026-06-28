@@ -159,12 +159,17 @@ final class AppState {
         _ = try? await APIClient.shared.markMessagesRead(ids: allIds)
     }
 
+    private func currentMonthKey() -> String {
+        let c = Calendar.current; let now = Date()
+        return String(format: "%04d-%02d", c.component(.year, from: now), c.component(.month, from: now))
+    }
+
     var isPaid: Bool {
-        paidStatus?.paid ?? false
+        paidStatus?.paidMonths[currentMonthKey()] != nil
     }
 
     var paidDateText: String? {
-        guard let raw = paidStatus?.updatedAt, !raw.isEmpty,
+        guard let raw = paidStatus?.paidMonths[currentMonthKey()], !raw.isEmpty,
               let date = DateParsing.parse(raw) else { return nil }
         return date.formatted(.dateTime.month(.abbreviated).day())
     }
@@ -196,10 +201,13 @@ final class AppState {
     func togglePaid() async {
         guard isAuthenticated else { return }
         let previous = paidStatus
-        let newValue = !(paidStatus?.paid ?? false)
-        paidStatus = PaidStatus(paid: newValue, month: previous?.month, updatedAt: newValue ? ISO8601DateFormatter().string(from: Date()) : nil)
+        let key = currentMonthKey()
+        let newValue = paidStatus?.paidMonths[key] == nil
+        var months = paidStatus?.paidMonths ?? [:]
+        if newValue { months[key] = ISO8601DateFormatter().string(from: Date()) } else { months.removeValue(forKey: key) }
+        paidStatus = PaidStatus(paidMonths: months)
         do {
-            paidStatus = try await APIClient.shared.setPaidStatus(paid: newValue)
+            paidStatus = try await APIClient.shared.setPaidStatus(paid: newValue, month: key)
         } catch {
             paidStatus = previous
         }
