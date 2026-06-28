@@ -11,11 +11,9 @@ final class MacScreenshot: XCTestCase {
         let app = XCUIApplication()
         app.launchArguments.append("UITEST_SNAPSHOT")
         app.launch()
-        sleep(5)
-
         app.activate()
-        sleep(1)
-        XCTAssertTrue(app.windows.firstMatch.waitForExistence(timeout: 10), "App window never appeared")
+        XCTAssertTrue(app.windows.firstMatch.waitForExistence(timeout: 20), "App window never appeared")
+        sleep(2)
         let window = app.windows.allElementsBoundByIndex.first { $0.frame.width > 200 && $0.frame.height > 200 } ?? app.windows.firstMatch
         let screenshot = window.screenshot()
         let dir = NSTemporaryDirectory() + "talli-mac-screenshots"

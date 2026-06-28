@@ -12,10 +12,15 @@
 		190C9A49755892F5842E7855 /* MacMessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB8A17CA2D95C67235E3EB7 /* MacMessagesView.swift */; };
 		1F33700CFE6CC60045C2907B /* MacContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78526D808FDBBD806F7EF05 /* MacContentView.swift */; };
 		2549FEFAACF6366B21309CAB /* MacBenefitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B92B5AB892DBD4B963F8656 /* MacBenefitsView.swift */; };
+		30CD73D4F75B6CFD187EF955 /* report.html in Resources */ = {isa = PBXBuildFile; fileRef = 26260F591117D95D2B446F20 /* report.html */; };
 		334EA37E0B895B20EF2496BB /* MacPaymentCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B87D84FEC8981517B9093CB /* MacPaymentCalendarView.swift */; };
 		37291C624EBCC18BA59688CA /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4671E8BA45907193EDB8BC4 /* MenuBarView.swift */; };
+		3A6A4D70BA51734063B5DCCB /* report.junit in Resources */ = {isa = PBXBuildFile; fileRef = 015603584AB9D3BC02491476 /* report.junit */; };
 		4BCA3DBEDCAA96B862C734FA /* TalliMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD291A0A6F3E178AE7DBC14D /* TalliMacApp.swift */; };
+		5CBF96C584EFB1F6848590BE /* report.xml in Resources */ = {isa = PBXBuildFile; fileRef = 651FFE4C7B53C1922457B7AE /* report.xml */; };
 		648A1E6A1C557E43E91DD2AB /* MacKeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D46509CD0CB994360A6EE /* MacKeychainHelper.swift */; };
+		6DA36D4C7790AC741B9CDF3B /* Talli.app.dSYM.zip in Resources */ = {isa = PBXBuildFile; fileRef = 5A62AEEE17B48A48D251C01E /* Talli.app.dSYM.zip */; };
+		A07B615F4F5F41F18BE41764 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = B17112A976A5037B337C6A40 /* README.md */; };
 		A1B3992F899C2CC9E4CD2DFC /* MacAppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD19AB31AA4F0A6DD858E063 /* MacAppState.swift */; };
 		A4F29351A1EDEEA85B7B12D7 /* MacDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 253DEBB17503562A3842CF40 /* MacDashboardView.swift */; };
 		A839CE61888A245D80B8D1F0 /* MacAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE374C826B98CFF02FCED84 /* MacAPIClient.swift */; };
@@ -36,10 +41,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		015603584AB9D3BC02491476 /* report.junit */ = {isa = PBXFileReference; path = report.junit; sourceTree = "<group>"; };
 		1777E1F0FD107545870F598B /* MacScreenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacScreenshot.swift; sourceTree = "<group>"; };
 		253DEBB17503562A3842CF40 /* MacDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDashboardView.swift; sourceTree = "<group>"; };
-		4BA58147703D20028DCD974A /* Talli.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Talli.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		50A47B05EAD85383E2010850 /* Fastfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Fastfile; sourceTree = "<group>"; };
+		26260F591117D95D2B446F20 /* report.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = report.html; sourceTree = "<group>"; };
+		4BA58147703D20028DCD974A /* TalliMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TalliMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		50A47B05EAD85383E2010850 /* Fastfile */ = {isa = PBXFileReference; path = Fastfile; sourceTree = "<group>"; };
+		5A62AEEE17B48A48D251C01E /* Talli.app.dSYM.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = Talli.app.dSYM.zip; sourceTree = "<group>"; };
+		63A17E7510CFCFBFACA72F49 /* Talli.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Talli.entitlements; sourceTree = "<group>"; };
+		651FFE4C7B53C1922457B7AE /* report.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = report.xml; sourceTree = "<group>"; };
 		6CE300DF4D1CB8C872ECF1C6 /* MacDashboardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDashboardData.swift; sourceTree = "<group>"; };
 		712C08E52D3C020E27D13B54 /* MacLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacLoginView.swift; sourceTree = "<group>"; };
 		7B87D84FEC8981517B9093CB /* MacPaymentCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPaymentCalendarView.swift; sourceTree = "<group>"; };
@@ -47,6 +57,7 @@
 		8B92B5AB892DBD4B963F8656 /* MacBenefitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBenefitsView.swift; sourceTree = "<group>"; };
 		A03D46509CD0CB994360A6EE /* MacKeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacKeychainHelper.swift; sourceTree = "<group>"; };
 		AF4D522BAA69042C54EEA0D3 /* TalliMacUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalliMacUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B17112A976A5037B337C6A40 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		B4671E8BA45907193EDB8BC4 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		BE52B7411BB64FCBF55E718E /* MacDateParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDateParsing.swift; sourceTree = "<group>"; };
 		BEEEC581169CEBE335A51EF3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -79,6 +90,15 @@
 			path = "UITests-mac";
 			sourceTree = "<group>";
 		};
+		5F54C9519C1265F183F6B394 /* test_output */ = {
+			isa = PBXGroup;
+			children = (
+				26260F591117D95D2B446F20 /* report.html */,
+				015603584AB9D3BC02491476 /* report.junit */,
+			);
+			path = test_output;
+			sourceTree = "<group>";
+		};
 		78C63CA92784404D8EC46A10 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -93,7 +113,7 @@
 		8B12F9F9BDDCEFD58632185A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4BA58147703D20028DCD974A /* Talli.app */,
+				4BA58147703D20028DCD974A /* TalliMac.app */,
 				AF4D522BAA69042C54EEA0D3 /* TalliMacUITests.xctest */,
 			);
 			name = Products;
@@ -103,7 +123,13 @@
 			isa = PBXGroup;
 			children = (
 				BEEEC581169CEBE335A51EF3 /* Assets.xcassets */,
+				5A62AEEE17B48A48D251C01E /* Talli.app.dSYM.zip */,
+				63A17E7510CFCFBFACA72F49 /* Talli.entitlements */,
 				CD291A0A6F3E178AE7DBC14D /* TalliMacApp.swift */,
+				D2F09362310FBA9BC12F44AF /* API */,
+				FC5B378005FE0FB8E81CCDEA /* fastlane */,
+				78C63CA92784404D8EC46A10 /* Models */,
+				EFA8EBF78F5183CCF1769CF9 /* Views */,
 			);
 			name = macos;
 			path = .;
@@ -136,8 +162,18 @@
 			isa = PBXGroup;
 			children = (
 				50A47B05EAD85383E2010850 /* Fastfile */,
+				B17112A976A5037B337C6A40 /* README.md */,
+				651FFE4C7B53C1922457B7AE /* report.xml */,
+				5F54C9519C1265F183F6B394 /* test_output */,
 			);
 			path = fastlane;
+			sourceTree = "<group>";
+		};
+		"TEMP_7FA0CE77-B887-40CA-935D-C22895CAFB1F" /* screenshots */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = screenshots;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -176,7 +212,7 @@
 			packageProductDependencies = (
 			);
 			productName = TalliMac;
-			productReference = 4BA58147703D20028DCD974A /* Talli.app */;
+			productReference = 4BA58147703D20028DCD974A /* TalliMac.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -186,7 +222,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 2650;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					BCF0D51D160B18E2451B3FFB = {
 						DevelopmentTeam = QMM486NPYC;
@@ -194,6 +230,7 @@
 					};
 					CA1CD7044DAB973754F775E5 = {
 						DevelopmentTeam = QMM486NPYC;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -223,6 +260,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4FDF05C00F33D7F703A260E /* Assets.xcassets in Resources */,
+				A07B615F4F5F41F18BE41764 /* README.md in Resources */,
+				6DA36D4C7790AC741B9CDF3B /* Talli.app.dSYM.zip in Resources */,
+				30CD73D4F75B6CFD187EF955 /* report.html in Resources */,
+				3A6A4D70BA51734063B5DCCB /* report.junit in Resources */,
+				5CBF96C584EFB1F6848590BE /* report.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,16 +315,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Talli.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "";
 				INFOPLIST_KEY_CFBundleDisplayName = Talli;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.heyitsmejosh.tally.mac;
 				PRODUCT_NAME = Talli;
 				SDKROOT = macosx;
@@ -324,12 +371,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = QMM486NPYC;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -339,12 +384,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 6.0;
@@ -386,12 +430,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = QMM486NPYC;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -407,13 +449,12 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 6.0;
@@ -424,16 +465,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Talli.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "";
 				INFOPLIST_KEY_CFBundleDisplayName = Talli;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.heyitsmejosh.tally.mac;
 				PRODUCT_NAME = Talli;
 				SDKROOT = macosx;
@@ -445,7 +491,6 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -463,7 +508,6 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
