@@ -133,6 +133,7 @@ struct ReportView: View {
                 Text("Next deadline: \(nextDeadline.formatted(date: .complete, time: .omitted))")
             }
         }
+        .safeAreaInset(side: .bottom) { Color.clear.frame(height: 90) }
         .navigationTitle("Reports")
         .task {
             loadSavedSecrets()

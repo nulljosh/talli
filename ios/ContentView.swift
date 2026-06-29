@@ -233,6 +233,47 @@ private struct TimelineCard: View {
     }
 }
 
+private struct ApplicationTimelinesCard: View {
+    let pwdSteps: [(label: String, date: String, done: Bool)]
+    let dtcSteps: [(label: String, date: String, done: Bool)]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            timelineSection(title: "PWD APPLICATION", steps: pwdSteps)
+            Divider()
+            timelineSection(title: "DTC APPLICATION", steps: dtcSteps)
+        }
+        .padding()
+        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
+    }
+
+    private func timelineSection(title: String, steps: [(label: String, date: String, done: Bool)]) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(title)
+                .font(.system(size: 11, weight: .semibold))
+                .tracking(1.5)
+                .foregroundStyle(.secondary)
+
+            ForEach(steps, id: \.label) { step in
+                HStack(alignment: .top, spacing: 12) {
+                    Circle()
+                        .fill(step.done ? Color.primary : Color.secondary.opacity(0.3))
+                        .frame(width: 10, height: 10)
+                        .padding(.top, 4)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(step.label)
+                            .font(.subheadline.weight(.medium))
+                        Text(step.date)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+        }
+    }
+}
+
 private struct DashboardScreen: View {
     @Environment(AppState.self) private var appState
     @State private var now = Date()
@@ -272,8 +313,7 @@ private struct DashboardScreen: View {
                 statsGrid
                 paidToggle
                 dateCard
-                TimelineCard(title: "PWD APPLICATION", steps: pwdSteps)
-                TimelineCard(title: "DTC APPLICATION", steps: dtcSteps)
+                ApplicationTimelinesCard(pwdSteps: pwdSteps, dtcSteps: dtcSteps)
                 craPayments
 
                 if !appState.statusMessages.isEmpty {
@@ -282,6 +322,7 @@ private struct DashboardScreen: View {
             }
             .padding()
         }
+        .safeAreaInset(side: .bottom) { Color.clear.frame(height: 90) }
         .refreshable { await appState.refreshDashboard() }
         .task { await appState.loadDashboardIfNeeded() }
         .onReceive(ticker) { now = $0 }
@@ -392,7 +433,7 @@ private struct DashboardScreen: View {
 
     private var dateCard: some View {
         VStack(spacing: 12) {
-            PaymentCalendarView(paymentDate: appState.parsedNextPaymentDate)
+            PaymentCalendarView(paymentDate: appState.parsedNextPaymentDate, today: now)
 
             HStack {
                 Text(appState.nextPaymentDateText)

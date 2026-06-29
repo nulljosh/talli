@@ -2,6 +2,7 @@ import SwiftUI
 
 struct PaymentCalendarView: View {
     let paymentDate: Date?
+    var today: Date = Date()
 
     private let calendar = Calendar.current
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
@@ -24,7 +25,7 @@ struct PaymentCalendarView: View {
 
         var cells: [DayCell] = (0..<paddingCount).map { _ in DayCell(day: nil, isPaymentDay: false, isToday: false) }
 
-        let today = calendar.startOfDay(for: Date())
+        let today = calendar.startOfDay(for: today)
         let paymentDay = paymentDate.map { calendar.component(.day, from: $0) }
 
         for day in range {

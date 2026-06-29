@@ -59,25 +59,16 @@ Deploy: push to `main` — GitHub Actions auto-deploys to Vercel prod on every p
 MIT 2026 Joshua Trommel
 
 ## Roadmap
-- [x] Top-right avatar spins while regenerating (refresh state lifted into Screen) — both avatars animate
-- [x] Hid the settings entry in the bottom nav; top-right avatar is now the settings link
-- [ ] Avatar still does not persist across reloads (avatarUrl not rehydrated on load) — separate fix
+- [ ] Avatar still does not persist across reloads (avatarUrl not rehydrated on load)
 - [ ] Sync mobile and web: web is missing the countdown the mobile app already has
 - [ ] Improve countdown functionality and UI
 - [ ] Rework the increasing-payment-per-hour model: pay is a monthly lump sum, so either remove the increasing-accrual visual or redesign it to read as a steady rate paid out monthly
 
 ### App Store submission (free, keep BC Self-Serve auto-login)
 Talli ships FREE — audience is income-assistance recipients, never paywall it. It's the proof-of-competence flagship, not a revenue line.
-- [x] Privacy policy page (`web/privacy.html`, live at `/privacy`)
-- [x] App Store Connect listing complete (category, subtitle, age rating, content rights)
-- [x] Screenshots regenerated at correct App Store resolutions (1242×2688 / 1284×2778)
-- [x] Submitted for review 2026-06-20 — status: Waiting for Review
 - [ ] Fix Xcode Cloud workflow: still points at old `Tally.xcodeproj`, needs repoint to `Talli.xcodeproj` in Manage Workflows
 - [ ] Mac TestFlight: `fastlane mac_beta` lane added 2026-06-21, archive builds clean, but upload fails — no macOS app record exists yet in App Store Connect for `com.heyitsmejosh.tally.mac`. Create the app record (one-time, manual) then re-run `fastlane mac_beta` in `macos/fastlane`.
 
-### macOS companion (scaffolded 2026-06-20, partially working)
-- [x] Window now opens correctly — root cause was a stale macOS window-restoration state (`~/Library/Saved Application State/com.heyitsmejosh.tally.mac.savedState`) corrupted by repeated forced-quits during today's testing, not a code bug. Confirmed fixed after clearing it.
-- [ ] **App icon still shows generic placeholder** in the Dock despite a correct `AppIcon.appiconset` + `ASSETCATALOG_COMPILER_APPICON_NAME` — assets/config both check out, this looks like a stale LaunchServices/Dock icon cache from rebuilding under the same bundle ID, not a code defect. Fix: after a clean rebuild, clear the cache (`killall Dock` and/or `qlmanage -r cache`) rather than chasing it as a code bug.
-- [x] **Sign-in fixed** — root cause: `MacAPIClient.execute()` short-circuited every HTTP 401 to a generic "Session expired" error before decoding the body, but the server also returns 401 with the real BC Self-Serve failure reason on a fresh failed login (not just on session expiry). `login()` now decodes the body directly and surfaces `error` from the response instead of swallowing it. Verified via `xcodebuild build` (BUILD SUCCEEDED); live-credential UI test still pending.
-- [x] watchOS screenshot lane works and is verified (real payment data, not blank).
-- [ ] macOS screenshot still pending — re-add once the icon cache issue above is cleared (sign-in is no longer a blocker).
+### macOS companion
+- [ ] **App icon still shows generic placeholder** in the Dock — stale LaunchServices/Dock icon cache. Fix: clean rebuild, then `killall Dock` and/or `qlmanage -r cache`.
+- [ ] macOS screenshot still pending — icon cache issue is the only blocker.
