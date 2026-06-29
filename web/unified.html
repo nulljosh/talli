@@ -1063,6 +1063,29 @@ function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidC
 // ════════════════════════════════════════════════════
 // APP (data fetching)
 // ════════════════════════════════════════════════════
+function WhatsNew({ dark }) {
+  const t = tk(dark);
+  const VER = '3.5.2', KEY = 'talli_whats_new_seen';
+  const [open, setOpen] = useState(() => localStorage.getItem(KEY) !== VER);
+  const dismiss = () => { localStorage.setItem(KEY, VER); setOpen(false); };
+  if (!open) return null;
+  return (
+    <div onClick={dismiss} style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(0,0,0,0.55)',backdropFilter:'blur(8px)',WebkitBackdropFilter:'blur(8px)',display:'flex',alignItems:'center',justifyContent:'center'}}>
+      <div onClick={e=>e.stopPropagation()} style={{background:t.bg,border:`1px solid ${t.border2}`,borderRadius:14,padding:'28px 28px',maxWidth:360,width:'90%',position:'relative',fontFamily:'"DM Sans",system-ui,sans-serif'}}>
+        <button onClick={dismiss} style={{position:'absolute',top:12,right:14,background:'transparent',border:'none',color:t.muted,fontSize:20,cursor:'pointer',padding:4,lineHeight:1}}>×</button>
+        <div style={{fontSize:15,fontWeight:600,marginBottom:14,color:t.text}}>What's New in v{VER}</div>
+        <ul style={{paddingLeft:18,lineHeight:1.8,marginBottom:20,color:t.mutedMid,fontSize:13}}>
+          <li>Status tab fixed — all program data now loads correctly</li>
+          <li>Faster login — cached data loads instantly</li>
+          <li>Monthly reports auto-detected from BC Self-Serve</li>
+          <li>Bilingual support (EN / FR)</li>
+        </ul>
+        <button onClick={dismiss} style={{width:'100%',padding:'10px 0',background:t.accent,color:'#fff',border:'none',borderRadius:8,cursor:'pointer',fontSize:14,fontWeight:600,fontFamily:'"DM Sans",system-ui,sans-serif'}}>Got it</button>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [dark,        setDark]        = useState(window.matchMedia('(prefers-color-scheme: dark)').matches);
   const [username,    setUsername]    = useState('');
@@ -1248,7 +1271,10 @@ function App() {
   };
 
   return (
+    <>
+    <WhatsNew dark={dark} />
     <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} readIds={readIds} onRead={mergeReadIds} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} setAvatarError={setAvatarError} skn={skn} reportMonths={reportMonths} onMarkFiled={handleMarkFiled} onPwdResubmitted={handlePwdResubmitted} pinSet={pinSet} setPinSet={setPinSet} showPinSheet={showPinSheet} setShowPinSheet={setShowPinSheet}/>
+    </>
   );
 }
 
