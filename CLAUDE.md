@@ -1,5 +1,7 @@
 # Talli
 
+v3.5.2 — Personal finance tracker.
+
 ## Rules
 - No emojis anywhere
 - Live at talli.heyitsmejosh.com (renamed from tally.heyitsmejosh.com 2026-06-20 — repo, domain, and portfolio link all updated; old `tally` subdomain still resolves but is not the canonical link)
