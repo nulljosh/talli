@@ -21,9 +21,9 @@
   --warning: #d97706;
   --error: #c0392b;
 
-  /* Typography — monospace to match portfolio */
-  --font-primary: ui-monospace, "SF Mono", Monaco, "Cascadia Code", monospace;
-  --font-display: ui-monospace, "SF Mono", Monaco, "Cascadia Code", monospace;
+  /* Typography */
+  --font-primary: "DM Sans", system-ui, -apple-system, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
 
   /* Font Sizes */
   --text-xs: 0.6875rem;
