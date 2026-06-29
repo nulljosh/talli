@@ -1,0 +1,13 @@
+{
+  "appId": "6782366555",
+  "bundleId": "com.heyitsmejosh.tally",
+  "scheme": "Talli",
+  "platforms": ["ios"],
+  "simulator": "iPhone 11 Pro Max",
+  "iosDir": "ios",
+  "xcodeProject": "ios/Talli.xcodeproj",
+  "exportOptions": "ios/.asc/artifacts/ExportOptions.plist",
+  "archivePath": "ios/.asc/artifacts/Talli.xcarchive",
+  "ipaPath": "ios/.asc/artifacts/Talli.ipa",
+  "screenshots": {}
+}
