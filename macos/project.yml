@@ -22,6 +22,8 @@ targets:
           - "*.md"
           - "*.app"
           - "*.pkg"
+          - ".asc"
+          - "fastlane"
           - UITests-mac
     settings:
       base:
