@@ -20,7 +20,7 @@ struct BenefitsView: View {
             }
             .padding()
         }
-        .safeAreaInset(side: .bottom) { Color.clear.frame(height: 90) }
+        .padding(.bottom, 90)
         .navigationTitle("Benefits")
     }
 
