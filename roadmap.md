@@ -1,10 +1,6 @@
 # Talli Roadmap
 
 ## App Store Connect (2026-06-22)
-- [x] Confirmed local macOS AppIcon set is complete and valid — placeholder in ASC was just a missing-build issue, not a missing-asset issue.
-- [x] Content rights declaration set (does not use third-party content).
-- [x] Copyright set on the macOS version record.
-- [x] Fixed version mismatch (1.0.0 → 1.0) and archived/exported/uploaded a build.
 - [ ] **Build upload failed ASC processing** (error code 90189, no detail text via API) — check the Apple validation email for the real reason, fix, then re-upload.
 - [ ] Support URL still missing — required before submission.
 
