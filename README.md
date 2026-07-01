@@ -58,6 +58,18 @@ Deploy: push to `main` — GitHub Actions auto-deploys to Vercel prod on every p
 
 MIT 2026 Joshua Trommel
 
+## This Week / This Month
+
+**This week**
+- [ ] Watch iOS v3.5.1 clear App Store review
+- [ ] Fix Xcode Cloud workflow pointing at old `Tally.xcodeproj`
+- [ ] Avatar persistence bug (avatarUrl not rehydrated)
+
+**This month**
+- [ ] macOS App Store submission (app record + `mac_beta` upload)
+- [ ] Sync mobile/web countdown feature gap
+- [ ] Rework increasing-payment-per-hour model (lump sum, not accrual)
+
 ## Roadmap
 - [ ] Avatar still does not persist across reloads (avatarUrl not rehydrated on load)
 - [ ] Sync mobile and web: web is missing the countdown the mobile app already has
