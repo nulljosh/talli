@@ -13,3 +13,9 @@
 
 ## Imported from Talli.pdf (2026-06-21)
 - [ ] Login still broken (reported again) — re-checked `src/api.js` session handling: `SESSION_SECRET` IS set in Vercel production (ruled out the leading theory). Still can't reproduce without real BC Self-Serve creds in this environment. Needs Joshua to repro live and capture the actual error/network response.
+
+## Imported from Talli.pdf (2026-07-01)
+- [ ] Calendar date is stale, showing last week instead of current date — should be simplest thing to make dynamic
+- [ ] Next-payment card: grey line overlapping behind the amount/value
+- [ ] Large unused whitespace at bottom of payment card view
+- [ ] Notifications not updating — stuck on old messages, newer ones exist
