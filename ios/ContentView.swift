@@ -322,7 +322,7 @@ private struct DashboardScreen: View {
             }
             .padding()
         }
-        .safeAreaInset(side: .bottom) { Color.clear.frame(height: 90) }
+        .safeAreaPadding(.bottom, 90)
         .refreshable { await appState.refreshDashboard() }
         .task { await appState.loadDashboardIfNeeded() }
         .onReceive(ticker) { now = $0 }

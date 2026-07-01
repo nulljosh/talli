@@ -28,6 +28,7 @@ targets:
           - Tests
           - fastlane
           - build
+          - .asc
     settings:
       base:
         INFOPLIST_FILE: Info.plist
@@ -36,6 +37,36 @@ targets:
         SUPPORTS_MACCATALYST: NO
         SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
         SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: NO
+    entitlements:
+      path: Talli.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.jt.talli
+    dependencies:
+      - target: TalliWidgetsExtension
+  TalliWidgetsExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: ../widgets-ios
+        excludes:
+          - "*.xcodeproj"
+          - "*.yml"
+          - "*.md"
+          - "*.svg"
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      INFOPLIST_KEY_CFBundleDisplayName: Talli Widgets
+      INFOPLIST_KEY_NSHumanReadableCopyright: "Copyright 2026 Joshua Trommel"
+      PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally.widgets
+      ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME: WidgetBackground
+      PRODUCT_NAME: TalliWidgets
+      CODE_SIGN_STYLE: Automatic
+    entitlements:
+      path: ../widgets-ios/TalliWidgets.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.jt.talli
   TalliTests:
     type: bundle.unit-test
     platform: iOS

@@ -21,6 +21,20 @@
                ReferencedContainer = "container:TalliMac.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "727D6FC087ABCC4491B9D045"
+               BuildableName = "TalliWidgets.appex"
+               BlueprintName = "TalliWidgets"
+               ReferencedContainer = "container:TalliMac.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

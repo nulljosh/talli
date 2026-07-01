@@ -10,6 +10,7 @@ struct TalliApp: App {
             ContentView()
                 .environment(appState)
                 .preferredColorScheme(rawTheme == "dark" ? .dark : rawTheme == "light" ? .light : nil)
+                .overlay { WhatsNewSheet() }
         }
     }
 }

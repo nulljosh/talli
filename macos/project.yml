@@ -40,6 +40,26 @@ targets:
         ENABLE_HARDENED_RUNTIME: YES
         CODE_SIGN_STYLE: Automatic
         CODE_SIGN_IDENTITY: "Apple Development"
+    dependencies:
+      - target: TalliWidgets
+  TalliWidgets:
+    type: app-extension
+    platform: macOS
+    sources:
+      - path: ../widgets-macos
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally.mac.widgets
+      GENERATE_INFOPLIST_FILE: YES
+      INFOPLIST_KEY_CFBundleDisplayName: Talli Widgets
+      MACOSX_DEPLOYMENT_TARGET: "14.0"
+      CODE_SIGN_STYLE: Automatic
+      LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks"
+    entitlements:
+      path: TalliWidgets.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.application-groups:
+          - group.com.jt.talli
   TalliMacUITests:
     type: bundle.ui-testing
     platform: macOS
@@ -56,6 +76,7 @@ schemes:
     build:
       targets:
         TalliMac: all
+        TalliWidgets: all
     run:
       config: Debug
     archive:
