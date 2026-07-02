@@ -2,7 +2,7 @@ import Foundation
 
 struct WidgetAPI {
     static let baseURL = "https://tally.heyitsmejosh.com"
-    private static let defaults = UserDefaults(suiteName: "group.com.jt.talli")
+    private nonisolated(unsafe) static let defaults = UserDefaults(suiteName: "group.com.jt.talli")
 
     private static var session: URLSession {
         let config = URLSessionConfiguration.default

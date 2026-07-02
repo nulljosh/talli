@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites name='TalliMacUITests.xctest' tests='1' failures='1'>
+  <testsuite name='TalliMacUITests.MacScreenshot' tests='1' failures='1'>
+    <testcase classname='TalliMacUITests.MacScreenshot' name='testCaptureMacScreenshot'>
+      <failure message='XCTAssertTrue failed - App window never appeared'>UITests-mac/MacScreenshot.swift:15</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
