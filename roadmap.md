@@ -19,3 +19,8 @@
 - [ ] Next-payment card: grey line overlapping behind the amount/value
 - [ ] Large unused whitespace at bottom of payment card view
 - [ ] Notifications not updating — stuck on old messages, newer ones exist
+
+## Pending verification (2026-07-01, v3.5.3)
+- [ ] Xcode Cloud green: build 42 should appear VALID in ASC (`asc builds list --app 6782366555 --limit 2`) — widget @Sendable fix pushed in 443496d, built clean locally. If no build appears, the workflow may still point at old Tally.xcodeproj path (known issue from v3.5.1) — check Manage Workflows in Xcode.
+- [ ] Confirm banner shows "Report window open" (not filed) on next login; file report by Jul 5.
+- [ ] Confirm header avatar renders (blob repointed) on next login.
