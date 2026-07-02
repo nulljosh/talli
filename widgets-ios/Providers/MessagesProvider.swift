@@ -14,7 +14,7 @@ struct MessagesProvider: TimelineProvider {
         completion(buildEntry(from: WidgetAPI.cachedSummary()))
     }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<MessagesEntry>) -> Void) {
+    func getTimeline(in context: Context, completion: @escaping @Sendable (Timeline<MessagesEntry>) -> Void) {
         Task {
             var summary: TalliSummary?
             do { summary = try await WidgetAPI.fetchSummary() } catch { summary = WidgetAPI.cachedSummary() }

@@ -832,9 +832,15 @@ function parseReportMonths(sectionData) {
     for (const key of open) filed.delete(key);
   }
 
-  const now = new Date().toISOString();
+  const nowDate = new Date();
+  const currentKey = `${nowDate.getFullYear()}-${String(nowDate.getMonth() + 1).padStart(2, '0')}`;
+  const now = nowDate.toISOString();
   const result = {};
-  for (const key of filed) result[key] = now;
+  // A report for a period after the current month cannot have been filed yet —
+  // future periods listed on the page (e.g. next month's row) are never "filed".
+  for (const key of filed) {
+    if (key <= currentKey) result[key] = now;
+  }
   return result;
 }
 

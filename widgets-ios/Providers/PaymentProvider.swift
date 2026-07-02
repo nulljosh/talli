@@ -14,7 +14,7 @@ struct PaymentProvider: TimelineProvider {
         completion(buildEntry(from: WidgetAPI.cachedSummary()))
     }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<PaymentEntry>) -> Void) {
+    func getTimeline(in context: Context, completion: @escaping @Sendable (Timeline<PaymentEntry>) -> Void) {
         Task {
             var summary: TalliSummary?
             do { summary = try await WidgetAPI.fetchSummary() } catch { summary = WidgetAPI.cachedSummary() }

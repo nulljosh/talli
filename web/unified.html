@@ -91,13 +91,13 @@ function generateNodeGraphSVG() {
   let out = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${s} ${s}" width="${s}" height="${s}"><circle cx="${cx}" cy="${cy}" r="${cx}" fill="#0d0c0b"/>`;
   // Edges
   activeEdges.forEach(([a, b]) => {
-    out += `<line x1="${nodes[a].x.toFixed(1)}" y1="${nodes[a].y.toFixed(1)}" x2="${nodes[b].x.toFixed(1)}" y2="${nodes[b].y.toFixed(1)}" stroke="rgba(255,133,27,0.3)" stroke-width="1.5" stroke-linecap="round"/>`;
+    out += `<line x1="${nodes[a].x.toFixed(1)}" y1="${nodes[a].y.toFixed(1)}" x2="${nodes[b].x.toFixed(1)}" y2="${nodes[b].y.toFixed(1)}" stroke="rgba(91,155,213,0.3)" stroke-width="1.5" stroke-linecap="round"/>`;
   });
   // Nodes
   nodes.forEach((n, i) => {
     const r = 5 + Math.random() * 6;
     const isAccent = i === 0 || i === Math.floor(nodes.length / 2);
-    out += `<circle cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${r.toFixed(1)}" fill="${isAccent ? '#FF851B' : 'rgba(242,237,232,0.75)'}"/>`;
+    out += `<circle cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${r.toFixed(1)}" fill="${isAccent ? '#5B9BD5' : 'rgba(242,237,232,0.75)'}"/>`;
     if (isAccent) out += `<circle cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="2.5" fill="rgba(255,255,255,0.4)"/>`;
   });
   return out + '</svg>';
@@ -110,14 +110,14 @@ function tk(dark) {
     text:'#f2ede8', muted:'rgba(242,237,232,0.32)', mutedMid:'rgba(242,237,232,0.52)',
     border:'rgba(242,237,232,0.07)', border2:'rgba(242,237,232,0.13)',
     tabBar:'rgba(11,10,9,0.96)',
-    accent:'#FF851B', accentBg:'rgba(255,133,27,0.12)',
+    accent:'#5B9BD5', accentBg:'rgba(91,155,213,0.12)',
     success:'#4ade80', warning:'#FF851B', error:'#f87171',
   } : {
     bg:'#faf7f4', bg2:'#f2ede8', bg3:'#e8e0d6',
     text:'#1a1612', muted:'rgba(26,22,18,0.32)', mutedMid:'rgba(26,22,18,0.52)',
     border:'rgba(26,22,18,0.07)', border2:'rgba(26,22,18,0.14)',
     tabBar:'rgba(250,247,244,0.96)',
-    accent:'#FF851B', accentBg:'rgba(255,133,27,0.10)',
+    accent:'#5B9BD5', accentBg:'rgba(91,155,213,0.10)',
     success:'#2d9e5f', warning:'#FF851B', error:'#d94f3d',
   };
 }
@@ -453,7 +453,7 @@ function CalendarTab({dark, payDateObj, amount, daysUntil}) {
               const next=isNextPay(d),past=pastPay(d),tod=isToday_(d),isP=isPast(d),isFilingDay=d&&d>=1&&d<=5;
               return (
                 <div key={i} style={{display:'flex',alignItems:'center',justifyContent:'center',height:44}}>
-                  <div style={{width:36,height:36,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:2,background:next?t.accent:'transparent',border:next?'none':tod?`1px solid ${t.border2}`:isFilingDay?`1px solid ${t.accent}50`:'none',animation:next?'pulseRing 2.5s ease-out infinite':'none','--pc':dark?'rgba(255,133,27,0.2)':'rgba(255,133,27,0.2)',position:'relative'}}>
+                  <div style={{width:36,height:36,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:2,background:next?t.accent:'transparent',border:next?'none':tod?`1px solid ${t.border2}`:isFilingDay?`1px solid ${t.accent}50`:'none',animation:next?'pulseRing 2.5s ease-out infinite':'none','--pc':'rgba(91,155,213,0.2)',position:'relative'}}>
                     <span style={{fontSize:14,fontWeight:(next||past)?600:400,lineHeight:1,color:d===null?'transparent':next?t.bg:isP&&!past?t.text:t.text,opacity:d===null?0:isP&&!past&&!tod?0.25:1}}>{d}</span>
                     {past&&!next&&<div style={{width:3,height:3,borderRadius:'50%',background:t.success,opacity:0.8,position:'absolute',bottom:5}}/>}
                   </div>
@@ -906,9 +906,18 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate,
 // ════════════════════════════════════════════════════
 // MESSAGES TAB
 // ════════════════════════════════════════════════════
-function MessagesTab({dark, messages, readIds, onRead}) {
+function MessagesTab({dark, messages, readIds, onRead, onRefresh}) {
   const t = tk(dark);
   const [expanded, setExpanded] = useState(null);
+  const pullStart = useRef(null);
+  const listRef = useRef(null);
+  // Refresh whenever the tab is opened (component remounts on each tab switch)
+  useEffect(() => { onRefresh && onRefresh(); }, []);
+  const onTouchStartPull = e => { if (listRef.current && listRef.current.scrollTop === 0) pullStart.current = e.touches[0].clientY; else pullStart.current = null; };
+  const onTouchEndPull = e => {
+    if (pullStart.current !== null && e.changedTouches[0].clientY - pullStart.current > 70) onRefresh && onRefresh();
+    pullStart.current = null;
+  };
   const toggle = (id) => {
     setExpanded(e => e===id ? null : id);
     if (!readIds[id]) {
@@ -926,7 +935,7 @@ function MessagesTab({dark, messages, readIds, onRead}) {
         <span style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted}}>Messages</span>
         {unreadCount>0&&<span style={{fontSize:10,fontWeight:700,color:t.bg,background:t.text,padding:'1px 6px',borderRadius:100}}>{unreadCount} new</span>}
       </div>
-      <div style={{flex:1,overflowY:'auto',paddingBottom:32}}>
+      <div ref={listRef} onTouchStart={onTouchStartPull} onTouchEnd={onTouchEndPull} style={{flex:1,overflowY:'auto',paddingBottom:32}}>
         {msgs.map((m,i)=>{
           const isRead=readIds[m.id]||!m.unread, isOpen=expanded===m.id;
           const initials=(m.title||'').slice(0,2).toUpperCase();
@@ -1009,7 +1018,7 @@ function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, av
 // ════════════════════════════════════════════════════
 const TAB_ORDER = ['home','calendar','status','messages'];
 
-function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, username, onLogout, avatarUrl, onAvatarClick, avatarError, setAvatarError, skn, reportMonths, onMarkFiled, onPwdResubmitted, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
+function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, onRefresh, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, username, onLogout, avatarUrl, onAvatarClick, avatarError, setAvatarError, skn, reportMonths, onMarkFiled, onPwdResubmitted, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
   const t = tk(dark);
   const [tab, setTab] = useState('home');
   const [showSubmit, setShowSubmit] = useState(false);
@@ -1049,7 +1058,7 @@ function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidC
       {tab==='home'     &&<HomeTab     dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange} reportMonths={reportMonths} onSubmitReport={()=>setShowSubmit(true)} onMarkFiled={onMarkFiled}/>}
       {tab==='calendar' &&<CalendarTab dark={dark} payDateObj={payDateObj} amount={amount} daysUntil={daysUntil}/>}
       {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} skn={skn} onSubmitReport={()=>setShowSubmit(true)} onPwdResubmit={()=>setShowPwdResubmit(true)} reportMonths={reportMonths} username={username} pinSet={pinSet} onSetPin={()=>setShowPinSheet(true)}/>}
-      {tab==='messages' &&<MessagesTab dark={dark} messages={messages} readIds={readIds} onRead={onRead}/>}
+      {tab==='messages' &&<MessagesTab dark={dark} messages={messages} readIds={readIds} onRead={onRead} onRefresh={onRefresh}/>}
       {tab==='settings' &&<SettingsTab dark={dark} username={username} avatarUrl={avatarUrl} onAvatarRefresh={doRefresh} refreshing={refreshing} avatarError={avatarError} setAvatarError={setAvatarError} onLogout={onLogout}/>}
 
       <TabBar tab={tab} setTab={setTab} dark={dark} msgBadge={unread}/>
@@ -1249,7 +1258,7 @@ function App() {
 
   return (
     <>
-    <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} readIds={readIds} onRead={mergeReadIds} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} setAvatarError={setAvatarError} skn={skn} reportMonths={reportMonths} onMarkFiled={handleMarkFiled} onPwdResubmitted={handlePwdResubmitted} pinSet={pinSet} setPinSet={setPinSet} showPinSheet={showPinSheet} setShowPinSheet={setShowPinSheet}/>
+    <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} readIds={readIds} onRead={mergeReadIds} onRefresh={loadData} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} setAvatarError={setAvatarError} skn={skn} reportMonths={reportMonths} onMarkFiled={handleMarkFiled} onPwdResubmitted={handlePwdResubmitted} pinSet={pinSet} setPinSet={setPinSet} showPinSheet={showPinSheet} setShowPinSheet={setShowPinSheet}/>
     </>
   );
 }

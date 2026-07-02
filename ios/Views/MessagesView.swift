@@ -34,7 +34,7 @@ struct MessagesView: View {
                 }
             }
         }
-        .safeAreaInset(side: .bottom) { Color.clear.frame(height: 90) }
+        .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 90) }
         .navigationTitle("Messages")
         .refreshable {
             await appState.refreshDashboard()

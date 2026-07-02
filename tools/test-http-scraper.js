@@ -624,6 +624,21 @@ Your cheque is ready for pickup.</div>
     assert.ok(!months['2026-08'], 'August (open) not filed');
   });
 
+  test('parseReportMonths never marks future periods as filed', () => {
+    const { parseReportMonths } = require('../src/http-scraper');
+    const now = new Date();
+    const M = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const next = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    const futureLabel = `${M[next.getMonth()]} ${next.getFullYear()}`;
+    const section = {
+      tableData: [`${futureLabel} | Submitted | $1,060`],
+      allText: [],
+      pageTitle: 'Monthly Reports'
+    };
+    const key = `${next.getFullYear()}-${String(next.getMonth() + 1).padStart(2, '0')}`;
+    assert.ok(!parseReportMonths(section)[key], 'future period must not be filed');
+  });
+
   test('parseReportMonths returns empty for a page with no periods', () => {
     const { parseReportMonths } = require('../src/http-scraper');
     assert.deepStrictEqual(parseReportMonths({ tableData: [], allText: [] }), {});
