@@ -3,10 +3,10 @@ import SwiftUI
 // Minimal color extensions used across views
 extension Color {
     static let appleBlue = Color(red: 0, green: 0.44, blue: 0.89)
-    static let talliOrange = Color(hex: "FF851B")
+    static let talliOrange = Color(hex: "5B9BD5")
     static let gradeGreen = Color.green
     static let gradeRed = Color.red
-    static let gradeAmber = Color.orange
+    static let gradeAmber = Color.blue
 
     init(hex: String) {
         let scanner = Scanner(string: hex)

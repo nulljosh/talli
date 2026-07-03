@@ -144,8 +144,8 @@ struct MacBenefitsView: View {
 
             applyRow("National Pharmacare", desc: "Free diabetes/hormone/contraceptive meds", color: .green)
             applyRow("Fair PharmaCare", desc: "Income-based prescription coverage", color: .green)
-            applyRow("SAFER", desc: "Rent subsidy for 60+ renters", color: .yellow)
-            applyRow("RAP", desc: "Rent subsidy for families (~$700/mo avg)", color: .orange)
+            applyRow("SAFER", desc: "Rent subsidy for 60+ renters", color: Color.bcPrimary)
+            applyRow("RAP", desc: "Rent subsidy for families (~$700/mo avg)", color: Color.bcLight)
             applyRow("BC Bus Pass", desc: "$45/yr transit for PWD/GIS seniors", color: Color.bcPrimary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)

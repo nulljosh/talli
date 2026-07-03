@@ -5,7 +5,7 @@ v2.4.4
 ## Rules
 
 - Portrait-only
-- Warm parchment palette: matches web (#faf7f4 bg / #1a1612 text / #FF851B orange accent)
+- Portfolio-vibe palette: matches web (#ffffff bg / #1a1a1a text / #5B9BD5 blue accent, `Color.talliOrange` name kept but now blue)
 - Solid cards: `Color(.secondarySystemGroupedBackground)` -- no ultraThinMaterial
 - `Color.talliOrange` for all accent uses (calendar, paid toggle, tab tint, avatar fallback)
 - Shared `AvatarView(size:)` for all avatar rendering (ContentView toolbar + SettingsView)

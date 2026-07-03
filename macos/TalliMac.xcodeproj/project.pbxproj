@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0282B5C8EA56EEF919DA487F /* MacBenefitsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE4D95EDD23AA9E97925A20 /* MacBenefitsProvider.swift */; };
+		0A4F2A936FBED3094781D846 /* MacSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9E6A07378DC7743CCC0E4D /* MacSettingsView.swift */; };
 		0BDFE2F644478B6E4DE81162 /* MacDateParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE52B7411BB64FCBF55E718E /* MacDateParsing.swift */; };
 		0EA33B911B3F3779F824707F /* MacMessagesWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C072FBCF9110200380F476B0 /* MacMessagesWidgetView.swift */; };
 		170DED2AAD7B3037534ED350 /* MacLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712C08E52D3C020E27D13B54 /* MacLoginView.swift */; };
@@ -101,6 +102,7 @@
 		DDE374C826B98CFF02FCED84 /* MacAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAPIClient.swift; sourceTree = "<group>"; };
 		DFB8A17CA2D95C67235E3EB7 /* MacMessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMessagesView.swift; sourceTree = "<group>"; };
 		E78526D808FDBBD806F7EF05 /* MacContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacContentView.swift; sourceTree = "<group>"; };
+		EC9E6A07378DC7743CCC0E4D /* MacSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacSettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -221,6 +223,7 @@
 				712C08E52D3C020E27D13B54 /* MacLoginView.swift */,
 				DFB8A17CA2D95C67235E3EB7 /* MacMessagesView.swift */,
 				7B87D84FEC8981517B9093CB /* MacPaymentCalendarView.swift */,
+				EC9E6A07378DC7743CCC0E4D /* MacSettingsView.swift */,
 				829CFD35783E267E334AD80F /* MacTheme.swift */,
 				B4671E8BA45907193EDB8BC4 /* MenuBarView.swift */,
 			);
@@ -374,6 +377,7 @@
 				170DED2AAD7B3037534ED350 /* MacLoginView.swift in Sources */,
 				190C9A49755892F5842E7855 /* MacMessagesView.swift in Sources */,
 				334EA37E0B895B20EF2496BB /* MacPaymentCalendarView.swift in Sources */,
+				0A4F2A936FBED3094781D846 /* MacSettingsView.swift in Sources */,
 				B2B60C9015E6163943DC89CF /* MacTheme.swift in Sources */,
 				37291C624EBCC18BA59688CA /* MenuBarView.swift in Sources */,
 				4BCA3DBEDCAA96B862C734FA /* TalliMacApp.swift in Sources */,
