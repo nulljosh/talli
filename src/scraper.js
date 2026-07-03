@@ -1013,11 +1013,14 @@ async function submitMonthlyReport(page, options = {}) {
  };
  });
 
- const isSuccess = confirmation.bodyText.toLowerCase().includes('submit') ||
- confirmation.bodyText.toLowerCase().includes('confirm') ||
- confirmation.bodyText.toLowerCase().includes('success') ||
- confirmation.bodyText.toLowerCase().includes('thank you') ||
- confirmation.bodyText.toLowerCase().includes('received');
+ // ponytail: "submit"/"confirm" alone also match a re-rendered form (e.g. validation error),
+ // so require a stronger completion phrase, not just the presence of the word.
+ const confirmText = confirmation.bodyText.toLowerCase();
+ const isSuccess = confirmText.includes('thank you') ||
+ confirmText.includes('successfully') ||
+ confirmText.includes('has been received') ||
+ confirmText.includes('report submitted') ||
+ (confirmText.includes('confirmation') && confirmText.includes('number'));
 
  console.log(`[${isSuccess ? '+' : '!'}] Submission ${isSuccess ? 'succeeded' : 'may have failed'}`);
  console.log(`[+] Total confirmation page time: ${Date.now() - confirmTimer}ms`);
