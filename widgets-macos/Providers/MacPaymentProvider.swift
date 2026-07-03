@@ -14,7 +14,7 @@ struct MacPaymentProvider: TimelineProvider {
         completion(buildEntry(from: MacWidgetAPI.cachedSummary()))
     }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<MacPaymentEntry>) -> Void) {
+    func getTimeline(in context: Context, completion: @escaping @Sendable (Timeline<MacPaymentEntry>) -> Void) {
         Task {
             var summary: MacTalliSummary?
             do { summary = try await MacWidgetAPI.fetchSummary() } catch { summary = MacWidgetAPI.cachedSummary() }
