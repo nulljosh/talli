@@ -65,6 +65,8 @@ private struct AuthenticatedShell: View {
             MacBenefitsView()
         case .messages:
             MacMessagesView()
+        case .settings:
+            MacSettingsView()
         }
     }
 }

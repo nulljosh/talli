@@ -3,12 +3,13 @@ import SwiftUI
 @main
 struct TalliMacApp: App {
     @State private var appState = MacAppState()
+    @AppStorage("app_theme") private var rawTheme = "dark"
 
     var body: some Scene {
         WindowGroup {
             MacContentView()
                 .environment(appState)
-                .preferredColorScheme(.dark)
+                .preferredColorScheme(rawTheme == "dark" ? .dark : rawTheme == "light" ? .light : nil)
                 .task {
                     await appState.bootstrap()
                 }

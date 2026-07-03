@@ -37,6 +37,7 @@ final class MacAppState {
         case dashboard = "Dashboard"
         case benefits = "Benefits"
         case messages = "Messages"
+        case settings = "Settings"
 
         var id: String { rawValue }
 
@@ -45,6 +46,7 @@ final class MacAppState {
             case .dashboard: return "house"
             case .benefits: return "list.bullet.rectangle"
             case .messages: return "envelope"
+            case .settings: return "gearshape"
             }
         }
     }
