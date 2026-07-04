@@ -2,7 +2,7 @@ import Foundation
 
 struct MacWidgetAPI {
     static let baseURL = "https://tally.heyitsmejosh.com"
-    private nonisolated(unsafe) static let defaults = UserDefaults(suiteName: "group.com.heyitsmejosh.talli")
+    private nonisolated(unsafe) static let defaults = UserDefaults(suiteName: "group.com.heyitsmejosh.tally")
 
     private static var session: URLSession {
         let config = URLSessionConfiguration.default

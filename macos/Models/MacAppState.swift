@@ -8,7 +8,7 @@ final class MacAppState {
     private enum Constants {
         static let dashboardCacheKey = "cached-dashboard-data"
         static let lastSyncKey = "last-sync-date"
-        static let appGroup = "group.com.heyitsmejosh.talli"
+        static let appGroup = "group.com.heyitsmejosh.tally"
     }
 
     var isAuthenticated = false

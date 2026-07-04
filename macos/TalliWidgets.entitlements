@@ -6,7 +6,7 @@
 	<true/>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.heyitsmejosh.talli</string>
+		<string>group.com.heyitsmejosh.tally</string>
 	</array>
 </dict>
 </plist>
