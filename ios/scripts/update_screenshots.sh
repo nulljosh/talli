@@ -9,7 +9,7 @@ xcodegen generate
 echo "==> Running fastlane snapshot (mock auth, no real credentials)"
 fastlane snapshot
 
-DEVICE="iPhone 17 Pro"
+DEVICE="iPhone 14 Plus"
 SHOTS=("01-Home" "02-Reports" "03-Benefits" "04-Messages" "05-Settings")
 
 echo "==> Copying screenshots into screenshots/appstore (no-space filenames for GitHub rendering)"

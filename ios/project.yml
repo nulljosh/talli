@@ -41,7 +41,7 @@ targets:
       path: Talli.entitlements
       properties:
         com.apple.security.application-groups:
-          - group.com.jt.talli
+          - group.com.heyitsmejosh.tally
     dependencies:
       - target: TalliWidgetsExtension
   TalliWidgetsExtension:
@@ -62,11 +62,16 @@ targets:
       ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME: WidgetBackground
       PRODUCT_NAME: TalliWidgets
       CODE_SIGN_STYLE: Automatic
+    info:
+      path: ../widgets-ios/Info.plist
+      properties:
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
     entitlements:
       path: ../widgets-ios/TalliWidgets.entitlements
       properties:
         com.apple.security.application-groups:
-          - group.com.jt.talli
+          - group.com.heyitsmejosh.tally
   TalliTests:
     type: bundle.unit-test
     platform: iOS
