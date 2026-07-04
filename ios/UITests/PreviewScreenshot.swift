@@ -14,6 +14,11 @@ final class PreviewScreenshot: XCTestCase {
         app.launch()
 
         sleep(3)
+        let gotIt = app.buttons["Got it"]
+        if gotIt.waitForExistence(timeout: 3) {
+            gotIt.tap()
+            sleep(1)
+        }
         snapshot("01-Home")
 
         let tabs = ["Reports", "Benefits", "Messages", "Settings"]
