@@ -16,10 +16,9 @@ final class PreviewScreenshot: XCTestCase {
         sleep(3)
         snapshot("01-Home")
 
-        let tabBar = app.tabBars.firstMatch
         let tabs = ["Reports", "Benefits", "Messages", "Settings"]
         for (index, name) in tabs.enumerated() {
-            let button = tabBar.buttons[name]
+            let button = app.buttons[name]
             if button.waitForExistence(timeout: 5) {
                 button.tap()
                 sleep(2)
