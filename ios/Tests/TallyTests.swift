@@ -315,18 +315,23 @@ final class AppStateComputedTests: XCTestCase {
         XCTAssertFalse(state.isPaid)
     }
 
+    private var currentMonthKey: String {
+        let c = Calendar.current; let now = Date()
+        return String(format: "%04d-%02d", c.component(.year, from: now), c.component(.month, from: now))
+    }
+
     func testIsPaidTrue() {
-        state.paidStatus = PaidStatus(paid: true, month: nil, updatedAt: nil)
+        state.paidStatus = PaidStatus(paidMonths: [currentMonthKey: "2026-05-15"])
         XCTAssertTrue(state.isPaid)
     }
 
-    func testPaidDateTextNilUpdatedAt() {
-        state.paidStatus = PaidStatus(paid: true, month: nil, updatedAt: nil)
+    func testPaidDateTextEmptyValue() {
+        state.paidStatus = PaidStatus(paidMonths: [currentMonthKey: ""])
         XCTAssertNil(state.paidDateText)
     }
 
     func testPaidDateTextParsed() {
-        state.paidStatus = PaidStatus(paid: true, month: "2026-05", updatedAt: "2026-05-15")
+        state.paidStatus = PaidStatus(paidMonths: [currentMonthKey: "2026-05-15"])
         XCTAssertNotNil(state.paidDateText)
     }
 }
