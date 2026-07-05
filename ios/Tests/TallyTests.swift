@@ -81,6 +81,18 @@ final class DashboardDataDecodingTests: XCTestCase {
         XCTAssertEqual(data.statusMessages[0].timestamp, "2026-05-01")
     }
 
+    func testServerShapeMessages() throws {
+        // /api/mobile sends {id, text, timestamp} — regression: these decoded to empty text and were filtered out
+        let data = try decode("""
+        {"payment_amount":"$1,000.00","next_date":"2026-06-15","messages":[
+            {"id":"h1","text":"Your cheque has been issued","timestamp":"2026-06-20"}
+        ]}
+        """)
+        XCTAssertEqual(data.statusMessages.count, 1)
+        XCTAssertEqual(data.statusMessages[0].text, "Your cheque has been issued")
+        XCTAssertEqual(data.statusMessages[0].timestamp, "2026-06-20")
+    }
+
     func testObjectMessageMissingSubject() throws {
         let data = try decode("""
         {"payment_amount":"$1,000.00","next_date":"2026-06-15","messages":[

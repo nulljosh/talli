@@ -38,11 +38,12 @@ struct DashboardData: Codable, Sendable {
             statusMessages = stringMessages.map { StatusMessage(text: $0) }
         } else if let objectMessages = try? container.decode([MessageObject].self, forKey: .statusMessages) {
             statusMessages = objectMessages.map { message in
-                let text = [message.subject, message.body].compactMap { $0 }.joined(separator: " - ")
+                let text = message.text
+                    ?? [message.subject, message.body].compactMap { $0 }.joined(separator: " - ")
                 return StatusMessage(
                     id: message.id ?? UUID().uuidString,
                     text: text,
-                    timestamp: message.date
+                    timestamp: message.timestamp ?? message.date
                 )
             }.filter { !$0.text.isEmpty }
         } else {
@@ -53,6 +54,8 @@ struct DashboardData: Codable, Sendable {
 
 private struct MessageObject: Codable {
     let id: String?
+    let text: String?
+    let timestamp: String?
     let subject: String?
     let body: String?
     let date: String?
