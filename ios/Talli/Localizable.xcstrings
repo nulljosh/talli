@@ -334,6 +334,18 @@
             "state": "translated",
             "value": "Sans affiliation avec le gouvernement de la Colombie-Britannique."
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "与不列颠哥伦比亚省政府无关。"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਬ੍ਰਿਟਿਸ਼ ਕੋਲੰਬੀਆ ਸਰਕਾਰ ਨਾਲ ਸੰਬੰਧਿਤ ਨਹੀਂ।"
+          }
         }
       }
     },
@@ -350,6 +362,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fenêtre de déclaration ouverte"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "申报窗口已开放"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਰਿਪੋਰਟ ਵਿੰਡੋ ਖੁੱਲ੍ਹੀ ਹੈ"
           }
         }
       }
@@ -368,6 +392,18 @@
             "state": "translated",
             "value": "Ferme le 5"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每月5日截止"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5 ਤਾਰੀਖ ਨੂੰ ਬੰਦ ਹੁੰਦੀ ਹੈ"
+          }
         }
       }
     },
@@ -384,6 +420,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Déclarer maintenant"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "立即申报"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਹੁਣੇ ਫਾਈਲ ਕਰੋ"
           }
         }
       }
@@ -402,6 +450,18 @@
             "state": "translated",
             "value": "Rapport déposé ce mois-ci"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本月已申报"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਇਸ ਮਹੀਨੇ ਰਿਪੋਰਟ ਦਰਜ ਹੋ ਗਈ"
+          }
         }
       }
     },
@@ -418,6 +478,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Soumettre le rapport mensuel"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "提交月度申报"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਮਾਸਿਕ ਰਿਪੋਰਟ ਜਮ੍ਹਾਂ ਕਰੋ"
           }
         }
       }
@@ -436,6 +508,18 @@
             "state": "translated",
             "value": "J'ai un revenu à déclarer ce mois-ci"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "我本月有收入需要申报"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਇਸ ਮਹੀਨੇ ਮੇਰੇ ਕੋਲ ਐਲਾਨ ਕਰਨ ਲਈ ਆਮਦਨ ਹੈ"
+          }
         }
       }
     },
@@ -452,6 +536,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Test -- rien n'a été soumis"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "试运行 —— 未提交任何内容"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਅਜ਼ਮਾਇਸ਼ੀ ਦੌੜ — ਕੁਝ ਵੀ ਜਮ੍ਹਾਂ ਨਹੀਂ ਕੀਤਾ ਗਿਆ"
           }
         }
       }
@@ -470,6 +566,18 @@
             "state": "translated",
             "value": "Enregistrer le NIP"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存PIN码"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PIN ਸੰਭਾਲੋ"
+          }
         }
       }
     },
@@ -486,6 +594,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Paiements récents"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "近期付款"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਹਾਲੀਆ ਭੁਗਤਾਨ"
           }
         }
       }
@@ -504,6 +624,18 @@
             "state": "translated",
             "value": "dernier paiement"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上次付款"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਪਿਛਲਾ ਭੁਗਤਾਨ"
+          }
         }
       }
     },
@@ -520,6 +652,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Calendrier à venir"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "即将到来的日程"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਆਗਾਮੀ ਸਮਾਂ-ਸੂਚੀ"
           }
         }
       }
@@ -538,6 +682,18 @@
             "state": "translated",
             "value": "Aucun paiement ce mois-ci"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本月无付款"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਇਸ ਮਹੀਨੇ ਕੋਈ ਭੁਗਤਾਨ ਨਹੀਂ"
+          }
         }
       }
     },
@@ -554,6 +710,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Accédez à un mois de paiement pour voir les détails"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "前往某个付款月份查看详情"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਵੇਰਵੇ ਵੇਖਣ ਲਈ ਕਿਸੇ ਭੁਗਤਾਨ ਮਹੀਨੇ ਤੇ ਜਾਓ"
           }
         }
       }
@@ -572,6 +740,18 @@
             "state": "translated",
             "value": "Tri des dettes"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "债务分类处理"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਕਰਜ਼ਾ ਤਰਜੀਹੀਕਰਨ"
+          }
         }
       }
     },
@@ -588,6 +768,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Prolongation PWD accordée"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PWD延期已批准"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PWD ਵਾਧਾ ਮਨਜ਼ੂਰ ਹੋਇਆ"
           }
         }
       }
@@ -606,6 +798,18 @@
             "state": "translated",
             "value": "Resoumettre la demande PWD"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重新提交PWD申请"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PWD ਅਰਜ਼ੀ ਦੁਬਾਰਾ ਜਮ੍ਹਾਂ ਕਰੋ"
+          }
         }
       }
     },
@@ -622,6 +826,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Demande PWD"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PWD申请"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PWD ਅਰਜ਼ੀ"
           }
         }
       }
@@ -640,6 +856,18 @@
             "state": "translated",
             "value": "Ouvrir BC Self-Serve"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开BC自助服务"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BC ਸੈਲਫ-ਸਰਵ ਖੋਲ੍ਹੋ"
+          }
         }
       }
     },
@@ -656,6 +884,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Prochaines étapes"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "后续步骤"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਅਗਲੇ ਕਦਮ"
           }
         }
       }
@@ -674,6 +914,18 @@
             "state": "translated",
             "value": "Étapes"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "步骤"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਕਦਮ"
+          }
         }
       }
     },
@@ -690,6 +942,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Client n° :"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "客户编号："
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਗਾਹਕ ਨੰਬਰ:"
           }
         }
       }
@@ -708,6 +972,18 @@
             "state": "translated",
             "value": "Programme"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "项目"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਪ੍ਰੋਗਰਾਮ"
+          }
         }
       }
     },
@@ -725,6 +1001,18 @@
             "state": "translated",
             "value": "Aide au revenu de la C.-B."
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BC收入援助"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BC ਆਮਦਨ ਸਹਾਇਤਾ"
+          }
         }
       }
     },
@@ -741,6 +1029,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "NIP"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PIN码"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PIN"
           }
         }
       }
@@ -788,6 +1088,18 @@
             "state": "translated",
             "value": "NAS"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "社会保险号"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SIN"
+          }
         }
       }
     },
@@ -804,6 +1116,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Demande REER-Invalidité"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RDSP申请"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RDSP ਅਰਜ਼ੀ"
           }
         }
       }
@@ -822,6 +1146,18 @@
             "state": "translated",
             "value": "Compte ouvert"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "账户已开设"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਖਾਤਾ ਖੋਲ੍ਹਿਆ ਗਿਆ"
+          }
         }
       }
     },
@@ -838,6 +1174,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Certificat DTC soumis"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DTC证明已提交"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DTC ਸਰਟੀਫਿਕੇਟ ਜਮ੍ਹਾਂ ਕੀਤਾ ਗਿਆ"
           }
         }
       }
@@ -856,6 +1204,18 @@
             "state": "translated",
             "value": "Compte financé"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "账户已注资"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਖਾਤੇ ਵਿੱਚ ਫੰਡ ਪਾਏ ਗਏ"
+          }
         }
       }
     },
@@ -872,6 +1232,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "REER-Invalidité actif"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RDSP已生效"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸਰਗਰਮ RDSP"
           }
         }
       }
@@ -890,6 +1262,18 @@
             "state": "translated",
             "value": "Prestation invalidité canadienne"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "加拿大残障福利"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਕੈਨੇਡਾ ਅਪੰਗਤਾ ਲਾਭ"
+          }
         }
       }
     },
@@ -906,6 +1290,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Prestation mensuelle"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每月福利"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਮਾਸਿਕ ਲਾਭ"
           }
         }
       }
@@ -924,6 +1320,18 @@
             "state": "translated",
             "value": "2 000 $/mois si approuvé"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "获批后每月$2,000"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਮਨਜ਼ੂਰੀ ਮਿਲਣ ਤੇ $2,000/ਮਹੀਨਾ"
+          }
         }
       }
     },
@@ -940,6 +1348,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rétroactif pendant 2 ans"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "可追溯至2年前"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2 ਸਾਲ ਪਿੱਛੇ ਤੱਕ ਪਿਛਲਾ ਬਕਾਇਆ"
           }
         }
       }
@@ -958,6 +1378,18 @@
             "state": "translated",
             "value": "Demande soumise"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "申请已提交"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਅਰਜ਼ੀ ਜਮ੍ਹਾਂ ਹੋ ਗਈ"
+          }
         }
       }
     },
@@ -975,6 +1407,18 @@
             "state": "translated",
             "value": "En examen"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "审核中"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸਮੀਖਿਆ ਅਧੀਨ"
+          }
         }
       }
     },
@@ -991,6 +1435,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Décision d'approbation"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "批准决定"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਮਨਜ਼ੂਰੀ ਦਾ ਫੈਸਲਾ"
           }
         }
       }
