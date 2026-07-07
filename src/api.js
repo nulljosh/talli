@@ -2058,9 +2058,12 @@ function extractMobileData(scraperResult) {
     ...((sections.Notifications && sections.Notifications.allText) || []),
   ];
   const messages = messagesAllText
-    .filter((entry) => typeof entry === 'string' && entry.includes('\n'))
-    .map((entry, idx) => {
+    .filter((entry) => typeof entry === 'string' && entry.trim())
+    .map((entry) => {
       const newlineIdx = entry.indexOf('\n');
+      if (newlineIdx === -1) {
+        return { id: msgHash(entry), text: entry.trim(), timestamp: null };
+      }
       const rawDate = entry.substring(0, newlineIdx).trim();
       const text = entry.substring(newlineIdx + 1).trim();
       // Parse "YYYY / MON / DD" -> ISO date
