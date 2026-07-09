@@ -689,8 +689,20 @@ async function loginWithRetries(username, password, attempts = LOGIN_RETRIES) {
   throw lastError || new Error(`Login failed after ${attempts} attempts`);
 }
 
+// Boilerplate that leaks in from the portal's skip-nav / a11y chrome. Anchored
+// full-line matches so it only drops the junk itself, never real content that
+// happens to mention these words.
+const JUNK_RX = /^(skip to (main content|navigation|content)|accessibility( statement)?|home|sign out|back|print|help|terms of use|privacy|logout|my self serve|menu)$/i;
+
 function uniqueTrimmed(values) {
-  return [...new Set(values.map(value => value.trim()).filter(Boolean))];
+  return [
+    ...new Set(
+      values
+        .map(value => value.trim())
+        .filter(Boolean)
+        .filter(value => !JUNK_RX.test(value))
+    )
+  ];
 }
 
 function extractSectionData(html, url) {
@@ -746,10 +758,9 @@ function extractSectionData(html, url) {
 
   // Full body text fallback when structured extraction yields nothing
   if (allText.length === 0 && bodyText.length > 200) {
-    const NAV_RX = /^(home|sign out|back|print|help|skip to|accessibility|terms of use|privacy|logout|my self serve)$/i;
     bodyText.split(/\s{2,}/).forEach(chunk => {
       const t = chunk.trim();
-      if (t.length > 15 && !NAV_RX.test(t)) allText.push(t);
+      if (t.length > 15 && !JUNK_RX.test(t)) allText.push(t);
     });
   }
 
