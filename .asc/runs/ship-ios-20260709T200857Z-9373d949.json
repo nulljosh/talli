@@ -1,0 +1,29 @@
+{
+  "run_id": "ship-ios-20260709T200857Z-9373d949",
+  "workflow": "ship-ios",
+  "workflow_file": "/Users/joshua/Documents/Code/talli/.asc/workflow.json",
+  "definition_hash": "4f18a778d0499b835d94712199499e4c6e373193c2adf94e7b6ee6c9465ae518",
+  "params": {
+    "VERSION": "3.5.4"
+  },
+  "status": "error",
+  "failed_step": "export",
+  "hooks": {
+    "before_all": {
+      "command": "asc auth status",
+      "status": "ok"
+    }
+  },
+  "steps": {
+    "ship-ios[1]": {
+      "name": "bump",
+      "status": "ok"
+    },
+    "ship-ios[2]": {
+      "name": "archive",
+      "status": "ok"
+    }
+  },
+  "created_at": "2026-07-09T20:08:57Z",
+  "updated_at": "2026-07-09T20:10:45Z"
+}
