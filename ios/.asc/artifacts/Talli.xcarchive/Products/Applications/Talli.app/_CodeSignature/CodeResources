@@ -6,23 +6,23 @@
 	<dict>
 		<key>01-home.png</key>
 		<data>
-		heFzMAbT3rruZbe84mZM0QaeAog=
+		bZ8u5GUYZ+cilOlLbRufVLjBBQE=
 		</data>
 		<key>02-reports.png</key>
 		<data>
-		b+MTtpe7pa2eqHpUkrjwu4sqh/o=
+		IXA7ArGT7yXVJrJ28ivLNYTkaqI=
 		</data>
 		<key>03-benefits.png</key>
 		<data>
-		9eHOzZ5xDSh4FSSH6THGJpDhyc4=
+		LcigdAZbm05SDj66hqlzEgc8FI0=
 		</data>
 		<key>04-messages.png</key>
 		<data>
-		9oFCbSs5xLmDY49Iny2jEnDlkFE=
+		IpSlLaP1TsaFvaNkLP8wsQBUa9s=
 		</data>
 		<key>05-settings.png</key>
 		<data>
-		Vb8v/7iu93R8iDarwllu17Ed+rY=
+		g60L0XnHbg8CUe2IPaZB8Zyz1uA=
 		</data>
 		<key>AppIcon60x60@2x.png</key>
 		<data>
@@ -34,11 +34,15 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		AQQb8z/n3vXThKfpO0bgkHMeogg=
+		Rj0arw3RfcmxKBJJyWiO+o6tzRM=
 		</data>
 		<key>DMSans-Variable.ttf</key>
 		<data>
 		fke5pCmkk+3JS04S/RqPASLkoZY=
+		</data>
+		<key>ExportOptions.plist</key>
+		<data>
+		HPxNa4grDYmUWC3ZPi5ktUETexM=
 		</data>
 		<key>Fraunces-Variable.ttf</key>
 		<data>
@@ -46,11 +50,27 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		RmvtIq4V1VqpBy0OL5F5U84a5yM=
+		39BxWdpy/MPZR4YGPiEpBPf79sE=
 		</data>
 		<key>PkgInfo</key>
 		<data>
 		n57qDP4tZfLD1rCS43W0B4LQjzE=
+		</data>
+		<key>PlugIns/TalliWidgets.appex/Info.plist</key>
+		<data>
+		Jmbnx28huQXHAyuX/UQ9flTuHP0=
+		</data>
+		<key>PlugIns/TalliWidgets.appex/TalliWidgets</key>
+		<data>
+		1poXb43mz8p4Ru5QqtcXkcfDFOY=
+		</data>
+		<key>PlugIns/TalliWidgets.appex/_CodeSignature/CodeResources</key>
+		<data>
+		D6qCgw+evvKBJI3IGYzvOEa2VI4=
+		</data>
+		<key>PlugIns/TalliWidgets.appex/embedded.mobileprovision</key>
+		<data>
+		eJdcVvEJOsU9djMKmeiYg4EzIdU=
 		</data>
 		<key>PrivacyInfo.xcprivacy</key>
 		<data>
@@ -58,11 +78,11 @@
 		</data>
 		<key>Talli.app.dSYM.zip</key>
 		<data>
-		XdISf6PRFBGkab9xFczh72M2rdw=
+		hwgOQI/ejE2VHhI1bDLzOLXVTgc=
 		</data>
 		<key>Talli.ipa</key>
 		<data>
-		Mu5m5m/Y2sjAF0z+/S6eusHgcNo=
+		eG5zhqbOJ6RTDs/pthUuU3w4FTU=
 		</data>
 		<key>Tally.ipa</key>
 		<data>
@@ -74,7 +94,7 @@
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
-		A5TpOlbEuqyC3TOWvId2yP2M+To=
+		fgmZu+oK5iIvtF7eK3vcMDr/7us=
 		</data>
 		<key>en.lproj/Localizable.strings</key>
 		<dict>
@@ -102,7 +122,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			9fdY+YC90V01/TvXlIiaMWDq4XY=
+			mKkPzApG1Sjz3VgstWcCjtNevx8=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -121,13 +141,13 @@
 		</data>
 		<key>update_screenshots.sh</key>
 		<data>
-		o7E3KlHmIKsewRZEW2Nz0vbtqB8=
+		xxaDQEVnOHbVWah06HmXG2k8YfY=
 		</data>
 		<key>zh.lproj/Localizable.strings</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			6F060ZLuya2wEhUAP+MShbL7lZo=
+			5sDwCQNKJG0OCX6YScyV7JYV3Dk=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -139,35 +159,35 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Y/8GcnGYrJqM3RpLCZueZHQ+f0TrCFPrSXAqnibuClc=
+			uXWSI1nqHkIh9API3vUm4uoJ2/g6TES0OcrUkEsVnhY=
 			</data>
 		</dict>
 		<key>02-reports.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			5kdo6fq9cUs0xKQm3Zpc8iePXXwakMeD7gsRRaAa7Xs=
+			3NLfAYr4vCtBu/VhF4hOFPYp+gBiBdhGZcswvR3aJLc=
 			</data>
 		</dict>
 		<key>03-benefits.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			KdXvah2VNKZbIQa3XDE1IOxqmAQ1iRBmWdLTyNarsLI=
+			iFjqyxtfi4VfC2T33LZRupBqzkokulEfS4Np4kvWqRA=
 			</data>
 		</dict>
 		<key>04-messages.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			UKoM8t/6nhLudjSDqdUc1jqmMXhjMzVFbErTXPCBK4s=
+			Hn/70z9543+ToBpDQBM+r2X599f1qYwAb8RK2NTUWkk=
 			</data>
 		</dict>
 		<key>05-settings.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ho2TN1B9ZgOz0DXiXdj4Bgf8LrbUp2oimYycuWmLtWg=
+			E/Lhe4S8JtY3hqSvMjoQji3/lnXx1niL15vTHmkAjHM=
 			</data>
 		</dict>
 		<key>AppIcon60x60@2x.png</key>
@@ -188,7 +208,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			U6sVF8XAcCCEsUnfjvD6yYqbsdEHasvej2D0sae9yS4=
+			1i8Y/2jAJ/ttq0vFDW4PXZ3MN+Z0pwUaL4ASSqRsiCY=
 			</data>
 		</dict>
 		<key>DMSans-Variable.ttf</key>
@@ -198,11 +218,46 @@
 			jNCNl+icJNCqku3S8PTI7mGV7um3yfFUhlpYsC8MHA0=
 			</data>
 		</dict>
+		<key>ExportOptions.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			uFc9i+dRFrF/PUioUdtDfKVNweYzRUJWn0ru9RJ5qww=
+			</data>
+		</dict>
 		<key>Fraunces-Variable.ttf</key>
 		<dict>
 			<key>hash2</key>
 			<data>
 			F3/2wPFOVVCjxiQkfNEYlhHU62XQALFJRMY9lnlYq7s=
+			</data>
+		</dict>
+		<key>PlugIns/TalliWidgets.appex/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			nDa/SLfm/Kay5oQUPV6iXzRGxYWLxctJPg5doIuA52M=
+			</data>
+		</dict>
+		<key>PlugIns/TalliWidgets.appex/TalliWidgets</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			jcyMSGJ2yJ1OysRTOivvVYyog1KFmoG48nmYCa8rocg=
+			</data>
+		</dict>
+		<key>PlugIns/TalliWidgets.appex/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			YZhHJGGs5UkGxbTdUF3Ao+Bkqu8GGRm8cRc7ge6gCDA=
+			</data>
+		</dict>
+		<key>PlugIns/TalliWidgets.appex/embedded.mobileprovision</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			uUG3E6vBHTbWmiqfnLHRnfa1vxhWPTTOO3pr+5iQtj0=
 			</data>
 		</dict>
 		<key>PrivacyInfo.xcprivacy</key>
@@ -216,14 +271,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			C90oj6IKUBoVDK9ivKgJQ/SC+tcpT3w7uJVUmBZYJ1c=
+			E50QpqSnCxU5Yjq4bqRZiWY1KEykNhgH2tFpT7RwLSM=
 			</data>
 		</dict>
 		<key>Talli.ipa</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			GvahtW2/VxEaeFapmwm63c3wO6hw3YE3/+OJDyuQXik=
+			3oTxvG1W4vc84vEwT8oOjwacDWXnJjsT0KyWSyvTP8g=
 			</data>
 		</dict>
 		<key>Tally.ipa</key>
@@ -244,7 +299,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			VFMJ/LcHGiOnjH11izqVycuZSL1H2sOkfbuqMWa+i10=
+			cbmEWsAlViwPo/SyQ1k/qillnPG4AsGh3KPaG7ah//4=
 			</data>
 		</dict>
 		<key>en.lproj/Localizable.strings</key>
@@ -276,7 +331,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			1VEvX/4hcL9GXKY09SDOnAdmHKA1fFWbEj3GqQgtzOA=
+			qK8f9dE+ly3sF1vbyWzV/40uZPoO3JTGDCz4uiv9xpI=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -306,14 +361,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ePbaol1rr5a+0e67fgwWpkXCsYd/EhsYAciZ7KySL8M=
+			nbKX7CrNPThIcVIAsprSuvkx92zubp3jdLqzcjp2YXc=
 			</data>
 		</dict>
 		<key>zh.lproj/Localizable.strings</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			E4gQAHL9WXo2ISF7H64jKkH924gux3jXYexyc6lEr7c=
+			RloZ+z/asFV/80sb4+NUjx6Xqj6QBCdlavY0pI2Og4o=
 			</data>
 			<key>optional</key>
 			<true/>

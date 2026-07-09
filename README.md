@@ -42,7 +42,7 @@ BC Self-Serve scraper and benefits dashboard. Tracks income, payment dates, PWD 
 
 ## Design
 
-DM Sans (body) + Fraunces (headings), warm parchment palette (`#faf7f4` light / `#0d0c0b` dark), clrs.cc orange (`#FF851B`) accent. 430px centered shell on desktop. iOS matches web: solid cards, orange accents, 8×8 pixel-art avatar generated with Core Graphics.
+DM Sans (body) + Fraunces (headings), portfolio palette (`#ffffff` light / `#1a1a1a` dark), blue (`#5B9BD5`) accent. 430px centered shell on desktop. iOS matches web: solid cards, blue accents, node-graph avatar generated with Core Graphics.
 
 ## Run
 
