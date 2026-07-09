@@ -24,3 +24,6 @@
 - [ ] Xcode Cloud green: build 42 should appear VALID in ASC (`asc builds list --app 6782366555 --limit 2`) — widget @Sendable fix pushed in 443496d, built clean locally. If no build appears, the workflow may still point at old Tally.xcodeproj path (known issue from v3.5.1) — check Manage Workflows in Xcode.
 - [ ] Confirm banner shows "Report window open" (not filed) on next login; file report by Jul 5.
 - [ ] Confirm header avatar renders (blob repointed) on next login.
+
+## Pending verification (2026-07-09, v3.5.4)
+- [ ] Confirm TestFlight build 3.5.4 processed + review submission accepted (blue icon). Ship run was in-flight at session end (bwut3bh5s); if it failed, check icon alpha again and re-run `asc workflow run ship-ios VERSION:3.5.4`.
