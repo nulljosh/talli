@@ -26,4 +26,4 @@
 - [ ] Confirm header avatar renders (blob repointed) on next login.
 
 ## Pending verification (2026-07-09, v3.5.4)
-- [ ] Confirm TestFlight build 3.5.4 processed + review submission accepted (blue icon). Ship run was in-flight at session end (bwut3bh5s); if it failed, check icon alpha again and re-run `asc workflow run ship-ios VERSION:3.5.4`.
+- [ ] v3.5.4 upload FAILED in ASC processing (2026-07-09): IPA (build 36 / 202607091308) uploaded + committed to App Store Connect, but processing failed with delivery errors **90189 + 90345**. Archive/export succeeded (blue-icon alpha fix worked). Next session: check the ASC rejection EMAIL for the specifics (codes only surface via email, not API) — 90189 is typically "redundant/invalid binary", 90345 signing/asset. Likely a widget/appex signing or asset-catalog issue, NOT the main app icon (that passed export validation). Re-ship with `asc workflow run ship-ios VERSION:3.5.4` after fixing.
