@@ -22,10 +22,21 @@ const CGEB = {
 };
 
 (async () => {
-  const { blobs } = await list({ prefix: 'talli-cache/' });
-  const anchor = blobs.find((b) => b.pathname.endsWith('/pwd-profile.json'));
-  if (!anchor) throw new Error('No pwd-profile.json found under talli-cache/');
-  const prefix = anchor.pathname.replace(/\/pwd-profile\.json$/, '');
+  const blobs = [];
+  let cursor;
+  do {
+    const r = await list({ prefix: 'talli-cache/', cursor });
+    blobs.push(...r.blobs);
+    cursor = r.cursor;
+  } while (cursor);
+  // Single-user install: any existing blob (e.g. results.json) marks the user's prefix.
+  const anchor = blobs.find((b) => /\/(pwd|rdsp|cdb)-profile\.json$/.test(b.pathname)) || blobs.find((b) => b.pathname.endsWith('/results.json'));
+  if (!anchor) {
+    console.error('No *-profile.json anchor found. Paths seen:');
+    console.error(blobs.map((b) => b.pathname).join('\n'));
+    process.exit(1);
+  }
+  const prefix = anchor.pathname.replace(/\/[^/]+$/, '');
   const path = `${prefix}/cgeb-profile.json`;
   await put(path, JSON.stringify(CGEB), { access: 'public', addRandomSuffix: false, allowOverwrite: true });
   console.log('Seeded', path);
