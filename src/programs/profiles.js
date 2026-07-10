@@ -31,6 +31,15 @@ const PROFILE_PROGRAMS = [
     validStatuses: ['pending', 'applied', 'under_review', 'approved', 'rejected', 'funded'],
     defaults: { status: 'pending', appliedDate: null, approvalDate: null, monthlyAmount: null, retroactiveEligible: false, notes: '' },
   },
+  {
+    id: 'cgeb',
+    route: 'cgeb-profile',
+    logTag: 'CGEB',
+    name: 'Canada Groceries and Essentials Benefit (CGEB)',
+    jurisdiction: 'CA-federal',
+    validStatuses: ['pending', 'active', 'adjusted', 'stopped'],
+    defaults: { status: 'pending', noticeDate: null, baseYear: null, paymentPeriod: null, annualEntitlement: null, quarterlyAmount: null, paymentSchedule: [], notes: '' },
+  },
 ];
 
 module.exports = { PROFILE_PROGRAMS };

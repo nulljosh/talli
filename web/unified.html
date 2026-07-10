@@ -701,7 +701,7 @@ function PwdResubmitModal({dark, pwdDeniedDate, onClose, onResubmitted}) {
 // ════════════════════════════════════════════════════
 // STATUS TAB
 // ════════════════════════════════════════════════════
-function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, skn, onSubmitReport, onPwdResubmit, reportMonths, username, pinSet, onSetPin}) {
+function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, cgeb, skn, onSubmitReport, onPwdResubmit, reportMonths, username, pinSet, onSetPin}) {
   const t = tk(dark);
   const now = new Date();
   const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
@@ -845,6 +845,31 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate,
           ))}
         </div>
       </div>
+
+      {cgeb&&cgeb.status!=='pending'&&(<>
+        <div style={{height:1,background:t.border,marginBottom:24}}/>
+        <div style={{marginBottom:28}}>
+          <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:16}}>Groceries and Essentials Benefit</div>
+          <div style={{background:t.accentBg,border:`1px solid ${t.accent}30`,borderRadius:12,padding:'12px 14px',marginBottom:16}}>
+            <div style={{fontSize:13,fontWeight:700,color:t.text,letterSpacing:'-0.2px'}}>Annual entitlement{cgeb.annualEntitlement!=null?` $${Number(cgeb.annualEntitlement).toFixed(2)}`:''}</div>
+            <div style={{fontSize:12,color:t.mutedMid,marginTop:1}}>{[cgeb.quarterlyAmount!=null?`$${Number(cgeb.quarterlyAmount).toFixed(2)} quarterly`:null,cgeb.paymentPeriod,cgeb.baseYear?`base year ${cgeb.baseYear}`:null].filter(Boolean).join(' · ')}</div>
+          </div>
+          {Array.isArray(cgeb.paymentSchedule)&&cgeb.paymentSchedule.length>0&&(
+            <div style={{borderLeft:`1.5px solid ${t.border}`,marginLeft:5,paddingLeft:18}}>
+              {cgeb.paymentSchedule.map((p,i)=>{
+                const past=new Date(p.date+'T12:00:00')<=new Date();
+                return (
+                  <div key={i} style={{position:'relative',paddingBottom:i<cgeb.paymentSchedule.length-1?22:0}}>
+                    <div style={{position:'absolute',left:-24,top:4,width:10,height:10,borderRadius:'50%',background:past?t.text:t.bg3,border:`2px solid ${t.bg}`}}/>
+                    <div style={{fontSize:14,fontWeight:400,color:past?t.mutedMid:t.text,letterSpacing:'-0.2px',textDecoration:past?'line-through':'none',textDecorationColor:t.border2}}>${Number(p.amount).toFixed(2)}{past?' — deposited':''}</div>
+                    <div style={{fontSize:12,marginTop:2,color:t.muted}}>{new Date(p.date+'T12:00:00').toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'})}</div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </>)}
 
       <div style={{height:1,background:t.border,marginBottom:24}}/>
 
@@ -1018,7 +1043,7 @@ function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, av
 // ════════════════════════════════════════════════════
 const TAB_ORDER = ['home','calendar','status','messages'];
 
-function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, onRefresh, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, username, onLogout, avatarUrl, onAvatarClick, avatarError, setAvatarError, skn, reportMonths, onMarkFiled, onPwdResubmitted, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
+function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, onRefresh, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, cgeb, username, onLogout, avatarUrl, onAvatarClick, avatarError, setAvatarError, skn, reportMonths, onMarkFiled, onPwdResubmitted, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
   const t = tk(dark);
   const [tab, setTab] = useState('home');
   const [showSubmit, setShowSubmit] = useState(false);
@@ -1057,7 +1082,7 @@ function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidC
 
       {tab==='home'     &&<HomeTab     dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange} reportMonths={reportMonths} onSubmitReport={()=>setShowSubmit(true)} onMarkFiled={onMarkFiled}/>}
       {tab==='calendar' &&<CalendarTab dark={dark} payDateObj={payDateObj} amount={amount} daysUntil={daysUntil}/>}
-      {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} skn={skn} onSubmitReport={()=>setShowSubmit(true)} onPwdResubmit={()=>setShowPwdResubmit(true)} reportMonths={reportMonths} username={username} pinSet={pinSet} onSetPin={()=>setShowPinSheet(true)}/>}
+      {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} cgeb={cgeb} skn={skn} onSubmitReport={()=>setShowSubmit(true)} onPwdResubmit={()=>setShowPwdResubmit(true)} reportMonths={reportMonths} username={username} pinSet={pinSet} onSetPin={()=>setShowPinSheet(true)}/>}
       {tab==='messages' &&<MessagesTab dark={dark} messages={messages} readIds={readIds} onRead={onRead} onRefresh={onRefresh}/>}
       {tab==='settings' &&<SettingsTab dark={dark} username={username} avatarUrl={avatarUrl} onAvatarRefresh={doRefresh} refreshing={refreshing} avatarError={avatarError} setAvatarError={setAvatarError} onLogout={onLogout}/>}
 
@@ -1093,6 +1118,7 @@ function App() {
   const [cdbApprovalDate, setCdbApprovalDate] = useState(null);
   const [cdbMonthlyAmount, setCdbMonthlyAmount] = useState(null);
   const [cdbRetroactiveEligible, setCdbRetroactiveEligible] = useState(false);
+  const [cgeb, setCgeb] = useState(null);
   const [avatarUrl,   setAvatarUrl]   = useState(() => localStorage.getItem('talliAvatarUrl') || null);
   const [avatarError, setAvatarError] = useState(null);
   const [skn,         setSkn]         = useState(null);
@@ -1156,6 +1182,7 @@ function App() {
       setCdbApprovalDate(json.uiConfig?.cdbApprovalDate||null);
       setCdbMonthlyAmount(json.uiConfig?.cdbMonthlyAmount||null);
       setCdbRetroactiveEligible(json.uiConfig?.cdbRetroactiveEligible||false);
+      setCgeb(json.uiConfig?.cgeb||null);
       fetch('/api/read-messages', {credentials:'include'})
         .then(r=>r.json()).then(d=>{ if(d.readIds?.length) mergeReadIds(d.readIds); }).catch(()=>{});
     } catch(e) { setAmount(v=>v??'$0'); setDaysUntil(v=>v??0); }
@@ -1258,7 +1285,7 @@ function App() {
 
   return (
     <>
-    <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} readIds={readIds} onRead={mergeReadIds} onRefresh={loadData} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} setAvatarError={setAvatarError} skn={skn} reportMonths={reportMonths} onMarkFiled={handleMarkFiled} onPwdResubmitted={handlePwdResubmitted} pinSet={pinSet} setPinSet={setPinSet} showPinSheet={showPinSheet} setShowPinSheet={setShowPinSheet}/>
+    <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} readIds={readIds} onRead={mergeReadIds} onRefresh={loadData} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} cgeb={cgeb} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} setAvatarError={setAvatarError} skn={skn} reportMonths={reportMonths} onMarkFiled={handleMarkFiled} onPwdResubmitted={handlePwdResubmitted} pinSet={pinSet} setPinSet={setPinSet} showPinSheet={showPinSheet} setShowPinSheet={setShowPinSheet}/>
     </>
   );
 }

@@ -1214,6 +1214,7 @@ app.get('/api/latest', requireAuth, async (req, res) => {
     const pwdProfile = await loadUserBlob(userId, 'pwd-profile', { status: 'applied' }).catch(() => ({ status: 'applied' }));
     const rdspProfile = await loadUserBlob(userId, 'rdsp-profile', { status: 'pending' }).catch(() => ({ status: 'pending' }));
     const cdbProfile = await loadUserBlob(userId, 'cdb-profile', { status: 'pending' }).catch(() => ({ status: 'pending' }));
+    const cgebProfile = await loadUserBlob(userId, 'cgeb-profile', { status: 'pending' }).catch(() => ({ status: 'pending' }));
     const uiConfig = {
       pwdApproved: pwdProfile.status === 'approved' || PWD_APPROVED,
       pwdMedicalDone: pwdProfile.status === 'medical_done' || pwdProfile.status === 'approved' || PWD_MEDICAL_DONE,
@@ -1228,6 +1229,7 @@ app.get('/api/latest', requireAuth, async (req, res) => {
       cdbApprovalDate: cdbProfile.approvalDate || null,
       cdbMonthlyAmount: cdbProfile.monthlyAmount || null,
       cdbRetroactiveEligible: cdbProfile.retroactiveEligible || false,
+      cgeb: cgebProfile,
     };
 
     const result = await fetchOrLoadData(req);
