@@ -162,11 +162,12 @@ function msgHash(s) {
 }
 
 function parseMessages(sections) {
-  const SPAM = new Set(['Home','Payment Info','Messages','Notifications','Service Requests','Monthly Reports','Sign out','Profile','Back','Print','Help','My Self Serve']);
-  const SPAM_RX = /^skip to|inactiv|logged out|javascript|^my self serve$|^service canada$/i;
+  // Portal side-nav labels leak in as <li> text alongside real messages; \b
+  // (not exact match) so trailing badge/count text after the label still gets caught.
+  const SPAM_RX = /^(skip to (main content|navigation|content)|home|payment info|messages?|notifications?|service requests?|monthly reports?|sign out|profile|back|print|help|my self serve|employment plans?|account info|terms of use|accessibility( statement)?|privacy|logout|menu|inactiv|logged out|javascript|service canada)\b/i;
   const DATE_RE = /\d{4}\s*\/\s*[A-Z]{3}\s*\/\s*\d{2}/;
   const combined = [...(sections['Messages']?.allText||[]), ...(sections['Notifications']?.allText||[])]
-    .filter(t => t && t.trim().length > 8 && !SPAM.has(t.trim()) && !SPAM_RX.test(t.trim()));
+    .filter(t => t && t.trim().length > 8 && !SPAM_RX.test(t.trim()));
   const msgs = []; let cur = null; let pendingDate = '';
   combined.forEach((line, i) => {
     if (DATE_RE.test(line)) {

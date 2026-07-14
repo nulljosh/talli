@@ -36,9 +36,13 @@ function extractMobileData(scraperResult) {
 
   const MONTHS = { JAN: '01', FEB: '02', MAR: '03', APR: '04', MAY: '05', JUN: '06',
     JUL: '07', AUG: '08', SEP: '09', OCT: '10', NOV: '11', DEC: '12' };
-  const messagesAllText = (sections.Messages && sections.Messages.allText) || [];
+  const messagesAllText = [
+    ...((sections.Messages && sections.Messages.allText) || []),
+    ...((sections.Notifications && sections.Notifications.allText) || []),
+  ];
+  const NAV_SPAM_RX = /^(skip to (main content|navigation|content)|home|payment info|messages?|notifications?|service requests?|monthly reports?|sign out|profile|back|print|help|my self serve|employment plans?|account info|terms of use|accessibility( statement)?|privacy|logout|menu)\b/i;
   const messages = messagesAllText
-    .filter((entry) => typeof entry === 'string' && entry.includes('\n'))
+    .filter((entry) => typeof entry === 'string' && entry.includes('\n') && !NAV_SPAM_RX.test(entry.trim()))
     .map((entry, idx) => {
       const newlineIdx = entry.indexOf('\n');
       const rawDate = entry.substring(0, newlineIdx).trim();
@@ -167,6 +171,25 @@ function run() {
     assert.strictEqual(result.messages.length, 1);
     assert.strictEqual(result.messages[0].timestamp, '2026-03-01');
     assert.strictEqual(result.messages[0].text, 'Your cheque is ready');
+  });
+
+  test('portal side-nav labels leaking into Messages/Notifications are filtered out', () => {
+    const result = extractMobileData({
+      sections: {
+        'Payment Info': { tableData: [], allText: [] },
+        Messages: {
+          allText: [
+            'Notifications\nsomething',
+            'Payment Info\nsomething',
+            'Employment Plans\nsomething',
+            '2026 / MAY / 25\nExtension Granted',
+          ]
+        },
+        Notifications: { allText: ['Skip to main content\nsomething', 'Account Info\nsomething'] }
+      }
+    });
+    assert.strictEqual(result.messages.length, 1);
+    assert.strictEqual(result.messages[0].text, 'Extension Granted');
   });
 
   // --- Next payment date ---

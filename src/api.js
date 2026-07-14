@@ -2059,8 +2059,11 @@ function extractMobileData(scraperResult) {
     ...((sections.Messages && sections.Messages.allText) || []),
     ...((sections.Notifications && sections.Notifications.allText) || []),
   ];
+  // Portal side-nav labels leak in as <li> text alongside real messages; \b
+  // (not $) so trailing badge/count text after the label still gets caught.
+  const NAV_SPAM_RX = /^(skip to (main content|navigation|content)|home|payment info|messages?|notifications?|service requests?|monthly reports?|sign out|profile|back|print|help|my self serve|employment plans?|account info|terms of use|accessibility( statement)?|privacy|logout|menu)\b/i;
   const messages = messagesAllText
-    .filter((entry) => typeof entry === 'string' && entry.trim())
+    .filter((entry) => typeof entry === 'string' && entry.trim() && !NAV_SPAM_RX.test(entry.trim()))
     .map((entry) => {
       const newlineIdx = entry.indexOf('\n');
       if (newlineIdx === -1) {
