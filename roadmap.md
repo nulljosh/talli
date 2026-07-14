@@ -42,3 +42,6 @@
 - [ ] Fix What's New screen — too much spacing, size to content
 - [ ] Resume 3.5.5 ship: `asc workflow run --file .asc/workflow.json ship-ios --resume ship-ios-20260714T085150Z-45be0270` after deleting stale .asc/artifacts/Talli.xcarchive (archive step needs --overwrite)
 - [ ] asc web login failed 401 (wrong password or Apple flake) — retry `asc web auth login` tomorrow, then Lexly Mac review pull
+
+## From Talli.pdf (imported 2026-07-14)
+- [ ] iOS has new icon (from icon rebrand v3.5.4) — Mac app icon needs the same update, still on old art
