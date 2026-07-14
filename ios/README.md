@@ -1,7 +1,7 @@
 <img src="icon.svg" width="80">
 
 # Talli iOS
-![version](https://img.shields.io/badge/version-v2.4.3-orange)
+![version](https://img.shields.io/badge/version-v2.4.4-blue)
 
 <p align="center">
   <img src="screenshots/appstore/01-home.png" width="200">
