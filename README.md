@@ -2,11 +2,11 @@
 
 # Talli
 
-![version](https://img.shields.io/badge/version-v3.5.3-blue)
-![App Store](https://img.shields.io/badge/App%20Store-Waiting%20for%20Review-yellow)
+![version](https://img.shields.io/badge/version-v3.5.4-blue)
+![App Store](https://img.shields.io/badge/App%20Store-Available-brightgreen)
 ![license](https://img.shields.io/badge/license-MIT-green) [![GitHub](https://img.shields.io/badge/GitHub-nulljosh%2Ftalli-black?logo=github)](https://github.com/nulljosh/talli)
 
-Live at [talli.heyitsmejosh.com](https://talli.heyitsmejosh.com)
+Live at [talli.heyitsmejosh.com](https://talli.heyitsmejosh.com) · [App Store](https://apps.apple.com/app/talli/id6782366555)
 
 <p align="center">
   <img src="ios/screenshots/appstore/01-home.png" width="200">
