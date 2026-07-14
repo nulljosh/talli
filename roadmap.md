@@ -30,3 +30,13 @@
 
 ## From Icons.pdf / Asc.pdf (imported 2026-07-12)
 - [ ] Talli Mac 1.0 PREPARE_FOR_SUBMISSION — build, screenshots, metadata, submit
+
+## 2026-07-14 dump
+- [ ] Fix failing GitHub Actions tests (nulljosh/talli Tests workflow, main)
+- [ ] Fix Xcode Cloud builds/tests
+- [ ] ASC ITMS-90473: TalliWidgets CFBundleShortVersionString (2.4.4) != app (3.5.4) — align, bump build
+- [ ] Submit latest version to App Store
+- [ ] Generate QR code for printed stickers linking to app
+- [ ] iOS UI refresh — at minimum splash screen
+- [ ] Navbar glitch: find root cause, tighten navbar code (intermittent, "solved itself")
+- [ ] Fix What's New screen — too much spacing, size to content
