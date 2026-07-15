@@ -31,3 +31,4 @@ macos/fastlane/report.xml
 macos/fastlane/README.md
 .asc/artifacts/
 .asc/release/
+.asc/runs/
