@@ -59,3 +59,6 @@ npm run upload-blob # upload to Vercel Blob
 ## Imported from Talli.pdf (2026-06-21)
 - [ ] Web login issue — could not reproduce; no real BC Self-Serve creds available in this environment, no error logs found. Likely fine or an intermittent portal outage (already handled distinctly in code).
 - [ ] macOS App Store Connect app record — doesn't exist yet for `com.heyitsmejosh.tally.mac`; `fastlane mac_beta` builds clean but upload fails until the record is created manually in ASC (same flow used to fix Epiphany macOS — see epiphany/CLAUDE.md).
+
+## Roadmap (2026-07-18 nightly wrap)
+- **Merge Talli Mac into Talli iOS**: Consolidate the two ASC app records (unify bundle ID from com.heyitsmejosh.talli.mac to com.heyitsmejosh.talli, same pattern as spark/books consolidation done tonight). Recolor Mac icon orange→blue to match iOS. Both icon sources are already correct in the repo; this follows the same hand-exported-PNG-drift bug pattern found in spark/portfolio/books where the PNG diverged from the SVG source.
