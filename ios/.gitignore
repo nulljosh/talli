@@ -1,6 +1,12 @@
 # Xcode
-*.xcodeproj/
-*.xcworkspace/
+*.xcodeproj/*
+!*.xcodeproj/project.xcworkspace/
+*.xcodeproj/project.xcworkspace/*
+!*.xcodeproj/project.xcworkspace/xcshareddata/
+*.xcodeproj/project.xcworkspace/xcshareddata/*
+!*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/*
+!*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
 build/
 DerivedData/
 *.pbxuser
@@ -17,7 +23,6 @@ xcuserdata/
 # Swift Package Manager
 .build/
 Packages/
-Package.resolved
 
 # OS
 .DS_Store
