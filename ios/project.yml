@@ -5,6 +5,10 @@ options:
     iOS: "17.0"
 attributes:
   LastUpgradeCheck: "2650"
+packages:
+  SwiftLint:
+    url: https://github.com/realm/SwiftLint
+    from: 0.59.1
 settings:
   DEVELOPMENT_TEAM: QMM486NPYC
   SWIFT_VERSION: "6.0"
@@ -44,6 +48,9 @@ targets:
           - group.com.heyitsmejosh.tally
     dependencies:
       - target: TalliWidgetsExtension
+    buildToolPlugins:
+      - plugin: SwiftLintBuildToolPlugin
+        package: SwiftLint
   TalliWidgetsExtension:
     type: app-extension
     platform: iOS

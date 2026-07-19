@@ -6,3 +6,11 @@ force_cast: warning
 force_try: warning
 disabled_rules:
   - todo
+  # matches epiphany's swiftlint config -- disabled to unblock the build-tool plugin
+  # on existing code, not a style endorsement; tackle deliberately later
+  - identifier_name
+  - type_body_length
+  - large_tuple
+  - cyclomatic_complexity
+  - file_length
+  - function_body_length
