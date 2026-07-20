@@ -479,11 +479,11 @@ private struct DashboardScreen: View {
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
-                Text("$174.50")
+                Text(CRADates.lastKnownGSTQuarterlyText)
                     .font(.subheadline.weight(.semibold))
             }
 
-            Text("4 payments per year. Not all CRA credits shown.")
+            Text("Last known amount. 4 payments per year. Not all CRA credits shown.")
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
         }

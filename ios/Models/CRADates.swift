@@ -15,4 +15,8 @@ enum CRADates {
     static var nextGSTPaymentText: String {
         nextGSTPayment().formatted(date: .abbreviated, time: .omitted)
     }
+
+    // ponytail: last known quarterly amount — no live source (scraper covers BC Self-Serve,
+    // not CRA My Account). Upgrade path: CRA My Account integration or manual entry in Settings.
+    static let lastKnownGSTQuarterlyText = "$174.50"
 }

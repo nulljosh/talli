@@ -1,10 +1,10 @@
 import SwiftUI
 
-private let whatsNewVersion = "2.4.4"
+private let whatsNewVersion = "3.5.6"
 private let whatsNewBullets = [
-    "Appearance picker in Settings — Light, Dark, or System",
-    "FloatingTabBar with SF Symbol fill states and haptics",
-    "Fixed calendar showing stale \"today\" and nav bar overlap",
+    "Login and splash screens now match your light/dark theme",
+    "Home page decluttered — status noise removed",
+    "CRA benefit dates update themselves each quarter",
 ]
 
 struct WhatsNewSheet: View {
