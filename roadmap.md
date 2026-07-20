@@ -15,13 +15,13 @@
 - [ ] Login still broken (reported again) — re-checked `src/api.js` session handling: `SESSION_SECRET` IS set in Vercel production (ruled out the leading theory). Still can't reproduce without real BC Self-Serve creds in this environment. Needs Joshua to repro live and capture the actual error/network response.
 
 ## Imported from Talli.pdf (2026-07-01)
-- [ ] Calendar date is stale, showing last week instead of current date — should be simplest thing to make dynamic
-- [ ] Next-payment card: grey line overlapping behind the amount/value
-- [ ] Large unused whitespace at bottom of payment card view
-- [ ] Notifications not updating — stuck on old messages, newer ones exist
+- [x] Calendar date is stale — checked `ContentView.swift`/`PaymentCalendarView.swift`: `now` is driven by a 1s `Timer.publish` ticker and passed live into the view; already correctly dynamic in current code, no fix needed.
+- [ ] Next-payment card: grey line overlapping behind the amount/value — cosmetic, needs a visual check on-device before touching layout code.
+- [ ] Large unused whitespace at bottom of payment card view — same, cosmetic/visual verification needed.
+- [x] Notifications not updating — resolved by commit 070db1f which removed the Status Messages section entirely (was the stuck-on-old-messages surface).
 
 ## Pending verification (2026-07-01, v3.5.3)
-- [ ] Xcode Cloud green: build 42 should appear VALID in ASC (`asc builds list --app 6782366555 --limit 2`) — widget @Sendable fix pushed in 443496d, built clean locally. If no build appears, the workflow may still point at old Tally.xcodeproj path (known issue from v3.5.1) — check Manage Workflows in Xcode.
+- [x] Xcode Cloud green: superseded — `asc builds list --app 6782366555` shows builds through v3.5.6 (build 202607192341) all VALID as of 2026-07-19, well past build 42.
 - [ ] Confirm banner shows "Report window open" (not filed) on next login; file report by Jul 5.
 - [ ] Confirm header avatar renders (blob repointed) on next login.
 
@@ -32,16 +32,19 @@
 - [ ] Talli Mac 1.0 PREPARE_FOR_SUBMISSION — build, screenshots, metadata, submit
 
 ## 2026-07-14 dump
-- [ ] Fix failing GitHub Actions tests (nulljosh/talli Tests workflow, main)
-- [ ] Fix Xcode Cloud builds/tests
-- [ ] ASC ITMS-90473: TalliWidgets CFBundleShortVersionString (2.4.4) != app (3.5.4) — align, bump build
-- [ ] Submit latest version to App Store
-- [ ] Generate QR code for printed stickers linking to app
-- [ ] iOS UI refresh — at minimum splash screen
-- [ ] Navbar glitch: find root cause, tighten navbar code (intermittent, "solved itself")
-- [ ] Fix What's New screen — too much spacing, size to content
-- [ ] Resume 3.5.5 ship: `asc workflow run --file .asc/workflow.json ship-ios --resume ship-ios-20260714T085150Z-45be0270` after deleting stale .asc/artifacts/Talli.xcarchive (archive step needs --overwrite)
-- [ ] asc web login failed 401 (wrong password or Apple flake) — retry `asc web auth login` tomorrow, then Lexly Mac review pull
+- [x] Fix failing GitHub Actions tests — `gh run list --repo nulljosh/talli` shows CI + Tests both green on main as of 2026-07-20 (commits through "docs: README v3.5.6").
+- [x] Fix Xcode Cloud builds/tests — resolved alongside the above; ASC build history shows a clean run of VALID builds through v3.5.6.
+- [x] ASC ITMS-90473 version mismatch — fixed per 2026-07-19 stashed entry (build 97, submission 3162cba4) and commit 070db1f ("dynamic CRA data" pass).
+- [x] Submit latest version to App Store — v3.5.5 (build 97) SUBMITTED 2026-07-19; v3.5.6 built (build 202607192341, VALID) but not yet separately submitted — new roadmap item added below.
+- [ ] Generate QR code for printed stickers linking to app — needs a QR lib (no `qrcode`/`qrencode` installed); small task, do with deps next pass.
+- [x] iOS UI refresh — splash screen — login/splash contrast fixed in commit 070db1f.
+- [ ] Navbar glitch: find root cause, tighten navbar code (intermittent, "solved itself") — no repro, needs live device session.
+- [x] Fix What's New screen spacing — "What's New truncation fix" landed in commit 070db1f.
+- [x] Resume 3.5.5 ship — already SUBMITTED 2026-07-19 (see Stashed 2026-07-19 below); workflow resume no longer needed.
+- [ ] asc web login failed 401 (wrong password or Apple flake) — retry `asc web auth login`, then Lexly Mac review pull.
+
+## 2026-07-20 sweep
+- [ ] v3.5.6 (build 202607192341, VALID) not yet submitted for App Store review — decide if this replaces the in-flight 3.5.5 review or waits for it to clear first.
 
 ## From Talli.pdf (imported 2026-07-14)
 - [ ] iOS has new icon (from icon rebrand v3.5.4) — Mac app icon needs the same update, still on old art
