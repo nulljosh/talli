@@ -45,3 +45,7 @@
 
 ## From Talli.pdf (imported 2026-07-14)
 - [ ] iOS has new icon (from icon rebrand v3.5.4) — Mac app icon needs the same update, still on old art
+
+## Stashed 2026-07-19
+- [x] iOS 3.5.5 (build 97, ITMS-90473 widget/version fix) SUBMITTED for review 2026-07-19 (submission 3162cba4)
+- [ ] macOS 1.0 (app 6782661988) still PREPARE_FOR_SUBMISSION — same prep pass needed (build, metadata, availability) when Mac push resumes
