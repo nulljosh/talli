@@ -2,7 +2,7 @@
 
 # Talli
 
-![version](https://img.shields.io/badge/version-v3.5.4-blue)
+![version](https://img.shields.io/badge/version-v3.5.6-blue)
 ![App Store](https://img.shields.io/badge/App%20Store-Available-brightgreen)
 ![license](https://img.shields.io/badge/license-MIT-green) [![GitHub](https://img.shields.io/badge/GitHub-nulljosh%2Ftalli-black?logo=github)](https://github.com/nulljosh/talli)
 
@@ -61,7 +61,7 @@ MIT 2026 Joshua Trommel
 ## This Week / This Month
 
 **This week**
-- [ ] Watch iOS v3.5.1 clear App Store review
+- [ ] Watch iOS v3.5.6 clear App Store review (submitted 2026-07-19: login/splash theme fix, Status Messages removed, What's New truncation fix, dynamic CRA dates)
 - [ ] Fix Xcode Cloud workflow pointing at old `Tally.xcodeproj`
 - [ ] Avatar persistence bug (avatarUrl not rehydrated)
 
