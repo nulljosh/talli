@@ -194,8 +194,7 @@ private struct LoginScreen: View {
             Spacer()
         }
         .padding(24)
-        .background(Color(hex: "1a1612").ignoresSafeArea())
-        .preferredColorScheme(.dark)
+        .background(Color(.systemBackground).ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
     }
 }
@@ -315,10 +314,6 @@ private struct DashboardScreen: View {
                 dateCard
                 ApplicationTimelinesCard(pwdSteps: pwdSteps, dtcSteps: dtcSteps)
                 craPayments
-
-                if !appState.statusMessages.isEmpty {
-                    messagesPreview
-                }
             }
             .padding()
         }
@@ -454,7 +449,7 @@ private struct DashboardScreen: View {
         [
             ("Application submitted", "Jan 14, 2026", true),
             ("Medical review", "Complete", true),
-            ("Decision", "Denied May 2026 -- Resubmission in progress", false),
+            ("Decision", "Third-round resubmission in progress", false),
             ("Backdated payments", "Upon approval", false)
         ]
     }
@@ -462,9 +457,9 @@ private struct DashboardScreen: View {
     private var dtcSteps: [(label: String, date: String, done: Bool)] {
         [
             ("Application submitted", "April 2026", true),
-            ("CRA processing", "Expected 8-12 weeks", false),
-            ("Decision", "Pending", false),
-            ("Credit applied retroactively", "Pending", false)
+            ("CRA processing", "Complete", true),
+            ("Decision", "Accepted July 2026", true),
+            ("Credit applied retroactively", "In progress", false)
         ]
     }
 
@@ -479,7 +474,7 @@ private struct DashboardScreen: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("GST/HST Credit")
                         .font(.subheadline.weight(.medium))
-                    Text("June 5, 2026")
+                    Text(CRADates.nextGSTPaymentText)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -496,20 +491,6 @@ private struct DashboardScreen: View {
         .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
     }
 
-    private var messagesPreview: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Status Messages")
-                .font(.headline)
-
-            ForEach(appState.statusMessageItems.prefix(3)) { message in
-                Text("-- \(message.text)")
-                    .font(.subheadline)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-        }
-        .padding()
-        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
-    }
 }
 
 private struct OfflineBanner: View {

@@ -17,8 +17,7 @@ struct SplashView: View {
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(hex: "1a1612"))
-        .preferredColorScheme(.dark)
+        .background(Color(.systemBackground))
     }
 }
 

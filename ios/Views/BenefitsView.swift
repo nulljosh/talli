@@ -13,7 +13,7 @@ struct BenefitsView: View {
                     .font(.title2.weight(.semibold))
                     .foregroundStyle(.primary)
 
-                benefitRow("GST/HST Credit", "$174.50 next Jun 5", "Automatic")
+                benefitRow("GST/HST Credit", "$174.50 next \(CRADates.nextGSTPaymentText)", "Automatic")
                 benefitRow("BC Renter's Tax Credit", "$400/yr max", "Claim on return")
                 benefitRow("Canada Workers Benefit", "$1,633/yr single", "Claim on return")
                 benefitRow("Canadian Dental Care Plan", "Free under $70K", "Application required")
