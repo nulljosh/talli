@@ -1,8 +1,8 @@
 # Talli Roadmap
 
 ## App Store Connect (2026-06-22)
-- [ ] **Build upload failed ASC processing** (error code 90189, no detail text via API) — check the Apple validation email for the real reason, fix, then re-upload.
-- [ ] Support URL still missing — required before submission.
+- [x] **Build upload failed ASC processing** (error code 90189) — superseded; `asc builds list --app 6782366555` shows all builds through v3.5.6 (build 103, 2026-07-20) VALID.
+- [x] Support URL missing — it was actually set but pointed at stale `tally.heyitsmejosh.com`; tried `asc apps info edit --support-url https://talli.heyitsmejosh.com` but ASC rejected it: "supportUrl cannot be edited at this time" (metadata locked while a version is in review). Retry once the in-flight review clears.
 
 ## Stashed 2026-06-21
 
@@ -41,13 +41,13 @@
 - [ ] Navbar glitch: find root cause, tighten navbar code (intermittent, "solved itself") — no repro, needs live device session.
 - [x] Fix What's New screen spacing — "What's New truncation fix" landed in commit 070db1f.
 - [x] Resume 3.5.5 ship — already SUBMITTED 2026-07-19 (see Stashed 2026-07-19 below); workflow resume no longer needed.
-- [ ] asc web login failed 401 (wrong password or Apple flake) — retry `asc web auth login`, then Lexly Mac review pull.
+- [ ] asc web login failed 401 (wrong password or Apple flake) — `asc web auth login` requires live 2FA input, can't complete headlessly. Needs Joshua to run it interactively.
 
 ## 2026-07-20 sweep
-- [ ] v3.5.6 (build 202607192341, VALID) not yet submitted for App Store review — decide if this replaces the in-flight 3.5.5 review or waits for it to clear first.
+- [ ] v3.5.6 (build 103, VALID) not yet submitted — ASC metadata is currently locked ("cannot be edited at this time"), confirming a version (3.5.5) is still actively in review. Wait for it to clear before submitting 3.5.6 rather than trying to replace it mid-review.
 
 ## From Talli.pdf (imported 2026-07-14)
-- [ ] iOS has new icon (from icon rebrand v3.5.4) — Mac app icon needs the same update, still on old art
+- [x] iOS has new icon (from icon rebrand v3.5.4) — Mac app icon needs the same update, still on old art. Fixed: regenerated `macos/Assets.xcassets/AppIcon.appiconset/*.png` (16–1024px) from root `icon.svg` via `rsvg-convert` — verified bg pixel now `#1a1a1a` (was `#1a1712` brown). Needs a Mac archive/build to actually ship it.
 
 ## Stashed 2026-07-19
 - [x] iOS 3.5.5 (build 97, ITMS-90473 widget/version fix) SUBMITTED for review 2026-07-19 (submission 3162cba4)
