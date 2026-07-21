@@ -34,7 +34,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally
         PRODUCT_NAME: Talli
         MARKETING_VERSION: "3.5.6"
-        CURRENT_PROJECT_VERSION: "202607211609"
+        CURRENT_PROJECT_VERSION: "202607211631"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         CODE_SIGN_ENTITLEMENTS: Talli.entitlements
         ENABLE_HARDENED_RUNTIME: YES
@@ -59,7 +59,7 @@ targets:
       properties:
         com.apple.security.app-sandbox: true
         com.apple.security.application-groups:
-          - group.com.jt.talli
+          - group.com.heyitsmejosh.tally
   TalliMacUITests:
     type: bundle.ui-testing
     platform: macOS

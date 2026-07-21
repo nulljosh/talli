@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Talli.pkg</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>x86_64</string>
+				<string>arm64</string>
+			</array>
+			<key>buildNumber</key>
+			<string>202607211631</string>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>841ED832F5CB2EA83C5EE8C502992F8B46BBBC32</string>
+				<key>dateExpires</key>
+				<string>2027-06-24</string>
+				<key>type</key>
+				<string>Mac App Distribution</string>
+			</dict>
+			<key>embeddedBinaries</key>
+			<array>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>x86_64</string>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>202607211631</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>841ED832F5CB2EA83C5EE8C502992F8B46BBBC32</string>
+						<key>dateExpires</key>
+						<string>2027-06-24</string>
+						<key>type</key>
+						<string>Mac App Distribution</string>
+					</dict>
+					<key>entitlements</key>
+					<dict>
+						<key>com.apple.application-identifier</key>
+						<string>QMM486NPYC.com.heyitsmejosh.tally.widgets</string>
+						<key>com.apple.developer.team-identifier</key>
+						<string>QMM486NPYC</string>
+						<key>com.apple.security.app-sandbox</key>
+						<true/>
+						<key>com.apple.security.application-groups</key>
+						<array>
+							<string>group.com.heyitsmejosh.tally</string>
+						</array>
+					</dict>
+					<key>name</key>
+					<string>TalliWidgets.appex</string>
+					<key>profile</key>
+					<dict>
+						<key>UUID</key>
+						<string>bb6dcd91-db01-4283-823b-66445f48f904</string>
+						<key>dateExpires</key>
+						<string>2027-06-24</string>
+						<key>name</key>
+						<string>Mac Team Store Provisioning Profile: com.heyitsmejosh.tally.widgets</string>
+					</dict>
+					<key>symbols</key>
+					<true/>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>QMM486NPYC</string>
+						<key>name</key>
+						<string>Joshua Trommel</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>3.5.6</string>
+				</dict>
+			</array>
+			<key>entitlements</key>
+			<dict>
+				<key>com.apple.application-identifier</key>
+				<string>QMM486NPYC.com.heyitsmejosh.tally</string>
+				<key>com.apple.developer.team-identifier</key>
+				<string>QMM486NPYC</string>
+				<key>com.apple.security.app-sandbox</key>
+				<true/>
+				<key>com.apple.security.application-groups</key>
+				<array>
+					<string>group.com.heyitsmejosh.tally</string>
+				</array>
+				<key>com.apple.security.network.client</key>
+				<true/>
+			</dict>
+			<key>name</key>
+			<string>Talli.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>fc4176e6-313d-4e44-b15f-c4568c9e34a8</string>
+				<key>dateExpires</key>
+				<string>2027-06-24</string>
+				<key>name</key>
+				<string>Mac Team Store Provisioning Profile: com.heyitsmejosh.tally</string>
+			</dict>
+			<key>symbols</key>
+			<true/>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>QMM486NPYC</string>
+				<key>name</key>
+				<string>Joshua Trommel</string>
+			</dict>
+			<key>versionNumber</key>
+			<string>3.5.6</string>
+		</dict>
+	</array>
+</dict>
+</plist>
