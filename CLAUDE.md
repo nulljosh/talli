@@ -62,3 +62,10 @@ npm run upload-blob # upload to Vercel Blob
 
 ## Roadmap (2026-07-18 nightly wrap)
 - **Merge Talli Mac into Talli iOS**: Consolidate the two ASC app records (unify bundle ID from com.heyitsmejosh.talli.mac to com.heyitsmejosh.talli, same pattern as spark/books consolidation done tonight). Recolor Mac icon orange→blue to match iOS. Both icon sources are already correct in the repo; this follows the same hand-exported-PNG-drift bug pattern found in spark/portfolio/books where the PNG diverged from the SVG source.
+
+## Merge progress (2026-07-21 night)
+- [x] `macos/project.yml` bundle ID fixed: `com.heyitsmejosh.tally.mac` → `com.heyitsmejosh.tally` (main app + widgets targets), matching iOS.
+- [x] **Real bug found and fixed**: `TalliWidgets` macOS entitlements declared App Group `group.com.jt.talli`, but the main app (and the actual Swift code reading it, `Models/MacAppState.swift:11`) uses `group.com.heyitsmejosh.tally` — a genuine mismatch that was silently breaking widget↔app data sharing on macOS, independent of tonight's merge work. Fixed in `project.yml`'s `TalliWidgets.entitlements.properties` (xcodegen regenerates the `.entitlements` file from this — editing the generated file directly doesn't stick).
+- [x] Upload attempt #1 (before the App Group fix): failed with errors 90345 + 90348.
+- [x] Upload attempt #2 (after the App Group fix): 90345 is **gone** — confirms the App Group mismatch was the real cause of that one. **90348 still persists.**
+- [ ] **90348 needs the Apple validation email** — no detail text available via the public API or the authenticated `asc web` session either (checked both 2026-07-21). Not blindly guessable further; check trommatic@icloud.com for Apple's ITMS validation message, then resume: `asc builds upload --app 6782366555 --pkg ".asc/artifacts/TalliMacMerged2Export/Talli.pkg" --version "3.5.6" --build-number "<new>"`.
