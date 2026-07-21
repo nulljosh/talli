@@ -326,8 +326,8 @@
 			projectRoot = "";
 			targets = (
 				CA1CD7044DAB973754F775E5 /* TalliMac */,
-				BCF0D51D160B18E2451B3FFB /* TalliMacUITests */,
 				727D6FC087ABCC4491B9D045 /* TalliWidgets */,
+				BCF0D51D160B18E2451B3FFB /* TalliMacUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -416,7 +416,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 202607100421;
+				CURRENT_PROJECT_VERSION = 202607211609;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "";
@@ -426,8 +426,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 3.5.4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.heyitsmejosh.tally.mac;
+				MARKETING_VERSION = 3.5.6;
+				PRODUCT_BUNDLE_IDENTIFIER = com.heyitsmejosh.tally;
 				PRODUCT_NAME = Talli;
 				SDKROOT = macosx;
 			};
@@ -443,7 +443,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Talli Widgets";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.heyitsmejosh.tally.mac.widgets;
+				PRODUCT_BUNDLE_IDENTIFIER = com.heyitsmejosh.tally.widgets;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -482,7 +482,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 202607100421;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = QMM486NPYC;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -496,7 +496,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 3.5.4;
+				MARKETING_VERSION = 1.0.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -517,7 +517,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Talli Widgets";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.heyitsmejosh.tally.mac.widgets;
+				PRODUCT_BUNDLE_IDENTIFIER = com.heyitsmejosh.tally.widgets;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -556,7 +556,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 202607100421;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = QMM486NPYC;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -576,7 +576,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 3.5.4;
+				MARKETING_VERSION = 1.0.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -596,7 +596,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 202607100421;
+				CURRENT_PROJECT_VERSION = 202607211609;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "";
@@ -606,8 +606,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 3.5.4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.heyitsmejosh.tally.mac;
+				MARKETING_VERSION = 3.5.6;
+				PRODUCT_BUNDLE_IDENTIFIER = com.heyitsmejosh.tally;
 				PRODUCT_NAME = Talli;
 				SDKROOT = macosx;
 			};
