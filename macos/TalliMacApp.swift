@@ -11,6 +11,7 @@ struct TalliMacApp: App {
                 .environment(appState)
                 .preferredColorScheme(rawTheme == "dark" ? .dark : rawTheme == "light" ? .light : nil)
                 .task {
+                    guard !CommandLine.arguments.contains("UITEST_SNAPSHOT") else { return }
                     await appState.bootstrap()
                 }
         }

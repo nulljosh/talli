@@ -55,7 +55,7 @@ final class MacAppState {
         if CommandLine.arguments.contains("UITEST_SNAPSHOT") {
             isAuthenticated = true
             dashboard = MacDashboardData(
-                paymentAmount: "$1,234.56",
+                paymentAmount: "$1,080.00",
                 nextPaymentDate: "2026-07-25",
                 statusMessages: [
                     .init(text: "Your monthly report has been received.", timestamp: "2026-06-02"),
@@ -112,6 +112,7 @@ final class MacAppState {
     // MARK: - Auth
 
     func bootstrap() async {
+        if CommandLine.arguments.contains("UITEST_SNAPSHOT") { return }
         if let credentials = MacKeychainHelper.loadCredentials() {
             // Fast path: check if server session is still alive (no BC Self-Serve roundtrip)
             if let sessionValid = try? await MacAPIClient.shared.sessionCheck(), sessionValid {

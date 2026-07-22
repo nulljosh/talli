@@ -51,7 +51,7 @@ final class AppState {
         if CommandLine.arguments.contains("UITEST_SNAPSHOT") {
             isAuthenticated = true
             dashboard = DashboardData(
-                paymentAmount: "$1,234.56",
+                paymentAmount: "$1,080.00",
                 nextPaymentDate: "2026-07-25",
                 statusMessages: [
                     .init(text: "Your monthly report has been received.", timestamp: "2026-06-02"),
