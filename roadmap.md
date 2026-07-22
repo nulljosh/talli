@@ -49,6 +49,9 @@
 ## From Talli.pdf (imported 2026-07-14)
 - [x] iOS has new icon (from icon rebrand v3.5.4) — Mac app icon needs the same update, still on old art. Fixed: regenerated `macos/Assets.xcassets/AppIcon.appiconset/*.png` (16–1024px) from root `icon.svg` via `rsvg-convert` — verified bg pixel now `#1a1a1a` (was `#1a1712` brown). Needs a Mac archive/build to actually ship it.
 
+## From Merge status.pdf (imported 2026-07-21)
+- [ ] Mac merge: code fixed (bundle ID), archive succeeds, but upload fails with opaque Apple error 90348 (no detail via API). Needs Joshua's validation-email check or asc web auth login to get real error detail.
+
 ## Stashed 2026-07-19
 - [x] iOS 3.5.5 (build 97, ITMS-90473 widget/version fix) SUBMITTED for review 2026-07-19 (submission 3162cba4)
 - [ ] macOS 1.0 (app 6782661988) still PREPARE_FOR_SUBMISSION — same prep pass needed (build, metadata, availability) when Mac push resumes
