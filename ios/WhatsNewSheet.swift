@@ -1,10 +1,8 @@
 import SwiftUI
 
-private let whatsNewVersion = "3.5.6"
+private let whatsNewVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
 private let whatsNewBullets = [
-    "Login and splash screens now match your light/dark theme",
-    "Home page decluttered — status noise removed",
-    "CRA benefit dates update themselves each quarter",
+    "Fixed What's New sheet getting cut off at the bottom on some devices",
 ]
 
 struct WhatsNewSheet: View {
