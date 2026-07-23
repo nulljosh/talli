@@ -47,7 +47,7 @@ struct WhatsNewSheet: View {
                     Color.clear.preference(key: SheetHeightKey.self, value: geo.size.height)
                 })
                 .onPreferenceChange(SheetHeightKey.self) { contentHeight = $0 }
-                .presentationDetents([.height(contentHeight)])
+                .presentationDetents([.height(contentHeight + 34)]) // ponytail: +34 covers home-indicator safe area GeometryReader doesn't include
             }
     }
 }
