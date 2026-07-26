@@ -2,7 +2,6 @@
 
 ## Open
 - [ ] Push notifications for payday + when monthly reports open (1–5 of each month)
-- [ ] Login still broken (reported again) — re-checked `src/api.js` session handling: `SESSION_SECRET` IS set in Vercel production (ruled out the leading theory). Still can't reproduce without real BC Self-Serve creds in this environment. Needs Joshua to repro live and capture the actual error/network response.
 - [ ] Next-payment card: grey line overlapping behind the amount/value — cosmetic, needs a visual check on-device before touching layout code.
 - [ ] Large unused whitespace at bottom of payment card view — same, cosmetic/visual verification needed.
 - [ ] Confirm banner shows "Report window open" (not filed) on next login; file report by Jul 5.
