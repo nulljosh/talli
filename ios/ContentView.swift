@@ -427,7 +427,7 @@ private struct DashboardScreen: View {
     }
 
     private var dateCard: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 4) {
             PaymentCalendarView(paymentDate: appState.parsedNextPaymentDate, today: now)
 
             HStack {
@@ -440,7 +440,9 @@ private struct DashboardScreen: View {
                     .contentTransition(.numericText())
             }
         }
-        .padding()
+        .padding(.horizontal, 16)
+        .padding(.top, 14)
+        .padding(.bottom, 12)
         .background(RoundedRectangle(cornerRadius: 12, style: .continuous)
             .fill(Color(.secondarySystemGroupedBackground)))
     }

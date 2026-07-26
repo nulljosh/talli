@@ -33,63 +33,14 @@ struct ReportView: View {
                     .foregroundStyle(.secondary)
             }
 
-            Section("Personal Information") {
-                VStack(alignment: .leading, spacing: 16) {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("Social Insurance Number")
-                            .font(.subheadline.weight(.medium))
-
-                        SecureField("SIN (9 digits)", text: $sin)
-                            .keyboardType(.numberPad)
-                            .onChange(of: sin) { _, newValue in
-                                sin = digitsOnly(from: newValue, maxCount: 9)
-                            }
-
-                        if let sinValidationMessage {
-                            Text(sinValidationMessage)
-                                .font(.footnote)
-                                .foregroundStyle(Color.gradeRed)
-                        }
-                    }
-
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("Phone Number")
-                            .font(.subheadline.weight(.medium))
-
-                        TextField("Phone", text: $phone)
-                            .keyboardType(.phonePad)
-                            .onChange(of: phone) { _, newValue in
-                                phone = formatPhone(newValue)
-                            }
-
-                        if let phoneValidationMessage {
-                            Text(phoneValidationMessage)
-                                .font(.footnote)
-                                .foregroundStyle(Color.gradeRed)
-                        }
-                    }
-
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("Personal Identification Number")
-                            .font(.subheadline.weight(.medium))
-
-                        SecureField("PIN", text: $pin)
-                            .keyboardType(.numberPad)
-                            .onChange(of: pin) { _, newValue in
-                                pin = digitsOnly(from: newValue, maxCount: 12)
-                            }
-
-                        if let pinValidationMessage {
-                            Text(pinValidationMessage)
-                                .font(.footnote)
-                                .foregroundStyle(Color.gradeRed)
-                        }
-                    }
-                }
-            }
-
             Section("Submission") {
                 VStack(alignment: .leading, spacing: 16) {
+                    if !isFormValid {
+                        Text("Add your SIN, phone number, and PIN in Settings before filing.")
+                            .font(.footnote)
+                            .foregroundStyle(Color.talliOrange)
+                    }
+
                     Button("Preview Report") {
                         Task { await submit(dryRun: true) }
                     }
@@ -135,6 +86,7 @@ struct ReportView: View {
         }
         .padding(.bottom, 90)
         .navigationTitle("Reports")
+        .onAppear(perform: loadSavedSecrets)
         .task {
             loadSavedSecrets()
             loadLastSubmittedDate()
@@ -142,28 +94,7 @@ struct ReportView: View {
     }
 
     private var isFormValid: Bool {
-        sin.count == 9 && digitsOnly(from: phone, maxCount: 10).count == 10 && !pin.isEmpty
-    }
-
-    private var sinValidationMessage: String? {
-        if !sin.isEmpty && sin.count != 9 {
-            return "SIN must be exactly 9 digits"
-        }
-        return nil
-    }
-
-    private var phoneValidationMessage: String? {
-        if !phone.isEmpty && digitsOnly(from: phone, maxCount: 20).count < 10 {
-            return "Phone number must be 10 digits"
-        }
-        return nil
-    }
-
-    private var pinValidationMessage: String? {
-        if !pin.isEmpty && pin.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            return "PIN is required"
-        }
-        return nil
+        PersonalInfo.isComplete(sin: sin, phone: phone, pin: pin)
     }
 
     private var lastSubmittedLabel: String {
@@ -188,12 +119,9 @@ struct ReportView: View {
     }
 
     private func loadSavedSecrets() {
-        if let savedSIN = KeychainHelper.loadReportSIN() {
-            sin = savedSIN
-        }
-        if let savedPIN = KeychainHelper.loadReportPIN() {
-            pin = savedPIN
-        }
+        sin = KeychainHelper.loadReportSIN() ?? ""
+        phone = KeychainHelper.loadReportPhone() ?? ""
+        pin = KeychainHelper.loadReportPIN() ?? ""
     }
 
     private func loadLastSubmittedDate() {
@@ -209,7 +137,7 @@ struct ReportView: View {
 
         let request = ReportSubmissionRequest(
             sin: sin,
-            phone: digitsOnly(from: phone, maxCount: 20),
+            phone: PersonalInfo.digitsOnly(phone, maxCount: 20),
             pin: pin,
             dryRun: dryRun
         )
@@ -218,6 +146,7 @@ struct ReportView: View {
             let response = try await APIClient.shared.submitReport(request)
             KeychainHelper.saveReportSIN(sin)
             KeychainHelper.saveReportPIN(pin)
+            KeychainHelper.saveReportPhone(phone)
 
             if dryRun {
                 previewText = response.preview ?? response.message ?? "Preview generated."
@@ -247,27 +176,6 @@ struct ReportView: View {
         return DateParsing.parse(value)
     }
 
-    private func digitsOnly(from value: String, maxCount: Int) -> String {
-        String(value.filter(\.isNumber).prefix(maxCount))
-    }
-
-    private func formatPhone(_ value: String) -> String {
-        let digits = digitsOnly(from: value, maxCount: 10)
-
-        if digits.count <= 3 {
-            return digits
-        }
-        if digits.count <= 6 {
-            let area = digits.prefix(3)
-            let rest = digits.dropFirst(3)
-            return "(\(area)) \(rest)"
-        }
-
-        let area = digits.prefix(3)
-        let mid = digits.dropFirst(3).prefix(3)
-        let last = digits.dropFirst(6)
-        return "(\(area)) \(mid)-\(last)"
-    }
 }
 
 #Preview {

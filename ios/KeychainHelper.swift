@@ -6,6 +6,7 @@ enum KeychainHelper {
     private static let account = "session-credentials"
     private static let reportSINAccount = "report-sin"
     private static let reportPINAccount = "report-pin"
+    private static let reportPhoneAccount = "report-phone"
 
     struct Credentials: Codable {
         let username: String
@@ -80,6 +81,14 @@ enum KeychainHelper {
 
     static func loadReportPIN() -> String? {
         loadSecret(account: reportPINAccount)
+    }
+
+    static func saveReportPhone(_ phone: String) {
+        saveSecret(phone, account: reportPhoneAccount)
+    }
+
+    static func loadReportPhone() -> String? {
+        loadSecret(account: reportPhoneAccount)
     }
 
     private static func saveSecret(_ value: String, account: String) {

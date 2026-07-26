@@ -2,8 +2,8 @@
 
 ## Open
 - [ ] Push notifications for payday + when monthly reports open (1–5 of each month)
-- [ ] Move personal info from Reports to Settings
-- [ ] Tighten calendar section layout (squish below-calendar area)
+- [x] Move personal info from Reports to Settings — SIN/phone/PIN editor now a `PersonalInfoSection` in `ios/Views/SettingsView.swift`, persisted to keychain on edit (phone persistence added to `KeychainHelper`); ReportView reads the saved values and prompts "add in Settings" when incomplete. Shared formatting in `ios/Helpers/PersonalInfo.swift`. xcodebuild passes.
+- [x] Tighten calendar section layout (squish below-calendar area) — `dateCard` VStack spacing 12→4, `.padding()` → 16/14/12 h/t/b, calendar grid spacing 6→4 and title spacing 10→8 (`ios/ContentView.swift`, `ios/Views/PaymentCalendarView.swift`). Mac calendar already at these values; no Mac Reports view exists, so item 1 is iOS-only. xcodebuild passes.
 - [ ] Login still broken (reported again) — re-checked `src/api.js` session handling: `SESSION_SECRET` IS set in Vercel production (ruled out the leading theory). Still can't reproduce without real BC Self-Serve creds in this environment. Needs Joshua to repro live and capture the actual error/network response.
 - [ ] Next-payment card: grey line overlapping behind the amount/value — cosmetic, needs a visual check on-device before touching layout code.
 - [ ] Large unused whitespace at bottom of payment card view — same, cosmetic/visual verification needed.

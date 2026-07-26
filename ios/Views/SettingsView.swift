@@ -36,6 +36,8 @@ struct SettingsView: View {
                 }
             }
 
+            PersonalInfoSection()
+
             Section {
                 Button(role: .destructive) {
                     Task { await appState.logout() }
@@ -73,6 +75,82 @@ struct SettingsView: View {
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }
+    }
+}
+
+/// Report identity fields. Moved here from ReportView so the values are entered once
+/// in Settings and reused by every monthly submission.
+private struct PersonalInfoSection: View {
+    @State private var sin = ""
+    @State private var phone = ""
+    @State private var pin = ""
+
+    var body: some View {
+        Section("Personal Information") {
+            field("Social Insurance Number", validation: sinValidationMessage) {
+                SecureField("SIN (9 digits)", text: $sin)
+                    .keyboardType(.numberPad)
+                    .onChange(of: sin) { _, newValue in
+                        sin = PersonalInfo.digitsOnly(newValue, maxCount: 9)
+                        KeychainHelper.saveReportSIN(sin)
+                    }
+            }
+
+            field("Phone Number", validation: phoneValidationMessage) {
+                TextField("Phone", text: $phone)
+                    .keyboardType(.phonePad)
+                    .onChange(of: phone) { _, newValue in
+                        phone = PersonalInfo.formatPhone(newValue)
+                        KeychainHelper.saveReportPhone(phone)
+                    }
+            }
+
+            field("Personal Identification Number", validation: nil) {
+                SecureField("PIN", text: $pin)
+                    .keyboardType(.numberPad)
+                    .onChange(of: pin) { _, newValue in
+                        pin = PersonalInfo.digitsOnly(newValue, maxCount: 12)
+                        KeychainHelper.saveReportPIN(pin)
+                    }
+            }
+
+            Text("Used to file your monthly report. Stored only in this device's keychain.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+        .onAppear {
+            sin = KeychainHelper.loadReportSIN() ?? ""
+            phone = KeychainHelper.loadReportPhone() ?? ""
+            pin = KeychainHelper.loadReportPIN() ?? ""
+        }
+    }
+
+    private func field<Content: View>(
+        _ label: String,
+        validation: String?,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(label)
+                .font(.subheadline.weight(.medium))
+            content()
+            if let validation {
+                Text(validation)
+                    .font(.footnote)
+                    .foregroundStyle(Color.gradeRed)
+            }
+        }
+        .padding(.vertical, 2)
+    }
+
+    private var sinValidationMessage: String? {
+        !sin.isEmpty && sin.count != 9 ? "SIN must be exactly 9 digits" : nil
+    }
+
+    private var phoneValidationMessage: String? {
+        !phone.isEmpty && PersonalInfo.digitsOnly(phone, maxCount: 20).count < 10
+            ? "Phone number must be 10 digits"
+            : nil
     }
 }
 
