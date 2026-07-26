@@ -27,3 +27,9 @@ iOS 3.5.7 and Mac 3.5.6 both WAITING_FOR_REVIEW under the unified app `678236655
 - [ ] Approved for CDB — next month +$200/mo plus ~$2600 lump sum (~$2800 total), plus welfare/PWD (~$1000-1450 more). Add a countdown feature showing daily total income from disability (e.g. $1450 + $200/mo, broken into hourly).
 - [ ] Release/update notes need more variety and intelligence — feels formulaic currently.
 - [ ] Add BC benefit tracking: BC Renter's Credit (auto via tax return), BC Bus Pass ($45/yr, apply once PWD confirmed), Fuel tax refund/Home Reno credit (if applicable), CLBC funding (autism dx), CPP-D (check contribution room). RDSP + RBC, CDB, PWD already in motion.
+
+## Visual verification 2026-07-25 (iPhone 17 Pro simulator, UITEST_SNAPSHOT)
+- [x] Calendar spacing CONFIRMED on device: home tab renders tight, no dead gap below the grid, Jul 25 correctly marked.
+- [x] `PersonalInfoSection` CONFIRMED present in Settings with Social Insurance Number / Phone Number / Personal Identification Number fields and the keychain footnote.
+- [x] **Bug found by this pass and fixed (commit 5309389):** Settings content sat behind the FloatingTabBar capsule — the keychain footnote was clipped and Log Out was underneath it. `SettingsView` was the only tab lacking the bottom inset its siblings already have (`MessagesView` safeAreaInset 90; `BenefitsView`/`ReportView` padding 90). Adding `PersonalInfoSection` made the list long enough for the pre-existing gap to bite. Fixed with the same 90pt inset.
+- [ ] The fix builds clean but was NOT visually re-confirmed at the bottom of the list — scrolling the sim to the end failed twice (axe swipe coords) and the session usage cap was reached. Re-check the bottom of Settings on the next sim run before treating this as fully closed.
