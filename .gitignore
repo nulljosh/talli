@@ -5,6 +5,7 @@ chrome-data/
 chrome-data-v2/
 *.png
 !preview.png
+!public/qr-code.png
 !macos/fastlane/screenshots/mac/*.png
 !watchos/fastlane/screenshots/watch/*.png
 error-screenshot.png
