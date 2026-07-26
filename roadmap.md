@@ -6,7 +6,6 @@
 - [ ] Large unused whitespace at bottom of payment card view — same, cosmetic/visual verification needed.
 - [ ] Confirm banner shows "Report window open" (not filed) on next login; file report by Jul 5.
 - [ ] Confirm header avatar renders (blob repointed) on next login.
-- [x] Generate QR code for printed stickers linking to app — done: `qrencode` (brew) → `public/qr-code.png`, points to https://talli.heyitsmejosh.com
 - [ ] Navbar glitch: find root cause, tighten navbar code (intermittent, "solved itself") — no repro, needs live device session.
 - [ ] asc web login failed 401 (wrong password or Apple flake) — `asc web auth login` requires live 2FA input, can't complete headlessly. Needs Joshua to run it interactively.
 - [ ] `.asc/workflow.json`'s `ship-mac` `export_mac` step uses `--pkg-path`, which this asc CLI version rejects (wants `--ipa-path` even for Mac, and further requires the destination file end in `.ipa` even though Mac exports a `.pkg`) — the workflow can't currently run end-to-end for Mac without manual intervention. Also `asc builds upload --pkg` requires `--build-number` explicitly (no auto-extraction like IPA) — verify it against the actual pkg's `Info.plist` (`pkgutil --expand-full` + `PlistBuddy -c "Print :CFBundleVersion"`) before passing it.
