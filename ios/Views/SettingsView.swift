@@ -47,6 +47,8 @@ struct SettingsView: View {
             }
         }
         .navigationTitle("Settings")
+        // Clear the FloatingTabBar capsule, same inset MessagesView uses.
+        .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 90) }
     }
 
     private var avatarButton: some View {
