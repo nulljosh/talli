@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
-  <rect width="200" height="200" fill="#1a1a1a" rx="36"/>
+  <rect width="200" height="200" fill="#d68910" rx="36"/>
   <!-- ledger line -->
   <line x1="38" y1="133" x2="162" y2="133" stroke="rgba(91,155,213,0.14)" stroke-width="1.5" stroke-linecap="round"/>
   <!-- group 1: four verticals -->
