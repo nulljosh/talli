@@ -1,4 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
-  <rect width="192" height="192" rx="32" fill="#1a1a1a"/>
-  <text x="96" y="130" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="120" font-weight="700" fill="#fafafa">T</text>
+  <rect width="192" height="192" rx="32" fill="#0074D9"/>
+  <line x1="50" y1="60" x2="50" y2="132" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+  <line x1="69" y1="56" x2="69" y2="136" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+  <line x1="88" y1="60" x2="88" y2="132" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+  <line x1="107" y1="56" x2="107" y2="136" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+  <line x1="42" y1="126" x2="115" y2="64" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
 </svg>
