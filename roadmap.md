@@ -1,7 +1,7 @@
 # Talli Roadmap
 
 ## Someday / Explore
-- [ ] Recurring build-failure friction (note 2026-07-26): "Been fighting these failing builds all day, 3 times we've been over this now" — no specific error captured. Worth a root-cause pass on the archive/upload flow if this keeps recurring (check version-train/App-Group mismatch patterns already seen in this repo).
+- [x] Recurring build-failure friction (note 2026-07-26) — root cause was the known version-train issue already diagnosed same day (3.5.8 rejected: ITMS-90186/90062, version train closed with 3.5.8 already READY_FOR_SALE), resolved by bumping to 3.5.9 and resubmitting. Local build re-verified clean today (`xcodegen generate` + `xcodebuild -skipPackagePluginValidation build` → BUILD SUCCEEDED), no separate local build-tooling bug found.
 
 ## Open
 - [ ] Push notifications for payday + when monthly reports open (1–5 of each month)
@@ -9,7 +9,7 @@
 - [ ] Large unused whitespace at bottom of payment card view — same, cosmetic/visual verification needed.
 - [ ] Confirm banner shows "Report window open" (not filed) on next login; file report by Jul 5.
 - [ ] Confirm header avatar renders (blob repointed) on next login.
-- [ ] Navbar glitch: find root cause, tighten navbar code (intermittent, "solved itself") — no repro, needs live device session.
+- [ ] Navbar glitch: find root cause, tighten navbar code (intermittent, "solved itself") — no repro, needs live device session. Checked 2026-07-26: `TalliFloatingTabBar` (ContentView.swift:75) is a plain fixed-layout HStack/Capsule with no timers, animations tied to external state, or async work — no code-level lead found. Still needs a live repro to make progress.
 - [ ] asc web login failed 401 (wrong password or Apple flake) — `asc web auth login` requires live 2FA input, can't complete headlessly. Needs Joshua to run it interactively.
 - [ ] `.asc/workflow.json`'s `ship-mac` `export_mac` step uses `--pkg-path`, which this asc CLI version rejects (wants `--ipa-path` even for Mac, and further requires the destination file end in `.ipa` even though Mac exports a `.pkg`) — the workflow can't currently run end-to-end for Mac without manual intervention. Also `asc builds upload --pkg` requires `--build-number` explicitly (no auto-extraction like IPA) — verify it against the actual pkg's `Info.plist` (`pkgutil --expand-full` + `PlistBuddy -c "Print :CFBundleVersion"`) before passing it.
 - [ ] App Privacy publish state flagged as unverifiable via API (`asc validate` info-level) — confirm published at https://appstoreconnect.apple.com/apps/6782366555/appPrivacy if 3.5.7 review comes back with a privacy-related rejection.
@@ -31,4 +31,4 @@ iOS 3.5.7 and Mac 3.5.6 both WAITING_FOR_REVIEW under the unified app `678236655
 - [ ] Add BC benefit tracking: BC Renter's Credit (auto via tax return), BC Bus Pass ($45/yr, apply once PWD confirmed), Fuel tax refund/Home Reno credit (if applicable), CLBC funding (autism dx), CPP-D (check contribution room). RDSP + RBC, CDB, PWD already in motion.
 
 ## Visual verification 2026-07-25 (iPhone 17 Pro simulator, UITEST_SNAPSHOT)
-- [ ] The fix builds clean but was NOT visually re-confirmed at the bottom of the list — scrolling the sim to the end failed twice (axe swipe coords) and the session usage cap was reached. Re-check the bottom of Settings on the next sim run before treating this as fully closed.
+- [ ] The fix builds clean but was NOT visually re-confirmed at the bottom of the list — scrolling the sim to the end failed twice (axe swipe coords) and the session usage cap was reached. Re-check the bottom of Settings on the next sim run before treating this as fully closed. Checked 2026-07-26: fix is `SettingsView.swift:51` `.safeAreaInset(edge: .bottom) { Color.clear.frame(height: 90) }` — a static constant, not conditional, so it's not a candidate for intermittent breakage; skipping a sim boot for this per house default (only when truly needed), leaving open for an actual on-device glance next time the sim is already running for something else.
