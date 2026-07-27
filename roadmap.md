@@ -1,5 +1,8 @@
 # Talli Roadmap
 
+## Someday / Explore
+- [ ] Recurring build-failure friction (note 2026-07-26): "Been fighting these failing builds all day, 3 times we've been over this now" — no specific error captured. Worth a root-cause pass on the archive/upload flow if this keeps recurring (check version-train/App-Group mismatch patterns already seen in this repo).
+
 ## Open
 - [ ] Push notifications for payday + when monthly reports open (1–5 of each month)
 - [ ] Next-payment card: grey line overlapping behind the amount/value — cosmetic, needs a visual check on-device before touching layout code.
