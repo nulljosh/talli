@@ -14,6 +14,9 @@
 - [ ] Vibe clone from portfolio — Talli's blue accent (#5B9BD5/#BFDDF0) is still hardcoded in CLAUDE.md/CSS, not pulled from shared `portfolio-tokens.css` like other apps (see vibe_tokens_sync). User flagged "too much blue."
 - [ ] App Store screenshot refresh (stale resolutions/content) + landing page copy/version bump.
 
+## In progress (2026-07-26 night, session ended over budget)
+- [ ] v3.5.11 (blue icon redesign): version bumped, `xcodegen generate` verified, local build clean, archived + exported + **uploaded to ASC successfully** (build 202607262107). The `ship-ios` workflow's `publish` step failed because export didn't save a local .ipa (upload happened directly via xcodebuild's own uploader) — the workflow expects a local .ipa path. Next session: find the build via `asc builds list --app 6782366555` once processing finishes (was still PROCESSING as of session end), get its build ID, then `asc release stage --app 6782366555 --version 3.5.11 --build <BUILD_ID> --copy-metadata-from 3.5.10 --confirm` followed by `asc submit` (check `asc submit --help` for the exact subcommand) to attach + submit for review.
+
 ## Status (2026-07-26)
 iOS 3.5.8 was rejected/bounced by ASC (ITMS-90186/90062: version train closed, 3.5.8 already READY_FOR_SALE). Bumped to 3.5.9, archived/uploaded, created version, attached build, submitted for review (submissionId `32660788-1736-42da-8028-6ac5b8d7a89f`). **ACCEPTED** — review completed 2026-07-26 11:21 AM PDT, 3.5.9 now eligible for distribution/live. The build-128 Xcode Cloud failure email (ITMS-90478/90186/90062 on the abandoned 3.5.8 attempt) is stale noise from before the 3.5.9 fix — no action needed.
 
