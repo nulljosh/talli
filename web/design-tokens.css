@@ -22,8 +22,8 @@
   --error: #c0392b;
 
   /* Typography */
-  --font-primary: "DM Sans", system-ui, -apple-system, sans-serif;
-  --font-display: "Fraunces", Georgia, serif;
+  --font-primary: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   /* Font Sizes */
   --text-xs: 0.6875rem;

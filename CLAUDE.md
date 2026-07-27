@@ -8,7 +8,7 @@ v3.5.3 — Personal finance tracker.
 - Push to `main` auto-deploys to Vercel prod via `.github/workflows/deploy.yml` (VERCEL_TOKEN/ORG_ID/PROJECT_ID repo secrets) — no more manual `vercel --prod` needed
 - Portfolio-vibe aesthetic (matches heyitsmejosh.com, see `portfolio-tokens.css`): Light (#ffffff bg / #1a1a1a text), Dark (#1a1a1a bg / #fff8f0 text)
 - Accent: #5B9BD5 (blue), secondary #BFDDF0
-- Fonts: DM Sans (body) + Fraunces (headings), Geist for code/mono — `web/landing.html` was found loading the old Space Grotesk font on 2026-06-20, fixed to match design tokens
+- Fonts: system SF Pro / Helvetica stack (`-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica`) — no webfonts. Backgrounds pure white (#ffffff), matching other projects.
 - 430px max-width shell centered on desktop
 - 640px max-width, single-column, text-first
 - Theme toggle: sun/moon SVG, View Transitions API, `[data-theme="dark"]`

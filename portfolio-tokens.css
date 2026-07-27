@@ -15,7 +15,7 @@
   --border: #e8e8e8;
   --border2: #f0f0f0;
 
-  --font: "DM Sans", system-ui, -apple-system, sans-serif;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   --radius-sm: 4px;
   --radius-md: 8px;
