@@ -14,8 +14,10 @@
 - [ ] Vibe clone from portfolio — Talli's blue accent (#5B9BD5/#BFDDF0) is still hardcoded in CLAUDE.md/CSS, not pulled from shared `portfolio-tokens.css` like other apps (see vibe_tokens_sync). User flagged "too much blue."
 - [ ] App Store screenshot refresh (stale resolutions/content) + landing page copy/version bump.
 
-## In progress (2026-07-26 night, session ended over budget)
-- [ ] v3.5.11 (blue icon redesign): version bumped, `xcodegen generate` verified, local build clean, archived + exported + **uploaded to ASC successfully** (build 202607262107, build ID `b6b62f42-32c8-43c4-9256-b7c0a569546a`, VALID/processed). Attaching to a new App Store version failed: `asc release stage --app 6782366555 --version 3.5.11 --build b6b62f42-32c8-43c4-9256-b7c0a569546a --copy-metadata-from 3.5.10 --confirm` → "You cannot create a new version of the App in the current state" — Apple won't allow a new version while 3.5.10 is still in its own review/waiting state (same version-train class of restriction as the original weekend bug). **Next session: check `asc versions list --app 6782366555` for 3.5.10's current state; once it clears (approved/rejected/removed), retry the same `release stage` command, then submit.** The blue-icon build itself is safely uploaded and waiting — no rework needed, just re-run staging once the train opens up.
+## Status (2026-07-27)
+v3.5.11 (blue icon redesign) **SUBMITTED for review** 2026-07-27 23:18 UTC — submission `7c4b18ef-a587-4187-bfe4-3014af80dc43`, version `44fc6b9b-1957-46ba-ac02-ad73c0bfcc28`, build 202607262107. The 3.5.10 version-train block cleared (3.5.10 now READY_FOR_SALE), staging + submit ran clean.
+
+Web: landing/login/unified/privacy/dca switched to pure white backgrounds and the system SF Pro / Helvetica stack (DM Sans + Fraunces webfonts dropped entirely) to match other projects.
 
 ## Status (2026-07-26)
 iOS 3.5.8 was rejected/bounced by ASC (ITMS-90186/90062: version train closed, 3.5.8 already READY_FOR_SALE). Bumped to 3.5.9, archived/uploaded, created version, attached build, submitted for review (submissionId `32660788-1736-42da-8028-6ac5b8d7a89f`). **ACCEPTED** — review completed 2026-07-26 11:21 AM PDT, 3.5.9 now eligible for distribution/live. The build-128 Xcode Cloud failure email (ITMS-90478/90186/90062 on the abandoned 3.5.8 attempt) is stale noise from before the 3.5.9 fix — no action needed.
