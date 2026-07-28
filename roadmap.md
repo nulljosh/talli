@@ -34,3 +34,7 @@ iOS 3.5.7 and Mac 3.5.6 both WAITING_FOR_REVIEW under the unified app `678236655
 
 ## Visual verification 2026-07-25 (iPhone 17 Pro simulator, UITEST_SNAPSHOT)
 - [ ] The fix builds clean but was NOT visually re-confirmed at the bottom of the list — scrolling the sim to the end failed twice (axe swipe coords) and the session usage cap was reached. Re-check the bottom of Settings on the next sim run before treating this as fully closed. Checked 2026-07-26: fix is `SettingsView.swift:51` `.safeAreaInset(edge: .bottom) { Color.clear.frame(height: 90) }` — a static constant, not conditional, so it's not a candidate for intermittent breakage; skipping a sim boot for this per house default (only when truly needed), leaving open for an actual on-device glance next time the sim is already running for something else.
+
+## From App Store.pdf (imported 2026-07-28)
+- [ ] Xcode Cloud "Talli -- Build 135 failed (main)" — iOS build failed; latest commit was submitted for review. Investigate the failure.
+- [ ] ASC "Action needed: The uploaded build for Talli has one or more issues" — correct the delivery issues and re-upload.
