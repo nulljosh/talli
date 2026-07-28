@@ -61,3 +61,21 @@ iOS 3.5.7 and Mac 3.5.6 both WAITING_FOR_REVIEW under the unified app `678236655
 ## From App Store.pdf (imported 2026-07-28)
 - [ ] Xcode Cloud "Talli -- Build 135 failed (main)" — iOS build failed; latest commit was submitted for review. Investigate the failure.
 - [ ] ASC "Action needed: The uploaded build for Talli has one or more issues" — correct the delivery issues and re-upload.
+
+## Ship 3.5.12 — not started (usage cap 2026-07-28)
+Today's message-parser fix (94808a3) is committed and pushed but **not in any build**, so it
+reaches nobody. `ios/project.yml` still reads 3.5.10; ASC already has 3.5.11 READY_FOR_SALE,
+so the next free iOS version is **3.5.12**. Nothing is in review — no submission to cancel.
+
+- [ ] Bump `MARKETING_VERSION` to "3.5.12" in `ios/project.yml`, then `cd ios && xcodegen generate`
+- [ ] Expect the same headless-archive failures Epiphany hit today. Apply the same three flags to
+      this repo's `.asc/workflow.json` archive/export steps before running:
+      `--overwrite`, `--xcodebuild-flag=-skipPackagePluginValidation`,
+      `--xcodebuild-flag=-allowProvisioningUpdates` (on BOTH archive and export)
+- [ ] `asc workflow run ship-ios VERSION:3.5.12`
+- [ ] What's New (no version numbers/emojis): "Your messages now load correctly. Reminders that
+      were being filtered out of the list are back, and the list refreshes when you open it."
+
+Still open from the parser work: pagination past page 1 is detected (`hasMoreMessages()`,
+`has_more_messages`) but not implemented — needs a live signed-in portal session to discover the
+"Show More Messages" postback (likely ASP.NET `__doPostBack` + `__VIEWSTATE`).
