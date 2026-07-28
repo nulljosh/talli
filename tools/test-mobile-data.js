@@ -1,7 +1,13 @@
 const assert = require('assert');
+// The message parser is imported from production, never copied -- an earlier
+// copy here drifted from src/api.js and asserted an input shape (allText
+// entries containing '\n') that http-scraper.js can never produce, so a
+// completely broken message parser passed this suite. Message-parsing
+// behaviour itself is covered by tools/test-parse-messages.js.
+const { parseMessages, hasMoreMessages } = require('../src/parse-messages');
 
-// Copy of extractMobileData from src/api.js for isolated testing.
-// Avoids booting Express just to test pure data extraction.
+// Copy of extractMobileData's payment/date logic from src/api.js for isolated
+// testing. Avoids booting Express just to test pure data extraction.
 
 function extractMobileData(scraperResult) {
   const sections = scraperResult?.sections || {};
@@ -34,26 +40,18 @@ function extractMobileData(scraperResult) {
   const pad = (n) => String(n).padStart(2, '0');
   const nextDate = `${nextPayday.getFullYear()}-${pad(nextPayday.getMonth() + 1)}-${pad(nextPayday.getDate())}`;
 
-  const MONTHS = { JAN: '01', FEB: '02', MAR: '03', APR: '04', MAY: '05', JUN: '06',
-    JUL: '07', AUG: '08', SEP: '09', OCT: '10', NOV: '11', DEC: '12' };
   const messagesAllText = [
     ...((sections.Messages && sections.Messages.allText) || []),
     ...((sections.Notifications && sections.Notifications.allText) || []),
   ];
-  const NAV_SPAM_RX = /^(skip to (main content|navigation|content)|home|payment info|messages?|notifications?|service requests?|monthly reports?|sign out|profile|back|print|help|my self serve|employment plans?|account info|terms of use|accessibility( statement)?|privacy|logout|menu)\b/i;
-  const messages = messagesAllText
-    .filter((entry) => typeof entry === 'string' && entry.includes('\n') && !NAV_SPAM_RX.test(entry.trim()))
-    .map((entry, idx) => {
-      const newlineIdx = entry.indexOf('\n');
-      const rawDate = entry.substring(0, newlineIdx).trim();
-      const text = entry.substring(newlineIdx + 1).trim();
-      const dateParts = rawDate.replace(/\s*\/\s*/g, '-').replace(/(\d{4})-([A-Z]{3})-(\d{2})/, (_, y, m, d) => {
-        return `${y}-${MONTHS[m] || '01'}-${d}`;
-      });
-      return { id: `msg-${idx}`, text, timestamp: dateParts };
-    });
+  const messages = parseMessages(messagesAllText);
 
-  return { payment_amount: paymentAmount || fallbackAmount, next_date: nextDate, messages };
+  return {
+    payment_amount: paymentAmount || fallbackAmount,
+    next_date: nextDate,
+    messages,
+    has_more_messages: hasMoreMessages(messagesAllText)
+  };
 }
 
 // --- Test harness ---
@@ -150,22 +148,26 @@ function run() {
 
   // --- Message parsing ---
 
-  test('malformed message dates do not crash extraction', () => {
+  // Fixtures below carry no '\n' -- http-scraper.js collapses all whitespace,
+  // so this is the only input shape the parser ever actually receives.
+
+  test('undated message text still comes through', () => {
     const result = extractMobileData({
       sections: {
         'Payment Info': { tableData: ['Amount: $100.00'], allText: [] },
-        Messages: { allText: ['garbage date format\nSome message text', 'not even a date\nAnother message'] }
+        Messages: { allText: ['Some message text', 'Another message'] }
       }
     });
     assert.strictEqual(result.messages.length, 2);
     assert.strictEqual(result.messages[0].text, 'Some message text');
+    assert.strictEqual(result.messages[0].timestamp, null);
   });
 
   test('valid message date is parsed to ISO format', () => {
     const result = extractMobileData({
       sections: {
         'Payment Info': { tableData: [], allText: [] },
-        Messages: { allText: ['2026 / MAR / 01\nYour cheque is ready'] }
+        Messages: { allText: ['2026 / MAR / 01', 'Your cheque is ready'] }
       }
     });
     assert.strictEqual(result.messages.length, 1);
@@ -178,18 +180,25 @@ function run() {
       sections: {
         'Payment Info': { tableData: [], allText: [] },
         Messages: {
-          allText: [
-            'Notifications\nsomething',
-            'Payment Info\nsomething',
-            'Employment Plans\nsomething',
-            '2026 / MAY / 25\nExtension Granted',
-          ]
+          allText: ['Notifications', 'Payment Info', 'Employment Plans', '2026 / MAY / 25', 'Extension Granted']
         },
-        Notifications: { allText: ['Skip to main content\nsomething', 'Account Info\nsomething'] }
+        Notifications: { allText: ['Skip to main content', 'Account Info'] }
       }
     });
     assert.strictEqual(result.messages.length, 1);
     assert.strictEqual(result.messages[0].text, 'Extension Granted');
+    assert.strictEqual(result.messages[0].timestamp, '2026-05-25');
+  });
+
+  test('has_more_messages flags the portal\'s hidden pages', () => {
+    const paged = extractMobileData({
+      sections: { Messages: { allText: ['2026 / MAY / 25', 'Extension Granted', 'Show More Messages'] } }
+    });
+    assert.strictEqual(paged.has_more_messages, true);
+    const complete = extractMobileData({
+      sections: { Messages: { allText: ['2026 / MAY / 25', 'Extension Granted'] } }
+    });
+    assert.strictEqual(complete.has_more_messages, false);
   });
 
   // --- Next payment date ---

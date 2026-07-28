@@ -61,8 +61,14 @@ private struct AuthenticatedTabShell: View {
                 .toolbar(.hidden, for: .tabBar)
         }
         .toolbar(.hidden, for: .tabBar)
-        .onChange(of: appState.selectedTabIndex) { _, _ in
+        .onChange(of: appState.selectedTabIndex) { _, newTab in
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            // Every tab stays alive inside this TabView, so onAppear only ever
+            // fires once -- opening Messages has to refetch explicitly or the
+            // list keeps showing whatever was loaded at launch.
+            if newTab == 3 {
+                Task { await appState.refreshDashboard() }
+            }
         }
         .tint(Color.talliOrange)
         .overlay(alignment: .bottom) {

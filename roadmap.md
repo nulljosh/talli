@@ -1,5 +1,15 @@
 # Talli Roadmap
 
+## From Talli.pdf (imported 2026-07-28)
+
+Source note: "messages regex still a mess / And it's not really updating accurately."
+Four root causes found and fixed (see Status 2026-07-28 below); these are the leftovers.
+
+- [ ] **Messages pagination not implemented.** The BC portal's Messages list renders only ~10 rows and hides the rest behind a "Show More Messages" button. `src/http-scraper.js` does a single GET of `/Auth/Messages`, so older messages are never fetched and counts/latest-message state go stale. Currently only *detected*: `parse-messages.js` exports `hasMoreMessages()` and `/api/mobile` returns `has_more_messages: true` when the button is present — nothing consumes it yet. To finish, the postback mechanism has to be discovered against the live portal (needs real BCeID creds + a logged-in session; `.env` has them, not usable headlessly here). Likely ASP.NET `__doPostBack` with `__VIEWSTATE`/`__EVENTVALIDATION` hidden fields — capture the Messages page HTML while signed in, find the Show More control's `name`, then POST those fields back and merge the extra rows before parsing. `parseAutoSubmitForm()` in http-scraper.js already has most of the hidden-field-harvesting logic to reuse.
+- [ ] Surface the action-required flag in the iOS UI. The portal marks some rows with a red `!` (action required); `parse-messages.js` now parses it and `/api/mobile` returns `actionRequired: true/false` per message, but `DashboardData.StatusMessage` doesn't decode it and `MessagesView` doesn't render it. Small: add the field to `MessageObject`/`StatusMessage`, show a marker in `MessageRow`.
+- [ ] `web/unified.html`'s own `parseMessages()` (line ~161) is a separate implementation from `src/parse-messages.js` and still dedupes on `title|body` without the date — so recurring "Monthly Report Reminder" messages collapse into a single row on web. Web can't `require()` the shared module without a build step; either inline the fixed logic or add a tiny bundling step.
+- [ ] `MessagesView` shows the raw ISO date (`2026-07-14`) now that timestamps actually parse. Format it for display (relative/abbreviated) — previously this never rendered at all because timestamp was always null, so it was never noticed.
+
 ## Open
 - [ ] Push notifications for payday + when monthly reports open (1–5 of each month)
 - [ ] Next-payment card: grey line overlapping behind the amount/value — cosmetic, needs a visual check on-device before touching layout code.
@@ -13,6 +23,19 @@
 
 - [ ] Vibe clone from portfolio — Talli's blue accent (#5B9BD5/#BFDDF0) is still hardcoded in CLAUDE.md/CSS, not pulled from shared `portfolio-tokens.css` like other apps (see vibe_tokens_sync). User flagged "too much blue."
 - [ ] App Store screenshot refresh (stale resolutions/content) + landing page copy/version bump.
+
+## Status (2026-07-28) — Messages parsing fixed
+
+Four independent root causes behind "messages regex still a mess / not updating accurately":
+
+1. **The mobile message parser never ran.** `extractMobileData()` split each entry on `\n` to separate date from subject, but every extraction path in `http-scraper.js` does `.text().replace(/\s+/g, ' ')` — an `allText` entry can never contain a newline. The date-parsing branch was unreachable, so every message shipped `timestamp: null` with the date glued to the front of the text, and bare date lines became their own bogus rows.
+2. **Real messages were being silently dropped.** `NAV_SPAM_RX` ended in `\b`, so the `monthly reports?` nav-tab pattern also matched the subject "Monthly Report Reminder" — the single most common message on the portal — filtering it out of both the list and the badge count. Nav labels are now full-line matches (plus optional badge digits).
+3. **`/api/mobile` never refreshed anything.** It passes `allowLiveScrape: false` (correct — the portal's payment page hangs 60-90s and was timing the endpoint out), but `refreshLiveInBackground()` was *also* gated on that flag. So the iOS app served cached blob data and never triggered even the non-blocking background refresh. The flag now gates only the blocking path; added an `inFlightRefresh` guard so concurrent requests don't stampede the portal.
+4. **The Messages tab stopped refetching on open.** v3.5.3 added refetch-on-open, but v2.4.3's custom `TalliFloatingTabBar` replaced the plain TabView — all tabs now stay alive, so `onAppear` only fires once. `ContentView`'s `onChange(of: selectedTabIndex)` now refreshes when tab 3 is selected.
+
+Parsing moved into `src/parse-messages.js` (single source of truth for the list *and* both badge counts, which previously used three different date regexes). Handles `YYYY / MON / DD` with uppercase months and irregular spacing, the `!` action-required marker, ellipsis-truncated subjects, and date-keyed stable ids — the ids matter because iOS read-state keys off `message.id`, so unstable ids marked every message unread on every refresh.
+
+`tools/test-parse-messages.js` (18 assertions) covers it with real portal strings. Note the old `tools/test-mobile-data.js` held a *copy* of the parser whose fixtures all contained `\n` — it asserted an impossible input shape, which is why a fully broken parser passed CI. It now imports the production parser instead of copying it. Full `npm test` green; iOS builds clean.
 
 ## Status (2026-07-27)
 v3.5.11 (blue icon redesign) **SUBMITTED for review** 2026-07-27 23:18 UTC — submission `7c4b18ef-a587-4187-bfe4-3014af80dc43`, version `44fc6b9b-1957-46ba-ac02-ad73c0bfcc28`, build 202607262107. The 3.5.10 version-train block cleared (3.5.10 now READY_FOR_SALE), staging + submit ran clean.

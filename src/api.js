@@ -10,6 +10,7 @@ const { checkAllSections, runSubmitMonthlyReport, getAuthenticatedCookies } = re
 const { createCorsOptionsDelegate, parseAllowedOrigins } = require('./cors-utils');
 const { parseCookies, unsealAuthPayload, setAuthCookie, clearAuthCookie } = require('./auth-cookie');
 const { attemptHttpLogin, fetchAllSections } = require('./http-scraper');
+const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { PROFILE_PROGRAMS } = require('./programs/profiles');
 
 const app = express();
@@ -32,6 +33,9 @@ const REMEMBER_ME_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 const SESSION_IDLE_TIMEOUT_MS = 60 * 60 * 1000; // 1 hour
 const LIVE_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 const liveCache = new Map();
+// userIds with a background portal scrape already running, so concurrent
+// requests don't stampede myselfserve.gov.bc.ca with duplicate scrapes.
+const inFlightRefresh = new Set();
 
 // Debug logging helper
 const log = (...args) => DEBUG && console.log(...args);
@@ -846,11 +850,10 @@ app.get('/api/info', requireAuth, async (req, res) => {
       }
     }
 
-    // Extract message count
+    // Extract message count -- same parser as the rendered list, so the badge
+    // count and the Messages tab can never disagree.
     const messagesSection = data.sections['Messages'];
-    const unreadCount = messagesSection && messagesSection.allText
-      ? messagesSection.allText.filter(msg => msg.match(/^\d{4}\s*\/\s*[A-Z]{3}\s*\/\s*\d{2}/)).length
-      : 0;
+    const unreadCount = countMessages((messagesSection && messagesSection.allText) || []);
 
     // Extract active benefits from payment section
     const activeBenefits = [];
@@ -1034,13 +1037,9 @@ app.get('/api/summary', async (req, res) => {
       });
     }
 
-    // Extract messages count
+    // Extract messages count -- shared parser, see note above.
     const messagesSection = data.sections.Messages;
-    const messageCount = messagesSection && messagesSection.allText
-      ? messagesSection.allText.filter(msg =>
-          msg.match(/^\d{4} \/ [A-Z]{3} \/ \d{2}/)
-        ).length
-      : 0;
+    const messageCount = countMessages((messagesSection && messagesSection.allText) || []);
 
     // Extract notifications
     const notificationsSection = data.sections.Notifications;
@@ -1051,7 +1050,7 @@ app.get('/api/summary', async (req, res) => {
     // Extract service requests count
     const requestsSection = data.sections['Service Requests'];
     const requestCount = requestsSection && requestsSection.allText
-      ? requestsSection.allText.filter(r => r.match(/^\d{4} \/ [A-Z]{3} \/ \d{2}/)).length
+      ? requestsSection.allText.filter(r => r.match(/^\s*!?\s*\d{4}\s*\/\s*[A-Z]{3}\s*\/\s*\d{2}/)).length
       : 0;
 
     // Build clean response
@@ -1131,8 +1130,20 @@ async function fetchOrLoadData(req, { allowLiveScrape = true } = {}) {
 
   // Background refresh helper: runs the live scrape without blocking the response,
   // and updates the TTL cache + Blob for the next request.
+  //
+  // Deliberately NOT gated on `allowLiveScrape`. That flag exists only to keep
+  // slow endpoints (/api/mobile) from *blocking* on a 60-90s portal scrape --
+  // gating this fire-and-forget path on it too meant /api/mobile never
+  // refreshed the cache at all, so the iOS Messages tab could pull-to-refresh
+  // forever and never see a new portal message.
   function refreshLiveInBackground() {
-    if (!creds || !allowLiveScrape) return;
+    if (!creds) return;
+    // One scrape per user at a time: without this, every request that arrives
+    // while the TTL cache is cold spawns another concurrent portal scrape.
+    if (userId) {
+      if (inFlightRefresh.has(userId)) return;
+      inFlightRefresh.add(userId);
+    }
     fetchAllSectionsWithHybridAuth(creds.username, creds.password).then(result => {
       if (result && result.success) {
         log('[API] Background live HTTP scrape succeeded');
@@ -1145,7 +1156,8 @@ async function fetchOrLoadData(req, { allowLiveScrape = true } = {}) {
       } else {
         log('[API] Background live scrape returned failure:', result?.error);
       }
-    }).catch(err => log('[API] Background live scrape failed:', err.message));
+    }).catch(err => log('[API] Background live scrape failed:', err.message))
+      .finally(() => { if (userId) inFlightRefresh.delete(userId); });
   }
 
   // Stale-while-revalidate: if we already have cached data (Blob/in-memory), return it
@@ -2009,13 +2021,6 @@ app.get('/api/check', scrapeLimiter, requireAuth, async (req, res) => {
 
 // ── Mobile API ──────────────────────────────────────────────────────────────
 
-function msgHash(s) {
-  let h = 5381;
-  const t = s.slice(0, 80);
-  for (let i = 0; i < t.length; i++) h = (h * 33 ^ t.charCodeAt(i)) >>> 0;
-  return String(h);
-}
-
 function extractMobileData(scraperResult) {
   const sections = scraperResult?.sections || {};
 
@@ -2052,34 +2057,20 @@ function extractMobileData(scraperResult) {
   const pad = (n) => String(n).padStart(2, '0');
   const nextDate = `${nextPayday.getFullYear()}-${pad(nextPayday.getMonth() + 1)}-${pad(nextPayday.getDate())}`;
 
-  // Extract messages from Messages + Notifications sections (matches web parseMessages)
-  const MONTHS = { JAN: '01', FEB: '02', MAR: '03', APR: '04', MAY: '05', JUN: '06',
-    JUL: '07', AUG: '08', SEP: '09', OCT: '10', NOV: '11', DEC: '12' };
+  // Extract messages from Messages + Notifications sections.
   const messagesAllText = [
     ...((sections.Messages && sections.Messages.allText) || []),
     ...((sections.Notifications && sections.Notifications.allText) || []),
   ];
-  // Portal side-nav labels leak in as <li> text alongside real messages; \b
-  // (not $) so trailing badge/count text after the label still gets caught.
-  const NAV_SPAM_RX = /^(skip to (main content|navigation|content)|home|payment info|messages?|notifications?|service requests?|monthly reports?|sign out|profile|back|print|help|my self serve|employment plans?|account info|terms of use|accessibility( statement)?|privacy|logout|menu)\b/i;
-  const messages = messagesAllText
-    .filter((entry) => typeof entry === 'string' && entry.trim() && !NAV_SPAM_RX.test(entry.trim()))
-    .map((entry) => {
-      const newlineIdx = entry.indexOf('\n');
-      if (newlineIdx === -1) {
-        return { id: msgHash(entry), text: entry.trim(), timestamp: null };
-      }
-      const rawDate = entry.substring(0, newlineIdx).trim();
-      const text = entry.substring(newlineIdx + 1).trim();
-      // Parse "YYYY / MON / DD" -> ISO date
-      const dateParts = rawDate.replace(/\s*\/\s*/g, '-').replace(/(\d{4})-([A-Z]{3})-(\d{2})/, (_, y, m, d) => {
-        return `${y}-${MONTHS[m] || '01'}-${d}`;
-      });
-      const lines = text.split('\n');
-      return { id: msgHash(lines[0] + '|' + lines.slice(1).join('\n')), text, timestamp: dateParts };
-    });
+  const messages = parseMessages(messagesAllText);
 
-  return { payment_amount: paymentAmount || fallbackAmount, next_date: nextDate, messages };
+  return {
+    payment_amount: paymentAmount || fallbackAmount,
+    next_date: nextDate,
+    messages,
+    // First page only -- the portal hides older rows behind "Show More Messages".
+    has_more_messages: hasMoreMessages(messagesAllText)
+  };
 }
 
 
