@@ -1,5 +1,12 @@
 import SwiftUI
 
+private func formattedMessageDate(_ raw: String) -> String {
+    guard let date = DateParsing.parse(raw) else { return raw }
+    let f = RelativeDateTimeFormatter()
+    f.unitsStyle = .abbreviated
+    return f.localizedString(for: date, relativeTo: Date())
+}
+
 struct MessagesView: View {
     @Environment(AppState.self) private var appState
     @State private var expanded: String? = nil
@@ -76,13 +83,22 @@ private struct MessageRow: View {
 
                 VStack(alignment: .leading, spacing: 3) {
                     HStack(alignment: .firstTextBaseline) {
-                        Text(message.text)
-                            .font(.system(size: 14, weight: isRead ? .regular : .semibold))
-                            .foregroundStyle(Color.primary)
-                            .lineLimit(isExpanded ? nil : 2)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        HStack(spacing: 4) {
+                            if message.actionRequired {
+                                Text("!")
+                                    .font(.system(size: 13, weight: .bold))
+                                    .foregroundStyle(.white)
+                                    .frame(width: 16, height: 16)
+                                    .background(Circle().fill(Color.red))
+                            }
+                            Text(message.text)
+                                .font(.system(size: 14, weight: isRead ? .regular : .semibold))
+                                .foregroundStyle(Color.primary)
+                                .lineLimit(isExpanded ? nil : 2)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         if let ts = message.timestamp {
-                            Text(ts)
+                            Text(formattedMessageDate(ts))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }

@@ -5,11 +5,13 @@ struct DashboardData: Codable, Sendable {
         let id: String
         let text: String
         let timestamp: String?
+        let actionRequired: Bool
 
-        init(id: String = UUID().uuidString, text: String, timestamp: String? = nil) {
+        init(id: String = UUID().uuidString, text: String, timestamp: String? = nil, actionRequired: Bool = false) {
             self.id = id
             self.text = text
             self.timestamp = timestamp
+            self.actionRequired = actionRequired
         }
     }
 
@@ -43,7 +45,8 @@ struct DashboardData: Codable, Sendable {
                 return StatusMessage(
                     id: message.id ?? UUID().uuidString,
                     text: text,
-                    timestamp: message.timestamp ?? message.date
+                    timestamp: message.timestamp ?? message.date,
+                    actionRequired: message.actionRequired ?? false
                 )
             }.filter { !$0.text.isEmpty }
         } else {
@@ -59,4 +62,5 @@ private struct MessageObject: Codable {
     let subject: String?
     let body: String?
     let date: String?
+    let actionRequired: Bool?
 }
