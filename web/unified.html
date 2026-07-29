@@ -185,7 +185,7 @@ function parseMessages(sections) {
   });
   if (cur) msgs.push(cur);
   const seen = new Set();
-  const deduped = msgs.filter(m => { const k = m.title+'|'+m.body; if (seen.has(k)) return false; seen.add(k); return true; }).slice(0, 12);
+  const deduped = msgs.filter(m => { const k = m.title+'|'+m.body+'|'+m.date; if (seen.has(k)) return false; seen.add(k); return true; }).slice(0, 12);
   deduped.forEach(m => { m.id = msgHash(m.title + '|' + m.body); });
   return deduped;
 }
