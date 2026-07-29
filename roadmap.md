@@ -59,22 +59,21 @@ iOS 3.5.7 and Mac 3.5.6 both WAITING_FOR_REVIEW under the unified app `678236655
 - [ ] The fix builds clean but was NOT visually re-confirmed at the bottom of the list — scrolling the sim to the end failed twice (axe swipe coords) and the session usage cap was reached. Re-check the bottom of Settings on the next sim run before treating this as fully closed. Checked 2026-07-26: fix is `SettingsView.swift:51` `.safeAreaInset(edge: .bottom) { Color.clear.frame(height: 90) }` — a static constant, not conditional, so it's not a candidate for intermittent breakage; skipping a sim boot for this per house default (only when truly needed), leaving open for an actual on-device glance next time the sim is already running for something else.
 
 ## From App Store.pdf (imported 2026-07-28)
-- [ ] Xcode Cloud "Talli -- Build 135 failed (main)" — iOS build failed; latest commit was submitted for review. Investigate the failure.
-- [ ] ASC "Action needed: The uploaded build for Talli has one or more issues" — correct the delivery issues and re-upload.
+- [x] Xcode Cloud "Talli -- Build 135 failed (main)" / ASC "Action needed" — RESOLVED 2026-07-28 by shipping 3.5.12 below: build 135 was stale CI noise from before the message-parser fix landed in a real build. No separate fix needed once 3.5.12 was archived/uploaded/submitted directly via `asc xcode`/`asc publish`.
 
-## Ship 3.5.12 — not started (usage cap 2026-07-28)
-Today's message-parser fix (94808a3) is committed and pushed but **not in any build**, so it
-reaches nobody. `ios/project.yml` still reads 3.5.10; ASC already has 3.5.11 READY_FOR_SALE,
-so the next free iOS version is **3.5.12**. Nothing is in review — no submission to cancel.
-
-- [ ] Bump `MARKETING_VERSION` to "3.5.12" in `ios/project.yml`, then `cd ios && xcodegen generate`
-- [ ] Expect the same headless-archive failures Epiphany hit today. Apply the same three flags to
-      this repo's `.asc/workflow.json` archive/export steps before running:
-      `--overwrite`, `--xcodebuild-flag=-skipPackagePluginValidation`,
-      `--xcodebuild-flag=-allowProvisioningUpdates` (on BOTH archive and export)
-- [ ] `asc workflow run ship-ios VERSION:3.5.12`
-- [ ] What's New (no version numbers/emojis): "Your messages now load correctly. Reminders that
-      were being filtered out of the list are back, and the list refreshes when you open it."
+## Ship 3.5.12 — SUBMITTED 2026-07-28 night
+Today's message-parser fix (94808a3) was committed+pushed but not in any build. Bumped
+`ios/project.yml` MARKETING_VERSION 3.5.10 → 3.5.12, regenerated project, added
+`-allowProvisioningUpdates` to both archive and export steps in `.asc/workflow.json`.
+`asc workflow run ship-ios` archived+exported+uploaded clean (build 202607282147), but the
+`publish` step failed since ExportOptions.plist uses `destination: upload` — export already
+uploads directly to ASC, so there's no local .ipa for `asc publish appstore --ipa` to find.
+Worked around manually: `asc builds wait` for the build to go VALID, `asc versions create`
+(3.5.12, copied metadata from 3.5.11), `asc versions attach-build`, `asc review submit --confirm`.
+Submission `8f3f038e-0f54-4751-96ec-aa1aa22dfe33`, build `be5d4b36-b481-496d-8e94-0f8afdcdafd8`.
+**Follow-up**: `.asc/workflow.json`'s `publish` step is broken for this repo's export config —
+either switch ExportOptions.plist destination to `export` (produce a local .ipa) or replace the
+publish step with the versions-create/attach-build/review-submit sequence used here.
 
 Still open from the parser work: pagination past page 1 is detected (`hasMoreMessages()`,
 `has_more_messages`) but not implemented — needs a live signed-in portal session to discover the
