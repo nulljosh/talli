@@ -6,9 +6,6 @@ Source note: "messages regex still a mess / And it's not really updating accurat
 Four root causes found and fixed (see Status 2026-07-28 below); these are the leftovers.
 
 - [ ] **Messages pagination not implemented.** The BC portal's Messages list renders only ~10 rows and hides the rest behind a "Show More Messages" button. `src/http-scraper.js` does a single GET of `/Auth/Messages`, so older messages are never fetched and counts/latest-message state go stale. Currently only *detected*: `parse-messages.js` exports `hasMoreMessages()` and `/api/mobile` returns `has_more_messages: true` when the button is present — nothing consumes it yet. To finish, the postback mechanism has to be discovered against the live portal (needs real BCeID creds + a logged-in session; `.env` has them, not usable headlessly here). Likely ASP.NET `__doPostBack` with `__VIEWSTATE`/`__EVENTVALIDATION` hidden fields — capture the Messages page HTML while signed in, find the Show More control's `name`, then POST those fields back and merge the extra rows before parsing. `parseAutoSubmitForm()` in http-scraper.js already has most of the hidden-field-harvesting logic to reuse.
-- [x] Surface the action-required flag in the iOS UI — DONE 2026-07-28: `DashboardData.StatusMessage`/`MessageObject` decode `actionRequired`, `MessageRow` shows a red `!` badge when true. Build-verified.
-- [x] `web/unified.html`'s own `parseMessages()` dedupe fixed — DONE 2026-07-28: dedup key now includes `m.date` alongside title/body, so recurring "Monthly Report Reminder" messages no longer collapse into one row. Still a separate implementation from `src/parse-messages.js` (web can't `require()` it without a build step) — bundling deferred.
-- [x] `MessagesView` shows the raw ISO date — DONE 2026-07-28: dates now formatted via `RelativeDateTimeFormatter` (abbreviated, e.g. "2w ago") through `DateParsing.parse`. Build-verified.
 
 ## Open
 - [ ] Push notifications for payday + when monthly reports open (1–5 of each month)
@@ -57,9 +54,6 @@ iOS 3.5.7 and Mac 3.5.6 both WAITING_FOR_REVIEW under the unified app `678236655
 
 ## Visual verification 2026-07-25 (iPhone 17 Pro simulator, UITEST_SNAPSHOT)
 - [ ] The fix builds clean but was NOT visually re-confirmed at the bottom of the list — scrolling the sim to the end failed twice (axe swipe coords) and the session usage cap was reached. Re-check the bottom of Settings on the next sim run before treating this as fully closed. Checked 2026-07-26: fix is `SettingsView.swift:51` `.safeAreaInset(edge: .bottom) { Color.clear.frame(height: 90) }` — a static constant, not conditional, so it's not a candidate for intermittent breakage; skipping a sim boot for this per house default (only when truly needed), leaving open for an actual on-device glance next time the sim is already running for something else.
-
-## From App Store.pdf (imported 2026-07-28)
-- [x] Xcode Cloud "Talli -- Build 135 failed (main)" / ASC "Action needed" — RESOLVED 2026-07-28 by shipping 3.5.12 below: build 135 was stale CI noise from before the message-parser fix landed in a real build. No separate fix needed once 3.5.12 was archived/uploaded/submitted directly via `asc xcode`/`asc publish`.
 
 ## Ship 3.5.12 — SUBMITTED 2026-07-28 night
 Today's message-parser fix (94808a3) was committed+pushed but not in any build. Bumped
