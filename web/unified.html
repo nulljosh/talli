@@ -228,6 +228,7 @@ const Icon = {
   status:(c,f)=><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.7" strokeLinecap="round"><circle cx="6" cy="6" r="2" fill={c} stroke="none"/><circle cx="6" cy="12" r="2" fill={c} stroke="none"/><circle cx="6" cy="18" r="2" stroke={c} strokeWidth="1.7"/><path d="M10 6h9M10 12h9M10 18h9" strokeLinecap="round"/></svg>,
   messages:(c,f)=><svg width="22" height="22" viewBox="0 0 24 24" fill={f?c:'none'} stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" fillOpacity={f?.15:0}/></svg>,
   settings:(c,f)=><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>,
+  bennies:(c,f)=><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="6" width="18" height="13" rx="2" fill={f?c:'none'} fillOpacity={f?.15:0}/><path d="M3 10h18M7 14h4"/></svg>,
 };
 
 // ── tab bar ───────────────────────────────────────────
@@ -235,6 +236,7 @@ const TABS = [
   {id:'home',     label:'Home',     icon:Icon.home},
   {id:'calendar', label:'Calendar', icon:Icon.calendar},
   {id:'status',   label:'Status',   icon:Icon.status},
+  {id:'bennies',  label:'Bennies',  icon:Icon.bennies},
   {id:'messages', label:'Messages', icon:Icon.messages},
 ];
 
@@ -697,6 +699,137 @@ function PwdResubmitModal({dark, pwdDeniedDate, onClose, onResubmitted}) {
 }
 
 // ════════════════════════════════════════════════════
+// BENNIES TAB — disability benefits + debt payoff dashboard
+// ════════════════════════════════════════════════════
+const OTHER_BENEFITS = [
+  {id:'rdsp_grants', label:'RDSP grants and bonds', detail:'Govt matches up to 300% ($3,500/yr) + up to $1,000/yr bond with zero contribution. $70k/$20k lifetime caps.'},
+  {id:'dtc_retro_refund', label:'DTC retroactive refund', detail:'Reassess up to 10 past tax years via a T1 adjustment for a possible lump sum.'},
+  {id:'dtc_transfer', label:'DTC transfer', detail:'Transfer unused credit to a supporting spouse or parent if income is too low to use it all.'},
+  {id:'fair_pharmacare', label:'Fair PharmaCare', detail:'Income-tested, often lower deductibles for PWD recipients.'},
+  {id:'bc_bus_pass', label:'BC bus pass', detail:'~$52/yr transit pass, or a $52/month transport supplement instead.'},
+  {id:'cpp_d', label:'CPP disability + CWB supplement', detail:"CPP-D if you've worked enough; CWB disability supplement if you ever do paid work."},
+  {id:'clbc', label:'CLBC', detail:'Separate eligibility (usually tied to significant support needs) — worth a call to check.'},
+];
+
+function BenniesTab({dark}) {
+  const t = tk(dark);
+  const [dtc, setDtc] = useState(null);
+  const [pwd, setPwd] = useState(null);
+  const [cdb, setCdb] = useState(null);
+  const [debt, setDebt] = useState(null);
+  const [other, setOther] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const [d, p, c, deb, o] = await Promise.all([
+          fetch('/api/dtc-profile', {credentials:'include'}).then(r=>r.json()),
+          fetch('/api/pwd-profile', {credentials:'include'}).then(r=>r.json()),
+          fetch('/api/cdb-profile', {credentials:'include'}).then(r=>r.json()),
+          fetch('/api/debt-payoff-profile', {credentials:'include'}).then(r=>r.json()),
+          fetch('/api/other-benefits-profile', {credentials:'include'}).then(r=>r.json()),
+        ]);
+        setDtc(d); setPwd(p); setCdb(c); setDebt(deb); setOther(o);
+      } catch (e) { /* leave nulls, fields show '—' */ }
+      setLoading(false);
+    })();
+  }, []);
+
+  const saveDebt = async (patch) => {
+    const next = {...debt, ...patch};
+    setDebt(next);
+    try { await fetch('/api/debt-payoff-profile', {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(patch)}); } catch (e) {}
+  };
+  const toggleOther = async (id) => {
+    const nextChecked = {...(other?.checked||{}), [id]: !(other?.checked||{})[id]};
+    const next = {...other, checked: nextChecked};
+    setOther(next);
+    try { await fetch('/api/other-benefits-profile', {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({checked: nextChecked})}); } catch (e) {}
+  };
+
+  const pwdMonthly = 1450, cdbMonthly = 200;
+  const totalMonthly = pwdMonthly + cdbMonthly;
+  const backpay = 2800;
+  const totalDebt = debt?.totalDebt || 6000;
+  const paidToDate = debt?.paidToDate || 0;
+  const debtPct = totalDebt ? Math.max(0, Math.min(100, (paidToDate/totalDebt)*100)) : 0;
+  const badge = (status) => {
+    const s = (status||'').replace(/_/g,' ');
+    const ok = ['approved','funded','processed','active','complete'].includes(status);
+    return <span style={{fontSize:11,fontWeight:600,color:ok?t.success:t.accent,background:ok?`${t.success}18`:`${t.accent}18`,padding:'3px 9px',borderRadius:100,textTransform:'capitalize'}}>{s||'—'}</span>;
+  };
+
+  if (loading) return (
+    <div style={{flex:1,display:'flex',flexDirection:'column',padding:'32px 28px',gap:16}}>
+      <Skel w={140} h={14} dark={dark}/><Skel w="100%" h={90} r={12} dark={dark}/><Skel w="100%" h={90} r={12} dark={dark}/>
+    </div>
+  );
+
+  return (
+    <div style={{flex:1,overflowY:'auto',padding:'20px 24px 32px',animation:'fadeIn 0.2s ease both'}}>
+      <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:14}}>Disability benefits</div>
+
+      <div style={{display:'flex',flexDirection:'column',gap:10,marginBottom:24}}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 16px',background:t.bg2,borderRadius:10,border:`1px solid ${t.border}`}}>
+          <span style={{fontSize:13,color:t.text,fontWeight:500}}>DTC</span>{badge(dtc?.status)}
+        </div>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 16px',background:t.bg2,borderRadius:10,border:`1px solid ${t.border}`}}>
+          <span style={{fontSize:13,color:t.text,fontWeight:500}}>PWD</span>{badge(pwd?.status)}
+        </div>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 16px',background:t.bg2,borderRadius:10,border:`1px solid ${t.border}`}}>
+          <span style={{fontSize:13,color:t.text,fontWeight:500}}>CDB</span>{badge(cdb?.status)}
+        </div>
+      </div>
+
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:1,marginBottom:28,border:`1px solid ${t.border}`,borderRadius:10,overflow:'hidden'}}>
+        {[['PWD monthly',`$${pwdMonthly.toLocaleString()}`],['CDB monthly',`$${cdbMonthly.toLocaleString()}`],['Total monthly',`$${totalMonthly.toLocaleString()}`]].map(([label,val],i)=>(
+          <div key={i} style={{padding:'14px 12px',background:t.bg2}}>
+            <div style={{fontSize:9,fontWeight:600,letterSpacing:'0.08em',textTransform:'uppercase',color:t.muted,marginBottom:6}}>{label}</div>
+            <div style={{fontSize:17,fontWeight:700,letterSpacing:'-0.5px',color:t.text}}>{val}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:14}}>Debt payoff — ${totalDebt.toLocaleString()}</div>
+      <div style={{padding:'16px 18px',background:t.bg2,borderRadius:12,border:`1px solid ${t.border}`,marginBottom:28}}>
+        <div style={{display:'flex',justifyContent:'space-between',marginBottom:8}}>
+          <span style={{fontSize:13,fontWeight:600,color:t.text}}>${paidToDate.toLocaleString()} paid</span>
+          <span style={{fontSize:12,color:t.muted}}>${(totalDebt-paidToDate).toLocaleString()} left</span>
+        </div>
+        <div style={{height:6,background:t.border,borderRadius:3}}>
+          <div style={{height:'100%',width:`${debtPct}%`,background:t.accent,borderRadius:3,transition:'width 0.6s ease'}}/>
+        </div>
+        <div style={{marginTop:12,fontSize:12,color:t.mutedMid,lineHeight:1.5}}>
+          Full ${backpay.toLocaleString()} August backpay to debt, plus $825/month (half of income) after. Debt-free by November.
+        </div>
+        <button onClick={()=>saveDebt({paidToDate: backpay})} style={{marginTop:12,padding:'7px 14px',borderRadius:100,background:t.accent,color:'#fff',border:'none',fontSize:12,fontWeight:600,fontFamily:'inherit',cursor:'pointer'}}>
+          Apply August backpay (${backpay.toLocaleString()})
+        </button>
+      </div>
+
+      <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:14}}>Other benefits to look into</div>
+      <div style={{display:'flex',flexDirection:'column',gap:8}}>
+        {OTHER_BENEFITS.map(b=>{
+          const checked = !!(other?.checked||{})[b.id];
+          return (
+            <button key={b.id} onClick={()=>toggleOther(b.id)} style={{textAlign:'left',display:'flex',gap:10,padding:'12px 14px',background:t.bg2,borderRadius:10,border:`1px solid ${checked?t.success+'50':t.border}`,cursor:'pointer',fontFamily:'inherit'}}>
+              <div style={{width:16,height:16,borderRadius:'50%',border:`1.5px solid ${checked?t.success:t.border2}`,background:checked?t.success:'none',flexShrink:0,marginTop:2,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                {checked&&<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
+              </div>
+              <div>
+                <div style={{fontSize:13,fontWeight:600,color:t.text}}>{b.label}</div>
+                <div style={{fontSize:11,color:t.mutedMid,marginTop:2,lineHeight:1.4}}>{b.detail}</div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════
 // STATUS TAB
 // ════════════════════════════════════════════════════
 function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, cgeb, skn, onSubmitReport, onPwdResubmit, reportMonths, username, pinSet, onSetPin}) {
@@ -1039,7 +1172,7 @@ function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, av
 // ════════════════════════════════════════════════════
 // SCREEN SHELL
 // ════════════════════════════════════════════════════
-const TAB_ORDER = ['home','calendar','status','messages'];
+const TAB_ORDER = ['home','calendar','status','bennies','messages'];
 
 function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, onRefresh, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, cgeb, username, onLogout, avatarUrl, onAvatarClick, avatarError, setAvatarError, skn, reportMonths, onMarkFiled, onPwdResubmitted, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
   const t = tk(dark);
@@ -1081,6 +1214,7 @@ function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidC
       {tab==='home'     &&<HomeTab     dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange} reportMonths={reportMonths} onSubmitReport={()=>setShowSubmit(true)} onMarkFiled={onMarkFiled}/>}
       {tab==='calendar' &&<CalendarTab dark={dark} payDateObj={payDateObj} amount={amount} daysUntil={daysUntil}/>}
       {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} cgeb={cgeb} skn={skn} onSubmitReport={()=>setShowSubmit(true)} onPwdResubmit={()=>setShowPwdResubmit(true)} reportMonths={reportMonths} username={username} pinSet={pinSet} onSetPin={()=>setShowPinSheet(true)}/>}
+      {tab==='bennies'  &&<BenniesTab  dark={dark}/>}
       {tab==='messages' &&<MessagesTab dark={dark} messages={messages} readIds={readIds} onRead={onRead} onRefresh={onRefresh}/>}
       {tab==='settings' &&<SettingsTab dark={dark} username={username} avatarUrl={avatarUrl} onAvatarRefresh={doRefresh} refreshing={refreshing} avatarError={avatarError} setAvatarError={setAvatarError} onLogout={onLogout}/>}
 
