@@ -69,6 +69,12 @@ Submission `8f3f038e-0f54-4751-96ec-aa1aa22dfe33`, build `be5d4b36-b481-496d-8e9
 either switch ExportOptions.plist destination to `export` (produce a local .ipa) or replace the
 publish step with the versions-create/attach-build/review-submit sequence used here.
 
+## Status (2026-08-02) — Bennies dashboard + i18n pipeline
+
+Added a new Bennies dashboard tab that consolidates disability benefit tracking: DTC/PWD/CDB benefit status cards, monthly total ($1,650), debt payoff plan targeting $6k with August backpay button, and a checklist of other benefits to chase (RDSP grants, retroactive DTC refunds, Fair PharmaCare, BC bus pass, CPP-D). Reused the existing profile-tracking system backend instead of new plumbing. Commit 6412485.
+
+Localization pipeline wired: `i18n/strings.json` master keys now match literal UI text across all five tabs (Home/Reports/Benefits/Messages/Settings). iOS Localizable.xcstrings regenerated, web locale JSON generated via `scripts/i18n-gen.mjs`, two real LocalizedStringKey bypass bugs fixed (ContentView ternary, BenefitsView helper). Web unified.html retrofitted (5 static labels wired to `window.I18N.t()`, React re-render gap flagged in source). Commit 9a5904c.
+
 ## Status (2026-08-01) — iOS 3.5.13 rebuild after pre-release train closed
 
 App Store Connect closed the pre-release train for v3.5.12 (build 139 was rejected). Bumped `MARKETING_VERSION` in `ios/project.yml` from 3.5.12 to 3.5.13, regenerated the Xcode project, and pushed to trigger a new Xcode Cloud build. Build execution pending. The 3.5.12 release remains valid for current distribution; the 3.5.13 rebuild is the next pre-release candidate.
