@@ -420,7 +420,7 @@ private struct DashboardScreen: View {
                 HStack(spacing: 8) {
                     Image(systemName: appState.isPaid ? "checkmark.circle.fill" : "circle")
                         .foregroundStyle(appState.isPaid ? Color.talliOrange : .secondary)
-                    Text(appState.isPaid ? "Paid" : "Paid yet?")
+                    Text(LocalizedStringKey(appState.isPaid ? "Paid" : "Paid yet?"))
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(appState.isPaid ? Color.talliOrange : .primary)
                 }

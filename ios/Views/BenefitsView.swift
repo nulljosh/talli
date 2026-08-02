@@ -27,11 +27,11 @@ struct BenefitsView: View {
     private func benefitRow(_ title: String, _ amount: String, _ how: String) -> some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text(title).font(.subheadline.weight(.medium))
-                Text(how).font(.caption).foregroundStyle(.secondary)
+                Text(LocalizedStringKey(title)).font(.subheadline.weight(.medium))
+                Text(LocalizedStringKey(how)).font(.caption).foregroundStyle(.secondary)
             }
             Spacer()
-            Text(amount).font(.subheadline.weight(.semibold))
+            Text(LocalizedStringKey(amount)).font(.subheadline.weight(.semibold))
         }
         .padding(12)
         .background(RoundedRectangle(cornerRadius: 8, style: .continuous).strokeBorder(Color.secondary.opacity(0.2), lineWidth: 1))

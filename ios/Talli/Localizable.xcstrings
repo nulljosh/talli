@@ -1,181 +1,53 @@
 {
   "sourceLanguage": "en",
   "strings": {
-    "account.bceid": {
+    "Talli": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "BCeID"
+            "value": "Talli"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "BCeID"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "BCeID"
+            "value": "Talli"
           }
         },
         "zh": {
           "stringUnit": {
             "state": "translated",
-            "value": "BCeID"
+            "value": "Talli"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Talli"
           }
         }
       }
     },
-    "account.biAssistance": {
+    "Your benefits. No bureaucracy.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "BC Income Assistance"
+            "value": "Your benefits. No bureaucracy."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aide au revenu de la C.-B."
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "BC ਆਮਦਨ ਸਹਾਇਤਾ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "BC收入援助"
+            "value": "Vos prestations. Sans bureaucratie."
           }
         }
       }
     },
-    "account.clientNum": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Client #:"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Client n° :"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਗਾਹਕ ਨੰਬਰ:"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "客户编号："
-          }
-        }
-      }
-    },
-    "account.pin": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PIN"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "NIP"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PIN"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PIN码"
-          }
-        }
-      }
-    },
-    "account.program": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Program"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Programme"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਪ੍ਰੋਗਰਾਮ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "项目"
-          }
-        }
-      }
-    },
-    "account.sin": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "SIN"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "NAS"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "SIN"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "社会保险号"
-          }
-        }
-      }
-    },
-    "app.loading": {
+    "Loading...": {
       "extractionState": "manual",
       "localizations": {
         "en": {
@@ -190,398 +62,108 @@
             "value": "Chargement..."
           }
         },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ..."
-          }
-        },
         "zh": {
           "stringUnit": {
             "state": "translated",
             "value": "加载中..."
           }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ..."
+          }
         }
       }
     },
-    "app.name": {
+    "Home": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Talli"
+            "value": "Home"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Talli"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Talli"
+            "value": "Accueil"
           }
         },
         "zh": {
           "stringUnit": {
             "state": "translated",
-            "value": "Talli"
+            "value": "主页"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਘਰ"
           }
         }
       }
     },
-    "cdb.amount": {
+    "Reports": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "$2,000/month if approved"
+            "value": "Reports"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "2 000 $/mois si approuvé"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਮਨਜ਼ੂਰੀ ਮਿਲਣ ਤੇ $2,000/ਮਹੀਨਾ"
+            "value": "Rapports"
           }
         },
         "zh": {
           "stringUnit": {
             "state": "translated",
-            "value": "获批后每月$2,000"
+            "value": "报告"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਰਿਪੋਰਟਾਂ"
           }
         }
       }
     },
-    "cdb.application": {
+    "Benefits": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Canada Disability Benefit"
+            "value": "Benefits"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prestation invalidité canadienne"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਕੈਨੇਡਾ ਅਪੰਗਤਾ ਲਾਭ"
+            "value": "Prestations"
           }
         },
         "zh": {
           "stringUnit": {
             "state": "translated",
-            "value": "加拿大残障福利"
-          }
-        }
-      }
-    },
-    "cdb.decision": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Approval decision"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Décision d'approbation"
+            "value": "福利"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਮਨਜ਼ੂਰੀ ਦਾ ਫੈਸਲਾ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "批准决定"
+            "value": "ਲਾਭ"
           }
         }
       }
     },
-    "cdb.monthlyBenefit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Monthly benefit"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prestation mensuelle"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਮਾਸਿਕ ਲਾਭ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "每月福利"
-          }
-        }
-      }
-    },
-    "cdb.retroactive": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retroactive to 2 years back"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rétroactif pendant 2 ans"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "2 ਸਾਲ ਪਿੱਛੇ ਤੱਕ ਪਿਛਲਾ ਬਕਾਇਆ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "可追溯至2年前"
-          }
-        }
-      }
-    },
-    "cdb.submitted": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Application submitted"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Demande soumise"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਅਰਜ਼ੀ ਜਮ੍ਹਾਂ ਹੋ ਗਈ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "申请已提交"
-          }
-        }
-      }
-    },
-    "cdb.underReview": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Under review"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "En examen"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਸਮੀਖਿਆ ਅਧੀਨ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "审核中"
-          }
-        }
-      }
-    },
-    "common.cancel": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cancel"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annuler"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਰੱਦ ਕਰੋ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "取消"
-          }
-        }
-      }
-    },
-    "common.disclaimer": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Not affiliated with the Government of British Columbia."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sans affiliation avec le gouvernement de la Colombie-Britannique."
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਬ੍ਰਿਟਿਸ਼ ਕੋਲੰਬੀਆ ਸਰਕਾਰ ਨਾਲ ਸੰਬੰਧਿਤ ਨਹੀਂ।"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "与不列颠哥伦比亚省政府无关。"
-          }
-        }
-      }
-    },
-    "common.important": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Important"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Important"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਮਹੱਤਵਪੂਰਨ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "重要"
-          }
-        }
-      }
-    },
-    "common.saved": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Saved"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistré"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਸੇਵ ਕੀਤਾ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "已保存"
-          }
-        }
-      }
-    },
-    "nav.account": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Account"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compte"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਖਾਤਾ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "账户"
-          }
-        }
-      }
-    },
-    "nav.messages": {
+    "Messages": {
       "extractionState": "manual",
       "localizations": {
         "en": {
@@ -594,12 +176,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Messages"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਸੁਨੇਹੇ"
           }
         },
         "zh": {
@@ -607,39 +183,16 @@
             "state": "translated",
             "value": "消息"
           }
-        }
-      }
-    },
-    "nav.reportsFiled": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reports Filed"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rapports déposés"
-          }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਦਾਇਰ ਰਿਪੋਰਟਾਂ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "已提交报告"
+            "value": "ਸੁਨੇਹੇ"
           }
         }
       }
     },
-    "nav.settings": {
+    "Settings": {
       "extractionState": "manual",
       "localizations": {
         "en": {
@@ -654,21 +207,380 @@
             "value": "Paramètres"
           }
         },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਸੈਟਿੰਗਾਂ"
-          }
-        },
         "zh": {
           "stringUnit": {
             "state": "translated",
             "value": "设置"
           }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸੈਟਿੰਗਾਂ"
+          }
         }
       }
     },
-    "nav.submit": {
+    "Cancel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuler"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "取消"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਰੱਦ ਕਰੋ"
+          }
+        }
+      }
+    },
+    "Not affiliated with the Government of British Columbia.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not affiliated with the Government of British Columbia."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sans affiliation avec le gouvernement de la Colombie-Britannique."
+          }
+        }
+      }
+    },
+    "BCEID USERNAME": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BCEID USERNAME"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NOM D'UTILISATEUR BCEID"
+          }
+        }
+      }
+    },
+    "PASSWORD": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PASSWORD"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MOT DE PASSE"
+          }
+        }
+      }
+    },
+    "Sign In": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign In"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se connecter"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "登录"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸਾਈਨ ਇਨ ਕਰੋ"
+          }
+        }
+      }
+    },
+    "NEXT PAYMENT": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NEXT PAYMENT"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PROCHAIN PAIEMENT"
+          }
+        }
+      }
+    },
+    "CRA BENEFITS": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CRA BENEFITS"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PRESTATIONS ARC"
+          }
+        }
+      }
+    },
+    "Last known amount. 4 payments per year. Not all CRA credits shown.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last known amount. 4 payments per year. Not all CRA credits shown."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernier montant connu. 4 paiements par an. Tous les crédits de l'ARC ne sont pas affichés."
+          }
+        }
+      }
+    },
+    "Offline": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Offline"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hors ligne"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "离线"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਆਫਲਾਈਨ"
+          }
+        }
+      }
+    },
+    "Showing last saved data": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Showing last saved data"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Affichage des dernières données enregistrées"
+          }
+        }
+      }
+    },
+    "Report window open": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report window open"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fenêtre de déclaration ouverte"
+          }
+        }
+      }
+    },
+    "Filing window is open — closes the 5th": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filing window is open — closes the 5th"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La fenêtre de déclaration est ouverte — ferme le 5"
+          }
+        }
+      }
+    },
+    "The filing window is open days 1–5 of each month. Submit during this window.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The filing window is open days 1–5 of each month. Submit during this window."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La fenêtre de déclaration est ouverte du 1er au 5 de chaque mois. Soumettez durant cette période."
+          }
+        }
+      }
+    },
+    "Closes the 5th": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Closes the 5th"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ferme le 5"
+          }
+        }
+      }
+    },
+    "Already filed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Already filed"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déjà déposé"
+          }
+        }
+      }
+    },
+    "Report filed this month": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report filed this month"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rapport déposé ce mois-ci"
+          }
+        }
+      }
+    },
+    "Add your SIN, phone number, and PIN in Settings before filing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add your SIN, phone number, and PIN in Settings before filing."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajoutez votre NAS, votre numéro de téléphone et votre NIP dans les paramètres avant de déclarer."
+          }
+        }
+      }
+    },
+    "Preview Report": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preview Report"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aperçu du rapport"
+          }
+        }
+      }
+    },
+    "Submit Report": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Submit Report"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soumettre le rapport"
+          }
+        }
+      }
+    },
+    "Submit": {
       "extractionState": "manual",
       "localizations": {
         "en": {
@@ -683,758 +595,462 @@
             "value": "Soumettre"
           }
         },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਜਮ੍ਹਾਂ ਕਰੋ"
-          }
-        },
         "zh": {
           "stringUnit": {
             "state": "translated",
             "value": "提交"
           }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਜਮ੍ਹਾਂ ਕਰੋ"
+          }
         }
       }
     },
-    "nav.upcoming": {
+    "Submitting...": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Upcoming"
+            "value": "Submitting..."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "À venir"
+            "value": "Envoi en cours..."
           }
-        },
-        "pa": {
+        }
+      }
+    },
+    "Active Benefits": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਆਉਣ ਵਾਲੇ"
+            "value": "Active Benefits"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prestations actives"
+          }
+        }
+      }
+    },
+    "Income Assistance": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Income Assistance"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aide au revenu"
+          }
+        }
+      }
+    },
+    "GST/HST Credit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GST/HST Credit"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crédit pour la TPS/TVH"
+          }
+        }
+      }
+    },
+    "BC Renter's Tax Credit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BC Renter's Tax Credit"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crédit d'impôt pour locataires de la C.-B."
+          }
+        }
+      }
+    },
+    "$400/yr max": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "$400/yr max"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "400 $/an max"
+          }
+        }
+      }
+    },
+    "Canada Workers Benefit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Canada Workers Benefit"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allocation canadienne pour les travailleurs"
+          }
+        }
+      }
+    },
+    "$1,633/yr single": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "$1,633/yr single"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 633 $/an (personne seule)"
+          }
+        }
+      }
+    },
+    "Canadian Dental Care Plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Canadian Dental Care Plan"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Régime canadien de soins dentaires"
+          }
+        }
+      }
+    },
+    "Free under $70K": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free under $70K"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratuit sous 70 000 $"
+          }
+        }
+      }
+    },
+    "Automatic": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatic"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatique"
+          }
+        }
+      }
+    },
+    "Claim on return": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claim on return"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réclamer sur la déclaration"
+          }
+        }
+      }
+    },
+    "Application required": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Application required"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demande requise"
+          }
+        }
+      }
+    },
+    "Paid": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paid"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Payé"
           }
         },
         "zh": {
           "stringUnit": {
             "state": "translated",
-            "value": "即将到来"
-          }
-        }
-      }
-    },
-    "pwd.application": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PWD Application"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Demande PWD"
+            "value": "已付款"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "PWD ਅਰਜ਼ੀ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PWD申请"
+            "value": "ਭੁਗਤਾਨ ਕੀਤਾ"
           }
         }
       }
     },
-    "pwd.extensionGranted": {
+    "Paid yet?": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "PWD Extension Granted"
+            "value": "Paid yet?"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prolongation PWD accordée"
+            "value": "Payé?"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已付款吗?"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "PWD ਵਾਧਾ ਮਨਜ਼ੂਰ ਹੋਇਆ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PWD延期已批准"
+            "value": "ਕੀ ਭੁਗਤਾਨ ਹੋਇਆ?"
           }
         }
       }
     },
-    "pwd.nextSteps": {
+    "BC Self-Serve": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Next steps"
+            "value": "BC Self-Serve"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prochaines étapes"
+            "value": "BC Self-Serve"
+          }
+        }
+      }
+    },
+    "Account": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compte"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "账户"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਅਗਲੇ ਕਦਮ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "后续步骤"
+            "value": "ਖਾਤਾ"
           }
         }
       }
     },
-    "pwd.openSelfServe": {
+    "Log Out": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open BC Self-Serve"
+            "value": "Log Out"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ouvrir BC Self-Serve"
+            "value": "Se déconnecter"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "退出登录"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "BC ਸੈਲਫ-ਸਰਵ ਖੋਲ੍ਹੋ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "打开BC自助服务"
+            "value": "ਲੌਗ ਆਉਟ ਕਰੋ"
           }
         }
       }
     },
-    "pwd.resubmitApp": {
+    "Tap to regenerate": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Resubmit PWD Application"
+            "value": "Tap to regenerate"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Resoumettre la demande PWD"
+            "value": "Touchez pour régénérer"
+          }
+        }
+      }
+    },
+    "Used to file your monthly report. Stored only in this device's keychain.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Used to file your monthly report. Stored only in this device's keychain."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utilisé pour déclarer votre rapport mensuel. Stocké uniquement dans le trousseau de cet appareil."
+          }
+        }
+      }
+    },
+    "No messages": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No messages"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun message"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有消息"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "PWD ਅਰਜ਼ੀ ਦੁਬਾਰਾ ਜਮ੍ਹਾਂ ਕਰੋ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "重新提交PWD申请"
+            "value": "ਕੋਈ ਸੁਨੇਹਾ ਨਹੀਂ"
           }
         }
       }
     },
-    "pwd.steps": {
+    "Got it": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Steps"
+            "value": "Got it"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Étapes"
+            "value": "Compris"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "知道了"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਕਦਮ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "步骤"
-          }
-        }
-      }
-    },
-    "rdsp.accountFunded": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Account funded"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compte financé"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਖਾਤੇ ਵਿੱਚ ਫੰਡ ਪਾਏ ਗਏ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "账户已注资"
-          }
-        }
-      }
-    },
-    "rdsp.accountOpened": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Account opened"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compte ouvert"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਖਾਤਾ ਖੋਲ੍ਹਿਆ ਗਿਆ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "账户已开设"
-          }
-        }
-      }
-    },
-    "rdsp.active": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Active RDSP"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "REER-Invalidité actif"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਸਰਗਰਮ RDSP"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "RDSP已生效"
-          }
-        }
-      }
-    },
-    "rdsp.application": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "RDSP Application"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Demande REER-Invalidité"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "RDSP ਅਰਜ਼ੀ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "RDSP申请"
-          }
-        }
-      }
-    },
-    "rdsp.dtcSubmitted": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "DTC certificate submitted"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Certificat DTC soumis"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "DTC ਸਰਟੀਫਿਕੇਟ ਜਮ੍ਹਾਂ ਕੀਤਾ ਗਿਆ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "DTC证明已提交"
-          }
-        }
-      }
-    },
-    "report.closes5th": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Closes the 5th"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ferme le 5"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "5 ਤਾਰੀਖ ਨੂੰ ਬੰਦ ਹੁੰਦੀ ਹੈ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "每月5日截止"
-          }
-        }
-      }
-    },
-    "report.debtTriage": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Debt triage"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tri des dettes"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਕਰਜ਼ਾ ਤਰਜੀਹੀਕਰਨ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "债务分类处理"
-          }
-        }
-      }
-    },
-    "report.dryRun": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dry run -- nothing was submitted"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Test -- rien n'a été soumis"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਅਜ਼ਮਾਇਸ਼ੀ ਦੌੜ — ਕੁਝ ਵੀ ਜਮ੍ਹਾਂ ਨਹੀਂ ਕੀਤਾ ਗਿਆ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "试运行 —— 未提交任何内容"
-          }
-        }
-      }
-    },
-    "report.fileNow": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "File now"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Déclarer maintenant"
-          }
-        }
-      }
-    },
-    "report.filedThisMonth": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Report filed this month"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rapport déposé ce mois-ci"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਇਸ ਮਹੀਨੇ ਰਿਪੋਰਟ ਦਰਜ ਹੋ ਗਈ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "本月已申报"
-          }
-        }
-      }
-    },
-    "report.haveIncome": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "I have income to declare this month"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "J'ai un revenu à déclarer ce mois-ci"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਇਸ ਮਹੀਨੇ ਮੇਰੇ ਕੋਲ ਐਲਾਨ ਕਰਨ ਲਈ ਆਮਦਨ ਹੈ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "我本月有收入需要申报"
-          }
-        }
-      }
-    },
-    "report.lastPayment": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "last payment"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "dernier paiement"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਪਿਛਲਾ ਭੁਗਤਾਨ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上次付款"
-          }
-        }
-      }
-    },
-    "report.navHint": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Navigate to a payment month to see details"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Accédez à un mois de paiement pour voir les détails"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਵੇਰਵੇ ਵੇਖਣ ਲਈ ਕਿਸੇ ਭੁਗਤਾਨ ਮਹੀਨੇ ਤੇ ਜਾਓ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "前往某个付款月份查看详情"
-          }
-        }
-      }
-    },
-    "report.noPaymentMonth": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No payment this month"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aucun paiement ce mois-ci"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਇਸ ਮਹੀਨੇ ਕੋਈ ਭੁਗਤਾਨ ਨਹੀਂ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "本月无付款"
-          }
-        }
-      }
-    },
-    "report.recentPayments": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recent payments"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Paiements récents"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਹਾਲੀਆ ਭੁਗਤਾਨ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "近期付款"
-          }
-        }
-      }
-    },
-    "report.savePin": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Save PIN"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrer le NIP"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PIN ਸੰਭਾਲੋ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "保存PIN码"
-          }
-        }
-      }
-    },
-    "report.submitMonthly": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Submit Monthly Report"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Soumettre le rapport mensuel"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਮਾਸਿਕ ਰਿਪੋਰਟ ਜਮ੍ਹਾਂ ਕਰੋ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "提交月度申报"
-          }
-        }
-      }
-    },
-    "report.upcomingSchedule": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Upcoming schedule"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Calendrier à venir"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਆਗਾਮੀ ਸਮਾਂ-ਸੂਚੀ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "即将到来的日程"
-          }
-        }
-      }
-    },
-    "report.windowOpen": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Report window open"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fenêtre de déclaration ouverte"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਰਿਪੋਰਟ ਵਿੰਡੋ ਖੁੱਲ੍ਹੀ ਹੈ"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "申报窗口已开放"
+            "value": "ਸਮਝ ਗਿਆ"
           }
         }
       }

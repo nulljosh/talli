@@ -57,7 +57,7 @@ function _talliScriptError() {
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous" onerror="_talliScriptError()"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous" onerror="_talliScriptError()"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous" onerror="_talliScriptError()"></script>
-<!-- i18n runtime: exposes window.I18N (t, setLang, fmtMoney/fmtDate/fmtNum). Retrofit JSX literals to I18N.t() to activate. -->
+<!-- i18n runtime: exposes window.I18N (t, setLang, fmtMoney/fmtDate/fmtNum). Static labels retrofitted to I18N.t() 2026-08-02; no re-render hook yet, so setLang() won't repaint this React tree until a language-context/state trigger is added. -->
 <script src="/js/i18n.js"></script>
 <script type="text/babel">
 const { useState, useEffect, useRef, useCallback } = React;
@@ -690,7 +690,7 @@ function PwdResubmitModal({dark, pwdDeniedDate, onClose, onResubmitted}) {
         ))}
         <a href="https://myselfserve.gov.bc.ca/myselfserve/welcome.do" target="_blank" rel="noopener" style={{display:'block',textAlign:'center',marginTop:8,marginBottom:10,padding:'13px',borderRadius:10,background:t.accent,color:'#fff',fontWeight:700,fontSize:15,letterSpacing:'-0.01em',textDecoration:'none',fontFamily:'inherit'}}>Open BC Self-Serve</a>
         {onResubmitted&&<button onClick={async()=>{try{await fetch('/api/pwd-profile',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'resubmitted'})});}catch(e){}onResubmitted();onClose();}} style={{width:'100%',padding:'11px',borderRadius:10,background:`${t.success}18`,border:`1px solid ${t.success}40`,color:t.success,fontWeight:600,fontSize:14,fontFamily:'inherit',cursor:'pointer',marginBottom:8}}>Mark as Resubmitted</button>}
-        <button onClick={onClose} style={{width:'100%',padding:'11px',borderRadius:10,background:'transparent',border:`1px solid ${t.border2}`,color:t.muted,fontWeight:500,fontSize:14,fontFamily:'inherit',cursor:'pointer'}}>Cancel</button>
+        <button onClick={onClose} style={{width:'100%',padding:'11px',borderRadius:10,background:'transparent',border:`1px solid ${t.border2}`,color:t.muted,fontWeight:500,fontSize:14,fontFamily:'inherit',cursor:'pointer'}}>{window.I18N.t("Cancel")}</button>
       </div>
     </div>
   );
@@ -878,7 +878,7 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate,
             <span style={{fontSize:14,color:item.done?t.muted:t.text,letterSpacing:'-0.2px',textDecoration:item.done?'line-through':'none',textDecorationColor:t.border2}}>{item.label}</span>
             <div style={{display:'flex',alignItems:'center',gap:8}}>
               <span style={{fontSize:12,fontWeight:item.warn?600:400,color:item.done?t.muted:item.warn?t.warning:t.muted,background:item.warn&&!item.done?`${t.warning}18`:'transparent',padding:item.warn&&!item.done?'2px 8px':'0',borderRadius:100}}>{item.done?'Filed':item.date}</span>
-              {item.action&&<button onClick={onSubmitReport} style={{padding:'3px 10px',borderRadius:100,background:t.accent,color:'#fff',border:'none',fontSize:11,fontWeight:700,fontFamily:'inherit',cursor:'pointer',WebkitTapHighlightColor:'transparent'}}>Submit</button>}
+              {item.action&&<button onClick={onSubmitReport} style={{padding:'3px 10px',borderRadius:100,background:t.accent,color:'#fff',border:'none',fontSize:11,fontWeight:700,fontFamily:'inherit',cursor:'pointer',WebkitTapHighlightColor:'transparent'}}>{window.I18N.t("Submit")}</button>}
             </div>
           </div>
         ))}
@@ -955,7 +955,7 @@ function MessagesTab({dark, messages, readIds, onRead, onRefresh}) {
   return (
     <div style={{flex:1,display:'flex',flexDirection:'column',overflow:'hidden',animation:'fadeIn 0.2s ease both'}}>
       <div style={{padding:'20px 24px 14px',flexShrink:0,display:'flex',alignItems:'baseline',gap:10}}>
-        <span style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted}}>Messages</span>
+        <span style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted}}>{window.I18N.t("Messages")}</span>
         {unreadCount>0&&<span style={{fontSize:10,fontWeight:700,color:t.bg,background:t.text,padding:'1px 6px',borderRadius:100}}>{unreadCount} new</span>}
       </div>
       <div ref={listRef} onTouchStart={onTouchStartPull} onTouchEnd={onTouchEndPull} style={{flex:1,overflowY:'auto',paddingBottom:32}}>
@@ -1004,7 +1004,7 @@ function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, av
   );
   return (
     <div style={{flex:1,overflowY:'auto',padding:'20px 24px 40px',animation:'fadeIn 0.2s ease both'}}>
-      <span style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted}}>Settings</span>
+      <span style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted}}>{window.I18N.t("Settings")}</span>
 
       {/* Avatar section */}
       <div style={{marginTop:20,marginBottom:24,display:'flex',flexDirection:'column',alignItems:'center',gap:12}}>
@@ -1031,7 +1031,7 @@ function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, av
         Sign Out
       </button>
 
-      <p style={{fontSize:12,color:t.muted,marginTop:24,lineHeight:1.5}}>Not affiliated with the Government of British Columbia.</p>
+      <p style={{fontSize:12,color:t.muted,marginTop:24,lineHeight:1.5}}>{window.I18N.t("Not affiliated with the Government of British Columbia.")}</p>
     </div>
   );
 }
