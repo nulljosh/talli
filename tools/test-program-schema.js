@@ -33,12 +33,12 @@ function run() {
 
   test('PROFILE_PROGRAMS contains pwd, rdsp, cdb', () => {
     const ids = PROFILE_PROGRAMS.map((p) => p.id);
-    assert.deepStrictEqual(ids.sort(), ['cdb', 'cgeb', 'pwd', 'rdsp']);
+    assert.deepStrictEqual(ids.sort(), ['cdb', 'cgeb', 'debt_payoff', 'dtc', 'other_benefits', 'pwd', 'rdsp']);
   });
 
   test('routes match the original hand-written endpoints', () => {
     const routes = PROFILE_PROGRAMS.map((p) => p.route).sort();
-    assert.deepStrictEqual(routes, ['cdb-profile', 'cgeb-profile', 'pwd-profile', 'rdsp-profile']);
+    assert.deepStrictEqual(routes, ['cdb-profile', 'cgeb-profile', 'debt-payoff-profile', 'dtc-profile', 'other-benefits-profile', 'pwd-profile', 'rdsp-profile']);
   });
 
   test('pwd validStatuses match pre-refactor set', () => {
