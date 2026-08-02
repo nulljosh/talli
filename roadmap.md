@@ -69,6 +69,10 @@ Submission `8f3f038e-0f54-4751-96ec-aa1aa22dfe33`, build `be5d4b36-b481-496d-8e9
 either switch ExportOptions.plist destination to `export` (produce a local .ipa) or replace the
 publish step with the versions-create/attach-build/review-submit sequence used here.
 
+## Status (2026-08-01) — iOS 3.5.13 rebuild after pre-release train closed
+
+App Store Connect closed the pre-release train for v3.5.12 (build 139 was rejected). Bumped `MARKETING_VERSION` in `ios/project.yml` from 3.5.12 to 3.5.13, regenerated the Xcode project, and pushed to trigger a new Xcode Cloud build. Build execution pending. The 3.5.12 release remains valid for current distribution; the 3.5.13 rebuild is the next pre-release candidate.
+
 Still open from the parser work: pagination past page 1 is detected (`hasMoreMessages()`,
 `has_more_messages`) but not implemented — needs a live signed-in portal session to discover the
 "Show More Messages" postback (likely ASP.NET `__doPostBack` + `__VIEWSTATE`).
