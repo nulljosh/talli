@@ -18,7 +18,6 @@ Four root causes found and fixed (see Status 2026-07-28 below); these are the le
 - [ ] `.asc/workflow.json`'s `ship-mac` `export_mac` step uses `--pkg-path`, which this asc CLI version rejects (wants `--ipa-path` even for Mac, and further requires the destination file end in `.ipa` even though Mac exports a `.pkg`) — the workflow can't currently run end-to-end for Mac without manual intervention. Also `asc builds upload --pkg` requires `--build-number` explicitly (no auto-extraction like IPA) — verify it against the actual pkg's `Info.plist` (`pkgutil --expand-full` + `PlistBuddy -c "Print :CFBundleVersion"`) before passing it.
 - [ ] App Privacy publish state flagged as unverifiable via API (`asc validate` info-level) — confirm published at https://appstoreconnect.apple.com/apps/6782366555/appPrivacy if 3.5.7 review comes back with a privacy-related rejection.
 
-- [x] Vibe clone from portfolio — web/landing.html, login.html, privacy.html now link `/portfolio-tokens.css` and reference `var(--blue)` instead of hardcoding `#5B9BD5`. No muted alternative exists yet in the shared tokens file, so "too much blue" isn't fixed by this — just de-hardcoded. unified.html's JS canvas fill-color constants intentionally left as literal strings (can't consume a CSS var in that context). 2026-08-03.
 - [ ] App Store screenshot refresh (stale resolutions/content) + landing page copy/version bump.
 
 ## Status (2026-07-28) — Messages parsing fixed
@@ -48,7 +47,6 @@ iOS 3.5.7 and Mac 3.5.6 both WAITING_FOR_REVIEW under the unified app `678236655
 `.env` exists now (gitignored) with real BC Self-Serve credentials for local testing.
 
 ## Ingested 2026-07-25
-- [x] Approved for CDB — added a "Daily disability income" card on the Home tab (`web/unified.html`, right after the PWD/CDB/Total monthly grid) showing $/day and $/hour derived from `pwdMonthly + cdbMonthly`. 2026-08-03.
 - [ ] Release/update notes need more variety and intelligence — feels formulaic currently.
 - [ ] Add BC benefit tracking: BC Renter's Credit (auto via tax return), BC Bus Pass ($45/yr, apply once PWD confirmed), Fuel tax refund/Home Reno credit (if applicable), CLBC funding (autism dx), CPP-D (check contribution room). RDSP + RBC, CDB, PWD already in motion.
 
