@@ -266,9 +266,23 @@ function HomeTab({dark, amount, daysUntil, paymentDate, paid, onPaidChange, repo
   const t = tk(dark);
   const [loaded, setLoaded] = useState(false);
   const [bounce, setBounce] = useState(false);
+  const [isPro, setIsPro] = useState(false);
+  const [unlocking, setUnlocking] = useState(false);
   useEffect(() => {
     if (amount !== null && daysUntil !== null) { const id=setTimeout(()=>setLoaded(true),300); return ()=>clearTimeout(id); }
   }, [amount, daysUntil]);
+  useEffect(() => {
+    fetch('/api/stripe-status', { credentials: 'include' })
+      .then(r => r.json()).then(d => setIsPro(Boolean(d.isPro))).catch(() => {});
+  }, []);
+  const unlockPro = async () => {
+    setUnlocking(true);
+    try {
+      const res = await fetch('/api/stripe-checkout', { method: 'POST', credentials: 'include' });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } finally { setUnlocking(false); }
+  };
   const counted   = useCountUp(loaded ? parseDollar(amount) : 0, 750);
   const formatted = '$' + Math.round(counted).toLocaleString('en-CA');
   const urgent    = daysUntil !== null && daysUntil <= 3;
@@ -362,38 +376,56 @@ function HomeTab({dark, amount, daysUntil, paymentDate, paid, onPaidChange, repo
       {/* Divider */}
       <div style={{height:1,background:t.border,margin:'24px 0 0'}}/>
 
-      {/* Stats row */}
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:1,animation:'fadeUp 0.45s 0.5s ease both'}}>
-        {[
-          {label:`${new Date().getFullYear()} received`, value:`$${ytd.toLocaleString('en-CA')}`},
-          {label:'Monthly amount', value: amount || '$1,060'},
-        ].map(({label,value},i)=>(
-          <div key={i} style={{padding:'16px 0',borderRight:i===0?`1px solid ${t.border}`:'none',paddingRight:i===0?16:0,paddingLeft:i===1?16:0}}>
-            <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:6}}>{label}</div>
-            <div style={{fontSize:22,fontWeight:700,letterSpacing:'-1px',color:t.text}}>{value}</div>
-          </div>
-        ))}
+      {/* Monthly amount -- always visible */}
+      <div style={{marginTop:24,animation:'fadeUp 0.45s 0.5s ease both'}}>
+        <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:6}}>Monthly amount</div>
+        <div style={{fontSize:22,fontWeight:700,letterSpacing:'-1px',color:t.text}}>{amount || '$1,060'}</div>
       </div>
 
-      {/* Bar chart */}
-      <div style={{marginTop:24,animation:'fadeUp 0.45s 0.58s ease both'}}>
-        <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:14}}>Recent payments</div>
-        <div style={{display:'flex',gap:6,alignItems:'flex-end',height:56}}>
-          {PAST_PAYMENTS.slice(0,5).map((p,i)=>{
-            const val=parseDollar(p.amount);
-            const max=Math.max(...PAST_PAYMENTS.slice(0,5).map(x=>parseDollar(x.amount)));
-            const pct=val/max;
-            const label=new Date(p.year,p.month,p.day).toLocaleString('en-CA',{month:'short'});
-            return (
-              <div key={i} style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',gap:4}}>
-                <span style={{fontSize:9,fontWeight:600,color:i===0?t.text:t.muted,letterSpacing:'-0.2px'}}>{`$${(parseDollar(p.amount)/1000).toFixed(1)}k`}</span>
-                <div style={{width:'100%',borderRadius:3,height:Math.round(pct*32),background:i===0?t.accent:t.bg3,opacity:i===0?1:0.55+(0.45*(1-i/5))}}/>
-                <span style={{fontSize:9,color:t.muted,letterSpacing:'-0.1px'}}>{label}</span>
+      {isPro ? (
+        <>
+          {/* Stats row */}
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:1,marginTop:24,animation:'fadeUp 0.45s 0.5s ease both'}}>
+            {[
+              {label:`${new Date().getFullYear()} received`, value:`$${ytd.toLocaleString('en-CA')}`},
+              {label:'Monthly amount', value: amount || '$1,060'},
+            ].map(({label,value},i)=>(
+              <div key={i} style={{padding:'16px 0',borderRight:i===0?`1px solid ${t.border}`:'none',paddingRight:i===0?16:0,paddingLeft:i===1?16:0}}>
+                <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:6}}>{label}</div>
+                <div style={{fontSize:22,fontWeight:700,letterSpacing:'-1px',color:t.text}}>{value}</div>
               </div>
-            );
-          })}
+            ))}
+          </div>
+
+          {/* Bar chart */}
+          <div style={{marginTop:24,animation:'fadeUp 0.45s 0.58s ease both'}}>
+            <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:14}}>Recent payments</div>
+            <div style={{display:'flex',gap:6,alignItems:'flex-end',height:56}}>
+              {PAST_PAYMENTS.slice(0,5).map((p,i)=>{
+                const val=parseDollar(p.amount);
+                const max=Math.max(...PAST_PAYMENTS.slice(0,5).map(x=>parseDollar(x.amount)));
+                const pct=val/max;
+                const label=new Date(p.year,p.month,p.day).toLocaleString('en-CA',{month:'short'});
+                return (
+                  <div key={i} style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',gap:4}}>
+                    <span style={{fontSize:9,fontWeight:600,color:i===0?t.text:t.muted,letterSpacing:'-0.2px'}}>{`$${(parseDollar(p.amount)/1000).toFixed(1)}k`}</span>
+                    <div style={{width:'100%',borderRadius:3,height:Math.round(pct*32),background:i===0?t.accent:t.bg3,opacity:i===0?1:0.55+(0.45*(1-i/5))}}/>
+                    <span style={{fontSize:9,color:t.muted,letterSpacing:'-0.1px'}}>{label}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </>
+      ) : (
+        <div style={{marginTop:24,padding:'16px',border:`1px solid ${t.border}`,borderRadius:10,animation:'fadeUp 0.45s 0.5s ease both'}}>
+          <div style={{fontSize:13,fontWeight:600,color:t.text,marginBottom:4}}>Full payment history</div>
+          <div style={{fontSize:12,color:t.muted,marginBottom:12}}>Year-to-date total + recent payments chart.</div>
+          <button onClick={unlockPro} disabled={unlocking} style={{padding:'8px 16px',borderRadius:100,background:t.accent,color:'#fff',border:'none',fontSize:12,fontWeight:600,fontFamily:'inherit',cursor:unlocking?'default':'pointer',opacity:unlocking?0.6:1}}>
+            {unlocking ? 'Loading...' : 'Unlock — $1'}
+          </button>
         </div>
-      </div>
+      )}
 
     </div>
   );

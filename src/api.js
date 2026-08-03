@@ -341,6 +341,35 @@ const allowedOrigins = parseAllowedOrigins(
 );
 
 app.use(cors(createCorsOptionsDelegate(allowedOrigins)));
+
+// Stripe webhook needs the raw body for signature verification, so it must be
+// registered with express.raw() before the global express.json() below --
+// once express.json() has run, the raw bytes are gone.
+let stripeClient;
+function getStripe() {
+  if (!stripeClient) stripeClient = require('stripe')(process.env.STRIPE_SECRET_KEY);
+  return stripeClient;
+}
+app.post('/api/stripe-webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  let event;
+  try {
+    event = getStripe().webhooks.constructEvent(req.body, req.headers['stripe-signature'], process.env.STRIPE_WEBHOOK_SECRET);
+  } catch (err) {
+    log('[STRIPE] Webhook signature verification failed:', err.message);
+    return res.status(400).json({ error: 'Webhook signature verification failed' });
+  }
+
+  if (event.type === 'checkout.session.completed') {
+    const userId = event.data.object.client_reference_id;
+    if (userId) {
+      await saveUserBlob(userId, 'pro-status', { isPro: true });
+      log('[STRIPE] Pro unlocked:', userId);
+    }
+  }
+
+  res.status(200).json({ received: true });
+});
+
 app.use(express.json());
 app.set('trust proxy', 1);
 
@@ -1621,6 +1650,31 @@ async function saveUserBlob(userId, key, data) {
     log(`[BLOB] Write ${key} failed:`, err.message);
   }
 }
+
+// Stripe Pro -- $1 one-time unlock for the full payment/report history view
+app.get('/api/stripe-status', requireAuth, async (req, res) => {
+  const userId = req.session?.userId;
+  const status = await loadUserBlob(userId, 'pro-status', { isPro: false });
+  res.json({ isPro: Boolean(status && status.isPro) });
+});
+
+app.post('/api/stripe-checkout', requireAuth, async (req, res) => {
+  try {
+    const session = await getStripe().checkout.sessions.create({
+      mode: 'payment',
+      payment_method_types: ['card'],
+      line_items: [{ price: process.env.STRIPE_PRICE_ID, quantity: 1 }],
+      success_url: 'https://talli.heyitsmejosh.com?pro=1',
+      cancel_url: 'https://talli.heyitsmejosh.com',
+      client_reference_id: req.session.userId,
+      customer_creation: 'always',
+    });
+    res.json({ url: session.url });
+  } catch (err) {
+    log('[STRIPE] Checkout session creation failed:', err.message);
+    res.status(500).json({ error: 'Checkout session creation failed' });
+  }
+});
 
 // Paid status -- persistent per-month history, stored in Blob
 app.get('/api/paid-status', requireAuth, async (req, res) => {
