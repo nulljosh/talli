@@ -784,6 +784,12 @@ function BenniesSection({dark}) {
         ))}
       </div>
 
+      <div style={{padding:'14px 16px',background:t.bg2,borderRadius:10,border:`1px solid ${t.border}`,marginBottom:28}}>
+        <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:8}}>Daily disability income</div>
+        <div style={{fontSize:20,fontWeight:700,letterSpacing:'-0.5px',color:t.text}}>${(totalMonthly/30).toFixed(2)}<span style={{fontSize:12,fontWeight:500,color:t.mutedMid}}>/day</span></div>
+        <div style={{fontSize:12,color:t.mutedMid,marginTop:4}}>${(totalMonthly/30/24).toFixed(2)}/hour · ${totalMonthly.toLocaleString()}/month (${pwdMonthly.toLocaleString()} PWD + ${cdbMonthly.toLocaleString()} CDB)</div>
+      </div>
+
       <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:14}}>Debt payoff — ${totalDebt.toLocaleString()}</div>
       <div style={{padding:'16px 18px',background:t.bg2,borderRadius:12,border:`1px solid ${t.border}`,marginBottom:28}}>
         <div style={{display:'flex',justifyContent:'space-between',marginBottom:8}}>
