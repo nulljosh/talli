@@ -314,7 +314,9 @@ private struct DashboardScreen: View {
                 }
 
                 paymentCard
-                paymentProgress
+                if appState.daysUntilPayment != nil {
+                    paymentProgress
+                }
                 statsGrid
                 paidToggle
                 dateCard
