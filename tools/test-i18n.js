@@ -16,6 +16,14 @@ const src = readJSON('i18n/strings.json');
 const { sourceLanguage, locales } = src._meta;
 const keys = Object.keys(src).filter((k) => k !== '_meta');
 
+// Keys ARE the literal English UI text (see i18n/strings.json _meta) — SwiftUI
+// resolves LocalizedStringKey by matching the literal string. Derive the sample
+// keys instead of hardcoding them so renaming a string doesn't break the suite.
+// reviewKey: human-review-flagged, fr authored, zh empty -> exercises en fallback.
+const reviewKey = keys.find((k) => src[k].review === true && src[k].fr && !src[k].zh);
+// liveKey: fully translated -> exercises real per-locale lookup.
+const liveKey = keys.find((k) => src[k].fr && src[k].zh);
+
 // Mirror of the generator mapping (scripts/i18n-gen.mjs) so we can detect drift.
 function expectedWeb(lng) {
   const out = {};
@@ -67,7 +75,7 @@ async function main() {
     const flagged = keys.filter((k) => src[k].review === true);
     assert.ok(flagged.length > 0, 'expected at least one review:true key');
     // a flagged benefit string may legitimately have empty zh/pa -> en fallback
-    assert.ok(keys.includes('report.fileNow') && src['report.fileNow'].review === true);
+    assert.ok(reviewKey, 'expected a review:true key with fr authored and zh empty');
   });
 
   // --- Group B: generated output / drift ---
@@ -88,9 +96,9 @@ async function main() {
     assert.deepStrictEqual(readJSON('web/locales/pa.json'), expectedWeb('pa'));
   });
 
-  await test('zh.json omits review-empty key report.fileNow (en-fallback path)', () => {
+  await test('zh.json omits review-empty flagged key (en-fallback path)', () => {
     const zh = readJSON('web/locales/zh.json');
-    assert.ok(!('report.fileNow' in zh), 'report.fileNow should be absent in zh');
+    assert.ok(!(reviewKey in zh), `${reviewKey} should be absent in zh`);
   });
 
   await test('every zh key has an en fallback target', () => {
@@ -107,8 +115,8 @@ async function main() {
     for (const k of keys) {
       assert.strictEqual(cat.strings[k].localizations.en.stringUnit.value, src[k].en, `${k} en drift`);
     }
-    assert.strictEqual(cat.strings['report.fileNow'].localizations.fr.stringUnit.value, src['report.fileNow'].fr);
-    assert.ok(!cat.strings['report.fileNow'].localizations.zh, 'zh should be omitted for review-empty key');
+    assert.strictEqual(cat.strings[reviewKey].localizations.fr.stringUnit.value, src[reviewKey].fr);
+    assert.ok(!cat.strings[reviewKey].localizations.zh, 'zh should be omitted for review-empty key');
   });
 
   // --- Group C: runtime (real web/js/i18n.js in a mocked browser sandbox) ---
@@ -147,15 +155,15 @@ async function main() {
     // let async boot (fallback + active dict load) settle
     await new Promise((r) => setTimeout(r, 20));
 
-    assert.strictEqual(I18N.t('nav.account'), 'Account', 'default en t()');
+    assert.strictEqual(I18N.t(liveKey), src[liveKey].en, 'default en t()');
     assert.strictEqual(I18N.t('totalli.unknown.key'), 'totalli.unknown.key', 'unknown key passthrough');
 
     await I18N.setLang('fr');
-    assert.strictEqual(I18N.t('nav.account'), 'Compte', 'fr t()');
+    assert.strictEqual(I18N.t(liveKey), src[liveKey].fr, 'fr t()');
 
     await I18N.setLang('zh');
-    assert.strictEqual(I18N.t('nav.account'), '账户', 'zh present');
-    assert.strictEqual(I18N.t('report.fileNow'), 'File now', 'zh missing -> en fallback');
+    assert.strictEqual(I18N.t(liveKey), src[liveKey].zh, 'zh present');
+    assert.strictEqual(I18N.t(reviewKey), src[reviewKey].en, 'zh missing -> en fallback');
 
     // formatters: the part translation can never do
     await I18N.setLang('en');
