@@ -11,7 +11,7 @@
   <img src="screenshots/appstore/05-settings.png" width="200">
 </p>
 
-iOS companion for [Talli](https://tally.heyitsmejosh.com), the BC benefits tracker. SwiftUI (iOS 17+, Swift 6), `@Observable` state, URLSession cookie jar auth, xcodegen. Backend: Vercel + Puppeteer at tally.heyitsmejosh.com.
+iOS companion for [Talli](https://talli.heyitsmejosh.com), the BC benefits tracker. SwiftUI (iOS 17+, Swift 6), `@Observable` state, URLSession cookie jar auth, xcodegen. Backend: Vercel + Puppeteer at talli.heyitsmejosh.com.
 
 [Architecture](architecture.svg)
 

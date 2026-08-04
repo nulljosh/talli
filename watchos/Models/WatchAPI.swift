@@ -3,7 +3,7 @@ import Foundation
 final class WatchAPI: @unchecked Sendable {
     static let shared = WatchAPI()
 
-    private let baseURL = "https://tally.heyitsmejosh.com"
+    private let baseURL = "https://talli.heyitsmejosh.com"
     private let session: URLSession
     private let decoder = JSONDecoder()
     private let defaults = UserDefaults.standard
