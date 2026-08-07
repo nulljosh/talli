@@ -66,7 +66,7 @@ private struct MessageRow: View {
     var body: some View {
         Button(action: onTap) {
             HStack(alignment: .top, spacing: 12) {
-                ZStack(alignment: .topTrailing) {
+                ZStack {
                     Circle()
                         .fill(isRead ? Color(.tertiarySystemFill) : Color.talliOrange)
                         .frame(width: 38, height: 38)
@@ -77,7 +77,7 @@ private struct MessageRow: View {
                         Circle()
                             .fill(Color.primary)
                             .frame(width: 8, height: 8)
-                            .offset(x: 2, y: -2)
+                            .offset(x: 17, y: -17)
                     }
                 }
 
