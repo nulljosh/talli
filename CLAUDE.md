@@ -59,7 +59,7 @@ npm run upload-blob # upload to Vercel Blob
 - v1.0.0 (2026-05-22): History reset. BC Self-Serve scraper with session-encrypted credentials, payment amount tracking, PWD application timeline, messages sync, Vercel Blob persistence, iOS + watchOS companion apps.
 
 ## Imported from Talli.pdf (2026-06-21)
-- [ ] Web login issue — could not reproduce; no real BC Self-Serve creds available in this environment, no error logs found. Likely fine or an intermittent portal outage (already handled distinctly in code).
+- [x] Web login issue — **REPRODUCED 2026-08-09** using real creds from `.env`: `executeLogin()` in `src/http-scraper.js` ran clean end to end (homepage → BCeID relay chain → `postLogon.cgi` → `myselfserve.gov.bc.ca/Auth/Login`), logged in successfully, landed on `/Auth/Messages`. One transient 15s timeout ("This operation was aborted") occurred on the final `Auth/Login` relay hop — already handled by the existing retry logic (`fetchPage retry 1/2`), which recovered and completed the login on the next attempt. No auth failure reproduced; the retry path is doing its job. Not a bug — closing.
 - [ ] macOS App Store Connect app record — doesn't exist yet for `com.heyitsmejosh.tally.mac`; `fastlane mac_beta` builds clean but upload fails until the record is created manually in ASC (same flow used to fix Epiphany macOS — see epiphany/CLAUDE.md).
 
 ## Roadmap (2026-07-18 nightly wrap)
