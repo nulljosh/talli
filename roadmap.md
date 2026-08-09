@@ -49,9 +49,6 @@ iOS 3.5.7 and Mac 3.5.6 both WAITING_FOR_REVIEW under the unified app `678236655
 - [ ] Release/update notes need more variety and intelligence — feels formulaic currently.
 - [ ] Add BC benefit tracking: BC Renter's Credit (auto via tax return), BC Bus Pass ($45/yr, apply once PWD confirmed), Fuel tax refund/Home Reno credit (if applicable), CLBC funding (autism dx), CPP-D (check contribution room). RDSP + RBC, CDB, PWD already in motion.
 
-## Visual verification 2026-07-25 (iPhone 17 Pro simulator, UITEST_SNAPSHOT)
-- [x] **VERIFIED 2026-08-03 in the simulator — bottom of Settings renders correctly.** Scrolled to the end; "Log Out" is fully visible and unclipped with clear space above the floating tab bar. The `.safeAreaInset` fix holds. Note on why the two earlier attempts failed: **`axe` takes POINTS, not pixels.** This device is 3x (1206x2622 px = 402x874 pt), so pixel coordinates land off-screen and `axe` still reports "✓ Tap completed successfully" — a silent no-op that looks like success. Convert screenshot pixel coords to points before every tap/swipe. Checked 2026-07-26: fix is `SettingsView.swift:51` `.safeAreaInset(edge: .bottom) { Color.clear.frame(height: 90) }` — a static constant, not conditional, so it's not a candidate for intermittent breakage; skipping a sim boot for this per house default (only when truly needed), leaving open for an actual on-device glance next time the sim is already running for something else.
-
 ## Ship 3.5.12 — SUBMITTED 2026-07-28 night
 Today's message-parser fix (94808a3) was committed+pushed but not in any build. Bumped
 `ios/project.yml` MARKETING_VERSION 3.5.10 → 3.5.12, regenerated project, added
@@ -75,4 +72,3 @@ Localization pipeline wired: `i18n/strings.json` master keys now match literal U
 ## Status (2026-08-01) — iOS 3.5.13 rebuild after pre-release train closed
 
 App Store Connect closed the pre-release train for v3.5.12 (build 139 was rejected). Bumped `MARKETING_VERSION` in `ios/project.yml` from 3.5.12 to 3.5.13, regenerated the Xcode project, and pushed to trigger a new Xcode Cloud build. Build execution pending. The 3.5.12 release remains valid for current distribution; the 3.5.13 rebuild is the next pre-release candidate.
-
