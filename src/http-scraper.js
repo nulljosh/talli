@@ -1,4 +1,5 @@
 const cheerio = require('cheerio');
+const { hasMoreMessages } = require('./parse-messages');
 
 const BASE_URL = 'https://myselfserve.gov.bc.ca';
 const REQUEST_TIMEOUT_MS = 15000;
@@ -8,6 +9,20 @@ const RETRY_BASE_DELAY_MS = 1000;
 const RETRY_MAX_DELAY_MS = 15000;
 const TRANSIENT_RETRY_COUNT = 2;
 const CAPTURED_COOKIE_RESPONSES = new WeakSet();
+
+// The Messages list is paginated: /Auth/Messages renders only the first page
+// (10 rows) plus a "Show More Messages" button. That button is NOT an ASP.NET
+// __doPostBack -- there is no <form>, no __VIEWSTATE, no __EVENTVALIDATION on
+// the page at all. It is a jQuery click handler doing a plain
+// `GET /Auth/Messages/MessageList?pageNumber=N`, which returns a bare HTML
+// fragment of the next 10 rows (verified against the live portal 2026-08-10).
+//
+// The portal CLAMPS past the last page instead of returning an empty fragment:
+// with 3 pages of data, pageNumber=4, 5, 6... all echo page 3 verbatim. So
+// termination must key off "this page contributed no new rows", never off an
+// empty response, or the loop runs until the cap on every single scrape.
+const MESSAGE_LIST_URL = `${BASE_URL}/Auth/Messages/MessageList`;
+const MAX_MESSAGE_PAGES = 20;
 
 const SECTION_CONFIG = [
   { name: 'Notifications', urls: [`${BASE_URL}/Auth`] },
@@ -736,6 +751,16 @@ function extractSectionData(html, url) {
     if (text.length > 5) allText.push(text);
   });
 
+  // Buttons carry real state, not just chrome -- the Messages list hides its
+  // remaining pages behind <button class="load-more">Show More Messages</button>.
+  // No selector above matches a bare <button>, so that string never reached
+  // allText and `hasMoreMessages()` was returning false on every real scrape:
+  // pagination read as "already complete" no matter how many pages existed.
+  $('button').each((_, el) => {
+    const text = $(el).text().replace(/\s+/g, ' ').trim();
+    if (text) allText.push(text);
+  });
+
   $('div[class], span[class]').each((_, el) => {
     if ($(el).children('div, p, ul, ol, table').length === 0) {
       const text = $(el).text().replace(/\s+/g, ' ').trim();
@@ -948,6 +973,49 @@ async function validateSession(jar) {
   }
 }
 
+/**
+ * Walk /Auth/Messages/MessageList past page 1, appending each fragment's rows
+ * to `data.allText` in portal order (newest first).
+ *
+ * Stops on the first page that contributes no new lines -- that single
+ * condition covers both a short final page and the portal's clamp-and-repeat
+ * behaviour past the end. Mutates and returns `data`.
+ *
+ * A page fetch that throws ends the walk rather than failing the section: a
+ * partial message list is strictly better than losing the first page too.
+ */
+async function fetchMessagePages(data, jar, maxPages = MAX_MESSAGE_PAGES) {
+  const seen = new Set(data.allText);
+  let pagesFetched = 0;
+
+  for (let pageNumber = 2; pageNumber <= maxPages; pageNumber++) {
+    let fragment;
+    try {
+      fragment = await fetchProtectedPage(`${MESSAGE_LIST_URL}?pageNumber=${pageNumber}`, jar);
+    } catch (error) {
+      log(`Messages page ${pageNumber} fetch failed, keeping ${pagesFetched + 1} page(s): ${error.message}`);
+      break;
+    }
+
+    const fresh = extractSectionData(fragment.html, fragment.url).allText
+      .filter(line => !seen.has(line));
+
+    if (fresh.length === 0) {
+      log(`Messages pagination complete at page ${pageNumber} (no new rows)`);
+      break;
+    }
+
+    fresh.forEach(line => seen.add(line));
+    data.allText.push(...fresh);
+    pagesFetched++;
+  }
+
+  if (pagesFetched > 0) {
+    log(`Messages: merged ${pagesFetched} extra page(s), ${data.allText.length} lines total`);
+  }
+  return data;
+}
+
 async function fetchSection(section, jar) {
   let lastError = null;
 
@@ -955,6 +1023,11 @@ async function fetchSection(section, jar) {
     try {
       const page = await fetchProtectedPage(url, jar);
       const data = extractSectionData(page.html, page.url);
+
+      // Only page 1 is rendered inline; the rest sits behind "Show More Messages".
+      if (section.name === 'Messages' && hasMoreMessages(data.allText)) {
+        await fetchMessagePages(data, jar);
+      }
 
       if (
         section.name === 'Payment Info' &&
@@ -1078,5 +1151,9 @@ module.exports = {
   backoffDelay,
   parseCookieExpiry,
   parseReportMonths,
-  periodToKey
+  periodToKey,
+  extractSectionData,
+  fetchMessagePages,
+  MESSAGE_LIST_URL,
+  MAX_MESSAGE_PAGES
 };

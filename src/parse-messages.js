@@ -31,11 +31,17 @@ const LEADING_DATE_RX = /^\s*!?\s*(\d{4})\s*\/\s*([A-Z]{3})\s*\/\s*(\d{2})\s*(.*
 // ended in `\b`, which made the "monthly reports?" nav-tab pattern also match
 // the real subject "Monthly Report Reminder" -- by far the most common message
 // on the portal -- silently dropping it from the list and the badge count.
-const NAV_LABEL_RX = /^(skip to (main content|navigation|content)|home|payment info|messages?|notifications?|service requests?|monthly reports?|sign out|profile|back|print|help|my self serve|employment plans?|account info|terms of use|accessibility( statement)?|privacy|logout|menu|show more( messages)?)\s*\(?\d*\)?\s*$/i;
+// "yes, i'm still here" and "select a message to read" are the session-timeout
+// modal's dismiss button and the empty reading-pane placeholder. Both reach
+// allText now that <button> text is extracted (needed for "Show More Messages"),
+// and both would otherwise render as dateless messages and inflate the badge.
+const NAV_LABEL_RX = /^(skip to (main content|navigation|content)|home|payment info|messages?|notifications?|service requests?|monthly reports?|sign out|profile|back|print|help|my self serve|employment plans?|account info|terms of use|accessibility( statement)?|privacy|logout|menu|show more( messages)?|yes,? i'?m still here|select a message to read)\s*\(?\d*\)?\s*$/i;
 
 // Interstitial boilerplate that legitimately leads a longer sentence, so these
 // stay prefix matches ("JavaScript is disabled…", "Inactivity warning…").
-const BOILERPLATE_RX = /^(inactiv|logged out|javascript|service canada)/i;
+// "due to inactiv" is separate from "inactiv" because the portal's session
+// modal leads with "Due to inactivity you will be logged out in seconds."
+const BOILERPLATE_RX = /^(inactiv|due to inactiv|logged out|javascript|service canada)/i;
 
 function isNavChrome(line) {
   return NAV_LABEL_RX.test(line) || BOILERPLATE_RX.test(line);
@@ -128,12 +134,22 @@ function parseMessages(lines = []) {
   // Same message can arrive from both the Messages and Notifications sections,
   // and http-scraper's overlapping selectors repeat rows within a section.
   const seen = new Set();
-  return out.filter(m => {
+  const deduped = out.filter(m => {
     const key = `${m.timestamp || ''}|${m.text}`;
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
   });
+
+  // The portal nests the subject inside the row: extractSectionData emits the
+  // whole row ("2026 / AUG / 05 Monthly Report Reminder") from `div.message`
+  // AND the inner `div.subject` on its own. The second copy has no date, so
+  // the date-keyed dedupe above treats it as a distinct message -- real
+  // portal HTML produced 18 rows for 10 actual messages, and each phantom got
+  // its own unstable id, so iOS showed it as a permanently-unread duplicate.
+  // A dateless row whose subject already appeared dated is always that artifact.
+  const datedSubjects = new Set(deduped.filter(m => m.timestamp).map(m => m.text));
+  return deduped.filter(m => m.timestamp || !datedSubjects.has(m.text));
 }
 
 // True when the portal is holding back rows behind "Show More Messages", i.e.
