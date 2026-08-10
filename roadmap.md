@@ -9,8 +9,6 @@ Talli's custom `/api/login` endpoint has no password-recovery or email-verificat
 Source note: "messages regex still a mess / And it's not really updating accurately."
 Four root causes found and fixed (see Status 2026-07-28 below); these are the leftovers.
 
-- [x] **Messages pagination — DONE 2026-08-10.** Live portal now yields **23 messages back to 2023-12-21** (was 10). The ASP.NET `__doPostBack` guess in this item was wrong: the Messages page has no `<form>`, no `__VIEWSTATE`, no `__EVENTVALIDATION` at all. "Show More Messages" is a jQuery handler doing a plain `GET /Auth/Messages/MessageList?pageNumber=N` returning a bare HTML fragment (10 rows/page). `fetchMessagePages()` in `src/http-scraper.js` walks it. Two pre-existing bugs found and fixed en route — see Status 2026-08-10 below.
-
 ## Open
 - [ ] Push notifications for payday + when monthly reports open (1–5 of each month) — see the Stashed 2026-08-10 note below for why this is bigger than it looks and the cheaper shape to build instead.
 - [ ] Large unused whitespace at bottom of payment card view — **investigated in the sim 2026-08-03, no removable padding found.** The gap is the `.safeAreaPadding(.bottom, 90)` clearance (`ContentView.swift:326`) reserved for `TalliFloatingTabBar`, not excess padding — if anything it's ~4pt short. Closing this properly is a design decision (more content, or a non-floating bar), not a padding tweak. Don't re-investigate blind.
