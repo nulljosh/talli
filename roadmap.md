@@ -1,5 +1,9 @@
 # Talli Roadmap
 
+## Email verification on signup + forgot-password flow
+
+Talli's custom `/api/login` endpoint has no password-recovery or email-verification paths yet. Most other apps already have both. Implement: (1) password-reset route that emails a time-limited reset token, (2) token verification before allowing a new password, (3) optional email-verification on signup (soft gate, existing accounts grandfathered, login never blocked). See sparkjar's `/api/auth/verify-email.js` + `/api/auth/password-reset.js` for a reference implementation and the mail.js helper used by epiphany, sparkjar, and others.
+
 ## From Talli.pdf (imported 2026-07-28)
 
 Source note: "messages regex still a mess / And it's not really updating accurately."
