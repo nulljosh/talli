@@ -11,6 +11,7 @@ const { createCorsOptionsDelegate, parseAllowedOrigins } = require('./cors-utils
 const { parseCookies, unsealAuthPayload, setAuthCookie, clearAuthCookie } = require('./auth-cookie');
 const { attemptHttpLogin, fetchAllSections } = require('./http-scraper');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
+const { nextPaymentDate } = require('./pay-dates');
 const { PROFILE_PROGRAMS } = require('./programs/profiles');
 
 const app = express();
@@ -1653,6 +1654,10 @@ async function saveUserBlob(userId, key, data) {
 
 // Stripe Pro -- $1 one-time unlock for the full payment/report history view
 app.get('/api/stripe-status', requireAuth, async (req, res) => {
+  // Owner account (the BCeID this instance is configured for) is always Pro -- Talli is a
+  // personal tool, no reason to paywall its own operator out of their own payment history.
+  const owner = process.env.BCEID_USERNAME;
+  if (owner && req.session?.bceidUsername === owner) return res.json({ isPro: true });
   const userId = req.session?.userId;
   const status = await loadUserBlob(userId, 'pro-status', { isPro: false });
   res.json({ isPro: Boolean(status && status.isPro) });
@@ -1905,21 +1910,22 @@ app.post('/api/avatar', requireAuth, async (req, res) => {
     if (svgBuffer.length > 100 * 1024) return res.status(400).json({ error: 'SVG too large' });
 
     const profile = await loadUserBlob(userId, 'profile', {});
+    let staleUrl = null;
     if (IS_PRODUCTION) {
-      const { put, del } = require('@vercel/blob');
-      const oldUrl = profile.avatarUrl;
+      const { put } = require('@vercel/blob');
       const pathname = `${blobPrefix(userId)}/avatar-${Date.now()}.svg`;
       const { url } = await put(pathname, svgBuffer, { access: 'public', addRandomSuffix: false, contentType: 'image/svg+xml' });
+      if (profile.avatarUrl && profile.avatarUrl.includes('blob.vercel-storage.com')) staleUrl = profile.avatarUrl;
       profile.avatarUrl = url;
-      if (oldUrl && oldUrl.includes('blob.vercel-storage.com')) {
-        del(oldUrl).catch(() => {});
-      }
     } else {
       // Dev: return data URL so the UI still works locally
       profile.avatarUrl = `data:image/svg+xml;base64,${svgBase64}`;
     }
     profile.avatarUpdatedAt = new Date().toISOString();
     await saveUserBlob(userId, 'profile', profile);
+    // Delete the old blob only after the new URL is durably saved -- deleting first
+    // leaves profile.avatarUrl pointing at a 404 if the save throws (letter-icon bug).
+    if (staleUrl) require('@vercel/blob').del(staleUrl).catch(() => {});
     res.json({ ok: true, avatarUrl: profile.avatarUrl });
   } catch (err) {
     log('[AVATAR] POST error:', err.message);
@@ -1945,7 +1951,6 @@ app.post('/api/submit-report', scrapeLimiter, requireAuth, async (req, res) => {
       if (profile.encryptedPin) resolvedPin = decrypt(profile.encryptedPin);
     }
     if (!resolvedPin) {
-      isSubmitting = false;
       return res.status(400).json({ error: 'PIN required — save your PIN in Account settings' });
     }
     // Pass SIN/phone only if explicitly provided -- BC portal uses its own pre-filled values
@@ -1963,7 +1968,6 @@ app.post('/api/submit-report', scrapeLimiter, requireAuth, async (req, res) => {
     }
 
     if (!username || !password) {
-      isSubmitting = false;
       return res.status(401).json({ error: 'No login credentials available' });
     }
 
@@ -1977,12 +1981,12 @@ app.post('/api/submit-report', scrapeLimiter, requireAuth, async (req, res) => {
       headless: true
     });
 
-    isSubmitting = false;
     res.json(result);
   } catch (error) {
-    isSubmitting = false;
     console.error('[API] submit-report error:', error);
     res.status(500).json({ success: false, error: safeApiError(error, 'Failed to submit report') });
+  } finally {
+    isSubmitting = false;
   }
 });
 
@@ -1996,6 +2000,11 @@ app.get('/api/check', scrapeLimiter, requireAuth, async (req, res) => {
 
   isChecking = true;
 
+  // Every exit path must clear isChecking -- it is a module-global lock, so one request
+  // that returned early (expired session, missing creds) used to leave it stuck true for
+  // the life of the serverless instance. After that every /api/check answered 429, no
+  // scrape ever ran again, and /api/mobile kept serving the frozen Blob (stale messages).
+  // ponytail: single global lock is fine for a single-user app; per-user if that changes.
   try {
     log('[API] Starting check for all sections...');
 
@@ -2033,7 +2042,6 @@ app.get('/api/check', scrapeLimiter, requireAuth, async (req, res) => {
     };
 
     if (!result || !result.success) {
-      isChecking = false;
       const scrapeError = (result && result.error) ? result.error : 'Scrape failed';
       console.error('[API] Scrape failed:', scrapeError);
       return res.status(502).json({
@@ -2052,15 +2060,11 @@ app.get('/api/check', scrapeLimiter, requireAuth, async (req, res) => {
       }
     }
 
-    isChecking = false;
-
     res.json({
       success: true,
       data: lastCheckResult
     });
   } catch (error) {
-    isChecking = false;
-
     const errorResult = {
       success: false,
       error: safeApiError(error, 'Failed to check BC Self-Serve'),
@@ -2070,6 +2074,8 @@ app.get('/api/check', scrapeLimiter, requireAuth, async (req, res) => {
     lastCheckResult = errorResult;
 
     res.status(500).json(errorResult);
+  } finally {
+    isChecking = false;
   }
 });
 
@@ -2092,24 +2098,7 @@ function extractMobileData(scraperResult) {
   const designationMatch = raw.match(/Persons?\s+with\s+Disabilities|PWD/i);
   const fallbackAmount = designationMatch ? '~$1,500-1,700/mo' : '~$1,000/mo';
 
-  // Compute next payment date
-  const payDates2026 = {
-    0: 21, 1: 25, 2: 25, 3: 23, 4: 27, 5: 24,
-    6: 23, 7: 26, 8: 24, 9: 28, 10: 25, 11: 16
-  };
-  const now = new Date();
-  const thisMonthDay = payDates2026[now.getMonth()];
-  let nextPayday;
-  if (thisMonthDay && now <= new Date(now.getFullYear(), now.getMonth(), thisMonthDay)) {
-    nextPayday = new Date(now.getFullYear(), now.getMonth(), thisMonthDay);
-  } else {
-    const nextMonth = (now.getMonth() + 1) % 12;
-    const nextDay = payDates2026[nextMonth] || 25;
-    const nextYear = nextMonth === 0 ? now.getFullYear() + 1 : now.getFullYear();
-    nextPayday = new Date(nextYear, nextMonth, nextDay);
-  }
-  const pad = (n) => String(n).padStart(2, '0');
-  const nextDate = `${nextPayday.getFullYear()}-${pad(nextPayday.getMonth() + 1)}-${pad(nextPayday.getDate())}`;
+  const nextDate = nextPaymentDate(new Date(), () => log('[PAYDATE] Cheque issue schedule exhausted -- add the next year from gov.bc.ca'));
 
   // Extract messages from Messages + Notifications sections.
   const messagesAllText = [

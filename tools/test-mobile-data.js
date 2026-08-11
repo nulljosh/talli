@@ -5,6 +5,7 @@ const assert = require('assert');
 // completely broken message parser passed this suite. Message-parsing
 // behaviour itself is covered by tools/test-parse-messages.js.
 const { parseMessages, hasMoreMessages } = require('../src/parse-messages');
+const { nextPaymentDate } = require('../src/pay-dates');
 
 // Copy of extractMobileData's payment/date logic from src/api.js for isolated
 // testing. Avoids booting Express just to test pure data extraction.
@@ -22,23 +23,9 @@ function extractMobileData(scraperResult) {
   const designationMatch = raw.match(/Persons?\s+with\s+Disabilities|PWD/i);
   const fallbackAmount = designationMatch ? '~$1,500-1,700/mo' : '~$1,000/mo';
 
-  const payDates2026 = {
-    0: 21, 1: 25, 2: 25, 3: 23, 4: 27, 5: 24,
-    6: 23, 7: 26, 8: 24, 9: 28, 10: 25, 11: 16
-  };
-  const now = new Date();
-  const thisMonthDay = payDates2026[now.getMonth()];
-  let nextPayday;
-  if (thisMonthDay && now <= new Date(now.getFullYear(), now.getMonth(), thisMonthDay)) {
-    nextPayday = new Date(now.getFullYear(), now.getMonth(), thisMonthDay);
-  } else {
-    const nextMonth = (now.getMonth() + 1) % 12;
-    const nextDay = payDates2026[nextMonth] || 25;
-    const nextYear = nextMonth === 0 ? now.getFullYear() + 1 : now.getFullYear();
-    nextPayday = new Date(nextYear, nextMonth, nextDay);
-  }
-  const pad = (n) => String(n).padStart(2, '0');
-  const nextDate = `${nextPayday.getFullYear()}-${pad(nextPayday.getMonth() + 1)}-${pad(nextPayday.getDate())}`;
+  // Pay-date logic is imported from production (src/pay-dates.js), never copied --
+  // the copy that used to live here drifted and asserted 5 wrong cheque issue dates.
+  const nextDate = nextPaymentDate();
 
   const messagesAllText = [
     ...((sections.Messages && sections.Messages.allText) || []),
