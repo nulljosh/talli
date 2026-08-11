@@ -33,6 +33,8 @@ targets:
           - fastlane
           - build
           - .asc
+          - screenshots
+          - .claude
     settings:
       base:
         INFOPLIST_FILE: Info.plist

@@ -102,3 +102,20 @@ App Store Connect closed the pre-release train for v3.5.12 (build 139 was reject
 - [ ] Refresh `CHEQUE_ISSUE_DATES` in `src/pay-dates.js` when BC publishes the 2027 cheque issue schedule — after 2026-12-16 the app shows "--" for the next payment date until it is added.
 - [x] Messages stale / not syncing — root cause: `/api/check` set the module-global `isChecking = true` but its three early-return paths (expired session, missing creds) never cleared it. One such request wedged the flag for the life of the serverless instance, so every later `/api/check` answered 429, no scrape ever ran again, and `/api/mobile` (`allowLiveScrape: false`) kept serving the frozen Blob — hence a Messages tab stuck on one December message, and iOS (Blob-only) diverging from web (which can still scrape live via `/api/latest`). Lock now released in a `finally`; `isSubmitting` in `/api/submit-report` converted to the same shape before it bit too. Regression test `tools/test-scrape-lock.js` (9 checks, asserts against real source; verified it fails when the bug is reintroduced), wired into `npm test`.
 - [ ] iOS `APIClient.check()` swallows `/api/check` failures with `try?` (deliberate — a slow scrape must not block the dashboard), which is why the wedged-429 above went unnoticed for months. Consider surfacing a quiet "last synced" staleness indicator so a silently-failing refresh is visible.
+
+## Screenshots (2026-08-11)
+- iOS App Store screenshots regenerated via `cd ios && fastlane screenshots`. Two real bugs
+  fixed to make the run produce usable images:
+  - `Snapfile` was missing `xcargs("-skipPackagePluginValidation -skipMacroValidation")`, so
+    the SwiftLint SPM build-tool plugin failed the headless build (same fix epiphany needed).
+  - `AppState`'s `UITEST_SNAPSHOT` mock only covered `init`. Tapping the Messages tab calls
+    `refreshDashboard()`, which hit a real 401 and dropped the run to the login screen — so
+    "04-Messages" was a screenshot of the sign-in form. Guarded `refreshDashboard()` and
+    `loadDashboardIfNeeded()` with the new `AppState.isSnapshot`.
+- Also fixed: `ios/project.yml` was bundling `screenshots/` PNGs and `.claude/settings.local.json`
+  into the shipped Talli.app (source scan had no excludes for them).
+- STILL OPEN: the 5th shot, `05-Settings`, is not captured. The Settings tab button exists and
+  is visible, but the UITest step after tapping it fails (snapshot run reports ❌ while all four
+  earlier shots land fine). 4 screens per device shipped instead of 5. Debug
+  `UITests/PreviewScreenshot.swift` when there's usage headroom.
+- Not uploaded to ASC — App Store submission freeze until 2026-08-18.

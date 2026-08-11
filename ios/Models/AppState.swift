@@ -12,6 +12,10 @@ final class AppState {
         static let lastSyncKey = "last-sync-date"
     }
 
+    /// App Store screenshot run: state is mocked in `init`, so every network path
+    /// must no-op or the first 401 kicks the run back to the login screen.
+    static let isSnapshot = CommandLine.arguments.contains("UITEST_SNAPSHOT")
+
     var isAuthenticated = false
     var isLoading = false
     var errorMessage: String?
@@ -43,12 +47,12 @@ final class AppState {
     private var storedCredentials: KeychainHelper.Credentials?
 
     var username: String? {
-        if CommandLine.arguments.contains("UITEST_SNAPSHOT") { return "demo.user" }
+        if Self.isSnapshot { return "demo.user" }
         return KeychainHelper.loadCredentials()?.username
     }
 
     init() {
-        if CommandLine.arguments.contains("UITEST_SNAPSHOT") {
+        if Self.isSnapshot {
             isAuthenticated = true
             dashboard = DashboardData(
                 paymentAmount: "$1,080.00",
@@ -288,7 +292,7 @@ final class AppState {
     }
 
     func bootstrap() async {
-        if CommandLine.arguments.contains("UITEST_SNAPSHOT") { return }
+        if Self.isSnapshot { return }
         // Optimistic: show cached dashboard immediately while session check runs
         if storedCredentials != nil, dashboard != nil {
             isAuthenticated = true
@@ -426,7 +430,7 @@ final class AppState {
     }
 
     func refreshDashboard() async {
-        guard isAuthenticated, !isRefreshing else { return }
+        guard !Self.isSnapshot, isAuthenticated, !isRefreshing else { return }
         isRefreshing = true
         isLoading = true
         defer {
@@ -459,7 +463,7 @@ final class AppState {
     }
 
     func loadDashboardIfNeeded() async {
-        guard isAuthenticated, dashboard == nil else { return }
+        guard !Self.isSnapshot, isAuthenticated, dashboard == nil else { return }
 
         isLoading = true
         defer { isLoading = false }
