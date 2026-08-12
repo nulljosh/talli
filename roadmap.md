@@ -1,5 +1,14 @@
 # Talli Roadmap
 
+## ASC state VERIFIED 2026-08-12 (`asc versions list`)
+
+**Both platforms are LIVE** — iOS 3.5.12 and macOS 3.5.6, both `READY_FOR_SALE`. Notes
+saying "3.5.13 rebuild pending" or "Mac build VALID pending submission" are wrong: no 3.5.13
+version record exists, and the Mac version shipped.
+
+Submissions frozen until 2026-08-18 (Guideline 5.6 review) — build and stage only, no
+`asc review submit`. Anything below this heading predates this check; trust this block.
+
 ## Email verification on signup + forgot-password flow
 
 Talli's custom `/api/login` endpoint has no password-recovery or email-verification paths yet. Most other apps already have both. Implement: (1) password-reset route that emails a time-limited reset token, (2) token verification before allowing a new password, (3) optional email-verification on signup (soft gate, existing accounts grandfathered, login never blocked). See sparkjar's `/api/auth/verify-email.js` + `/api/auth/password-reset.js` for a reference implementation and the mail.js helper used by epiphany, sparkjar, and others.
