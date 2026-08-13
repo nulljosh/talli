@@ -303,6 +303,8 @@ private struct DashboardScreen: View {
             VStack(spacing: 18) {
                 if appState.isOffline {
                     OfflineBanner()
+                } else if appState.isSyncStale {
+                    StaleSyncBanner()
                 }
 
                 if isFilingWindowOpen {
@@ -512,6 +514,26 @@ private struct OfflineBanner: View {
         }
         .padding(12)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+    }
+}
+
+private struct StaleSyncBanner: View {
+    @Environment(AppState.self) private var appState
+
+    private var detail: String {
+        guard let date = appState.lastSyncDate else { return "Never synced" }
+        return "Last synced \(date.formatted(.relative(presentation: .named)))"
+    }
+
+    var body: some View {
+        HStack {
+            Text("Not up to date").font(.caption.weight(.semibold))
+            Spacer()
+            Text(detail).font(.caption).foregroundStyle(.secondary)
+        }
+        .padding(12)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .accessibilityElement(children: .combine)
     }
 }
 

@@ -83,9 +83,21 @@ final class MacAPIClient: @unchecked Sendable {
         try await send(path: "api/mobile", responseType: MacDashboardData.self)
     }
 
-    func check() async throws -> MacDashboardData {
-        _ = try await send(path: "api/check", responseType: MacCheckResponse.self)
-        return try await send(path: "api/mobile", responseType: MacDashboardData.self)
+    /// Triggers a fresh scrape, then fetches parsed mobile data.
+    ///
+    /// A failed/slow live scrape must not fail the whole refresh -- api/mobile
+    /// still returns usable (cached or computed) data on its own, so throwing
+    /// here reported a healthy dashboard as fully offline. The caller gets the
+    /// scrape outcome instead and surfaces it quietly. Mirrors iOS APIClient.
+    func check() async throws -> (data: MacDashboardData, scrapeSucceeded: Bool) {
+        var scrapeSucceeded = true
+        do {
+            _ = try await send(path: "api/check", responseType: MacCheckResponse.self)
+        } catch {
+            scrapeSucceeded = false
+        }
+        let data = try await send(path: "api/mobile", responseType: MacDashboardData.self)
+        return (data, scrapeSucceeded)
     }
 
     func getReportStatus() async throws -> [String: String] {

@@ -28,6 +28,19 @@ final class AppState {
     var avatarImageData: Data? = nil
     var reportMonths: [String: String] = [:]
 
+    /// Hours after which a successful scrape is old enough to surface quietly.
+    /// The scraper runs on open and on pull-to-refresh, so anything past a day
+    /// means refreshes have been failing without ever saying so.
+    private static let staleSyncHours = 24.0
+
+    /// True when the last *successful* scrape is old enough to be worth showing.
+    /// nil lastSyncDate means no successful sync has ever been recorded.
+    var isSyncStale: Bool {
+        guard isAuthenticated, dashboard != nil else { return false }
+        guard let lastSyncDate else { return true }
+        return Date().timeIntervalSince(lastSyncDate) > Self.staleSyncHours * 3600
+    }
+
     var isCurrentMonthFiled: Bool {
         let c = Calendar.current
         let now = Date()
@@ -443,9 +456,12 @@ final class AppState {
             async let readTask: Void = loadReadMessages()
             let fresh = try await dashTask
             _ = await readTask
-            dashboard = fresh
-            cacheDashboard(fresh)
-            updateSyncDate()
+            dashboard = fresh.data
+            cacheDashboard(fresh.data)
+            // Only stamp a sync when the live scrape actually ran. api/mobile
+            // still serves cached data when the scrape fails, so stamping
+            // unconditionally would report a wedged scrape as a fresh sync.
+            if fresh.scrapeSucceeded { updateSyncDate() }
             errorMessage = nil
             if let months = try? await APIClient.shared.getReportStatus() {
                 reportMonths = months

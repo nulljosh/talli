@@ -18,6 +18,18 @@ final class MacAppState {
     var isOffline = false
     var selectedSection: AppSection = .dashboard
     var reportMonths: [String: String] = [:]
+    var lastSyncDate: Date? = UserDefaults.standard.object(forKey: Constants.lastSyncKey) as? Date
+
+    /// Hours after which a successful scrape is old enough to surface quietly.
+    private static let staleSyncHours = 24.0
+
+    /// True when the last *successful* scrape is old enough to be worth showing.
+    /// nil lastSyncDate means no successful sync has ever been recorded.
+    var isSyncStale: Bool {
+        guard isAuthenticated, dashboard != nil else { return false }
+        guard let lastSyncDate else { return true }
+        return Date().timeIntervalSince(lastSyncDate) > Self.staleSyncHours * 3600
+    }
 
     var isCurrentMonthFiled: Bool {
         let c = Calendar.current
@@ -192,9 +204,10 @@ final class MacAppState {
             async let reportTask: Void = refreshReportStatus()
             let fresh = try await dashTask
             _ = await reportTask
-            dashboard = fresh
-            cacheDashboard(fresh)
-            syncToWidgets(fresh)
+            dashboard = fresh.data
+            cacheDashboard(fresh.data)
+            syncToWidgets(fresh.data)
+            if fresh.scrapeSucceeded { updateSyncDate() }
             errorMessage = nil
         } catch {
             if dashboard != nil {
@@ -210,7 +223,13 @@ final class MacAppState {
     private func cacheDashboard(_ value: MacDashboardData) {
         guard let data = try? JSONEncoder().encode(value) else { return }
         UserDefaults.standard.set(data, forKey: Constants.dashboardCacheKey)
-        UserDefaults.standard.set(Date(), forKey: Constants.lastSyncKey)
+    }
+
+    /// Stamped only when the live scrape actually ran -- caching alone happens
+    /// even on a wedged scrape, so stamping there reported stale data as fresh.
+    private func updateSyncDate() {
+        lastSyncDate = Date()
+        UserDefaults.standard.set(lastSyncDate, forKey: Constants.lastSyncKey)
     }
 
     private func loadCached() -> MacDashboardData? {

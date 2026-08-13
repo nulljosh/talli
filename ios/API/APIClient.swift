@@ -98,12 +98,22 @@ final class APIClient: @unchecked Sendable {
         try await send(path: "api/mobile", responseType: DashboardData.self)
     }
 
-    func check() async throws -> DashboardData {
-        // Trigger fresh scrape, then fetch parsed mobile data.
-        // A failed/slow live scrape must not block reading the dashboard --
-        // api/mobile always returns usable (cached or computed) data on its own.
-        _ = try? await send(path: "api/check", responseType: CheckResponse.self)
-        return try await send(path: "api/mobile", responseType: DashboardData.self)
+    /// Triggers a fresh scrape, then fetches parsed mobile data.
+    ///
+    /// A failed/slow live scrape must not block reading the dashboard --
+    /// api/mobile always returns usable (cached or computed) data on its own.
+    /// But the caller still needs to know the scrape leg failed, otherwise a
+    /// wedged scrape looks identical to a healthy sync and goes unnoticed
+    /// (which is exactly how a 429 stayed wedged for months).
+    func check() async throws -> (data: DashboardData, scrapeSucceeded: Bool) {
+        var scrapeSucceeded = true
+        do {
+            _ = try await send(path: "api/check", responseType: CheckResponse.self)
+        } catch {
+            scrapeSucceeded = false
+        }
+        let data = try await send(path: "api/mobile", responseType: DashboardData.self)
+        return (data, scrapeSucceeded)
     }
 
     func submitReport(_ requestBody: ReportSubmissionRequest) async throws -> ReportSubmissionResponse {

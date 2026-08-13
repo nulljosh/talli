@@ -9,6 +9,8 @@ struct MacDashboardView: View {
             VStack(spacing: 20) {
                 if appState.isOffline {
                     offlineBanner
+                } else if appState.isSyncStale {
+                    staleSyncBanner
                 }
 
                 if appState.isFilingWindowOpen && !appState.isCurrentMonthFiled {
@@ -198,6 +200,20 @@ struct MacDashboardView: View {
         .padding(12)
         .background(Color.green.opacity(0.1), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(Color.green.opacity(0.3), lineWidth: 1))
+    }
+
+    private var staleSyncBanner: some View {
+        HStack {
+            Image(systemName: "clock.arrow.circlepath")
+                .font(.caption)
+            Text(appState.lastSyncDate.map {
+                "Not up to date -- last synced \($0.formatted(.relative(presentation: .named)))"
+            } ?? "Not up to date -- never synced")
+                .font(.caption)
+            Spacer()
+        }
+        .padding(10)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
 
     private var offlineBanner: some View {
