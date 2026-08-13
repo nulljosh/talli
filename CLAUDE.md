@@ -1,6 +1,6 @@
 # Talli
 
-v3.5.3 — Personal finance tracker.
+v3.5.12 (iOS, live) · v3.5.6 (macOS, live) — Personal finance tracker.
 
 ## Rules
 - No emojis anywhere
