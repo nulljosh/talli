@@ -25,10 +25,8 @@ Four root causes found and fixed (see Status 2026-07-28 below); these are the le
 - [ ] Confirm header avatar renders (blob repointed) on next login.
 - [ ] Navbar glitch: intermittent, "solved itself," no repro. Checked 2026-07-26: `TalliFloatingTabBar` (ContentView.swift:75) is a plain fixed-layout HStack/Capsule with no timers/animations/async work — no code-level lead found. Needs a live repro to make progress.
 - [ ] asc web login failed 401 — `asc web auth login` requires live 2FA input, needs Joshua to run it interactively.
-- [x] `.asc/workflow.json` broken steps — **the `--pkg-path` half was already stale**: commit `2fae00a` had switched `export_mac` to `--ipa-path`. The real remaining bug was in **`ship-ios`**, not `ship-mac`: `export` runs `cd ios` and writes `../.asc/artifacts/Talli.ipa` (= repo root), but `publish` ran from repo root reading `ios/.asc/artifacts/Talli.ipa` — a path that never receives the export, so every `asc workflow run ship-ios` would fail at the publish step on a missing IPA. Fixed to `.asc/artifacts/Talli.ipa`; verified with `asc workflow run --dry-run ship-ios` that steps 3 and 4 now resolve to the same file. (Still open, unrelated: `asc builds upload --pkg` requires `--build-number` explicitly — verify against the pkg's actual `Info.plist` via `pkgutil --expand-full` + `PlistBuddy -c "Print :CFBundleVersion"` before passing it.)
 - [ ] App Privacy publish state flagged as unverifiable via API (`asc validate` info-level) — confirm published at appstoreconnect.apple.com/apps/6782366555/appPrivacy if a future review comes back privacy-related.
 - [ ] App Store screenshot refresh (stale resolutions/content) — screenshots were regenerated 2026-08-11 (see Screenshots section); the 5th (Settings) still doesn't capture and is held from publication, which is what's left here.
-  - [x] Version bump half: `README.md` badge said v3.5.7 and `CLAUDE.md` said v3.5.3 — both corrected to the live versions (iOS 3.5.12 / macOS 3.5.6). `web/landing.html` carries no version string, so nothing to bump there. Note `ios/project.yml` is deliberately staged at 3.5.13 (pre-release train for 3.5.12 closed 2026-08-01) — that is *not* drift, don't "fix" it down.
 
 ## Stashed 2026-08-10
 
@@ -107,7 +105,6 @@ App Store Connect closed the pre-release train for v3.5.12 (build 139 was reject
 ## From Apple Notes (imported 2026-08-10)
 - [ ] iOS avatar is device-local only (`AppState.generateNodeGraphAvatar`, disk-cached PNG) and never syncs with the server's avatar, so iOS and web show different avatars. Real fix needs SVG rendering on iOS (server stores SVG) or a server-side PNG variant — deliberately not built as part of the letter-icon fix.
 - [ ] Refresh `CHEQUE_ISSUE_DATES` in `src/pay-dates.js` when BC publishes the 2027 cheque issue schedule — after 2026-12-16 the app shows "--" for the next payment date until it is added.
-- [x] iOS `APIClient.check()` swallowed `/api/check` failures with `try?` — **the deeper bug was that `refreshDashboard()` then called `updateSyncDate()` unconditionally**, so a wedged scrape stamped a fresh "last synced" timestamp and looked identical to a healthy sync. `check()` now returns `(data:scrapeSucceeded:)`, the stamp only lands on a real scrape, and a quiet "Not up to date — last synced X" banner shows past 24h (reuses the existing OfflineBanner slot/style). Mirrored to macOS, which had the **inverse** bug: `MacAPIClient.check()` used plain `try`, so a failed scrape threw and reported a perfectly healthy dashboard as fully "Offline" — and `cacheDashboard()` stamped `lastSyncKey` on every cache write, including wedged ones. Both platforms build clean.
 
 ## Screenshots (2026-08-11)
 - iOS App Store screenshots regenerated via `cd ios && fastlane screenshots`. Two real bugs
@@ -125,3 +122,6 @@ App Store Connect closed the pre-release train for v3.5.12 (build 139 was reject
   earlier shots land fine). 4 screens per device shipped instead of 5. Debug
   `UITests/PreviewScreenshot.swift` when there's usage headroom.
 - Not uploaded to ASC — App Store submission freeze until 2026-08-18.
+
+## From Apple Notes (imported 2026-08-13)
+- [ ] Analyze project from CLAUDE.md + README.md, then refresh the app icon based on that analysis
