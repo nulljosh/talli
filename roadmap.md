@@ -125,3 +125,7 @@ App Store Connect closed the pre-release train for v3.5.12 (build 139 was reject
 
 ## From Apple Notes (imported 2026-08-13)
 - [ ] Analyze project from CLAUDE.md + README.md, then refresh the app icon based on that analysis
+
+## Ingested 2026-08-18
+- [ ] Splash screen: use more of the white space on the sides — 2/3 of the page isn't being used.
+- [ ] Splash screen: switch font to San Francisco or Helvetica / sans-serif.
