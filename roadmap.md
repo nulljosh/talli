@@ -129,3 +129,26 @@ App Store Connect closed the pre-release train for v3.5.12 (build 139 was reject
 ## Ingested 2026-08-18
 - [ ] Splash screen: use more of the white space on the sides — 2/3 of the page isn't being used.
 - [ ] Splash screen: switch font to San Francisco or Helvetica / sans-serif.
+
+## App Privacy corrected + published — 2026-08-18
+
+The live listing declared `DATA_NOT_COLLECTED`. That was false, and Talli is the most sensitive app
+in the portfolio to get this wrong on. The server persists per-user blobs (`src/api.js`, via
+`saveUserBlob`/`loadUserBlob`): `pwd-profile` (**Persons With Disabilities designation**),
+`cdb-profile`/`rdsp-profile`, `results` (benefit payment amounts), `filing-status`,
+`report-status`, and `profile` (which holds `encryptedPin`, `src/api.js:1840`).
+
+Apple's Sensitive Info definition **explicitly names disability**, so this was a factual
+misdeclaration, not a borderline reading.
+
+Now published, all `DATA_LINKED_TO_YOU` / `APP_FUNCTIONALITY`:
+`USER_ID`, `OTHER_FINANCIAL_INFO`, `SENSITIVE_INFO`, `OTHER_DATA`.
+
+Deliberately excluded: no `EMAIL_ADDRESS` (Talli has no account system of its own — state is keyed
+by session `userId`), and BCeID/CRA credentials are transmitted to log into BC Self-Serve but not
+persisted (`src/api.js:2015`), so they aren't "collected" under Apple's definition. `OTHER_DATA`
+covers the persisted PIN, since Apple has no credentials category.
+
+- [ ] **Privacy policy should now match the label** — it needs to say Talli retains disability
+      designation and benefit/payment data server-side. A privacy label and a privacy policy that
+      disagree is its own problem. Legal copy, so left for Joshua rather than rewritten unprompted.
