@@ -149,6 +149,9 @@ by session `userId`), and BCeID/CRA credentials are transmitted to log into BC S
 persisted (`src/api.js:2015`), so they aren't "collected" under Apple's definition. `OTHER_DATA`
 covers the persisted PIN, since Apple has no credentials category.
 
-- [ ] **Privacy policy should now match the label** — it needs to say Talli retains disability
-      designation and benefit/payment data server-side. A privacy label and a privacy policy that
-      disagree is its own problem. Legal copy, so left for Joshua rather than rewritten unprompted.
+- [x] **Privacy policy now matches the label** (2026-08-18) — `web/privacy.html` § "What we store"
+      gained a paragraph naming the PWD designation status and RDSP/CDB application status, noting
+      Apple classifies disability information as sensitive and that the label declares it, plus a
+      line on the encrypted PIN. "Last updated" bumped to August 18, 2026. Factual description of
+      what the code stores, not new legal terms — **worth Joshua's read-through** since it is
+      user-facing policy copy.
