@@ -11,7 +11,7 @@ const PROFILE_PROGRAMS = [
     name: 'BC Disability Assistance (PWD)',
     jurisdiction: 'BC',
     validStatuses: ['applied', 'in_review', 'medical_done', 'denied', 'resubmitted', 'approved'],
-    defaults: { status: 'applied', submittedDate: null, deniedDate: null, notes: '' },
+    defaults: { status: 'applied', submittedDate: null, deniedDate: null, monthlyAmount: null, notes: '' },
   },
   {
     id: 'rdsp',

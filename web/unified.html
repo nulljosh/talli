@@ -778,7 +778,8 @@ function BenniesSection({dark}) {
     try { await fetch('/api/other-benefits-profile', {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({checked: nextChecked})}); } catch (e) {}
   };
 
-  const pwdMonthly = 1450, cdbMonthly = 200;
+  // Real per-user amounts when recorded; the constants are the current BC/CRA rates as fallback.
+  const pwdMonthly = pwd?.monthlyAmount ?? 1450, cdbMonthly = cdb?.monthlyAmount ?? 200;
   const totalMonthly = pwdMonthly + cdbMonthly;
   const backpay = 2800;
   const totalDebt = debt?.totalDebt || 6000;
@@ -832,7 +833,7 @@ function BenniesSection({dark}) {
           <div style={{height:'100%',width:`${debtPct}%`,background:t.accent,borderRadius:3,transition:'width 0.6s ease'}}/>
         </div>
         <div style={{marginTop:12,fontSize:12,color:t.mutedMid,lineHeight:1.5}}>
-          Full ${backpay.toLocaleString()} August backpay to debt, plus $825/month (half of income) after. Debt-free by November.
+          Full ${backpay.toLocaleString()} August backpay to debt, plus ${(totalMonthly/2).toLocaleString()}/month (half of income) after. Debt-free by November.
         </div>
         <button onClick={()=>saveDebt({paidToDate: backpay})} style={{marginTop:12,padding:'7px 14px',borderRadius:100,background:t.accent,color:'#fff',border:'none',fontSize:12,fontWeight:600,fontFamily:'inherit',cursor:'pointer'}}>
           Apply August backpay (${backpay.toLocaleString()})
