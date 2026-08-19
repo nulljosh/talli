@@ -70,7 +70,7 @@
       padding: 0 clamp(1.25rem, 5vw, 3rem);
     }
     nav .inner {
-      max-width: 640px;
+      max-width: 1040px;
       margin: 0 auto;
       height: 52px;
       display: flex;
@@ -114,6 +114,8 @@
     }
 
     /* ── Hero ──────────────────────────────────────────── */
+    .hero-row { display: grid; gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+    @media (min-width: 900px) { .hero-row { grid-template-columns: 1fr 0.8fr; } .hero-row .hero { padding-bottom: clamp(4rem, 10vw, 7rem); } .hero-row .preview-wrap { margin-bottom: 0; } }
     .hero {
       padding: clamp(4rem, 10vw, 7rem) 0 clamp(3rem, 6vw, 5rem);
       display: flex;
@@ -363,6 +365,7 @@
 
   <div class="page">
 
+    <div class="hero-row">
     <!-- Hero -->
     <section class="hero fade-up">
       <h1 class="hero-heading">Your BC benefits.<br>No portal maze.</h1>
@@ -418,6 +421,7 @@
           </div>
         </div>
       </div>
+    </div>
     </div>
 
     <!-- Screenshots -->
