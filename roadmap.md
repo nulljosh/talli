@@ -6,8 +6,11 @@
 saying "3.5.13 rebuild pending" or "Mac build VALID pending submission" are wrong: no 3.5.13
 version record exists, and the Mac version shipped.
 
-Submissions frozen until 2026-08-18 (Guideline 5.6 review) — build and stage only, no
-`asc review submit`. Anything below this heading predates this check; trust this block.
+Freeze lifted 2026-08-18 (Guideline 5.6 suspension expired). Submitted that day and now
+WAITING_FOR_REVIEW: Curvely iOS 1.2.0, Wiretext iOS 1.1.0, Wordroot iOS 1.0, Healstack iOS 2.3.4.
+**Held pending those four verdicts — never a batch:** Sparkjar iOS+Mac, BCGD iOS+Mac, Wordroot Mac,
+Lexly Mac. All six are `asc validate` clean (0 errors, 0 blocking) with a VALID build attached, so
+each is one `asc review submit` away. Do not submit until the in-flight verdicts land.
 
 ## Email verification on signup + forgot-password flow
 
@@ -121,7 +124,7 @@ App Store Connect closed the pre-release train for v3.5.12 (build 139 was reject
   is visible, but the UITest step after tapping it fails (snapshot run reports ❌ while all four
   earlier shots land fine). 4 screens per device shipped instead of 5. Debug
   `UITests/PreviewScreenshot.swift` when there's usage headroom.
-- Not uploaded to ASC — App Store submission freeze until 2026-08-18.
+- Not uploaded to ASC — App Store submission freeze, which lifted 2026-08-18.
 
 ## From Apple Notes (imported 2026-08-13)
 - [ ] Analyze project from CLAUDE.md + README.md, then refresh the app icon based on that analysis
