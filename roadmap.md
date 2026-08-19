@@ -152,27 +152,7 @@ by session `userId`), and BCeID/CRA credentials are transmitted to log into BC S
 persisted (`src/api.js:2015`), so they aren't "collected" under Apple's definition. `OTHER_DATA`
 covers the persisted PIN, since Apple has no credentials category.
 
-- [x] **Privacy policy now matches the label** (2026-08-18) — `web/privacy.html` § "What we store"
-      gained a paragraph naming the PWD designation status and RDSP/CDB application status, noting
-      Apple classifies disability information as sensitive and that the label declares it, plus a
-      line on the encrypted PIN. "Last updated" bumped to August 18, 2026. Factual description of
-      what the code stores, not new legal terms — **worth Joshua's read-through** since it is
-      user-facing policy copy.
-
 ## From Notes (imported 2026-08-19)
-- [x] **Personal account now shows PWD + CDB from real data** (2026-08-19) — the `$1000/m` is not
-      in the codebase anywhere; it is the live figure scraped from BC Self-Serve, i.e. account data
-      at the government's end, not a code constant. What *was* wrong: `web/unified.html`
-      hard-coded `pwdMonthly = 1450, cdbMonthly = 200` two lines below where it already fetches
-      `/api/pwd-profile` and `/api/cdb-profile`, so the PWD/CDB/Total tiles, the daily-income line
-      and the debt-payoff line all showed fixed numbers regardless of the user's actual amounts.
-      Now `pwd?.monthlyAmount ?? 1450` / `cdb?.monthlyAmount ?? 200` — real per-user values win,
-      the current BC/CRA rates stay as the fallback, so the default display is still ~$1,650/m.
-      Added `monthlyAmount` to the PWD profile defaults in `src/programs/profiles.js`; the route
-      factory derives its writable fields from `defaults`, so `/api/pwd-profile` accepts it with no
-      route change (CDB already had it). `$825/month (half of income)` is now derived from the
-      total instead of hard-coded. **Needs Joshua**: set the real PWD amount via
-      `POST /api/pwd-profile {"monthlyAmount": <n>}` — until then it displays the 1450 fallback.
 - [ ] Native apps have no personal PWD + CDB income section — the PWD/CDB/Total breakdown and daily
       disability income exist only in `web/unified.html`. iOS/macOS/watchOS show just the scraped
       next-payment amount, and `MacBenefitsView` is a static rate catalogue, not personal data.
