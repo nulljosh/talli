@@ -44,7 +44,7 @@ function run() {
   test('pwd validStatuses match pre-refactor set', () => {
     const pwd = PROFILE_PROGRAMS.find((p) => p.id === 'pwd');
     assert.deepStrictEqual(pwd.validStatuses, ['applied', 'in_review', 'medical_done', 'denied', 'resubmitted', 'approved']);
-    assert.deepStrictEqual(pwd.defaults, { status: 'applied', submittedDate: null, deniedDate: null, notes: '' });
+    assert.deepStrictEqual(pwd.defaults, { status: 'applied', submittedDate: null, deniedDate: null, monthlyAmount: null, notes: '' });
   });
 
   test('rdsp validStatuses match pre-refactor set', () => {
