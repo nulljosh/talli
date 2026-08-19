@@ -82,4 +82,19 @@ const PROFILE_PROGRAMS = [
   },
 ];
 
-module.exports = { PROFILE_PROGRAMS };
+// Current monthly rates, used only when the user has not recorded a real amount.
+// BC PWD single-person support+shelter, and the federal CDB maximum.
+const DEFAULT_MONTHLY_RATES = { pwd: 1450, cdb: 200 };
+
+// Single source of truth for "what does this person actually receive per month".
+// Everything that shows income -- the web dashboard, /api/mobile for the native
+// apps, and the payment-amount fallback -- derives from here, so the platforms
+// cannot drift apart the way they did before 2026-08-19.
+// Uses ?? not ||, so a genuine recorded 0 is preserved rather than replaced.
+function deriveIncome(pwdProfile, cdbProfile) {
+  const pwdMonthly = pwdProfile?.monthlyAmount ?? DEFAULT_MONTHLY_RATES.pwd;
+  const cdbMonthly = cdbProfile?.monthlyAmount ?? DEFAULT_MONTHLY_RATES.cdb;
+  return { pwdMonthly, cdbMonthly, totalMonthly: pwdMonthly + cdbMonthly };
+}
+
+module.exports = { PROFILE_PROGRAMS, DEFAULT_MONTHLY_RATES, deriveIncome };

@@ -320,6 +320,7 @@ private struct DashboardScreen: View {
                     paymentProgress
                 }
                 statsGrid
+                incomeBreakdown
                 paidToggle
                 dateCard
                 ApplicationTimelinesCard(pwdSteps: pwdSteps, dtcSteps: dtcSteps)
@@ -373,6 +374,46 @@ private struct DashboardScreen: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
+    }
+
+    /// PWD + CDB breakdown, mirroring the web dashboard's Bennies income block so
+    /// the platforms agree. Hidden entirely when the server sends no income block.
+    @ViewBuilder
+    private var incomeBreakdown: some View {
+        if let income = appState.income {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("MONTHLY INCOME")
+                    .font(.system(size: 11, weight: .semibold))
+                    .tracking(1.5)
+                    .foregroundStyle(.secondary)
+
+                HStack(spacing: 12) {
+                    incomeCell(label: "PWD", value: appState.moneyText(income.pwdMonthly))
+                    incomeCell(label: "CDB", value: appState.moneyText(income.cdbMonthly))
+                    incomeCell(label: "TOTAL", value: appState.moneyText(income.totalMonthly))
+                }
+
+                if let hourly = appState.hourlyIncomeText {
+                    Text("\(hourly)/hour")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+    }
+
+    private func incomeCell(label: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(label)
+                .font(.system(size: 10, weight: .semibold))
+                .tracking(1.2)
+                .foregroundStyle(.secondary)
+            Text(value)
+                .font(.system(size: 16, weight: .semibold))
+                .minimumScaleFactor(0.8)
+                .lineLimit(1)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var paymentProgress: some View {

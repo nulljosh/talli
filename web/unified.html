@@ -779,7 +779,11 @@ function BenniesSection({dark}) {
   };
 
   // Real per-user amounts when recorded; the constants are the current BC/CRA rates as fallback.
-  const pwdMonthly = pwd?.monthlyAmount ?? 1450, cdbMonthly = cdb?.monthlyAmount ?? 200;
+  // Same derivation as deriveIncome() in src/programs/profiles.js -- keep the
+  // fallback rates in sync with DEFAULT_MONTHLY_RATES there. ?? not ||, so a real
+  // recorded 0 survives.
+  const pwdMonthly = pwd?.monthlyAmount ?? 1450;
+  const cdbMonthly = cdb?.monthlyAmount ?? 200;
   const totalMonthly = pwdMonthly + cdbMonthly;
   const backpay = 2800;
   const totalDebt = debt?.totalDebt || 6000;

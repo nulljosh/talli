@@ -105,6 +105,25 @@ final class AppState {
         dashboard?.paymentAmount ?? "--"
     }
 
+    /// Server-derived monthly income (PWD + CDB). Nil when the server predates
+    /// the income block, in which case the breakdown section is simply hidden.
+    var income: DashboardData.Income? {
+        dashboard?.income
+    }
+
+    private static let moneyFormat: FloatingPointFormatStyle<Double>.Currency =
+        .currency(code: "CAD").precision(.fractionLength(0))
+
+    func moneyText(_ amount: Double) -> String {
+        amount.formatted(Self.moneyFormat)
+    }
+
+    /// Hourly equivalent of total monthly income, matching the web dashboard's line.
+    var hourlyIncomeText: String? {
+        guard let total = income?.totalMonthly, total > 0 else { return nil }
+        return (total / 30 / 24).formatted(.currency(code: "CAD").precision(.fractionLength(2)))
+    }
+
     var statusMessages: [String] {
         dashboard?.statusMessages.map(\.text) ?? []
     }

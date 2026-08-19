@@ -12,7 +12,7 @@ const { parseCookies, unsealAuthPayload, setAuthCookie, clearAuthCookie } = requ
 const { attemptHttpLogin, fetchAllSections } = require('./http-scraper');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { nextPaymentDate } = require('./pay-dates');
-const { PROFILE_PROGRAMS } = require('./programs/profiles');
+const { PROFILE_PROGRAMS, deriveIncome } = require('./programs/profiles');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -1272,6 +1272,7 @@ app.get('/api/latest', requireAuth, async (req, res) => {
       cdbMonthlyAmount: cdbProfile.monthlyAmount || null,
       cdbRetroactiveEligible: cdbProfile.retroactiveEligible || false,
       cgeb: cgebProfile,
+      income: deriveIncome(pwdProfile, cdbProfile),
     };
 
     const result = await fetchOrLoadData(req);
@@ -2081,7 +2082,7 @@ app.get('/api/check', scrapeLimiter, requireAuth, async (req, res) => {
 
 // ── Mobile API ──────────────────────────────────────────────────────────────
 
-function extractMobileData(scraperResult) {
+function extractMobileData(scraperResult, income = null) {
   const sections = scraperResult?.sections || {};
 
   // Extract payment amount from Payment Info tableData
@@ -2094,9 +2095,12 @@ function extractMobileData(scraperResult) {
     raw.match(/(\$\d{1,3}(?:,\d{3})+(?:\.\d{2})?)/);
   const paymentAmount = amountMatch ? amountMatch[1] : null;
 
-  // Fallback: if regex fails, provide designation-aware default
-  const designationMatch = raw.match(/Persons?\s+with\s+Disabilities|PWD/i);
-  const fallbackAmount = designationMatch ? '~$1,500-1,700/mo' : '~$1,000/mo';
+  // Fallback: if the regex fails, show what this person actually receives rather
+  // than a hardcoded guess. The old '~$1,000/mo' default was a literal invention
+  // and is what the native apps displayed whenever the scrape shape changed.
+  const fallbackAmount = income
+    ? `~$${income.totalMonthly.toLocaleString('en-CA')}/mo`
+    : null;
 
   const nextDate = nextPaymentDate(new Date(), () => log('[PAYDATE] Cheque issue schedule exhausted -- add the next year from gov.bc.ca'));
 
@@ -2109,6 +2113,7 @@ function extractMobileData(scraperResult) {
 
   return {
     payment_amount: paymentAmount || fallbackAmount,
+    income,
     next_date: nextDate,
     messages,
     // First page only -- the portal hides older rows behind "Show More Messages".
@@ -2123,7 +2128,10 @@ app.get('/api/mobile', requireAuth, async (req, res) => {
     // The myselfserve.gov.bc.ca ChequeInfo/Payment page can hang for 60-90s+ on
     // transient errors, which made this endpoint time out client-side.
     const result = await fetchOrLoadData(req, { allowLiveScrape: false });
-    res.json(extractMobileData(result?.data || null));
+    const userId = req.session?.userId;
+    const pwdProfile = await loadUserBlob(userId, 'pwd-profile', {}).catch(() => ({}));
+    const cdbProfile = await loadUserBlob(userId, 'cdb-profile', {}).catch(() => ({}));
+    res.json(extractMobileData(result?.data || null, deriveIncome(pwdProfile, cdbProfile)));
   } catch (error) {
     console.error('[API] /api/mobile error:', error);
     res.status(500).json({ error: safeApiError(error, 'Failed to load data') });
