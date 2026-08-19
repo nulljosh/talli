@@ -13,26 +13,39 @@ struct MacDashboardData: Codable, Sendable {
         }
     }
 
+    /// Monthly disability income, derived server-side by deriveIncome() in
+    /// src/programs/profiles.js so web, iOS and macOS cannot disagree. Optional
+    /// so a response from an older server still decodes.
+    struct Income: Codable, Sendable {
+        let pwdMonthly: Double
+        let cdbMonthly: Double
+        let totalMonthly: Double
+    }
+
     let paymentAmount: String?
     let nextPaymentDate: String?
     let statusMessages: [StatusMessage]
+    let income: Income?
 
     enum CodingKeys: String, CodingKey {
         case paymentAmount = "payment_amount"
         case nextPaymentDate = "next_date"
         case statusMessages = "messages"
+        case income
     }
 
-    init(paymentAmount: String?, nextPaymentDate: String?, statusMessages: [StatusMessage]) {
+    init(paymentAmount: String?, nextPaymentDate: String?, statusMessages: [StatusMessage], income: Income? = nil) {
         self.paymentAmount = paymentAmount
         self.nextPaymentDate = nextPaymentDate
         self.statusMessages = statusMessages
+        self.income = income
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         paymentAmount = try container.decodeIfPresent(String.self, forKey: .paymentAmount)
         nextPaymentDate = try container.decodeIfPresent(String.self, forKey: .nextPaymentDate)
+        income = try container.decodeIfPresent(Income.self, forKey: .income)
 
         if let stringMessages = try? container.decode([String].self, forKey: .statusMessages) {
             statusMessages = stringMessages.map { StatusMessage(text: $0) }

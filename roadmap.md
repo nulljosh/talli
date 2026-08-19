@@ -153,7 +153,20 @@ persisted (`src/api.js:2015`), so they aren't "collected" under Apple's definiti
 covers the persisted PIN, since Apple has no credentials category.
 
 ## From Notes (imported 2026-08-19)
-- [ ] Native apps have no personal PWD + CDB income section — the PWD/CDB/Total breakdown and daily
-      disability income exist only in `web/unified.html`. iOS/macOS/watchOS show just the scraped
-      next-payment amount, and `MacBenefitsView` is a static rate catalogue, not personal data.
-      Mirror the BenniesSection income block natively so the platforms agree.
+- [x] Native PWD + CDB income section — DONE 2026-08-19. `deriveIncome()` in
+      `src/programs/profiles.js` is now the single source of truth; `/api/mobile` and
+      `/api/latest` both use it. iOS shows a PWD/CDB/Total breakdown under the stats
+      grid; macOS shows a personal income card above the static rate catalogue in
+      `MacBenefitsView`. Both build clean. Also removed the invented `'~$1,000/mo'`
+      fallback in `/api/mobile`, which is the likeliest source of the reported $1000/m.
+- [ ] Mirror the same income block to watchOS and both widget targets. The payload
+      already carries `income`, so each is a decode + small view; deferred 2026-08-19
+      only to conserve weekly quota. `watchos/ContentView.swift` is a 12-line stub and
+      needs a real screen first.
+- [ ] Automate the ASC 2FA code (currently Joshua screenshots it every login). Idea:
+      route the code to SMS and read it from `~/Library/Messages/chat.db` via SQL, wired
+      to `ASC_WEB_2FA_CODE_COMMAND`. Headless, no System Events. Unproven: needs Full
+      Disk Access, and Apple may not offer an SMS path for this flow — timebox it.
+- [ ] `MacBenefitsView`'s static catalogue uses a teal accent
+      (`Color(red: 78/255, green: 205/255, blue: 196/255)`), against the no-teal rule.
+      Pre-existing, spotted 2026-08-19 while adding the income card.

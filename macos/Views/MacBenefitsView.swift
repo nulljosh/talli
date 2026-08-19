@@ -1,9 +1,48 @@
 import SwiftUI
 
 struct MacBenefitsView: View {
+    @Environment(MacAppState.self) private var appState
+
+    /// This person's actual monthly income, above the static rate catalogue below.
+    /// The catalogue is reference material; this is real data, and it must match
+    /// what web and iOS show (all three derive from deriveIncome() server-side).
+    @ViewBuilder
+    private var incomeCard: some View {
+        if let income = appState.dashboard?.income {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("YOUR MONTHLY INCOME")
+                    .font(.system(size: 11, weight: .semibold))
+                    .tracking(1.5)
+                    .foregroundStyle(.secondary)
+
+                HStack(spacing: 20) {
+                    incomeCell("PWD", income.pwdMonthly)
+                    incomeCell("CDB", income.cdbMonthly)
+                    incomeCell("Total", income.totalMonthly)
+                }
+            }
+            .padding(16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 10))
+        }
+    }
+
+    private func incomeCell(_ label: String, _ amount: Double) -> some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(label)
+                .font(.system(size: 10, weight: .semibold))
+                .tracking(1.1)
+                .foregroundStyle(.secondary)
+            Text(amount.formatted(.currency(code: "CAD").precision(.fractionLength(0))))
+                .font(.system(size: 17, weight: .semibold))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
+                incomeCard
                 philosophyCard
                 callToAction
 
