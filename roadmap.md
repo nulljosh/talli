@@ -129,14 +129,6 @@ App Store Connect closed the pre-release train for v3.5.12 (build 139 was reject
 ## From Apple Notes (imported 2026-08-13)
 - [ ] Analyze project from CLAUDE.md + README.md, then refresh the app icon based on that analysis
 
-## Ingested 2026-08-18
-- [x] Splash screen: use more of the white space on the sides. Fixed 2026-08-19 — the icon and
-      tagline now size against the container (`containerRelativeFrame`, 42% and 80% of width)
-      instead of a fixed 88pt, so the mark fills the screen rather than the middle third.
-- [x] Splash screen font — verified 2026-08-19, already correct. `SplashView` uses
-      `.font(.system(size:weight:))` throughout, which *is* San Francisco. No custom or serif face
-      was ever set, so there was nothing to switch.
-
 ## App Privacy corrected + published — 2026-08-18
 
 The live listing declared `DATA_NOT_COLLECTED`. That was false, and Talli is the most sensitive app
@@ -157,12 +149,6 @@ persisted (`src/api.js:2015`), so they aren't "collected" under Apple's definiti
 covers the persisted PIN, since Apple has no credentials category.
 
 ## From Notes (imported 2026-08-19)
-- [x] Native PWD + CDB income section — DONE 2026-08-19. `deriveIncome()` in
-      `src/programs/profiles.js` is now the single source of truth; `/api/mobile` and
-      `/api/latest` both use it. iOS shows a PWD/CDB/Total breakdown under the stats
-      grid; macOS shows a personal income card above the static rate catalogue in
-      `MacBenefitsView`. Both build clean. Also removed the invented `'~$1,000/mo'`
-      fallback in `/api/mobile`, which is the likeliest source of the reported $1000/m.
 - [ ] Mirror the same income block to watchOS and both widget targets. The payload
       already carries `income`, so each is a decode + small view; deferred 2026-08-19
       only to conserve weekly quota. `watchos/ContentView.swift` is a 12-line stub and
@@ -171,5 +157,3 @@ covers the persisted PIN, since Apple has no credentials category.
       route the code to SMS and read it from `~/Library/Messages/chat.db` via SQL, wired
       to `ASC_WEB_2FA_CODE_COMMAND`. Headless, no System Events. Unproven: needs Full
       Disk Access, and Apple may not offer an SMS path for this flow — timebox it.
-- [x] `MacBenefitsView`'s teal accent removed 2026-08-19. BC Family Benefit now uses the existing
-      `Color.bcLight` token (a true blue from `MacTheme`) rather than a new literal.
