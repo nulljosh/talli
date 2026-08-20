@@ -66,7 +66,7 @@ struct MacBenefitsView: View {
                 benefitCard(
                     title: "BC Family Benefit",
                     difficulty: "Automatic",
-                    color: Color(red: 78/255, green: 205/255, blue: 196/255),
+                    color: Color.bcLight,
                     rows: [("1st child", "$1,750/yr"), ("2nd child", "$1,100/yr"), ("Single-parent", "up to $500/yr")],
                     how: "Auto if registered for CCB.",
                     note: "Full amount under $29,526 income."

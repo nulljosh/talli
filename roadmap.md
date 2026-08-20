@@ -130,8 +130,12 @@ App Store Connect closed the pre-release train for v3.5.12 (build 139 was reject
 - [ ] Analyze project from CLAUDE.md + README.md, then refresh the app icon based on that analysis
 
 ## Ingested 2026-08-18
-- [ ] Splash screen: use more of the white space on the sides — 2/3 of the page isn't being used.
-- [ ] Splash screen: switch font to San Francisco or Helvetica / sans-serif.
+- [x] Splash screen: use more of the white space on the sides. Fixed 2026-08-19 — the icon and
+      tagline now size against the container (`containerRelativeFrame`, 42% and 80% of width)
+      instead of a fixed 88pt, so the mark fills the screen rather than the middle third.
+- [x] Splash screen font — verified 2026-08-19, already correct. `SplashView` uses
+      `.font(.system(size:weight:))` throughout, which *is* San Francisco. No custom or serif face
+      was ever set, so there was nothing to switch.
 
 ## App Privacy corrected + published — 2026-08-18
 
@@ -167,6 +171,5 @@ covers the persisted PIN, since Apple has no credentials category.
       route the code to SMS and read it from `~/Library/Messages/chat.db` via SQL, wired
       to `ASC_WEB_2FA_CODE_COMMAND`. Headless, no System Events. Unproven: needs Full
       Disk Access, and Apple may not offer an SMS path for this flow — timebox it.
-- [ ] `MacBenefitsView`'s static catalogue uses a teal accent
-      (`Color(red: 78/255, green: 205/255, blue: 196/255)`), against the no-teal rule.
-      Pre-existing, spotted 2026-08-19 while adding the income card.
+- [x] `MacBenefitsView`'s teal accent removed 2026-08-19. BC Family Benefit now uses the existing
+      `Color.bcLight` token (a true blue from `MacTheme`) rather than a new literal.
