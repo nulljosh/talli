@@ -159,4 +159,5 @@ covers the persisted PIN, since Apple has no credentials category.
       Disk Access, and Apple may not offer an SMS path for this flow — timebox it.
 
 ## Ingested 2026-08-22
-- [ ] Still out of date — CDB should be showing roughly 1450-1500 + 200. Messages are still stale. Investigate why the displayed figures and the message list are not refreshing.
+- [x] Home tab figures fixed 2026-08-23: hero scraped the PWD-only Payment Info line (dropping CDB) and PAST_PAYMENTS was a frozen literal array. Now reads uiConfig.income.totalMonthly and derives history from PAY_SCHEDULE.
+- [ ] Messages still stale — separate from the amount bug, not yet investigated.
