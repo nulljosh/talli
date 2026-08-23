@@ -193,13 +193,18 @@ function parseMessages(sections) {
 function parseDollar(s) { return parseFloat((s||'').replace(/[^0-9.]/g,'')) || 0; }
 
 // ── static past payments ──────────────────────────────
-const PAST_PAYMENTS = [
-  {year:2026,month:4,day:27,amount:'$1,060'},
-  {year:2026,month:3,day:23,amount:'$1,060'},
-  {year:2026,month:2,day:28,amount:'$1,060'},
-  {year:2026,month:1,day:25,amount:'$1,060'},
-  {year:2026,month:0,day:21,amount:'$1,060'},
-];
+// Built from PAY_SCHEDULE rather than a literal list: the old hardcoded array froze at
+// May 2026 and quietly under-reported YTD for three months. ponytail: assumes every past
+// cheque was the current monthly amount; wire real per-payment history in if a back-dated
+// rate change ever has to show up correctly.
+function pastPayments(amount) {
+  const now = new Date(); now.setHours(0,0,0,0);
+  const out = [];
+  for (const [y, months] of Object.entries(PAY_SCHEDULE))
+    for (const [m, day] of Object.entries(months))
+      if (new Date(+y, +m, day) < now) out.push({year:+y, month:+m, day, amount});
+  return out.sort((a,b)=>new Date(b.year,b.month,b.day)-new Date(a.year,a.month,a.day));
+}
 
 // ── count-up ──────────────────────────────────────────
 function useCountUp(target, ms=750) {
@@ -290,7 +295,8 @@ function HomeTab({dark, amount, daysUntil, paymentDate, paid, onPaidChange, repo
   const pct       = daysUntil !== null ? Math.max(0, Math.min(100, ((28-daysUntil)/28)*100)) : 0;
   const handlePaid = () => { setBounce(true); setTimeout(()=>setBounce(false),350); onPaidChange(!paid); };
   const now2 = new Date();
-  const ytd = PAST_PAYMENTS.filter(p=>p.year===now2.getFullYear()&&new Date(p.year,p.month,p.day)<now2).reduce((acc,p)=>acc+parseDollar(p.amount),0);
+  const payments = pastPayments(amount || '$0');
+  const ytd = payments.filter(p=>p.year===now2.getFullYear()&&new Date(p.year,p.month,p.day)<now2).reduce((acc,p)=>acc+parseDollar(p.amount),0);
   const isReportingWindow = now2.getDate() >= 1 && now2.getDate() <= 5;
   const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const nextIncomeLabel = `${M[new Date(now2.getFullYear(), now2.getMonth()+1, 1).getMonth()]} 1`;
@@ -401,9 +407,9 @@ function HomeTab({dark, amount, daysUntil, paymentDate, paid, onPaidChange, repo
           <div style={{marginTop:24,animation:'fadeUp 0.45s 0.58s ease both'}}>
             <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:14}}>Recent payments</div>
             <div style={{display:'flex',gap:6,alignItems:'flex-end',height:56}}>
-              {PAST_PAYMENTS.slice(0,5).map((p,i)=>{
+              {payments.slice(0,5).map((p,i)=>{
                 const val=parseDollar(p.amount);
-                const max=Math.max(...PAST_PAYMENTS.slice(0,5).map(x=>parseDollar(x.amount)));
+                const max=Math.max(...payments.slice(0,5).map(x=>parseDollar(x.amount)));
                 const pct=val/max;
                 const label=new Date(p.year,p.month,p.day).toLocaleString('en-CA',{month:'short'});
                 return (
@@ -448,11 +454,11 @@ function CalendarTab({dark, payDateObj, amount, daysUntil}) {
   const cells=[]; for(let i=0;i<firstDay;i++)cells.push(null); for(let d=1;d<=daysInMonth;d++)cells.push(d);
   const isToday_=(d)=>d&&new Date(year,month,d).toDateString()===today.toDateString();
   const isNextPay=(d)=>d&&new Date(year,month,d).getTime()===nextPayment.getTime();
-  const pastPay=(d)=>d?PAST_PAYMENTS.find(p=>p.year===year&&p.month===month&&p.day===d):null;
+  const pastPay=(d)=>d?pastPayments(amount||'$0').find(p=>p.year===year&&p.month===month&&p.day===d):null;
   const isPast=(d)=>d&&new Date(year,month,d)<today;
   const animStyle=dir?{animation:`${dir==='left'?'slideInLeft':'slideInRight'} 0.28s cubic-bezier(0.4,0,0.2,1) both`}:{animation:'fadeIn 0.25s ease both'};
 
-  const viewedPast = PAST_PAYMENTS.find(p=>p.year===year&&p.month===month);
+  const viewedPast = pastPayments(amount||'$0').find(p=>p.year===year&&p.month===month);
   const viewedIsNext = nextPayment.getFullYear()===year&&nextPayment.getMonth()===month;
   const monthPayment = viewedIsNext
     ? {type:'upcoming',amount:amount||'$1,060',date:nextPayment.toLocaleString('en-CA',{month:'short',day:'numeric'})}
@@ -1321,10 +1327,12 @@ function App() {
       const sections = json.data?.sections || json.sections || {};
       const pi  = sections['Payment Info'] || {};
       const raw = [...(pi.tableData||[]), ...(pi.allText||[])].join('\n');
-      const amtMatch = raw.match(/(?:(?:payment\s+)?amount|cheque(?:\s+amount)?|monthly\s+(?:amount|benefit)|next\s+payment)[:\s]+(\$[\d,]+(?:\.\d{2})?)/i)
-        || raw.match(/(\$\d{1,3}(?:,\d{3})+(?:\.\d{2})?)/);
-      if (amtMatch) setAmount(amtMatch[1]);
-      else setAmount(prev => prev ?? '$1,060');
+      // Income comes from deriveIncome() on the server (PWD + CDB), not the portal's
+      // Payment Info line -- My Self Serve only ever shows the provincial PWD half, so
+      // scraping it silently dropped the federal CDB and showed a low monthly total.
+      const total = json.uiConfig?.income?.totalMonthly;
+      if (total != null) setAmount('$' + total.toLocaleString('en-CA'));
+      else setAmount(prev => prev ?? '$0');
       const dm = raw.match(/(\d{4})\s*\/\s*([A-Z]{3})\s*\/\s*(\d{2})/);
       const _now = new Date(); _now.setHours(0,0,0,0);
       let payDate;
