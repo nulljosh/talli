@@ -157,3 +157,6 @@ covers the persisted PIN, since Apple has no credentials category.
       route the code to SMS and read it from `~/Library/Messages/chat.db` via SQL, wired
       to `ASC_WEB_2FA_CODE_COMMAND`. Headless, no System Events. Unproven: needs Full
       Disk Access, and Apple may not offer an SMS path for this flow — timebox it.
+
+## Ingested 2026-08-22
+- [ ] Still out of date — CDB should be showing roughly 1450-1500 + 200. Messages are still stale. Investigate why the displayed figures and the message list are not refreshing.
