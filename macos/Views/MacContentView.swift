@@ -88,7 +88,7 @@ private struct ErrorBanner: View {
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 10)
-        .background(.ultraThinMaterial, in: Capsule())
+        .liquidGlass(in: Capsule(), fallback: .ultraThinMaterial)
         .padding(.horizontal)
         .shadow(radius: 8, y: 2)
     }
