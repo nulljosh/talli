@@ -88,3 +88,13 @@ Talli ships FREE — audience is income-assistance recipients, never paywall it.
 ## Whitepaper
 
 [Technical whitepaper](WHITEPAPER.md)
+
+## API and agent tools
+
+[`docs/API.md`](docs/API.md) documents the full HTTP surface and the WebMCP tools
+Talli registers on `document.modelContext`, so an in-browser agent can read
+benefit status and payments and, with confirmation, file the monthly report.
+
+Credentials never pass through a tool call: no tool sets the security PIN, and
+`submit_monthly_report` takes no SIN, phone or PIN argument. `tools/test-webmcp.js`
+enforces both and runs first in `npm test`.

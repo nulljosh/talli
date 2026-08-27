@@ -59,6 +59,10 @@ function _talliScriptError() {
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous" onerror="_talliScriptError()"></script>
 <!-- i18n runtime: exposes window.I18N (t, setLang, fmtMoney/fmtDate/fmtNum). Static labels retrofitted to I18N.t() 2026-08-02; no re-render hook yet, so setLang() won't repaint this React tree until a language-context/state trigger is added. -->
 <script src="/js/i18n.js"></script>
+<!-- WebMCP tool registration: exposes benefit status, payments and messages to
+     in-browser agents. Independent of the React tree below -- it talks to the
+     same /api routes the app does. -->
+<script src="/js/webmcp.js"></script>
 <script type="text/babel">
 const { useState, useEffect, useRef, useCallback } = React;
 
