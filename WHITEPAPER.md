@@ -1,6 +1,6 @@
 # Talli Technical Whitepaper
 
-**v3.5.3** | July 2026
+**v3.5.12 iOS / 3.5.6 macOS** | August 2026
 
 Talli is a benefits dashboard for BC disability assistance. It scrapes BC
 Self-Serve, tracks income and payment dates, monitors PWD/DTC application
@@ -47,7 +47,8 @@ On top of the scrape:
 | Platform | Status |
 |---|---|
 | Web (PWA) | Live |
-| iOS | v3.5.1 Waiting for Review |
+| iOS | v3.5.12 Live |
+| macOS | v3.5.6 Live |
 | watchOS | Bundled complication |
 
 The iOS app matches the web visual language (parchment palette, orange accent,
