@@ -3,7 +3,7 @@
 ## Blocked on Joshua — file the 4.3(a) appeal (needs a browser)
 
 Resolution Center is web-only; `asc web review` is read-only, so there is no CLI path.
-Reply text is written and verified: `notes/appeal-4-3-spam.md`. Paste it by hand at
+Reply text is written and verified: `~/Documents/Code/notes/appeal-4-3-spam.md`. Paste it by hand at
 appstoreconnect.com. Order: Talli first (strongest — 3.5.7 through 3.5.12 were each
 approved, 3.5.13 is maintenance only), then Curvely, then Doorstock (answer 3.2's
 numbered questions literally as well).
@@ -14,7 +14,7 @@ as a spam factor.
 
 ## Rejected 2026-08-27 — iOS rejected (4.3a Spam), appeal DRAFTED not yet filed
 
-iOS rejected 2026-08-26 under Guideline 4.3(a) Design: Spam. Apple flagged an account-level pattern — five apps submitted the same day (Sparkjar, NYC Survive, Talli, Curvely, Doorstock) all landed on the same violation. Live versions iOS 3.5.12 + macOS 3.5.6 unaffected. Do not attempt resubmit; appeal DRAFTED 2026-08-27 at notes/appeal-4-3-spam.md — NOT yet filed (Resolution Center is web-only, paste by hand). Monitor appeal verdict only.
+iOS rejected 2026-08-26 under Guideline 4.3(a) Design: Spam. Apple flagged an account-level pattern — five apps submitted the same day (Sparkjar, NYC Survive, Talli, Curvely, Doorstock) all landed on the same violation. Live versions iOS 3.5.12 + macOS 3.5.6 unaffected. Do not attempt resubmit; appeal DRAFTED 2026-08-27 at ~/Documents/Code/notes/appeal-4-3-spam.md — NOT yet filed (Resolution Center is web-only, paste by hand). Monitor appeal verdict only.
 
 ## ASC state VERIFIED 2026-08-12 (`asc versions list`)
 
@@ -188,7 +188,7 @@ covers the persisted PIN, since Apple has no credentials category.
 Done. 12 tools over the existing Express API. Gated: `submit_monthly_report` (files a real report with the ministry) and `mark_taxes_filed`. Credentials never become tool arguments -- `tools/test-webmcp.js` enforces that and runs first in `npm test`.
 
 See `docs/API.md` for the full tool table, linked from the README.
-- [ ] iOS rejected 4.3(a) Spam 2026-08-26. Appeal draft: notes/appeal-4-3-spam.md (Resolution Center, web only).
+- [ ] iOS rejected 4.3(a) Spam 2026-08-26. Appeal draft: ~/Documents/Code/notes/appeal-4-3-spam.md (Resolution Center, web only).
 
 ## From Notes (imported 2026-08-27)
 - [ ] App Review flagged **Talli 3.5.13 for iOS** (submitted Aug 27 2026 01:48 PM PDT, submission `bbb79864-00aa-4d6d-bd55-93459bcd7086`). Get the real reason via `asc web review show`, fix, resubmit.
@@ -200,6 +200,6 @@ talli/roadmap.md
   - iOS **3.5.12 is still live** (READY_FOR_SALE) — the shipped app is unaffected, only the update is held.
   - Talli is the **strongest appeal case**: 3.5.7 through 3.5.12 were each individually approved and 3.5.12 is live; 3.5.13 changes no concept (security headers, WebMCP tool registration, Liquid Glass pass).
   - **This is not a per-app content problem — do not fix code and do not resubmit.** Apple's letter is byte-identical boilerplate across all five with no named comparison app. Resubmitting the same build will fail again and adds to the pattern.
-  - **The appeal draft is at `~/Documents/Code/notes/appeal-4-3-spam.md` (repo root, 113 lines) — NOT at `<repo>/notes/appeal-4-3-spam.md`.** Several roadmap lines point at the per-repo path; that file does not exist in any of the five repos. Fix the pointer, do not write a second draft.
+  - **The appeal draft is at `~/Documents/Code/notes/appeal-4-3-spam.md` (repo root, 113 lines) — NOT at `<repo>/~/Documents/Code/notes/appeal-4-3-spam.md`.** Several roadmap lines point at the per-repo path; that file does not exist in any of the five repos. Fix the pointer, do not write a second draft.
   - **Status: DRAFTED, NOT FILED.** Filing is Resolution Center, which is browser-only (`asc web review` is read-only). Blocked on Joshua. Reply order in the draft is Talli, Curvely, Doorstock; hold Sparkjar and NYC Survive.
   - Verified via API 2026-08-27: submission is UNRESOLVED_ISSUES with a single appStoreVersion item REJECTED — no phantom-IAP item, so the "mislabeled inAppPurchaseVersion" trap does not apply. `asc validate` and `asc review doctor` are otherwise clean, confirming this is a guideline call and not a readiness gap.
