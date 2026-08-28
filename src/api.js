@@ -205,6 +205,9 @@ async function getHybridAuthCookies(username, password) {
 // Map internal scraper errors to user-facing messages
 function userFacingLoginError(internalError) {
   const msg = String(internalError || '').toLowerCase();
+  if (msg.includes('password expired') || msg.includes('must be changed')) {
+    return 'Your BCeID password has expired. Reset it at https://logon7.gov.bc.ca, then sign in again.';
+  }
   if (msg.includes('invalid bceid credentials') ||
       msg.includes('login appears to have returned to the login page')) {
     return 'Invalid credentials. Please check your BCeID username and password.';

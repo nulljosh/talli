@@ -408,6 +408,12 @@ async function followRedirectChain(response, jar, currentUrl) {
     }
     visitedUrls.add(nextUrl);
 
+    // SiteMinder routes password-change/expiry through Password Services. The
+    // chain then bounces back to the logon form, so the final URL looks exactly
+    // like a rejected password -- this hop is the only place the difference is
+    // visible. Recorded on the jar because that is what survives to the caller.
+    if (/smpwservices|SMAUTHREASON=24/i.test(nextUrl)) jar._passwordServices = true;
+
     log(`Following redirect ${activeResponse.status} -> ${nextUrl} (hop ${i + 1}/${MAX_REDIRECTS})`);
 
     activeResponse = await fetchPage(nextUrl, jar, {
@@ -654,6 +660,9 @@ async function executeLogin(username, password) {
   const failReasonBad = jar.FAILREASON && jar.FAILREASON !== '0';
 
   if (stillOnBceidLogon || failReasonBad) {
+    if (jar._passwordServices) {
+      throw new Error('BCeID password expired or must be changed');
+    }
     throw new Error('Invalid BCeID credentials');
   }
 
