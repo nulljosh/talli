@@ -16,26 +16,6 @@
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    :root {
-      --bg: #ffffff;
-      --bg2: #f5f5f5;
-      --text: #111111;
-      --text-secondary: rgba(17,17,17,0.55);
-      --text-tertiary: rgba(17,17,17,0.35);
-      --border: rgba(17,17,17,0.1);
-      --accent: var(--blue);
-    }
-
-    [data-theme="dark"] {
-      --bg: #0d0c0b;
-      --bg2: #161412;
-      --text: #f5f5f5;
-      --text-secondary: rgba(242,237,232,0.55);
-      --text-tertiary: rgba(242,237,232,0.3);
-      --border: rgba(242,237,232,0.1);
-      --accent: var(--blue);
-    }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -84,7 +64,7 @@
       color: var(--text);
       text-decoration: none;
     }
-    .wordmark span { color: var(--accent); }
+    .wordmark span { color: var(--bulb-deep, var(--accent)); }
 
     .theme-toggle {
       background: none;
@@ -143,7 +123,7 @@
       align-items: center;
       gap: 6px;
       background: var(--accent);
-      color: #fff;
+      color: #000;
       font-family: inherit;
       font-size: 0.9375rem;
       font-weight: 600;
@@ -198,7 +178,7 @@
     .card-days {
       font-size: 20px;
       font-weight: 600;
-      color: var(--accent);
+      color: var(--bulb-deep, var(--accent));
       letter-spacing: -0.02em;
       margin-bottom: 4px;
     }
@@ -229,7 +209,7 @@
       gap: 5px;
       font-size: 11px;
       font-weight: 600;
-      color: var(--accent);
+      color: var(--bulb-deep, var(--accent));
       border: 1px solid var(--accent);
       border-radius: 100px;
       padding: 3px 10px;

@@ -6,13 +6,13 @@ v3.5.12 (iOS, live) · v3.5.6 (macOS, live) — Personal finance tracker.
 - No emojis anywhere
 - Live at talli.heyitsmejosh.com (renamed from tally.heyitsmejosh.com 2026-06-20 — repo, domain, and portfolio link all updated; old `tally` subdomain still resolves but is not the canonical link)
 - Push to `main` auto-deploys to Vercel prod via `.github/workflows/deploy.yml` (VERCEL_TOKEN/ORG_ID/PROJECT_ID repo secrets) — no more manual `vercel --prod` needed
-- Portfolio-vibe aesthetic (matches heyitsmejosh.com, see `portfolio-tokens.css`): Light (#ffffff bg / #1a1a1a text), Dark (#1a1a1a bg / #fff8f0 text)
-- Accent: #5B9BD5 (blue), secondary #BFDDF0
+- Jaybulb design system: `web/portfolio-tokens.css` @imports the canonical https://heyitsmejosh.com/tokens.css and adds ONLY an alias layer for names canonical lacks. Never re-declare a colour the system owns in a page's own `:root` -- that shadows the system and is the drift bug fixed 2026-08-28.
+- Accent comes from the system (currently bulb #ffca30), not from this file. Text on the accent must be #000; accent-as-text uses `--bulb-deep` (the accessible yellow), never raw `--accent`.
 - Fonts: system SF Pro / Helvetica stack (`-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica`) — no webfonts. Backgrounds pure white (#ffffff), matching other projects.
 - 430px max-width shell centered on desktop
 - 640px max-width, single-column, text-first
 - Theme toggle: sun/moon SVG, View Transitions API, `[data-theme="dark"]`
-- 14px border-radius standard; glass/blur accents allowed on sticky/floating elements (toggle, banners)
+- 14px border-radius standard; glass/blur accents allowed on sticky/floating elements (toggle, banners). NOTE: this predates the canonical system, which is square (`--radius*: 0`) with no shadows. landing.html/login.html still hardcode 16 radii + 3 shadows -- unresolved, see roadmap.
 - Spring hover: `transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)`
 - Never use raw `setInterval` for API polling -- always use `visibilityInterval()` helper (pauses when tab hidden, prevents Vercel invocation burn)
 
