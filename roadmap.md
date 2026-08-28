@@ -192,7 +192,8 @@ See `docs/API.md` for the full tool table, linked from the README.
 
 ## From Notes (imported 2026-08-27)
 - [ ] App Review flagged **Talli 3.5.13 for iOS** (submitted Aug 27 2026 01:48 PM PDT, submission `bbb79864-00aa-4d6d-bd55-93459bcd7086`). Get the real reason via `asc web review show`, fix, resubmit.
-- [ ] Talli "doesn't really match the vibe of our other projects" — adopt the shared Jaybulb `tokens.css` design system instead of its own styling.
+- [ ] Decide: `landing.html`/`login.html` still hardcode 16 border-radius values and 3 box-shadows, against canonical's square/no-shadow signature — but `CLAUDE.md` documents the "14px border-radius standard" as deliberate. Squaring a live product's UI is a taste call. Settle the conflict, then make CLAUDE.md and the CSS agree.
+- [ ] Decide: web accent is now bulb yellow while the shipped iOS/macOS icon and App Store screenshots are blue `#5B9BD5`. Web and native have diverged.
 talli/roadmap.md
 
 ### 4.3(a) status — verified 2026-08-27
