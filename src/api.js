@@ -1,12 +1,14 @@
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
 const session = require('express-session');
 const crypto = require('crypto');
-const { spawn } = require('child_process');
 const rateLimit = require('express-rate-limit');
-const { checkAllSections, runSubmitMonthlyReport, getAuthenticatedCookies } = require('./scraper');
+const blob = require('./_blob');
+// src/scraper.js is Puppeteer, and it reads __dirname at import time -- neither
+// works on Workers. Nothing in the production path needs it: attemptBCLogin and
+// fetchAllSectionsWithHybridAuth both take the IS_PRODUCTION HTTP-only branch.
+// Required on demand so importing this file stays Workers-safe.
+const scraper = () => require('./scraper');
 const { createCorsOptionsDelegate, parseAllowedOrigins } = require('./cors-utils');
 const { parseCookies, unsealAuthPayload, setAuthCookie, clearAuthCookie } = require('./auth-cookie');
 const { attemptHttpLogin, fetchAllSections } = require('./http-scraper');
@@ -16,7 +18,54 @@ const { PROFILE_PROGRAMS, deriveIncome } = require('./programs/profiles');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const IS_PRODUCTION = !!process.env.VERCEL;
+// Set by wrangler.jsonc vars on the deployed Worker. The VERCEL check is kept
+// only so a rollback to Vercel still behaves while DNS settles.
+const IS_PRODUCTION = process.env.NODE_ENV === 'production' || !!process.env.VERCEL;
+
+// esbuild leaves __dirname undeclared in the Workers bundle; Node always has
+// it. Unlike a binding check this is correct during module evaluation, before
+// any request scope exists.
+const HAS_FS = typeof __dirname !== 'undefined';
+
+// Serve a file from the Workers static-assets binding. Replaces res.sendFile --
+// there is no filesystem on Workers. Falls back to disk locally, where
+// `npm start` has no ASSETS binding.
+async function serveAsset(res, pathname, status = 200) {
+  const assets = globalThis.__cfEnv?.ASSETS;
+  if (!assets) {
+    if (!HAS_FS) return res.status(404).send('Not found');
+    return res.status(status).sendFile(require('path').join(__dirname, '../web', pathname));
+  }
+  const upstream = await assets.fetch(new Request(`https://assets.local${pathname}`));
+  const body = Buffer.from(await upstream.arrayBuffer());
+  res.status(upstream.ok ? status : upstream.status);
+  const type = upstream.headers.get('content-type');
+  if (type) res.setHeader('Content-Type', type);
+  res.send(body);
+}
+
+// Newest good data/results-*.json, or null. Local dev only -- this was three
+// copies of the same block before, each a fallback for when the blob store has
+// nothing. On Workers there is no filesystem, so it short-circuits.
+function readLocalResults() {
+  if (!HAS_FS) return null;
+  const fs = require('fs');
+  const path = require('path');
+  const dataDir = path.join(__dirname, '../data');
+  try {
+    const files = fs.readdirSync(dataDir)
+      .filter(f => f.startsWith('results-') && f.endsWith('.json'))
+      .map(f => ({ path: path.join(dataDir, f), time: fs.statSync(path.join(dataDir, f)).mtime.getTime() }))
+      .sort((a, b) => b.time - a.time);
+    for (const file of files) {
+      try {
+        const data = JSON.parse(fs.readFileSync(file.path, 'utf8'));
+        if (!hasErrors(data)) return data;
+      } catch { /* skip bad file */ }
+    }
+  } catch { /* no data dir */ }
+  return null;
+}
 
 // Fail fast if SESSION_SECRET missing in production
 if (IS_PRODUCTION && !process.env.SESSION_SECRET) {
@@ -128,35 +177,6 @@ function decrypt(encrypted) {
   }
 }
 
-function runCommand(command, args, options = {}) {
-  return new Promise((resolve, reject) => {
-    const child = spawn(command, args, {
-      cwd: options.cwd || path.join(__dirname, '..'),
-      env: { ...process.env, ...(options.env || {}) }
-    });
-
-    let stdout = '';
-    let stderr = '';
-
-    child.stdout.on('data', (chunk) => {
-      stdout += String(chunk);
-    });
-
-    child.stderr.on('data', (chunk) => {
-      stderr += String(chunk);
-    });
-
-    child.on('error', reject);
-    child.on('close', (code) => {
-      if (code === 0) {
-        resolve({ stdout, stderr });
-      } else {
-        reject(new Error(stderr.trim() || stdout.trim() || `${command} exited with code ${code}`));
-      }
-    });
-  });
-}
-
 function getCraProfile(req) {
   const profile = req.session?.craProfile || null;
   if (!profile) return null;
@@ -170,59 +190,12 @@ function getCraProfile(req) {
   };
 }
 
-function getCraArtifacts() {
-  const dataDir = path.join(__dirname, '../data');
-  const artifacts = [];
-  const files = [
-    {
-      label: 'Filled T2201 draft',
-      pathname: '/data/dtc_filled.pdf',
-      filePath: path.join(dataDir, 'dtc_filled.pdf')
-    },
-    {
-      label: 'Blank T2201 form',
-      pathname: '/data/t2201_blank.pdf',
-      filePath: path.join(dataDir, 't2201_blank.pdf')
-    }
-  ];
-
-  for (const file of files) {
-    if (!fs.existsSync(file.filePath)) continue;
-    const stat = fs.statSync(file.filePath);
-    artifacts.push({
-      label: file.label,
-      path: file.pathname,
-      updatedAt: stat.mtime.toISOString(),
-      size: stat.size
-    });
-  }
-
-  return artifacts;
-}
-
-async function prepareDtcDraft({ legalName, sin, dob, submit }) {
-  const env = {};
-  if (legalName) env.LEGAL_NAME = legalName;
-  if (sin) env.SIN = sin;
-  if (dob) env.DOB = dob;
-
-  const args = ['tools/dtc_apply.py'];
-  if (submit) args.push('--submit');
-
-  const { stdout, stderr } = await runCommand('python3', args, { env });
-  return {
-    success: true,
-    output: `${stdout}${stderr}`.trim(),
-    artifacts: getCraArtifacts()
-  };
-}
-
 function isPuppeteerUnavailableError(error) {
   return /Puppeteer auth unavailable/i.test(error?.message || '');
 }
 
 async function getHybridAuthCookies(username, password) {
-  return getAuthenticatedCookies({
+  return scraper().getAuthenticatedCookies({
     username,
     password,
     headless: true
@@ -524,7 +497,7 @@ const requireAuth = (req, res, next) => {
     }
     next();
   } else {
-    res.status(401).sendFile(path.join(__dirname, '../web/login.html'));
+    serveAsset(res, '/login.html', 401);
   }
 };
 
@@ -713,7 +686,9 @@ app.get('/api/cra/summary', requireAuth, (req, res) => {
         url: 'https://www.canada.ca/en/services/taxes/income-tax/personal-income-tax/how-file/tax-software/complete-return/auto-fill.html'
       }
     ],
-    artifacts: getCraArtifacts()
+    // T2201 draft artifacts came from tools/dtc_apply.py via child_process,
+    // which never ran on serverless and cannot run on Workers. Route removed.
+    artifacts: []
   });
 });
 
@@ -784,44 +759,16 @@ app.post('/api/cra/filing-status', requireAuth, async (req, res) => {
   }
 });
 
-app.post('/api/cra/dtc/prepare', requireAuth, async (req, res) => {
-  try {
-    const { legalName, sin, dob, submit } = req.body || {};
-
-    if (typeof legalName !== 'string' || !legalName.trim()) {
-      return res.status(400).json({ error: 'legalName is required' });
-    }
-    if (typeof sin !== 'string' || !/^\d{9}$/.test(sin.replace(/\D/g, ''))) {
-      return res.status(400).json({ error: 'sin must be 9 digits' });
-    }
-    if (typeof dob !== 'string' || !dob.trim()) {
-      return res.status(400).json({ error: 'dob is required' });
-    }
-
-    const result = await prepareDtcDraft({
-      legalName: legalName.trim(),
-      sin: sin.replace(/\D/g, ''),
-      dob: dob.trim(),
-      submit: !!submit
-    });
-
-    res.json(result);
-  } catch (error) {
-    console.error('[API] /api/cra/dtc/prepare error:', error);
-    res.status(500).json({
-      success: false,
-      error: safeApiError(error, 'Failed to prepare DTC draft')
-    });
-  }
-});
+// /api/cra/dtc/prepare removed: it shelled out to python3 tools/dtc_apply.py,
+// which has never worked in production (no python on @vercel/node, none on
+// Workers). Run tools/dtc_apply.py directly if the T2201 draft is needed.
 
 let lastCheckResult = null;
 let isChecking = false;
 
-// Benefits screener (public, no auth)
-app.get('/screen', (req, res) => {
-  res.sendFile(path.join(__dirname, '../web/screen.html'));
-});
+// Benefits screener (public, no auth). The assets binding serves /screen ->
+// screen.html on its own; this route only exists for `npm start` locally.
+app.get('/screen', (req, res) => serveAsset(res, '/screen.html'));
 
 // Public info summary endpoint — reads from Blob cache (auth required)
 app.get('/api/info', requireAuth, async (req, res) => {
@@ -840,19 +787,7 @@ app.get('/api/info', requireAuth, async (req, res) => {
       data = lastCheckResult;
     }
 
-    if (!data) {
-      const dataDir = path.join(__dirname, '../data');
-      try {
-        const files = fs.readdirSync(dataDir)
-          .filter(f => f.startsWith('results-') && f.endsWith('.json'))
-          .map(f => ({ name: f, path: path.join(dataDir, f), time: fs.statSync(path.join(dataDir, f)).mtime.getTime() }))
-          .sort((a, b) => b.time - a.time);
-        for (const file of files) {
-          const d = JSON.parse(fs.readFileSync(file.path, 'utf8'));
-          if (!hasErrors(d)) { data = d; break; }
-        }
-      } catch (_) {}
-    }
+    if (!data) data = readLocalResults();
 
     if (!data || !data.sections) {
       return res.status(404).json({ error: 'No cached data available. Run a scrape first.' });
@@ -955,7 +890,11 @@ app.get('/', async (req, res) => {
     }
   }
 
-  return res.redirect('/login.html');
+  // Vercel's route table mapped "^/$" straight to landing.html, so that is what
+  // production has always served here -- a 200, not a redirect. Workers'
+  // _redirects cannot rewrite (a 200 rule comes back as a 307), so the Worker
+  // serves it.
+  return serveAsset(res, '/landing.html');
 });
 
 // Serve dashboard (require login)
@@ -964,19 +903,25 @@ app.get('/app', async (req, res) => {
     return res.redirect('/login.html');
   }
   res.setHeader('Cache-Control', 'no-store');
-  res.sendFile(path.join(__dirname, '../web/unified.html'));
+  return serveAsset(res, '/unified.html');
 });
 
-// Serve static files AFTER route handlers (prevents index.html from bypassing auth)
-app.use('/data', requireAuth, express.static(path.join(__dirname, '../data')));
-app.use(express.static(path.join(__dirname, '../web'), {
-  index: false, // Don't serve index.html as default
-  setHeaders: (res, filePath) => {
-    if (filePath.endsWith('.html')) {
-      res.setHeader('Cache-Control', 'no-cache');
+// Static files come from the Workers assets binding (see wrangler.jsonc), not
+// from disk. /app and /api/* still route here because they are not files in
+// web/, so the "don't let index.html bypass auth" property is preserved.
+// /data/* is gone with the python T2201 artifacts it used to serve.
+// Local dev only -- on Workers there is no filesystem and the assets binding
+// has already served anything under web/ before the request reaches Express.
+if (HAS_FS) {
+  app.use(express.static(require('path').join(__dirname, '../web'), {
+    index: false, // Don't serve index.html as default
+    setHeaders: (res, filePath) => {
+      if (filePath.endsWith('.html')) {
+        res.setHeader('Cache-Control', 'no-cache');
+      }
     }
-  }
-}));
+  }));
+}
 
 app.get('/api', requireAuth, (req, res) => {
   res.json({ status: 'ok' });
@@ -1005,36 +950,17 @@ app.get('/api/summary', async (req, res) => {
     // Get latest data (same logic as /api/latest but simplified)
     let data = null;
 
-    // Try Vercel Blob first
-    if (process.env.VERCEL) {
+    // Try the KV blob store first
+    if (blob.available()) {
       try {
-        const { list } = require('@vercel/blob');
-        const { blobs } = await list({ prefix: 'chequecheck-cache/results.json' });
-        if (blobs && blobs.length > 0) {
-          const response = await fetch(blobs[0].url);
-          data = await response.json();
-        }
+        data = await blob.getJSON('chequecheck-cache/results.json');
       } catch (err) {
         log('[SUMMARY] Blob read failed:', err.message);
       }
     }
 
     // Fallback to local files
-    if (!data) {
-      const dataDir = path.join(__dirname, '../data');
-      const files = fs.readdirSync(dataDir)
-        .filter(f => f.startsWith('results-') && f.endsWith('.json'))
-        .map(f => ({
-          name: f,
-          path: path.join(dataDir, f),
-          time: fs.statSync(path.join(dataDir, f)).mtime.getTime()
-        }))
-        .sort((a, b) => b.time - a.time);
-
-      if (files.length > 0) {
-        data = JSON.parse(fs.readFileSync(files[0].path, 'utf8'));
-      }
-    }
+    if (!data) data = readLocalResults();
 
     if (!data || !data.sections) {
       return res.status(404).json({ error: 'No data available' });
@@ -1232,19 +1158,8 @@ async function fetchOrLoadData(req, { allowLiveScrape = true } = {}) {
   }
 
   // Fall back to local files
-  const dataDir = path.join(__dirname, '../data');
-  try {
-    const files = fs.readdirSync(dataDir)
-      .filter(f => f.startsWith('results-') && f.endsWith('.json'))
-      .map(f => ({ name: f, path: path.join(dataDir, f), time: fs.statSync(path.join(dataDir, f)).mtime.getTime() }))
-      .sort((a, b) => b.time - a.time);
-    for (const file of files) {
-      try {
-        const data = JSON.parse(fs.readFileSync(file.path, 'utf8'));
-        if (!hasErrors(data)) return { source: file.name, data };
-      } catch { /* skip bad file */ }
-    }
-  } catch { /* no data dir */ }
+  const local = readLocalResults();
+  if (local) return { source: 'local-file', data: local };
 
   return null;
 }
@@ -1617,25 +1532,19 @@ function blobPrefix(userId) {
 
 // Generic per-user Blob persistence
 async function loadUserBlob(userId, key, fallback) {
-  if (!IS_PRODUCTION || !userId) return fallback;
+  if (!IS_PRODUCTION || !userId || !blob.available()) return fallback;
   try {
-    const { list } = require('@vercel/blob');
-    const blobPath = `${blobPrefix(userId)}/${key}.json`;
-    const { blobs } = await list({ prefix: blobPath });
-    const match = blobs?.find(b => b.pathname === blobPath);
-    if (match) {
-      const resp = await fetch(match.url);
-      return await resp.json();
-    }
+    // Reads go straight to KV. The old list()+fetch(blob.url) round trip cannot
+    // work here: the URL now points back at this Worker, and a Worker fetching
+    // itself is a subrequest loop.
+    const data = await blob.getJSON(`${blobPrefix(userId)}/${key}.json`);
+    if (data !== null) return data;
+
     // Legacy path fallback (pre-HMAC format — some results.json blobs were not migrated)
-    const legacyPath = `talli-cache/${userId}/${key}.json`;
-    const { blobs: legacyBlobs } = await list({ prefix: legacyPath });
-    const legacyMatch = legacyBlobs?.find(b => b.pathname === legacyPath);
-    if (legacyMatch) {
-      const resp = await fetch(legacyMatch.url);
-      const data = await resp.json();
-      saveUserBlob(userId, key, data).catch(() => {});
-      return data;
+    const legacy = await blob.getJSON(`talli-cache/${userId}/${key}.json`);
+    if (legacy !== null) {
+      saveUserBlob(userId, key, legacy).catch(() => {});
+      return legacy;
     }
   } catch (err) {
     log(`[BLOB] Read ${key} failed:`, err.message);
@@ -1644,14 +1553,31 @@ async function loadUserBlob(userId, key, fallback) {
 }
 
 async function saveUserBlob(userId, key, data) {
-  if (!IS_PRODUCTION || !userId) return;
+  if (!IS_PRODUCTION || !userId || !blob.available()) return;
   try {
-    const { put } = require('@vercel/blob');
-    await put(`${blobPrefix(userId)}/${key}.json`, JSON.stringify(data), { access: 'public', addRandomSuffix: false });
+    await blob.putJSON(`${blobPrefix(userId)}/${key}.json`, data);
   } catch (err) {
     log(`[BLOB] Write ${key} failed:`, err.message);
   }
 }
+
+// Serves anything the blob store holds that the browser needs by URL -- today
+// just avatars. blob.keyToUrl() hands out exactly this path.
+app.get('/api/blob/*splat', requireAuth, async (req, res) => {
+  try {
+    // Express 5 gives a named wildcard as an array of path segments.
+    const splat = req.params.splat;
+    const key = (Array.isArray(splat) ? splat.join('/') : String(splat || ''));
+    const found = key && (await blob.getWithMeta(key));
+    if (!found) return res.status(404).json({ error: 'Not found' });
+    res.setHeader('Content-Type', found.contentType);
+    res.setHeader('Cache-Control', 'private, max-age=300');
+    res.send(found.body);
+  } catch (err) {
+    log('[BLOB] Serve failed:', err.message);
+    res.status(500).json({ error: 'Failed to read blob' });
+  }
+});
 
 // Stripe Pro -- $1 one-time unlock for the full payment/report history view
 app.get('/api/stripe-status', requireAuth, async (req, res) => {
@@ -1912,11 +1838,12 @@ app.post('/api/avatar', requireAuth, async (req, res) => {
 
     const profile = await loadUserBlob(userId, 'profile', {});
     let staleUrl = null;
-    if (IS_PRODUCTION) {
-      const { put } = require('@vercel/blob');
+    if (IS_PRODUCTION && blob.available()) {
       const pathname = `${blobPrefix(userId)}/avatar-${Date.now()}.svg`;
-      const { url } = await put(pathname, svgBuffer, { access: 'public', addRandomSuffix: false, contentType: 'image/svg+xml' });
-      if (profile.avatarUrl && profile.avatarUrl.includes('blob.vercel-storage.com')) staleUrl = profile.avatarUrl;
+      const url = await blob.putBytes(pathname, svgBuffer, 'image/svg+xml');
+      // Only our own KV-backed URLs are deletable; a leftover
+      // blob.vercel-storage.com URL is not ours to delete post-migration.
+      if (profile.avatarUrl && profile.avatarUrl.startsWith('/api/blob/')) staleUrl = profile.avatarUrl;
       profile.avatarUrl = url;
     } else {
       // Dev: return data URL so the UI still works locally
@@ -1926,7 +1853,7 @@ app.post('/api/avatar', requireAuth, async (req, res) => {
     await saveUserBlob(userId, 'profile', profile);
     // Delete the old blob only after the new URL is durably saved -- deleting first
     // leaves profile.avatarUrl pointing at a 404 if the save throws (letter-icon bug).
-    if (staleUrl) require('@vercel/blob').del(staleUrl).catch(() => {});
+    if (staleUrl) blob.del(staleUrl).catch(() => {});
     res.json({ ok: true, avatarUrl: profile.avatarUrl });
   } catch (err) {
     log('[AVATAR] POST error:', err.message);
@@ -1972,7 +1899,7 @@ app.post('/api/submit-report', scrapeLimiter, requireAuth, async (req, res) => {
       return res.status(401).json({ error: 'No login credentials available' });
     }
 
-    const result = await runSubmitMonthlyReport({
+    const result = await scraper().runSubmitMonthlyReport({
       username,
       password,
       ...(resolvedSin && { sin: resolvedSin }),

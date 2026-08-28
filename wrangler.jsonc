@@ -1,0 +1,31 @@
+{
+  "name": "talli",
+  "main": "worker/index.mjs",
+  // nodejs_compat is what lets Express 5 run here; 2025-04-01+ is required for
+  // it to populate process.env from vars/secrets.
+  "compatibility_date": "2026-08-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "web",
+    "binding": "ASSETS",
+    // "none": anything that is not a file in web/ falls through to the Worker,
+    // which is how /api/*, /app and the rest of Express keep working. Default
+    // html_handling still maps /login -> login.html, /privacy -> privacy.html
+    // etc., matching the old vercel.json route table. "/" is handled by
+    // web/_redirects.
+    "not_found_handling": "none",
+    // Without this the assets binding answers "/" with index.html. Vercel
+    // routed "^/$" to landing.html, and that is what the Worker serves.
+    "run_worker_first": ["/"]
+  },
+  // Backs src/_blob.js, the @vercel/blob replacement. Deliberately NOT the
+  // account-wide "BLOB" namespace -- that one is epiphany's and uses the same
+  // "blob:" key prefix.
+  "kv_namespaces": [{ "binding": "BLOB", "id": "536a7d86e04e47c4a0e08c042c49fb28" }],
+  // Workers custom domain owns the DNS record, replacing the CNAME at Vercel.
+  "routes": [{ "pattern": "talli.heyitsmejosh.com", "custom_domain": true }],
+  "observability": { "enabled": true },
+  // IS_PRODUCTION in src/api.js reads this. The custom-domain route is added
+  // only at DNS cutover -- until then this deploys to talli.<subdomain>.workers.dev.
+  "vars": { "NODE_ENV": "production" }
+}

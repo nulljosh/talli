@@ -20,28 +20,30 @@
     "info": "bash scripts/talli-info.sh",
     "monthly-report": "python3 tools/monthly_report.py",
     "screenshot:preview": "node scripts/preview-screenshot.js",
-    "test:i18n": "node tools/test-i18n.js"
+    "test:i18n": "node tools/test-i18n.js",
+    "deploy": "wrangler deploy",
+    "dev:worker": "wrangler dev"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@sparticuz/chromium": "^143.0.4",
-    "@vercel/blob": "^2.2.0",
     "cheerio": "^1.2.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "express-rate-limit": "^8.2.1",
     "express-session": "^1.18.2",
-    "puppeteer-core": "^24.40.0",
     "stripe": "^22.4.0"
   },
   "devDependencies": {
+    "@sparticuz/chromium": "^143.0.4",
     "browser-sync": "^3.0.4",
     "concurrently": "^9.2.1",
     "live-server": "^1.2.2",
-    "nodemon": "^3.1.11"
+    "nodemon": "^3.1.11",
+    "puppeteer-core": "^24.40.0",
+    "wrangler": "^4.127.1"
   }
 }

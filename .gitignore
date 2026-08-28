@@ -47,3 +47,5 @@ macos/TalliWidgets-Info.plist
 **/.asc/release/
 **/.asc/runs/
 **/.asc/reports/
+.env.vercel.local
+.kv-bulk.json
