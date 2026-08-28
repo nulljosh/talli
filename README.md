@@ -98,3 +98,7 @@ benefit status and payments and, with confirmation, file the monthly report.
 Credentials never pass through a tool call: no tool sets the security PIN, and
 `submit_monthly_report` takes no SIN, phone or PIN argument. `tools/test-webmcp.js`
 enforces both and runs first in `npm test`.
+
+## Architecture
+
+<img src="architecture.svg" width="600">
