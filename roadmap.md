@@ -1,5 +1,9 @@
 # Talli Roadmap
 
+## Rejected 2026-08-27 — iOS rejected (4.3a Spam), appeal filed
+
+iOS rejected 2026-08-26 under Guideline 4.3(a) Design: Spam. Apple flagged an account-level pattern — five apps submitted the same day (Sparkjar, NYC Survive, Talli, Curvely, Doorstock) all landed on the same violation. Live versions iOS 3.5.12 + macOS 3.5.6 unaffected. Do not attempt resubmit; appeal filed 2026-08-27 via Resolution Center. Monitor appeal verdict only.
+
 ## ASC state VERIFIED 2026-08-12 (`asc versions list`)
 
 **Both platforms are LIVE** — iOS 3.5.12 and macOS 3.5.6, both `READY_FOR_SALE`. Notes
@@ -172,3 +176,4 @@ covers the persisted PIN, since Apple has no credentials category.
 Done. 12 tools over the existing Express API. Gated: `submit_monthly_report` (files a real report with the ministry) and `mark_taxes_filed`. Credentials never become tool arguments -- `tools/test-webmcp.js` enforces that and runs first in `npm test`.
 
 See `docs/API.md` for the full tool table, linked from the README.
+- [ ] iOS rejected 4.3(a) Spam 2026-08-26. Appeal draft: notes/appeal-4-3-spam.md (Resolution Center, web only).
