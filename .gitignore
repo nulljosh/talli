@@ -49,3 +49,6 @@ macos/TalliWidgets-Info.plist
 **/.asc/reports/
 .env.vercel.local
 .kv-bulk.json
+.wrangler/
+.vercel/
+.DS_Store
