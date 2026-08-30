@@ -72,6 +72,7 @@ if (IS_PRODUCTION && !process.env.SESSION_SECRET) {
   throw new Error('SESSION_SECRET must be set in production. Refusing to start with random key.');
 }
 const ENCRYPTION_KEY = process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex');
+const BOOT_HAD_SESSION_SECRET = !!process.env.SESSION_SECRET;
 const DEBUG = process.env.DEBUG === 'true' || process.env.NODE_ENV === 'development';
 const PWD_APPROVED = process.env.PWD_APPROVED === 'true';
 const PWD_MEDICAL_DONE = process.env.PWD_MEDICAL_DONE === 'true';
@@ -473,7 +474,12 @@ app.use((req, res, next) => {
 });
 
 // Security headers (precomputed at startup)
-const CSP_HEADER = "default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://myselfserve.gov.bc.ca; frame-ancestors 'none'";
+// Must stay in sync with web/_headers (that one covers static assets, this one
+// covers Worker-served routes like /app). 'unsafe-eval' is required: unified.html
+// compiles its JSX in the browser with @babel/standalone -- without it the whole
+// dashboard silently fails to boot, which is prod-only because this header is
+// only set when IS_PRODUCTION.
+const CSP_HEADER = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https://myselfserve.gov.bc.ca; frame-ancestors 'none'; object-src 'none'; base-uri 'self'";
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
@@ -931,7 +937,13 @@ app.get('/api', requireAuth, (req, res) => {
 });
 
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok' });
+  // ponytail: booleans only, never values -- this is how we tell whether the
+  // Worker actually populated process.env (see the login-loop bug).
+  res.json({
+    status: 'ok',
+    envAtBoot: { isProduction: IS_PRODUCTION, hasSecret: BOOT_HAD_SESSION_SECRET },
+    envNow: { nodeEnv: process.env.NODE_ENV || null, hasSecret: !!process.env.SESSION_SECRET }
+  });
 });
 
 
