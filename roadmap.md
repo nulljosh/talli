@@ -1,20 +1,15 @@
 # Talli Roadmap
 
-## Blocked on Joshua — file the 4.3(a) appeal (needs a browser)
+## ASC state VERIFIED 2026-08-30
 
-Resolution Center is web-only; `asc web review` is read-only, so there is no CLI path.
-Reply text is written and verified: `~/Documents/Code/notes/appeal-4-3-spam.md`. Paste it by hand at
-appstoreconnect.com. Order: Talli first (strongest — 3.5.7 through 3.5.12 were each
-approved, 3.5.13 is maintenance only), then Curvely, then Doorstock (answer 3.2's
-numbered questions literally as well).
+**iOS 3.5.13 is LIVE** (`READY_FOR_SALE`), macOS 3.5.6 LIVE. The 4.3(a) rejection was
+resolved — 3.5.13 shipped. Talli needs no appeal; Curvely and Doorstock still do
+(text at `~/Documents/Code/notes/appeal-4-3-spam.md`).
 
-Do NOT resubmit any rejected build before the appeal gets a verdict.
-Do NOT open a second developer account — Apple's letter names multi-account submission
-as a spam factor.
-
-## Rejected 2026-08-27 — iOS rejected (4.3a Spam), appeal DRAFTED not yet filed
-
-iOS rejected 2026-08-26 under Guideline 4.3(a) Design: Spam. Apple flagged an account-level pattern — five apps submitted the same day (Sparkjar, NYC Survive, Talli, Curvely, Doorstock) all landed on the same violation. Live versions iOS 3.5.12 + macOS 3.5.6 unaffected. Do not attempt resubmit; appeal DRAFTED 2026-08-27 at ~/Documents/Code/notes/appeal-4-3-spam.md — NOT yet filed (Resolution Center is web-only, paste by hand). Monitor appeal verdict only.
+ITMS-90186/90062 email 2026-08-30 was a *delivery* error, not a review rejection: build 203
+was uploaded into the already-approved 3.5.13 train. `MARKETING_VERSION` is now 3.5.14
+(commit 0fa6b07). Do NOT archive/upload 3.5.14 until there is real content behind it — right
+now it is a bare version bump.
 
 ## ASC state VERIFIED 2026-08-12 (`asc versions list`)
 
