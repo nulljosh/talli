@@ -187,3 +187,19 @@ talli/roadmap.md
   - **The appeal draft is at `~/Documents/Code/notes/appeal-4-3-spam.md` (repo root, 113 lines) — NOT at `<repo>/~/Documents/Code/notes/appeal-4-3-spam.md`.** Several roadmap lines point at the per-repo path; that file does not exist in any of the five repos. Fix the pointer, do not write a second draft.
   - **Status: DRAFTED, NOT FILED.** Filing is Resolution Center, which is browser-only (`asc web review` is read-only). Blocked on Joshua. Reply order in the draft is Talli, Curvely, Doorstock; hold Sparkjar and NYC Survive.
   - Verified via API 2026-08-27: submission is UNRESOLVED_ISSUES with a single appStoreVersion item REJECTED — no phantom-IAP item, so the "mislabeled inAppPurchaseVersion" trap does not apply. `asc validate` and `asc review doctor` are otherwise clean, confirming this is a guideline call and not a readiness gap.
+
+## App Store metadata (2026-08-30)
+
+Canonical `metadata/` now checked in (pulled live from ASC, then corrected). It is NOT yet applied
+— version 3.5.13 is READY_FOR_SALE and Apple freezes the whole en-CA localization on a live
+version. Both `asc metadata push` and `asc apps info edit` fail with "Attribute '<field>' cannot be
+edited at this time". **The next version bump must push this dir**, which applies all three fixes:
+
+- [ ] **marketingUrl + supportUrl were dead.** They pointed at `tally.heyitsmejosh.com`, stale from
+      the Talli rename; that host does not resolve (curl 000, vs 200 for `talli.`). A live App Store
+      listing is currently advertising a broken support link. Fixed in `metadata/`, awaiting release.
+- [ ] Keywords retuned: dropped `benefits` (generic) and `disability tax credit` (21 chars) for
+      `cheque day`, `BC Self-Serve`, and `hardship` — higher intent, uncontested. 92/100 chars.
+
+Note: `asc metadata push` prints a full JSON result even when it applied nothing. Always re-pull to
+a scratch dir and diff; the `actions[].status` field is the only truth.
