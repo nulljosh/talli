@@ -11,18 +11,6 @@ was uploaded into the already-approved 3.5.13 train. `MARKETING_VERSION` is now 
 (commit 0fa6b07). Do NOT archive/upload 3.5.14 until there is real content behind it — right
 now it is a bare version bump.
 
-## ASC state VERIFIED 2026-08-12 (`asc versions list`)
-
-**Both platforms are LIVE** — iOS 3.5.12 and macOS 3.5.6, both `READY_FOR_SALE`. Notes
-saying "3.5.13 rebuild pending" or "Mac build VALID pending submission" are wrong: no 3.5.13
-version record exists, and the Mac version shipped.
-
-Freeze lifted 2026-08-18 (Guideline 5.6 suspension expired). Submitted that day and now
-WAITING_FOR_REVIEW: Curvely iOS 1.2.0, Wiretext iOS 1.1.0, Wordroot iOS 1.0, Healstack iOS 2.3.4.
-**Held pending those four verdicts — never a batch:** Sparkjar iOS+Mac, BCGD iOS+Mac, Wordroot Mac,
-Lexly Mac. All six are `asc validate` clean (0 errors, 0 blocking) with a VALID build attached, so
-each is one `asc review submit` away. Do not submit until the in-flight verdicts land.
-
 ## Email verification on signup + forgot-password flow
 
 Talli's custom `/api/login` endpoint has no password-recovery or email-verification paths yet. Most other apps already have both. Implement: (1) password-reset route that emails a time-limited reset token, (2) token verification before allowing a new password, (3) optional email-verification on signup (soft gate, existing accounts grandfathered, login never blocked). See sparkjar's `/api/auth/verify-email.js` + `/api/auth/password-reset.js` for a reference implementation and the mail.js helper used by epiphany, sparkjar, and others.
