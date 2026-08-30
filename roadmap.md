@@ -20,9 +20,6 @@ Talli's custom `/api/login` endpoint has no password-recovery or email-verificat
 Source note: "messages regex still a mess / And it's not really updating accurately."
 Four root causes found and fixed (see Status 2026-07-28 below); these are the leftovers.
 
-## Done
-- [x] Empty-dashboard bug (reported 2026-08-30). Cause was client-side: 15s URLSession timeout vs the server's 45s cold-cache scrape, plus `try?` in `bootstrap()` swallowing the failure. Fixed commit 8326e15 2026-08-30 (timeouts 60/90, error now surfaced when no cache). Ships in 3.5.14.
-
 ## Open
 - [ ] App Store support and marketing URLs: corrected in `metadata/` (talli.heyitsmejosh.com) but frozen until 3.5.14+ ship due to 3.5.13 READY_FOR_SALE status. Push metadata changes on the next version release.
 - [ ] Push notifications for payday + when monthly reports open (1–5 of each month) — see the Stashed 2026-08-10 note below for why this is bigger than it looks and the cheaper shape to build instead.
