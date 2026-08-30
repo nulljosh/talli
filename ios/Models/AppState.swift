@@ -337,7 +337,12 @@ final class AppState {
                 async let paidTask: Void = loadPaidStatus()
                 async let readTask: Void = loadReadMessages()
                 _ = await (paidTask, readTask)
-                try? await loadLatestData()
+                do {
+                    try await loadLatestData()
+                } catch {
+                    // Silent failure here is how the dashboard sat on "--" forever.
+                    if dashboard == nil { errorMessage = error.localizedDescription }
+                }
                 Task { await refreshDashboard() }
                 return
             }
@@ -453,9 +458,10 @@ final class AppState {
             updateSyncDate()
             errorMessage = nil
         } catch {
-            if let cached = dashboard {
-                dashboard = cached
+            if dashboard != nil {
                 errorMessage = "Showing cached data."
+            } else {
+                errorMessage = error.localizedDescription
             }
             throw error
         }

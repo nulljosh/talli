@@ -45,8 +45,10 @@ final class APIClient: @unchecked Sendable {
         configuration.httpShouldSetCookies = true
         configuration.httpCookieStorage = .shared
         configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
-        configuration.timeoutIntervalForRequest = 15
-        configuration.timeoutIntervalForResource = 30
+        // /api/mobile can block on a cold-cache portal scrape (server allows 45s).
+        // A 15s client timeout turned that into a permanently empty dashboard.
+        configuration.timeoutIntervalForRequest = 60
+        configuration.timeoutIntervalForResource = 90
 
         session = URLSession(configuration: configuration)
     }
