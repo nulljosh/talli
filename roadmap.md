@@ -1,18 +1,5 @@
 # Talli Roadmap
 
-## Landing page
-
-- [x] Light-mode macOS screenshot captured 2026-08-31. Note for next time:
-      `defaults write` (plain domain, sandbox-container domain, with and without a
-      cfprefsd flush) and `open --args -app_theme light` are ALL ignored by the
-      app's @AppStorage read -- the only reliable way to capture a themed macOS
-      shot is a throwaway build with `.preferredColorScheme` hardcoded. The
-      in-app picker itself is fine; it writes through the same binding in-process.
-- [x] macOS app forced dark regardless of the Settings picker: `TalliMacApp`
-      defaulted the shared `app_theme` key to "dark" while `MacSettingsView`
-      defaulted it to "system", so the picker highlighted System while the app
-      hard-set .dark. Fixed 2026-08-31.
-
 ## Full cross-platform -- DONE 2026-08-31
 
 Talli is now a real app on all six platforms: native iOS and macOS (Swift), a
