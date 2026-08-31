@@ -383,6 +383,22 @@ app.use(session({
   // No store needed - defaults to MemoryStore locally, cookies on Vercel serverless
 }));
 
+// THE LOGIN LOOP: express-session "splits the response" whenever Content-Length
+// is set -- it writes body-minus-the-last-byte, saves the session, then writes
+// that final byte. workerd's node:http bridge drops that trailing write, so on
+// Workers every response from an authenticated request arrived one byte short:
+// `{"authenticated":true,"username":"x"` with no closing brace. The dashboard's
+// JSON.parse threw, it bounced to /login, login saw a valid session and sent it
+// back to /app -- forever.
+// ponytail: no Content-Length, no split. Workers responses are chunked anyway
+// (the header never reached the wire), so dropping it costs nothing.
+app.use((req, res, next) => {
+  const setHeader = res.setHeader.bind(res);
+  res.setHeader = (name, value) =>
+    (String(name).toLowerCase() === 'content-length' ? res : setHeader(name, value));
+  next();
+});
+
 if (IS_PRODUCTION && !process.env.SESSION_SECRET) {
   console.error('[CRITICAL] SESSION_SECRET is missing in production. Sessions will not persist across deploys. Set SESSION_SECRET in environment variables.');
 } else if (!process.env.SESSION_SECRET) {
