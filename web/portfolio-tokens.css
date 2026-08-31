@@ -37,6 +37,9 @@
      than it does on black, so it is set per theme below. */
   --accent: #5B9BD5;
   --bulb-deep: #2C6BA8;
+  /* solid-fill variant: white on this is 5.9:1, and it is deliberately the same
+     in light and dark so a filled button never needs a per-theme text colour */
+  --accent-strong: #2C6BA8;
 }
 
 [data-theme="dark"] {
