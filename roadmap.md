@@ -13,23 +13,29 @@
       defaulted it to "system", so the picker highlighted System while the app
       hard-set .dark. Fixed 2026-08-31.
 
-## Full cross-platform (real binaries, not the PWA)
+## Full cross-platform -- DONE 2026-08-31
 
-Talli today is native on iOS and macOS, a web app, and an *installable web app*
-on Windows, Linux and Android. That last part is a PWA, not a binary -- there is
-no `kmp/` in this repo, so there is no APK, no MSI and no DEB.
+Talli is now a real app on all six platforms: native iOS and macOS (Swift), a
+Compose Multiplatform binary for Android, Windows and Linux (`kmp/`), and the web
+app. The PWA install path still works but is no longer the story on the landing
+page.
 
-nimble is the template: `nimble/kmp/composeApp/build.gradle.kts` declares
-`androidTarget()` + `jvm("desktop")` and emits Msi, Deb and Dmg. homeward has the
-same treatment. Porting Talli means a second UI codebase in Compose for the
-dashboard, benefits, messages and settings screens, reusing the existing
-`/api/mobile` contract (which is already the one both Swift clients consume).
+`kmp/shared` is the API layer -- a straight translation of `ios/API/APIClient.swift`
+against the same `/api` contract, with `HttpCookies` standing in for URLSession's
+shared cookie storage. `kmp/composeApp` is one Compose UI (login, dashboard,
+benefits, messages, settings) shared by the APK and the jpackage desktop build.
+`.github/workflows/build-native.yml` produces the MSI, DEB and APK, since jpackage
+can only build an installer for the OS it runs on.
 
-- [ ] Add `kmp/` Compose Multiplatform module, modelled on `nimble/kmp`
-- [ ] Port the four screens; the API layer is a straight translation of `ios/API/APIClient.swift`
-- [ ] Wire Android keychain equivalent (EncryptedSharedPreferences) for the stored BCeID credentials
-- [ ] CI target producing APK + MSI + DEB, and update the landing page's "Install it anywhere" section to link real downloads instead of browser-install instructions
+Deliberately left out:
 
+- [ ] No "remember me". Storing a BCeID password needs a real keystore per platform
+      (EncryptedSharedPreferences / DPAPI / libsecret); today you sign in each launch.
+      Add it when the friction is an actual complaint.
+- [ ] No monthly report submission on the Compose clients (`ReportView` on iOS) --
+      it wants the SIN/phone/PIN form and a dry-run preview.
+- [ ] Payment calendar and theme picker are iOS/macOS only.
+- [ ] Android and desktop builds are unsigned CI artifacts, not store listings.
 
 ## ASC state VERIFIED 2026-08-30
 
