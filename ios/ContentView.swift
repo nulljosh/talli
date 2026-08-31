@@ -42,25 +42,20 @@ private struct AuthenticatedTabShell: View {
             DashboardScreen()
                 .tabItem { Label("Home", systemImage: "house.fill") }
                 .tag(0)
-                .toolbar(.hidden, for: .tabBar)
             ReportView()
                 .tabItem { Label("Reports", systemImage: "list.bullet.clipboard.fill") }
                 .tag(1)
-                .toolbar(.hidden, for: .tabBar)
             BenefitsView()
                 .tabItem { Label("Benefits", systemImage: "heart.text.clipboard.fill") }
                 .tag(2)
-                .toolbar(.hidden, for: .tabBar)
             MessagesView()
                 .tabItem { Label("Messages", systemImage: "message.fill") }
                 .tag(3)
-                .toolbar(.hidden, for: .tabBar)
+                .badge(appState.unreadMessageCount)
             SettingsView()
                 .tabItem { Label("Settings", systemImage: "gearshape.fill") }
                 .tag(4)
-                .toolbar(.hidden, for: .tabBar)
         }
-        .toolbar(.hidden, for: .tabBar)
         .onChange(of: appState.selectedTabIndex) { _, newTab in
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
             // Every tab stays alive inside this TabView, so onAppear only ever
@@ -71,66 +66,6 @@ private struct AuthenticatedTabShell: View {
             }
         }
         .tint(Color.talliOrange)
-        .overlay(alignment: .bottom) {
-            TalliFloatingTabBar(selectedTab: $appState.selectedTabIndex, unreadCount: appState.unreadMessageCount)
-                .padding(.bottom, 8)
-        }
-    }
-}
-
-private struct TalliFloatingTabBar: View {
-    @Binding var selectedTab: Int
-    let unreadCount: Int
-
-    private let tabs: [(icon: String, fill: String, label: String)] = [
-        ("house", "house.fill", "Home"),
-        ("list.bullet.clipboard", "list.bullet.clipboard.fill", "Reports"),
-        ("heart.text.clipboard", "heart.text.clipboard.fill", "Benefits"),
-        ("message", "message.fill", "Messages"),
-        ("gearshape", "gearshape.fill", "Settings"),
-    ]
-
-    var body: some View {
-        HStack(spacing: 0) {
-            ForEach(tabs.indices, id: \.self) { index in
-                tabButton(index)
-            }
-        }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 10)
-        .frame(maxWidth: 360)
-        .liquidGlass(in: Capsule(), interactive: true)
-        .overlay(Capsule().stroke(Color.primary.opacity(0.08), lineWidth: 1))
-        .shadow(color: .black.opacity(0.1), radius: 12, y: 4)
-    }
-
-    private func tabButton(_ index: Int) -> some View {
-        Button {
-            selectedTab = index
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        } label: {
-            ZStack(alignment: .topTrailing) {
-                Image(systemName: selectedTab == index ? tabs[index].fill : tabs[index].icon)
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundStyle(selectedTab == index ? Color.talliOrange : Color.secondary)
-                    .symbolEffect(.bounce, value: selectedTab == index)
-                    .frame(width: 50, height: 40)
-                    .background {
-                        if selectedTab == index {
-                            Capsule().fill(Color.talliOrange.opacity(0.1))
-                        }
-                    }
-                if index == 3 && unreadCount > 0 {
-                    Circle()
-                        .fill(Color.talliOrange)
-                        .frame(width: 8, height: 8)
-                        .offset(x: -4, y: 4)
-                }
-            }
-        }
-        .frame(maxWidth: .infinity)
-        .buttonStyle(.plain)
-        .accessibilityLabel(tabs[index].label)
     }
 }
 
@@ -233,6 +168,7 @@ private struct TimelineCard: View {
                 }
             }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
     }
@@ -248,6 +184,7 @@ private struct ApplicationTimelinesCard: View {
             Divider()
             timelineSection(title: "DTC APPLICATION", steps: dtcSteps)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
     }
@@ -319,7 +256,6 @@ private struct DashboardScreen: View {
                 if appState.daysUntilPayment != nil {
                     paymentProgress
                 }
-                statsGrid
                 incomeBreakdown
                 paidToggle
                 dateCard
@@ -328,7 +264,6 @@ private struct DashboardScreen: View {
             }
             .padding()
         }
-        .safeAreaPadding(.bottom, 90)
         .refreshable { await appState.refreshDashboard() }
         .task { await appState.loadDashboardIfNeeded() }
         .onReceive(ticker) { now = $0 }
@@ -374,6 +309,9 @@ private struct DashboardScreen: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
     }
 
     /// PWD + CDB breakdown, mirroring the web dashboard's Bennies income block so
@@ -399,6 +337,9 @@ private struct DashboardScreen: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(16)
+            .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
         }
     }
 
@@ -431,30 +372,6 @@ private struct DashboardScreen: View {
             }
         }
         .frame(height: 7)
-    }
-
-    private var statsGrid: some View {
-        HStack(spacing: 12) {
-            statCell(label: "MONTHLY", value: appState.paymentAmountText)
-            statCell(label: "NEXT PAYMENT", value: appState.nextPaymentDateText)
-        }
-    }
-
-    private func statCell(label: String, value: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(label)
-                .font(.system(size: 10, weight: .semibold))
-                .tracking(1.2)
-                .foregroundStyle(.secondary)
-            Text(value)
-                .font(.system(size: 16, weight: .semibold))
-                .minimumScaleFactor(0.8)
-                .lineLimit(1)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 14)
-        .padding(.vertical, 12)
-        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
     }
 
     private var paidToggle: some View {
@@ -540,6 +457,7 @@ private struct DashboardScreen: View {
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
     }
