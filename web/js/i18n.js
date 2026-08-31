@@ -23,7 +23,10 @@
 
   function apply(root = document) {
     root.querySelectorAll("[data-i18n]").forEach((el) => {
-      el.textContent = t(el.getAttribute("data-i18n"));
+      // A missing key makes t() return the key itself; keep the inline copy rather than printing it.
+      const key = el.getAttribute("data-i18n");
+      const value = t(key);
+      if (value !== key) el.textContent = value;
     });
     root.querySelectorAll("[data-i18n-attr]").forEach((el) => {
       // format: "placeholder:key,title:key"
