@@ -296,8 +296,16 @@
       setTheme(current === 'dark' ? 'light' : 'dark', true);
     });
 
-    // Skip login if session is valid
+    // Skip login if session is valid.
+    // ponytail: if the dashboard bounced us here, do NOT auto-resume -- the
+    // server session is still valid, so redirecting back to /app is the
+    // infinite loop we came here to break.
     (async () => {
+      await null; // let the rest of this script initialise (showError, errorMsg)
+      if (sessionStorage.getItem('talliBounced')) {
+        showError('Could not open your dashboard. Please sign in again.');
+        return;
+      }
       try {
         const res = await fetch('/api/session-check');
         if (res.ok) {
@@ -355,6 +363,7 @@
         }
 
         if (res.ok && data.success) {
+          try { sessionStorage.removeItem('talliBounced'); } catch (e) {}
           successMsg.style.display = 'block';
           setTimeout(() => { window.location.href = '/app'; }, 800);
         } else {

@@ -53,6 +53,14 @@ function _talliScriptError() {
   btn.onclick = function() { location.reload(); };
   r.textContent = ''; r.appendChild(msg); r.appendChild(btn);
 }
+// ponytail: one bounce per tab. /app -> /login.html -> (session still valid) ->
+// /app is an infinite redirect loop, so anything other than a real 401 must not
+// navigate, and even a real 401 only gets one shot before we show an error.
+function _talliBounceToLogin() {
+  if (sessionStorage.getItem('talliBounced')) { _talliScriptError(); return; }
+  try { sessionStorage.setItem('talliBounced', '1'); } catch (e) {}
+  location.href = '/login.html';
+}
 </script>
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous" onerror="_talliScriptError()"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous" onerror="_talliScriptError()"></script>
@@ -1325,7 +1333,7 @@ function App() {
   const loadData = useCallback(async () => {
     try {
       const r = await fetchWithSessionRetry('/api/latest', {credentials:'include'});
-      if (r.status===401) { location.href='/login.html'; return; }
+      if (r.status===401) { _talliBounceToLogin(); return; }
       if (!r.ok) return;
       const json = await r.json();
       const sections = json.data?.sections || json.sections || {};
@@ -1380,9 +1388,11 @@ function App() {
     (async () => {
       try {
         const r = await fetchWithSessionRetry('/api/me', {credentials:'include'});
-        if (!r.ok) { location.href='/login.html'; return; }
+        if (r.status===401) { _talliBounceToLogin(); return; }
+        if (!r.ok) { _talliScriptError(); return; }
         const d = await r.json();
-        if (!d.authenticated) { location.href='/login.html'; return; }
+        if (!d.authenticated) { _talliBounceToLogin(); return; }
+        try { sessionStorage.removeItem('talliBounced'); } catch (e) {}
         setUsername(d.username);
         loadData();
         fetch('/api/paid-status',{credentials:'include'}).then(r=>r.json()).then(d=>setPaidMonths(d.paidMonths||{})).catch(()=>{});
@@ -1416,7 +1426,7 @@ function App() {
           if(p.skn) setSkn(p.skn);
           setPinSet(p.pinSet || false);
         }).catch(()=>{});
-      } catch(e) { location.href='/login.html'; }
+      } catch(e) { console.error('[talli] dashboard bootstrap failed', e); _talliScriptError(); }
     })();
     const clearPoll = visibilityInterval(loadData, 120000);
     if ('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js',{scope:'/'}).catch(console.error));
