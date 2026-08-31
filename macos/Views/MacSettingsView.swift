@@ -2,10 +2,18 @@ import SwiftUI
 
 struct MacSettingsView: View {
     @AppStorage("app_theme") private var rawTheme = "system"
+    @Environment(MacAppState.self) private var appState
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
+                Text("Account")
+                    .font(.headline)
+                AccountCard(username: appState.username) {
+                    Task { await appState.logout() }
+                }
+                .modifier(MacGlassCard())
+
                 Text("Appearance")
                     .font(.headline)
                 AppearancePicker(rawTheme: $rawTheme)
@@ -14,6 +22,26 @@ struct MacSettingsView: View {
             .padding(24)
         }
         .navigationTitle("Settings")
+    }
+}
+
+private struct AccountCard: View {
+    let username: String
+    let signOut: () -> Void
+
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Signed in as")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text(username.isEmpty ? "Unknown" : username)
+                    .font(.body.weight(.medium))
+            }
+            Spacer()
+            Button("Sign Out", action: signOut)
+                .buttonStyle(.bordered)
+        }
     }
 }
 

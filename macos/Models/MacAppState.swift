@@ -12,6 +12,7 @@ final class MacAppState {
     }
 
     var isAuthenticated = false
+    var username = ""
     var isLoading = false
     var errorMessage: String?
     var dashboard: MacDashboardData?
@@ -129,6 +130,7 @@ final class MacAppState {
             // Fast path: check if server session is still alive (no BC Self-Serve roundtrip)
             if let sessionValid = try? await MacAPIClient.shared.sessionCheck(), sessionValid {
                 isAuthenticated = true
+                self.username = credentials.username
                 try? await loadLatest()
                 Task { await refresh() }
                 Task { await refreshReportStatus() }
@@ -153,6 +155,7 @@ final class MacAppState {
                 return
             }
             isAuthenticated = true
+            self.username = username
             if store {
                 MacKeychainHelper.saveCredentials(username: username, password: password)
             }
@@ -166,6 +169,7 @@ final class MacAppState {
     func logout() async {
         try? await MacAPIClient.shared.logout()
         isAuthenticated = false
+        username = ""
         MacKeychainHelper.clearCredentials()
         clearCookies()
     }

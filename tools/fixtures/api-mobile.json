@@ -1,0 +1,24 @@
+{
+  "payment_amount": "$1,650",
+  "income": {
+    "pwdMonthly": 1450,
+    "cdbMonthly": 200,
+    "totalMonthly": 1650
+  },
+  "next_date": "2026-09-23",
+  "messages": [
+    {
+      "id": "248854731",
+      "text": "Extension Granted",
+      "timestamp": "2026-05-25",
+      "actionRequired": false
+    },
+    {
+      "id": "1822715265",
+      "text": "Reconsideration for PWD",
+      "timestamp": "2026-05-20",
+      "actionRequired": false
+    }
+  ],
+  "has_more_messages": false
+}

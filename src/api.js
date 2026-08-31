@@ -11,6 +11,7 @@ const blob = require('./_blob');
 const scraper = () => require('./scraper');
 const { createCorsOptionsDelegate, parseAllowedOrigins } = require('./cors-utils');
 const { parseCookies, unsealAuthPayload, setAuthCookie, clearAuthCookie } = require('./auth-cookie');
+const { normalizeReadIds } = require('./read-ids');
 const { attemptHttpLogin, fetchAllSections } = require('./http-scraper');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { nextPaymentDate } = require('./pay-dates');
@@ -1744,7 +1745,7 @@ app.get('/api/read-messages', requireAuth, async (req, res) => {
     const userId = req.session?.userId;
     const sessionData = req.session.readMessages;
     if (sessionData) return res.json(sessionData);
-    const data = await loadUserBlob(userId, 'read-messages', { readIds: [] });
+    const data = normalizeReadIds(await loadUserBlob(userId, 'read-messages', { readIds: [] }));
     req.session.readMessages = data;
     res.json(data);
   } catch (err) {
@@ -1761,7 +1762,7 @@ app.post('/api/read-messages', requireAuth, async (req, res) => {
     }
     const userId = req.session?.userId;
     const existing = await loadUserBlob(userId, 'read-messages', { readIds: [] });
-    const merged = Array.from(new Set([...(existing.readIds || []), ...readIds]));
+    const merged = normalizeReadIds({ readIds: [...(existing.readIds || []), ...readIds] }).readIds;
     const data = { readIds: merged, updatedAt: new Date().toISOString() };
     req.session.readMessages = data;
     await saveUserBlob(userId, 'read-messages', data);
@@ -2053,11 +2054,14 @@ function extractMobileData(scraperResult, income = null) {
     raw.match(/(\$\d{1,3}(?:,\d{3})+(?:\.\d{2})?)/);
   const paymentAmount = amountMatch ? amountMatch[1] : null;
 
-  // Fallback: if the regex fails, show what this person actually receives rather
-  // than a hardcoded guess. The old '~$1,000/mo' default was a literal invention
-  // and is what the native apps displayed whenever the scrape shape changed.
-  const fallbackAmount = income
-    ? `~$${income.totalMonthly.toLocaleString('en-CA')}/mo`
+  // My Self Serve's Payment Info line only ever shows the provincial PWD half, so
+  // the scraped figure silently drops the federal CDB -- that is why the web
+  // stopped trusting it and derives its own total. deriveIncome() has both
+  // halves, so it wins whenever it is available and the scrape is the fallback.
+  // Without this the native dashboards showed $1060 while their own Benefits tab
+  // said $1,650, off by exactly the CDB.
+  const derivedAmount = income
+    ? `$${income.totalMonthly.toLocaleString('en-CA')}`
     : null;
 
   const nextDate = nextPaymentDate(new Date(), () => log('[PAYDATE] Cheque issue schedule exhausted -- add the next year from gov.bc.ca'));
@@ -2070,7 +2074,7 @@ function extractMobileData(scraperResult, income = null) {
   const messages = parseMessages(messagesAllText);
 
   return {
-    payment_amount: paymentAmount || fallbackAmount,
+    payment_amount: derivedAmount || paymentAmount,
     income,
     next_date: nextDate,
     messages,

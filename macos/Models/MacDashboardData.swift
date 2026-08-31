@@ -51,11 +51,16 @@ struct MacDashboardData: Codable, Sendable {
             statusMessages = stringMessages.map { StatusMessage(text: $0) }
         } else if let objectMessages = try? container.decode([MacMessageObject].self, forKey: .statusMessages) {
             statusMessages = objectMessages.map { msg in
-                let text = [msg.subject, msg.body].compactMap { $0 }.joined(separator: " - ")
+                // The server sends {id, text, timestamp}; subject/body is the
+                // older shape. Without `text` every message decoded to an empty
+                // string and the filter below silently dropped all of them --
+                // which is why macOS showed "No messages" against a live feed.
+                let text = msg.text
+                    ?? [msg.subject, msg.body].compactMap { $0 }.joined(separator: " - ")
                 return StatusMessage(
                     id: msg.id ?? UUID().uuidString,
                     text: text,
-                    timestamp: msg.date
+                    timestamp: msg.timestamp ?? msg.date
                 )
             }.filter { !$0.text.isEmpty }
         } else {
@@ -66,6 +71,8 @@ struct MacDashboardData: Codable, Sendable {
 
 private struct MacMessageObject: Codable {
     let id: String?
+    let text: String?
+    let timestamp: String?
     let subject: String?
     let body: String?
     let date: String?

@@ -1135,7 +1135,7 @@ function MessagesTab({dark, messages, readIds, onRead, onRefresh}) {
     if (!readIds[id]) {
       onRead([id]);
       const allRead = {...readIds, [id]: true};
-      const ids = Object.keys(allRead).filter(k => allRead[k]).map(Number);
+      const ids = Object.keys(allRead).filter(k => allRead[k]).map(String);
       fetch('/api/read-messages', {method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({readIds: ids})}).catch(()=>{});
     }
   };

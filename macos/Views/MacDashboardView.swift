@@ -46,7 +46,7 @@ struct MacDashboardView: View {
                 .kerning(0.5)
 
             Text(appState.paymentAmountText)
-                .font(.system(size: 48, weight: .bold, design: .rounded))
+                .font(.system(size: 48, weight: .bold))
                 .foregroundStyle(Color.bcPrimary)
                 .contentTransition(.numericText())
 
@@ -82,7 +82,7 @@ struct MacDashboardView: View {
     private var countdownCard: some View {
         VStack(spacing: 8) {
             Text("\(appState.daysUntilPayment)")
-                .font(.system(size: 52, weight: .bold, design: .rounded))
+                .font(.system(size: 52, weight: .bold))
                 .foregroundStyle(Color.bcPrimary)
             Text("days until payment")
                 .font(.caption)

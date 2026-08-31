@@ -43,7 +43,6 @@ struct MacBenefitsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 incomeCard
-                philosophyCard
                 callToAction
 
                 // Automatic benefits
@@ -105,13 +104,6 @@ struct MacBenefitsView: View {
             .padding(24)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-    }
-
-    private var philosophyCard: some View {
-        Text("Everything below is money allocated for you. Not charity. Not a handout. Collecting it is rational.")
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
-            .macGlassCard()
     }
 
     private var callToAction: some View {
