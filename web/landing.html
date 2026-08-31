@@ -94,6 +94,35 @@
     }
 
     /* ── Hero ──────────────────────────────────────────── */
+    /* a slow-drifting wall of the numbers the app actually shows */
+    .hero-band { position: relative; isolation: isolate; overflow: hidden; }
+    .hero-band > .hero-row { position: relative; z-index: 2; }
+    .hero-wall {
+      position: absolute; inset: -10%; z-index: 0;
+      display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 10px;
+      opacity: 0.5; pointer-events: none; user-select: none;
+    }
+    .wall-col { display: flex; min-width: 0; flex-direction: column; gap: 10px; }
+    .wall-col span {
+      display: block; padding: 0.5rem 0.7rem; background: var(--bg2, var(--bg));
+      border: 1px solid var(--border); border-radius: 10px;
+      font-size: 0.8rem; color: var(--text-secondary);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .wall-col.up   { animation: wall-up   var(--dur) linear infinite; }
+    .wall-col.down { animation: wall-down var(--dur) linear infinite; }
+    @keyframes wall-up   { from { transform: translateY(0); }    to { transform: translateY(-50%); } }
+    @keyframes wall-down { from { transform: translateY(-50%); } to { transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { .wall-col { animation: none; } }
+    /* scrim: keeps the headline and the card readable in either theme */
+    .hero-band::after {
+      content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 65% at 40% 45%, var(--bg) 25%, transparent 85%),
+        linear-gradient(var(--bg), transparent 25%, transparent 60%, var(--bg) 97%),
+        color-mix(in srgb, var(--bg) 55%, transparent);
+    }
+
     .hero-row { display: grid; gap: clamp(2rem, 5vw, 4rem); align-items: center; }
     @media (min-width: 900px) { .hero-row { grid-template-columns: 1fr 0.8fr; } .hero-row .hero { padding-bottom: clamp(4rem, 10vw, 7rem); } .hero-row .preview-wrap { margin-bottom: 0; } }
     .hero {
@@ -382,6 +411,8 @@
 
   <div class="page">
 
+    <div class="hero-band">
+    <div class="hero-wall" id="heroWall" aria-hidden="true"></div>
     <div class="hero-row">
     <!-- Hero -->
     <section class="hero fade-up">
@@ -438,6 +469,7 @@
           </div>
         </div>
       </div>
+    </div>
     </div>
     </div>
 
@@ -587,6 +619,40 @@
         setTheme(e.matches ? 'dark' : 'light', true, false);
       }
     });
+
+    // Hero wallpaper: the kind of lines the dashboard shows, drifting slowly.
+    (function () {
+      const lines = [
+        'Payment posted  $1,650', 'Next payment  Sep 23', 'Reporting window  Sep 1-5',
+        'Monthly report  filed', 'PWD status  in review', 'Message from Ministry',
+        'YTD received  $4,950', 'Disability assistance  $1,483', 'Transportation  $52',
+        'Canada Disability Benefit', 'RDSP grant  matched', 'DTC certificate  approved',
+        'Aug 20  $1,650', 'Jul 17  $1,650', 'Jun 18  $1,650', 'May 21  $1,650',
+        'Streak  5 months on time', 'Shelter allowance  $500', 'Support allowance  $983',
+        'Earnings exemption  $1,200', 'Report due in 4 days', 'Bus pass  active',
+        'Medical coverage  active', 'Nutritional supplement', 'Crisis supplement  none',
+        'Balance owing  $0', 'T2201 submitted', 'Direct deposit  verified'
+      ];
+      for (let i = lines.length - 1; i > 0; i--) {  // shuffle so the wall differs each visit
+        const j = Math.floor(Math.random() * (i + 1));
+        [lines[i], lines[j]] = [lines[j], lines[i]];
+      }
+      const wall = document.getElementById('heroWall');
+      const cols = Math.max(3, Math.min(7, Math.ceil(window.innerWidth / 220)));
+      const per = Math.max(4, Math.floor(lines.length / cols));
+      for (let c = 0; c < cols; c++) {
+        const col = document.createElement('div');
+        col.className = 'wall-col ' + (c % 2 ? 'down' : 'up');
+        col.style.setProperty('--dur', (70 + c * 11) + 's');
+        const slice = lines.slice(c * per, (c + 1) * per);
+        slice.concat(slice).forEach(text => {  // doubled, so the loop is seamless
+          const el = document.createElement('span');
+          el.textContent = text;
+          col.appendChild(el);
+        });
+        wall.appendChild(col);
+      }
+    })();
 
     // FadeUp observer
     const observer = new IntersectionObserver((entries) => {
