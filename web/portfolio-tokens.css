@@ -27,11 +27,22 @@
 
   /* semantic, not part of the canonical palette */
   --error: #d94f3d;
+
+  /* Talli's brand accent is blue and has been since v3.5.3 -- the icon, the app
+     UI and the App Store assets are all #5B9BD5. The canonical system's accent
+     is the Jaybulb yellow, which shipped a yellow landing page sitting under a
+     blue logo. This is a deliberate per-app override of a canonical colour (the
+     same escape hatch charwork uses for its terracotta), NOT accidental drift.
+     --bulb-deep is the accent-as-text variant; blue needs a darker one on white
+     than it does on black, so it is set per theme below. */
+  --accent: #5B9BD5;
+  --bulb-deep: #2C6BA8;
 }
 
 [data-theme="dark"] {
   --error: #f87171;
+  --bulb-deep: #7FB6E3;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --error: #f87171; }
+  :root:not([data-theme="light"]) { --error: #f87171; --bulb-deep: #7FB6E3; }
 }

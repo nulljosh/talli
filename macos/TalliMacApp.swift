@@ -3,7 +3,7 @@ import SwiftUI
 @main
 struct TalliMacApp: App {
     @State private var appState = MacAppState()
-    @AppStorage("app_theme") private var rawTheme = "dark"
+    @AppStorage("app_theme") private var rawTheme = "system"
 
     var body: some Scene {
         WindowGroup {

@@ -1,5 +1,36 @@
 # Talli Roadmap
 
+## Landing page
+
+- [ ] Light-mode macOS screenshot. The iOS shots ship light + dark and follow the
+      page theme; the Mac one is dark-only because the app's appearance can only
+      be changed through its own Settings picker. `defaults write` (both the plain
+      and the sandbox-container domain) and `open --args -app_theme light` were
+      all ignored, so capturing light needs either UI automation on the picker or
+      flipping the system appearance.
+- [x] macOS app forced dark regardless of the Settings picker: `TalliMacApp`
+      defaulted the shared `app_theme` key to "dark" while `MacSettingsView`
+      defaulted it to "system", so the picker highlighted System while the app
+      hard-set .dark. Fixed 2026-08-31.
+
+## Full cross-platform (real binaries, not the PWA)
+
+Talli today is native on iOS and macOS, a web app, and an *installable web app*
+on Windows, Linux and Android. That last part is a PWA, not a binary -- there is
+no `kmp/` in this repo, so there is no APK, no MSI and no DEB.
+
+nimble is the template: `nimble/kmp/composeApp/build.gradle.kts` declares
+`androidTarget()` + `jvm("desktop")` and emits Msi, Deb and Dmg. homeward has the
+same treatment. Porting Talli means a second UI codebase in Compose for the
+dashboard, benefits, messages and settings screens, reusing the existing
+`/api/mobile` contract (which is already the one both Swift clients consume).
+
+- [ ] Add `kmp/` Compose Multiplatform module, modelled on `nimble/kmp`
+- [ ] Port the four screens; the API layer is a straight translation of `ios/API/APIClient.swift`
+- [ ] Wire Android keychain equivalent (EncryptedSharedPreferences) for the stored BCeID credentials
+- [ ] CI target producing APK + MSI + DEB, and update the landing page's "Install it anywhere" section to link real downloads instead of browser-install instructions
+
+
 ## ASC state VERIFIED 2026-08-30
 
 **iOS 3.5.13 is LIVE** (`READY_FOR_SALE`), macOS 3.5.6 LIVE. The 4.3(a) rejection was

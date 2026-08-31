@@ -8,7 +8,7 @@ v3.5.12 (iOS, live) · v3.5.6 (macOS, live) — Personal finance tracker.
 - Runs on Cloudflare Workers as of 2026-08-28 (`wrangler.jsonc`, `worker/index.mjs`). Deploy with `npm run deploy` — **a git push deploys nothing**; the Vercel GitHub Action was removed with `vercel.json`.
 - `src/_blob.js` is the storage layer (Workers KV), not `@vercel/blob`. `web/` is served by the assets binding; only `/` is `run_worker_first`.
 - Jaybulb design system: `web/portfolio-tokens.css` @imports the canonical https://heyitsmejosh.com/tokens.css and adds ONLY an alias layer for names canonical lacks. Never re-declare a colour the system owns in a page's own `:root` -- that shadows the system and is the drift bug fixed 2026-08-28.
-- Accent comes from the system (currently bulb #ffca30), not from this file. Text on the accent must be #000; accent-as-text uses `--bulb-deep` (the accessible yellow), never raw `--accent`.
+- Accent is Talli blue #5B9BD5, set in `web/portfolio-tokens.css` as a deliberate per-app override of the canonical yellow (the logo and the whole app UI are blue). Text on the accent stays #000; accent-as-text uses `--bulb-deep`, which is a darker blue on light and a lighter blue on dark.
 - Fonts: system SF Pro / Helvetica stack (`-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica`) — no webfonts. Backgrounds pure white (#ffffff), matching other projects.
 - 430px max-width shell centered on desktop
 - 640px max-width, single-column, text-first

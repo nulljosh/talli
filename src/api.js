@@ -496,7 +496,11 @@ app.use((req, res, next) => {
 // compiles its JSX in the browser with @babel/standalone -- without it the whole
 // dashboard silently fails to boot, which is prod-only because this header is
 // only set when IS_PRODUCTION.
-const CSP_HEADER = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https://myselfserve.gov.bc.ca; frame-ancestors 'none'; object-src 'none'; base-uri 'self'";
+// style-src must allow heyitsmejosh.com: portfolio-tokens.css @imports the
+// canonical tokens.css from there, and blocking it takes the whole design system
+// with it -- serif fallback, no colours, and a dark-mode toggle that does nothing
+// because [data-theme="dark"] never defines a single variable.
+const CSP_HEADER = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://heyitsmejosh.com; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https://myselfserve.gov.bc.ca; frame-ancestors 'none'; object-src 'none'; base-uri 'self'";
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');

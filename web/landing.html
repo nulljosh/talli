@@ -319,6 +319,15 @@
     }
     footer a:hover { opacity: 0.5; }
 
+    .shot { width: 180px; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+    .shot-mac { width: min(100%, 720px); border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+    .shot-dark { display: none; }
+    [data-theme="dark"] .shot-light { display: none; }
+    [data-theme="dark"] .shot-dark { display: block; }
+
+    .wordmark { display: inline-flex; align-items: center; gap: 8px; }
+    .wordmark img { border-radius: 5px; display: block; }
+
     :focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
   </style>
 </head>
@@ -327,7 +336,7 @@
   <!-- Nav -->
   <nav>
     <div class="inner">
-      <a href="/" class="wordmark">talli<span>.</span></a>
+      <a href="/" class="wordmark"><img src="/icon.svg" alt="" width="22" height="22">talli<span>.</span></a>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
         <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="5"/>
@@ -357,9 +366,9 @@
     <div class="preview-wrap fade-up">
       <div class="app-card">
         <div class="card-label">Next Payment</div>
-        <div class="card-amount">$1,060</div>
-        <div class="card-days">in 22 days</div>
-        <div class="card-date">Wed, May 27</div>
+        <div class="card-amount">$1,650</div>
+        <div class="card-days">in 23 days</div>
+        <div class="card-date">Wed, Sep 23</div>
 
         <div class="progress-track"><div class="progress-fill"></div></div>
         <div class="streak-badge">&#9733; 5 months on time</div>
@@ -367,11 +376,11 @@
         <div class="stat-grid">
           <div class="stat-cell">
             <div class="stat-label">YTD Received</div>
-            <div class="stat-value">$3,180</div>
+            <div class="stat-value">$4,950</div>
           </div>
           <div class="stat-cell">
             <div class="stat-label">Monthly Amount</div>
-            <div class="stat-value">$1,060</div>
+            <div class="stat-value">$1,650</div>
           </div>
         </div>
 
@@ -406,13 +415,19 @@
 
     <!-- Screenshots -->
     <section class="screenshots fade-up" style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin:48px 0;">
-      <img src="/screenshots/01-home.png" alt="Talli Home tab" style="width:180px;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,0.2);">
-      <img src="/screenshots/02-reports.png" alt="Talli Reports tab" style="width:180px;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,0.2);">
-      <img src="/screenshots/03-benefits.png" alt="Talli Benefits tab" style="width:180px;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,0.2);">
+      <img class="shot shot-light" src="/screenshots/01-home.png" alt="Talli Home tab">
+      <img class="shot shot-dark" src="/screenshots/01-home-dark.png" alt="Talli Home tab">
+      <img class="shot shot-light" src="/screenshots/02-reports.png" alt="Talli Reports tab">
+      <img class="shot shot-dark" src="/screenshots/02-reports-dark.png" alt="Talli Reports tab">
+      <img class="shot shot-light" src="/screenshots/03-benefits.png" alt="Talli Benefits tab">
+      <img class="shot shot-dark" src="/screenshots/03-benefits-dark.png" alt="Talli Benefits tab">
     </section>
 
     <section class="screenshots fade-up" style="display:flex;justify-content:center;margin:48px 0;">
-      <img src="/screenshots/mac-dashboard.png" alt="Talli on macOS" style="width:min(100%,720px);border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,0.2);">
+      <!-- One shot, both themes: the Mac app's appearance cannot be driven
+           headlessly (its picker is the only way in), so a "light" capture would
+           just be the dark one renamed. See roadmap. -->
+      <img class="shot-mac" src="/screenshots/mac-dashboard-dark.png" alt="Talli on macOS">
     </section>
 
     <!-- Features -->
@@ -513,18 +528,18 @@
       return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     };
 
-    const setTheme = (theme, animate) => {
+    const setTheme = (theme, animate, persist = true) => {
       const apply = () => {
         if (theme === 'dark') {
           document.documentElement.setAttribute('data-theme', 'dark');
           sunIcon.style.display = 'none';
           moonIcon.style.display = 'block';
         } else {
-          document.documentElement.removeAttribute('data-theme');
+          document.documentElement.setAttribute('data-theme', 'light');
           sunIcon.style.display = 'block';
           moonIcon.style.display = 'none';
         }
-        localStorage.setItem('theme', theme);
+        if (persist) localStorage.setItem('theme', theme);
       };
 
       if (animate && document.startViewTransition) {
@@ -534,16 +549,16 @@
       }
     };
 
-    setTheme(getPreferredTheme(), false);
+    setTheme(getPreferredTheme(), false, false);
 
     themeToggle.addEventListener('click', () => {
-      const current = document.documentElement.hasAttribute('data-theme') ? 'dark' : 'light';
+      const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
       setTheme(current === 'dark' ? 'light' : 'dark', true);
     });
 
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
       if (!localStorage.getItem('theme')) {
-        setTheme(e.matches ? 'dark' : 'light', true);
+        setTheme(e.matches ? 'dark' : 'light', true, false);
       }
     });
 

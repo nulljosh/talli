@@ -891,18 +891,18 @@
       if (saved) return saved;
       return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     };
-    const setTheme = (theme, animate) => {
+    const setTheme = (theme, animate, persist = true) => {
       const apply = () => {
         if (theme === 'dark') {
           document.documentElement.setAttribute('data-theme', 'dark');
           sunIcon.style.display = 'none';
           moonIcon.style.display = 'block';
         } else {
-          document.documentElement.removeAttribute('data-theme');
+          document.documentElement.setAttribute('data-theme', 'light');
           sunIcon.style.display = 'block';
           moonIcon.style.display = 'none';
         }
-        localStorage.setItem('theme', theme);
+        if (persist) localStorage.setItem('theme', theme);
       };
       if (animate && document.startViewTransition) {
         document.startViewTransition(apply);
@@ -910,9 +910,9 @@
         apply();
       }
     };
-    setTheme(getPreferredTheme(), false);
+    setTheme(getPreferredTheme(), false, false);
     themeToggle.addEventListener('click', () => {
-      const current = document.documentElement.hasAttribute('data-theme') ? 'dark' : 'light';
+      const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
       setTheme(current === 'dark' ? 'light' : 'dark', true);
     });
 
