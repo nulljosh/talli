@@ -126,7 +126,7 @@
     }
     input[type="text"]:focus,
     input[type="password"]:focus {
-      border-color: var(--accent);
+      border-color: var(--link, var(--accent));
     }
     input::placeholder { color: var(--text-tertiary); }
 
@@ -139,7 +139,7 @@
     .checkbox-row input[type="checkbox"] {
       width: 16px;
       height: 16px;
-      accent-color: var(--accent);
+      accent-color: var(--link, var(--accent));
       cursor: pointer;
     }
     .checkbox-row label {
