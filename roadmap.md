@@ -2,12 +2,12 @@
 
 ## Landing page
 
-- [ ] Light-mode macOS screenshot. The iOS shots ship light + dark and follow the
-      page theme; the Mac one is dark-only because the app's appearance can only
-      be changed through its own Settings picker. `defaults write` (both the plain
-      and the sandbox-container domain) and `open --args -app_theme light` were
-      all ignored, so capturing light needs either UI automation on the picker or
-      flipping the system appearance.
+- [x] Light-mode macOS screenshot captured 2026-08-31. Note for next time:
+      `defaults write` (plain domain, sandbox-container domain, with and without a
+      cfprefsd flush) and `open --args -app_theme light` are ALL ignored by the
+      app's @AppStorage read -- the only reliable way to capture a themed macOS
+      shot is a throwaway build with `.preferredColorScheme` hardcoded. The
+      in-app picker itself is fine; it writes through the same binding in-process.
 - [x] macOS app forced dark regardless of the Settings picker: `TalliMacApp`
       defaulted the shared `app_theme` key to "dark" while `MacSettingsView`
       defaulted it to "system", so the picker highlighted System while the app
