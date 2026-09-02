@@ -2,10 +2,11 @@
 
 **v3.5.12 iOS / 3.5.6 macOS** | August 2026
 
-Talli is a benefits dashboard for BC disability assistance. It scrapes BC
-Self-Serve, tracks income and payment dates, monitors PWD/DTC application
-status, and surfaces government messages — the data the Ministry makes you dig
-for, in one glance. Live at
+When does the money come, and how much?
+
+Talli answers that for people on BC disability assistance. It reads BC Self-Serve,
+tracks income and payment dates, follows PWD and DTC applications, and shows
+government messages. Everything the Ministry makes you dig for, in one glance. Live at
 [talli.heyitsmejosh.com](https://talli.heyitsmejosh.com), with an iOS companion
 app and a watchOS complication.
 
@@ -19,13 +20,13 @@ plaintext; the SIN is masked everywhere it renders.
 
 On top of the scrape:
 
-- **Payment countdown** — next payment date with an "in X days" hero and an
+- **Payment countdown**: next payment date with an "in X days" hero and an
   earning-rate figure (payment ÷ hours remaining).
-- **Report window detection** — the monthly report filing banner auto-shows
+- **Report window detection**: the monthly report filing banner auto-shows
   days 1–5 of each month; reports submit with a stored PIN.
-- **Application timelines** — PWD and DTC trackers with submission history,
+- **Application timelines**: PWD and DTC trackers with submission history,
   including hardcoded Ministry deadline overrides when extensions are granted.
-- **Message sync** — read state loads on mount and persists on tap
+- **Message sync**: read state loads on mount and persists on tap
   (Vercel Blob), so web and iOS agree on what's been seen.
 
 ## Architecture
@@ -33,7 +34,7 @@ On top of the scrape:
 - **Frontend**: vanilla HTML/CSS/JS, no build step. `web/unified.html` is the
   authed dashboard; `web/landing.html` and `web/benefits.html` are public.
   430px centered shell, PWA with offline mode, dark mode auto-detect.
-- **API**: Express (`src/api.js`) on Vercel serverless — auth, session
+- **API**: Express (`src/api.js`) on Vercel serverless, auth, session
   handling, scrape orchestration.
 - **Persistence**: Vercel Blob for paid/report status and message read state.
 - **Polling**: all API polling goes through a `visibilityInterval()` helper
@@ -59,5 +60,5 @@ pixel-art avatar generated with Core Graphics) and ships via
 
 - Scraper credentials encrypted per session; nothing written to disk in clear.
 - SIN masked in all UI surfaces.
-- No ads, no analytics, no third-party trackers — the only external calls are
+- No ads, no analytics, no third-party trackers, the only external calls are
   to BC Self-Serve itself.

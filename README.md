@@ -85,10 +85,10 @@ MIT 2026 Joshua Trommel
 ### App Store submission (free, keep BC Self-Serve auto-login)
 Talli is free. The people who use it are on income assistance. Never paywall it. It's the flagship, not a revenue line.
 - [ ] Fix Xcode Cloud workflow: still points at old `Tally.xcodeproj`, needs repoint to `Talli.xcodeproj` in Manage Workflows
-- [ ] Mac TestFlight: `fastlane mac_beta` lane added 2026-06-21, archive builds clean, but upload fails — no macOS app record exists yet in App Store Connect for `com.heyitsmejosh.tally.mac`. Create the app record (one-time, manual) then re-run `fastlane mac_beta` in `macos/fastlane`.
+- [ ] Mac TestFlight: `fastlane mac_beta` lane added 2026-06-21, archive builds clean, but upload fails, no macOS app record exists yet in App Store Connect for `com.heyitsmejosh.tally.mac`. Create the app record (one-time, manual) then re-run `fastlane mac_beta` in `macos/fastlane`.
 
 ### macOS companion
-- [ ] **App icon still shows generic placeholder** in the Dock — stale LaunchServices/Dock icon cache. Fix: clean rebuild, then `killall Dock` and/or `qlmanage -r cache`.
+- [ ] **App icon still shows generic placeholder** in the Dock, stale LaunchServices/Dock icon cache. Fix: clean rebuild, then `killall Dock` and/or `qlmanage -r cache`.
 - [x] macOS screenshot captured (`macos/screenshots/dashboard.png`, 2026-08-31).
 
 ## Whitepaper
