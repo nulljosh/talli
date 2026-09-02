@@ -555,7 +555,7 @@ app.post('/api/login', loginLimiter, async (req, res) => {
   if (password) password = password.trim();
 
   // Local-only convenience: allow empty login to use .env credentials
-  if ((!username || !password) && !process.env.VERCEL) {
+  if ((!username || !password) && !IS_PRODUCTION) {
     username = process.env.BCEID_USERNAME;
     password = process.env.BCEID_PASSWORD;
     usedLocalEnvFallback = !!(username && password);
@@ -569,7 +569,7 @@ app.post('/api/login', loginLimiter, async (req, res) => {
   }
 
   try {
-    if (!process.env.VERCEL && !usedLocalEnvFallback) {
+    if (!IS_PRODUCTION && !usedLocalEnvFallback) {
       // Local dev: if creds match .env, skip live validation
       const envUser = process.env.BCEID_USERNAME;
       const envPass = process.env.BCEID_PASSWORD;
@@ -587,7 +587,7 @@ app.post('/api/login', loginLimiter, async (req, res) => {
           });
         }
       }
-    } else if (!process.env.VERCEL && usedLocalEnvFallback) {
+    } else if (!IS_PRODUCTION && usedLocalEnvFallback) {
       log('[LOGIN] Local: Using .env credentials fallback (no live validation)');
     } else {
       log('[LOGIN] Vercel: Validating credentials with BC Self-Serve...');
@@ -806,7 +806,7 @@ app.get('/api/info', requireAuth, async (req, res) => {
     const userId = req.session?.userId;
     let data = null;
 
-    if (process.env.VERCEL) {
+    if (IS_PRODUCTION) {
       if (!userId) return res.status(401).json({ error: 'Missing user session' });
       const stored = await loadUserBlob(userId, 'results', null);
       if (stored) data = stored.data || stored;
@@ -897,7 +897,7 @@ app.get('/', async (req, res) => {
   }
 
   // Local dev: auto-authenticate with .env credentials (skip browser validation)
-  if (!process.env.VERCEL) {
+  if (!IS_PRODUCTION) {
     const username = process.env.BCEID_USERNAME;
     const password = process.env.BCEID_PASSWORD;
     if (username && password) {
@@ -927,8 +927,9 @@ app.get('/', async (req, res) => {
   return serveAsset(res, '/landing.html');
 });
 
-// Serve dashboard (require login)
-app.get('/app', async (req, res) => {
+// Serve dashboard (require login). /unified and /unified.html are listed in
+// run_worker_first so the assets binding cannot hand the shell out unauthenticated.
+app.get(['/app', '/unified', '/unified.html'], async (req, res) => {
   if (!req.session || !req.session.authenticated) {
     return res.redirect('/login.html');
   }
@@ -1926,7 +1927,7 @@ app.post('/api/submit-report', scrapeLimiter, requireAuth, async (req, res) => {
     if (req.session && req.session.authenticated) {
       username = req.session.bceidUsername;
       password = decrypt(req.session.bceidPassword);
-    } else if (!process.env.VERCEL) {
+    } else if (!IS_PRODUCTION) {
       username = process.env.BCEID_USERNAME;
       password = process.env.BCEID_PASSWORD;
     }
@@ -1975,7 +1976,7 @@ app.get('/api/check', scrapeLimiter, requireAuth, async (req, res) => {
     let username;
     let password;
 
-    if (process.env.VERCEL) {
+    if (IS_PRODUCTION) {
       // Production: only use credentials supplied at login and stored in session.
       if (!req.session || !req.session.authenticated) {
         return res.status(401).json({ error: 'Not authenticated. Please login first.' });
@@ -2015,7 +2016,7 @@ app.get('/api/check', scrapeLimiter, requireAuth, async (req, res) => {
       });
     }
 
-    if (process.env.VERCEL && req.session?.userId && result && result.success) {
+    if (IS_PRODUCTION && req.session?.userId && result && result.success) {
       try {
         await saveUserBlob(req.session.userId, 'results', lastCheckResult);
         log('[API] Saved scrape result to Blob');
