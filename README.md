@@ -24,29 +24,31 @@ Live at [talli.heyitsmejosh.com](https://talli.heyitsmejosh.com) · [App Store](
   <img src="watchos/fastlane/screenshots/watch/1-main.png" width="120">
 </p>
 
-BC Self-Serve scraper and benefits dashboard. Tracks income, payment dates, PWD application status, and government messages.
+When does the money come, and how much? Talli answers that for people on BC income assistance.
+
+It reads BC Self-Serve for you and shows income, payment dates, PWD application status and government messages in one place. Free, always.
 
 ## Features
 
-- BC Self-Serve scraper with session-encrypted credentials
-- 4-tab dashboard: Home, Calendar, Status, Messages
-- Income tracking with payment countdown, "in X days" hero, and earning rate (payment ÷ hrs remaining)
-- Bar chart of recent payments + YTD stats
-- PWD and DTC application timeline trackers with report submission history
-- Calendar view with upcoming payment schedule
-- Messages with server-synced read state (load on mount, persist on tap)
-- Account info panel (BCeID, SIN masked, program)
-- Monthly report filing window banner (auto-shows days 1–5 of each month)
-- Monthly report submission with stored PIN
-- Persistent paid/report status (Vercel Blob)
-- Multilingual (en, fr, zh, pa): one master string source generates both the web i18next bundle and the Xcode String Catalog, plus `Intl` CAD currency/date formatting. Benefit strings flagged for human/DeepL review.
-- Dark mode auto-detect
-- PWA with offline mode
-- iOS companion app (parchment palette, orange accent, pixel-art avatar, top-right settings shortcut)
+- Reads BC Self-Serve. Credentials are encrypted per session
+- Four tabs: Home, Calendar, Status, Messages
+- A countdown to the next payment, and what you're earning per hour until it lands
+- Recent payments as a bar chart, plus year to date
+- PWD and DTC application timelines, with report history
+- A calendar of what's coming
+- Messages, with read state synced to the server
+- Account panel: BCeID, program, SIN masked
+- A filing-window banner on days 1 to 5 of each month
+- File the monthly report with a stored PIN
+- Paid and report status that survives reloads (Vercel Blob)
+- English, French, Chinese, Punjabi. One string source feeds the web i18next bundle and the Xcode String Catalog, with `Intl` for CAD and dates. Benefit strings are flagged for human or DeepL review
+- Dark mode follows the system
+- Installs as a PWA, works offline
+- An iOS app: parchment palette, orange accent, pixel-art avatar, settings top right
 
 ## Design
 
-DM Sans (body) + Fraunces (headings), portfolio palette (`#ffffff` light / `#1a1a1a` dark), blue (`#5B9BD5`) accent. 430px centered shell on desktop. iOS matches web: solid cards, blue accents, node-graph avatar generated with Core Graphics.
+DM Sans for body, Fraunces for headings. The portfolio palette: `#ffffff` light, `#1a1a1a` dark, blue `#5B9BD5` accent. A 430px shell centered on desktop. iOS matches: solid cards, blue accents, a node-graph avatar drawn with Core Graphics.
 
 ## Run
 
@@ -56,7 +58,7 @@ npm install && npm start
 
 Open http://localhost:3000. Copy `.env.example` to `.env`.
 
-Deploy: push to `main` — GitHub Actions auto-deploys to Vercel prod on every push (see `.github/workflows/deploy.yml`).
+Deploy: push to `main`. GitHub Actions ships it on every push (`.github/workflows/deploy.yml`).
 
 ## License
 
@@ -81,7 +83,7 @@ MIT 2026 Joshua Trommel
 - [ ] Rework the increasing-payment-per-hour model: pay is a monthly lump sum, so either remove the increasing-accrual visual or redesign it to read as a steady rate paid out monthly
 
 ### App Store submission (free, keep BC Self-Serve auto-login)
-Talli ships FREE — audience is income-assistance recipients, never paywall it. It's the proof-of-competence flagship, not a revenue line.
+Talli is free. The people who use it are on income assistance. Never paywall it. It's the flagship, not a revenue line.
 - [ ] Fix Xcode Cloud workflow: still points at old `Tally.xcodeproj`, needs repoint to `Talli.xcodeproj` in Manage Workflows
 - [ ] Mac TestFlight: `fastlane mac_beta` lane added 2026-06-21, archive builds clean, but upload fails — no macOS app record exists yet in App Store Connect for `com.heyitsmejosh.tally.mac`. Create the app record (one-time, manual) then re-run `fastlane mac_beta` in `macos/fastlane`.
 
@@ -95,13 +97,12 @@ Talli ships FREE — audience is income-assistance recipients, never paywall it.
 
 ## API and agent tools
 
-[`docs/API.md`](docs/API.md) documents the full HTTP surface and the WebMCP tools
-Talli registers on `document.modelContext`, so an in-browser agent can read
-benefit status and payments and, with confirmation, file the monthly report.
+[`docs/API.md`](docs/API.md) lists the HTTP surface and the WebMCP tools Talli registers
+on `document.modelContext`. An agent can read benefit status and payments and, with your
+say-so, file the monthly report.
 
-Credentials never pass through a tool call: no tool sets the security PIN, and
-`submit_monthly_report` takes no SIN, phone or PIN argument. `tools/test-webmcp.js`
-enforces both and runs first in `npm test`.
+Credentials never pass through a tool. No tool sets the PIN. `submit_monthly_report` takes
+no SIN, phone or PIN. `tools/test-webmcp.js` enforces both and runs first in `npm test`.
 
 ## Architecture
 
