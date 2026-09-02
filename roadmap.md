@@ -45,9 +45,6 @@ Source note: "messages regex still a mess / And it's not really updating accurat
 Four root causes found and fixed (see Status 2026-07-28 below); these are the leftovers.
 
 ## Open
-- [x] (fixed 2026-09-02, all VERCEL checks now IS_PRODUCTION) **SECURITY: dev-path fallback in src/api.js line 551 checks `!process.env.VERCEL`, never set on Cloudflare Workers**, production therefore takes the dev path and falls back to `BCEID_USERNAME`/`BCEID_PASSWORD` env vars if the scraper fails, potential auth bypass if those are set as Worker secrets. Discovered 2026-08-31.
-- [x] (fixed 2026-09-02, /unified + /unified.html in run_worker_first and gated with /app) **SECURITY: /unified served publicly by assets binding, bypassing /app auth gate**, HTML shell is world-readable (APIs remain gated). Discovered 2026-08-31.
-- [x] (2026-09-02: live 3.5.14 already carries talli.heyitsmejosh.com for both) App Store support and marketing URLs: corrected in `metadata/` (talli.heyitsmejosh.com) but frozen until 3.5.14+ ship due to 3.5.13 READY_FOR_SALE status. Push metadata changes on the next version release.
 - [ ] Push notifications for payday + when monthly reports open (1–5 of each month), see the Stashed 2026-08-10 note below for why this is bigger than it looks and the cheaper shape to build instead.
 - [ ] Large unused whitespace at bottom of payment card view, **investigated in the sim 2026-08-03, no removable padding found.** The gap is the `.safeAreaPadding(.bottom, 90)` clearance (`ContentView.swift:326`) reserved for `TalliFloatingTabBar`, not excess padding, if anything it's ~4pt short. Closing this properly is a design decision (more content, or a non-floating bar), not a padding tweak. Don't re-investigate blind.
 - [ ] Confirm banner shows "Report window open" (not filed) on next login; file report by Jul 5.
