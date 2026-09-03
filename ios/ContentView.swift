@@ -331,10 +331,19 @@ private struct DashboardScreen: View {
                     incomeCell(label: "TOTAL", value: appState.moneyText(income.totalMonthly))
                 }
 
-                if let hourly = appState.hourlyIncomeText {
-                    Text("\(hourly)/hour")
+                ForEach(appState.incomeRates, id: \.label) { rate in
+                    HStack {
+                        Text(rate.label).foregroundStyle(.secondary)
+                        Spacer()
+                        Text(rate.value).fontWeight(.semibold)
+                    }
+                    .font(.footnote)
+                }
+                if let comparison = appState.minimumWageComparisonText {
+                    Text(comparison)
                         .font(.footnote)
                         .foregroundStyle(.secondary)
+                        .padding(.top, 4)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)

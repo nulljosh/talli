@@ -842,7 +842,22 @@ function BenniesSection({dark}) {
       <div style={{padding:'14px 16px',background:t.bg2,borderRadius:10,border:`1px solid ${t.border}`,marginBottom:28}}>
         <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:8}}>Daily disability income</div>
         <div style={{fontSize:20,fontWeight:700,letterSpacing:'-0.5px',color:t.text}}>${(totalMonthly/30).toFixed(2)}<span style={{fontSize:12,fontWeight:500,color:t.mutedMid}}>/day</span></div>
-        <div style={{fontSize:12,color:t.mutedMid,marginTop:4}}>${(totalMonthly/30/24).toFixed(2)}/hour · ${totalMonthly.toLocaleString()}/month (${pwdMonthly.toLocaleString()} PWD + ${cdbMonthly.toLocaleString()} CDB)</div>
+        <div style={{fontSize:12,color:t.mutedMid,marginTop:4}}>${totalMonthly.toLocaleString()}/month ({pwdMonthly.toLocaleString()} PWD + {cdbMonthly.toLocaleString()} CDB)</div>
+        {(()=>{
+          // ponytail: BC minimum wage, indexed every June 1. Update the constant, nothing else.
+          const MIN_WAGE = 17.85;
+          const FT_HOURS = 40*52/12;
+          const rows = [
+            ['every hour', totalMonthly/30/24],
+            ['waking hour (16h/day)', totalMonthly/30/16],
+            ['hour at a 40h week', totalMonthly/FT_HOURS],
+          ];
+          const pct = Math.round(totalMonthly/FT_HOURS/MIN_WAGE*100);
+          return <div style={{marginTop:10,display:'grid',gap:4}}>
+            {rows.map(([l,v])=><div key={l} style={{display:'flex',justifyContent:'space-between',fontSize:12,color:t.mutedMid}}><span>per {l}</span><span style={{color:t.text,fontWeight:600}}>${v.toFixed(2)}</span></div>)}
+            <div style={{fontSize:12,color:t.mutedMid,marginTop:4}}>{pct}% of BC minimum wage (${MIN_WAGE}/hour) on a full-time schedule</div>
+          </div>;
+        })()}
       </div>
 
       <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:14}}>Debt payoff — ${totalDebt.toLocaleString()}</div>

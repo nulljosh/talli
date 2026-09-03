@@ -118,10 +118,27 @@ final class AppState {
         amount.formatted(Self.moneyFormat)
     }
 
-    /// Hourly equivalent of total monthly income, matching the web dashboard's line.
-    var hourlyIncomeText: String? {
+    /// BC minimum wage, indexed every June 1. Update the constant, nothing else.
+    private static let bcMinimumWage = 17.85
+    private static let fullTimeHoursPerMonth = 40.0 * 52 / 12
+
+    /// Income framed as rates, matching the web dashboard's list.
+    var incomeRates: [(label: String, value: String)] {
+        guard let total = income?.totalMonthly, total > 0 else { return [] }
+        let money: (Double) -> String = { $0.formatted(.currency(code: "CAD").precision(.fractionLength(2))) }
+        return [
+            ("per day", money(total / 30)),
+            ("per hour, every hour", money(total / 30 / 24)),
+            ("per waking hour (16h/day)", money(total / 30 / 16)),
+            ("per hour at a 40h week", money(total / Self.fullTimeHoursPerMonth)),
+        ]
+    }
+
+    /// "53% of BC minimum wage" line under the rates; nil without income.
+    var minimumWageComparisonText: String? {
         guard let total = income?.totalMonthly, total > 0 else { return nil }
-        return (total / 30 / 24).formatted(.currency(code: "CAD").precision(.fractionLength(2)))
+        let pct = Int((total / Self.fullTimeHoursPerMonth / Self.bcMinimumWage * 100).rounded())
+        return "\(pct)% of BC minimum wage ($\(Self.bcMinimumWage.formatted(.number.precision(.fractionLength(2))))/hour) on a full-time schedule"
     }
 
     var statusMessages: [String] {
