@@ -17,7 +17,7 @@ Live at [talli.heyitsmejosh.com](https://talli.heyitsmejosh.com) · [App Store](
 </p>
 
 <p align="center">
-  <img src="macos/screenshots/dashboard.png" width="620">
+  <img src="macos/fastlane/screenshots/mac/1-main.png" width="620">
 </p>
 
 <p align="center">
@@ -89,7 +89,7 @@ Talli is free. The people who use it are on income assistance. Never paywall it.
 
 ### macOS companion
 - [ ] **App icon still shows generic placeholder** in the Dock, stale LaunchServices/Dock icon cache. Fix: clean rebuild, then `killall Dock` and/or `qlmanage -r cache`.
-- [x] macOS screenshot captured (`macos/screenshots/dashboard.png`, 2026-08-31).
+- [x] macOS screenshot captured (`macos/fastlane/screenshots/mac/1-main.png`, 2026-08-31).
 
 ## Whitepaper
 
