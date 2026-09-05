@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="apple-touch-icon" href="/icon-192.svg">
+  <link rel="stylesheet" href="/portfolio-tokens.css">
+  <title>Legal Help Directory - Talli</title>
+  <meta name="description" content="Free and low-cost legal help in BC for housing, employment, disability, and benefits issues.">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100dvh;
+    }
+    nav {
+      position: sticky; top: 0; z-index: 10;
+      background: var(--bg); border-bottom: 1px solid var(--border);
+      padding: 0 clamp(1.25rem, 5vw, 3rem);
+    }
+    nav .inner { max-width: 720px; margin: 0 auto; height: 52px; display: flex; align-items: center; }
+    .wordmark { font-size: 1.0625rem; font-weight: 700; letter-spacing: -0.03em; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+    .wordmark span { color: var(--bulb-deep, var(--accent)); }
+    .page { max-width: 720px; margin: 0 auto; padding: clamp(2rem, 6vw, 3.5rem) clamp(1.25rem, 5vw, 3rem) 4rem; }
+    h1 { font-size: clamp(1.75rem, 5vw, 2.25rem); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+    .subtitle { color: var(--text-secondary); margin-bottom: 2rem; max-width: 52ch; }
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; }
+    .filter-btn {
+      border: 1px solid var(--border); background: var(--bg); color: var(--text-secondary);
+      border-radius: 999px; padding: 6px 14px; font-size: 0.875rem; cursor: pointer;
+    }
+    .filter-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+    .entry { border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem; margin-bottom: 12px; }
+    .entry h2 { font-size: 1.0625rem; margin-bottom: 4px; }
+    .entry .desc { color: var(--text-secondary); font-size: 0.9375rem; margin-bottom: 10px; }
+    .entry .meta { display: flex; flex-wrap: wrap; gap: 12px; font-size: 0.875rem; }
+    .entry .meta a { color: var(--bulb-deep, var(--accent)); text-decoration: none; }
+    .entry .meta a:hover { text-decoration: underline; }
+    .tags { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+    .tag { font-size: 0.75rem; color: var(--text-tertiary); border: 1px solid var(--border); border-radius: 999px; padding: 2px 8px; }
+    .empty { color: var(--text-secondary); padding: 2rem 0; text-align: center; }
+    footer { max-width: 720px; margin: 0 auto; padding: 0 clamp(1.25rem, 5vw, 3rem) 3rem; color: var(--text-tertiary); font-size: 0.8125rem; }
+    footer a { color: inherit; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="inner">
+      <a href="/" class="wordmark"><img src="/icon.svg" alt="" width="22" height="22">talli<span>.</span></a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <h1>Legal Help Directory</h1>
+    <p class="subtitle">Free and low-cost legal help in BC, organized by issue type. Not a law firm and not legal advice, just a starting point.</p>
+
+    <div class="filters" id="filters"></div>
+    <div id="entries"></div>
+  </div>
+
+  <footer>
+    Know an organization that should be listed? <a href="mailto:hello@heyitsmejosh.com">Tell us</a>.
+  </footer>
+
+  <script>
+    const CATEGORY_LABELS = { housing: 'Housing', employment: 'Employment', disability: 'Disability', benefits: 'Benefits' };
+    let directory = [];
+    let activeCategory = 'all';
+
+    function render() {
+      const entriesEl = document.getElementById('entries');
+      const list = activeCategory === 'all'
+        ? directory
+        : directory.filter((entry) => entry.categories.includes(activeCategory));
+
+      entriesEl.innerHTML = list.length === 0
+        ? '<div class="empty">No listings for this category yet.</div>'
+        : list.map((entry) => `
+          <div class="entry">
+            <h2>${entry.name}</h2>
+            <div class="desc">${entry.description}</div>
+            <div class="meta">
+              ${entry.phone ? `<span>${entry.phone}</span>` : ''}
+              ${entry.url ? `<a href="${entry.url}" target="_blank" rel="noopener noreferrer">${entry.url.replace(/^https?:\/\//, '')}</a>` : ''}
+            </div>
+            <div class="tags">${entry.categories.map((c) => `<span class="tag">${CATEGORY_LABELS[c] || c}</span>`).join('')}</div>
+          </div>
+        `).join('');
+    }
+
+    function renderFilters() {
+      const categories = ['all', ...new Set(directory.flatMap((entry) => entry.categories))];
+      document.getElementById('filters').innerHTML = categories.map((c) => `
+        <button class="filter-btn${c === activeCategory ? ' active' : ''}" data-category="${c}">
+          ${c === 'all' ? 'All' : (CATEGORY_LABELS[c] || c)}
+        </button>
+      `).join('');
+      document.querySelectorAll('.filter-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          activeCategory = btn.dataset.category;
+          renderFilters();
+          render();
+        });
+      });
+    }
+
+    fetch('/data/lawyers.json')
+      .then((res) => res.json())
+      .then((data) => {
+        directory = data.directory || [];
+        renderFilters();
+        render();
+      })
+      .catch(() => {
+        document.getElementById('entries').innerHTML = '<div class="empty">Couldn\'t load the directory. Try again later.</div>';
+      });
+
+    (function () {
+      const saved = localStorage.getItem('theme');
+      const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+</body>
+</html>

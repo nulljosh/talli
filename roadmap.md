@@ -44,6 +44,18 @@ Talli's custom `/api/login` endpoint has no password-recovery or email-verificat
 Source note: "messages regex still a mess / And it's not really updating accurately."
 Four root causes found and fixed (see Status 2026-07-28 below); these are the leftovers.
 
+## Lawyer directory -- v1 shipped 2026-09-04
+
+`web/lawyers.html` + `web/data/lawyers.json`: free/low-cost BC legal help orgs
+(Disability Alliance BC, CLAS, TRAC, Legal Aid BC, etc.), filterable by category.
+Linked from the landing page footer. `web/js/legal.js` (the /api/legal analyzer,
+currently unmounted -- no HTML wires its element IDs or loads the script) also
+matches lawyers into its results for whenever that tab gets built.
+
+- [ ] Turn this into the $499/mo referral-listing product: paid firms opt in,
+      free orgs stay free. Not built -- today it's a static curated list.
+- [ ] Wire `web/js/legal.js` into an actual unified.html tab; it's dead code today.
+
 ## Open
 - [ ] Push notifications for payday + when monthly reports open (1–5 of each month), see the Stashed 2026-08-10 note below for why this is bigger than it looks and the cheaper shape to build instead.
 - [ ] Large unused whitespace at bottom of payment card view, **investigated in the sim 2026-08-03, no removable padding found.** The gap is the `.safeAreaPadding(.bottom, 90)` clearance (`ContentView.swift:326`) reserved for `TalliFloatingTabBar`, not excess padding, if anything it's ~4pt short. Closing this properly is a design decision (more content, or a non-floating bar), not a padding tweak. Don't re-investigate blind.

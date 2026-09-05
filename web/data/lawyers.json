@@ -1,0 +1,48 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-09-04",
+  "directory": [
+    {
+      "name": "Disability Alliance BC",
+      "categories": ["disability", "benefits"],
+      "description": "Advocacy and help with PWD/DTC applications, appeals, and benefit denials.",
+      "phone": "1-800-663-1278",
+      "url": "https://disabilityalliancebc.org"
+    },
+    {
+      "name": "Community Legal Assistance Society (CLAS)",
+      "categories": ["disability", "employment", "benefits"],
+      "description": "Free legal help for human rights, disability, and mental health law in BC.",
+      "phone": "604-685-3425",
+      "url": "https://clasbc.net"
+    },
+    {
+      "name": "Tenant Resource & Advisory Centre (TRAC)",
+      "categories": ["housing"],
+      "description": "Tenant rights advice and help with Residential Tenancy Branch disputes.",
+      "phone": "1-800-665-1185",
+      "url": "https://tenants.bc.ca"
+    },
+    {
+      "name": "Employment Standards Legal Clinic",
+      "categories": ["employment"],
+      "description": "Free legal advice on wages, termination, and BC employment standards complaints.",
+      "phone": "604-873-7166",
+      "url": "https://employmentlaw-bc.ca"
+    },
+    {
+      "name": "Access Pro Bono BC",
+      "categories": ["housing", "employment", "disability", "benefits"],
+      "description": "Free legal advice clinics across BC, matches you to a volunteer lawyer by issue type.",
+      "phone": "1-877-762-6664",
+      "url": "https://accessprobono.ca"
+    },
+    {
+      "name": "BC Legal Aid (Legal Aid BC)",
+      "categories": ["housing", "employment", "disability", "benefits"],
+      "description": "Government-funded legal aid, covers eligible income assistance, disability, and tenancy matters.",
+      "phone": "1-866-577-2525",
+      "url": "https://legalaid.bc.ca"
+    }
+  ]
+}

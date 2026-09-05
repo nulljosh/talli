@@ -1,5 +1,26 @@
 // Legal issue analysis
 
+let lawyerDirectory = null;
+async function loadLawyerDirectory() {
+  if (lawyerDirectory) return lawyerDirectory;
+  try {
+    const response = await fetch('/data/lawyers.json');
+    const data = await response.json();
+    lawyerDirectory = data.directory || [];
+  } catch (err) {
+    console.error('Error loading lawyer directory:', err);
+    lawyerDirectory = [];
+  }
+  return lawyerDirectory;
+}
+
+function matchLawyers(categoryNames) {
+  const wanted = new Set(categoryNames.map((name) => name.toLowerCase()));
+  return (lawyerDirectory || []).filter((entry) =>
+    entry.categories.some((category) => wanted.has(category.toLowerCase()))
+  );
+}
+
 async function analyzeLegalIssue() {
   const descriptionEl = document.getElementById('legal-description');
   const resultEl = document.getElementById('legal-analysis-results');
@@ -29,6 +50,9 @@ async function analyzeLegalIssue() {
     const steps = Array.isArray(data.nextSteps) ? data.nextSteps : [];
     const resources = Array.isArray(data.resources) ? data.resources : [];
 
+    await loadLawyerDirectory();
+    const lawyers = matchLawyers(categories.map((cat) => cat.name));
+
     let html = '<div style="margin-bottom: 14px;"><strong>Matched Categories</strong></div>';
     if (categories.length === 0) {
       html += '<div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;">No clear category match found. Try adding more details.</div>';
@@ -53,6 +77,17 @@ async function analyzeLegalIssue() {
           <div style="font-size: 12px; color: var(--text-secondary); margin-top: -6px; margin-bottom: 8px;">${escapeHtml(resource.description || '')}</div>
         `).join('') + '</div>'
       : '<div style="font-size: 13px; color: var(--text-secondary);">No resources matched.</div>';
+
+    html += '<div style="margin: 14px 0 8px;"><strong>Legal Help Near You</strong></div>';
+    html += lawyers.length > 0
+      ? lawyers.map((entry) => `
+          <div class="list-item">
+            <div class="list-item-title">${escapeHtml(entry.name)}</div>
+            <div class="list-item-meta">${escapeHtml(entry.description || '')}</div>
+            <div class="list-item-meta">${escapeHtml(entry.phone || '')} &middot; <a href="${escapeHtml(entry.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(entry.url)}</a></div>
+          </div>
+        `).join('')
+      : '<div style="font-size: 13px; color: var(--text-secondary);">No matching legal help found for this issue.</div>';
 
     resultEl.innerHTML = html;
   } catch (err) {
