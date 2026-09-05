@@ -508,6 +508,8 @@ final class AppState {
             if let months = try? await APIClient.shared.getReportStatus() {
                 reportMonths = months
             }
+            await PaydayNotificationScheduler.requestAuthorizationIfNeeded()
+            await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate)
         } catch APIClientError.unauthorized {
             isAuthenticated = false
             errorMessage = "Session expired. Please sign in again."

@@ -56,8 +56,25 @@ matches lawyers into its results for whenever that tab gets built.
       free orgs stay free. Not built -- today it's a static curated list.
 - [ ] Wire `web/js/legal.js` into an actual unified.html tab; it's dead code today.
 
+## Local notifications shipped 2026-09-04
+
+Built the "cheaper shape" the Stashed 2026-08-10 note below called for: `ios/Notifications/PaydayNotificationScheduler.swift`
+uses `UNCalendarNotificationTrigger`, no APNs key, no device tokens, no server. Reschedules on every
+`AppState.refreshDashboard()` (permission requested once via `requestAuthorizationIfNeeded`, silently
+skips scheduling until granted). Two reminders: reporting-window-open (fires day 1 at 9am, or next
+month's day 1 if today isn't day 1) and payday-tomorrow (9am the day before the next scraped payment
+date). Pure date math lives in `nextReportingWindowFireDate`/`paydayReminderFireDate`, checked by
+`ios/Tests/test_payday_dates.swift` (`swift ios/Tests/test_payday_dates.swift`, 6 assertions, excluded
+from the app target same as `Tests/`) -- the first version of the window-date logic was inverted
+(fired on day 1-5 instead of skipping to next month) and the check caught it before it shipped.
+
+- [ ] macOS/watchOS not wired yet, iOS only. Same pure functions would port directly; the watchOS
+      target doesn't have a real dashboard screen yet either (see "Mirror the same income block to
+      watchOS" below), do both together.
+- [ ] No Settings toggle to turn reminders off individually, revoking notification permission in
+      iOS Settings is the only way today. Add if it comes up as friction.
+
 ## Open
-- [ ] Push notifications for payday + when monthly reports open (1–5 of each month), see the Stashed 2026-08-10 note below for why this is bigger than it looks and the cheaper shape to build instead.
 - [ ] Large unused whitespace at bottom of payment card view, **investigated in the sim 2026-08-03, no removable padding found.** The gap is the `.safeAreaPadding(.bottom, 90)` clearance (`ContentView.swift:326`) reserved for `TalliFloatingTabBar`, not excess padding, if anything it's ~4pt short. Closing this properly is a design decision (more content, or a non-floating bar), not a padding tweak. Don't re-investigate blind.
 - [ ] Confirm banner shows "Report window open" (not filed) on next login; file report by Jul 5.
 - [ ] Confirm header avatar renders (blob repointed) on next login.
