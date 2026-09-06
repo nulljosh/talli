@@ -244,6 +244,7 @@ const Icon = {
   calendar:(c,f)=><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="3" fill={f?c:'none'} fillOpacity={f?.15:0}/><path d="M3 9h18M8 2v4M16 2v4"/></svg>,
   status:(c,f)=><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.7" strokeLinecap="round"><circle cx="6" cy="6" r="2" fill={c} stroke="none"/><circle cx="6" cy="12" r="2" fill={c} stroke="none"/><circle cx="6" cy="18" r="2" stroke={c} strokeWidth="1.7"/><path d="M10 6h9M10 12h9M10 18h9" strokeLinecap="round"/></svg>,
   messages:(c,f)=><svg width="22" height="22" viewBox="0 0 24 24" fill={f?c:'none'} stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" fillOpacity={f?.15:0}/></svg>,
+  legal:(c,f)=><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v18M5 21h14M12 6l6 8H6l6-8z" fill={f?c:'none'} fillOpacity={f?.15:0}/></svg>,
   settings:(c,f)=><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>,
 };
 
@@ -253,6 +254,7 @@ const TABS = [
   {id:'calendar', label:'Calendar', icon:Icon.calendar},
   {id:'status',   label:'Status',   icon:Icon.status},
   {id:'messages', label:'Messages', icon:Icon.messages},
+  {id:'legal',    label:'Legal',    icon:Icon.legal},
 ];
 
 function TabBar({tab, setTab, dark, msgBadge}) {
@@ -1195,6 +1197,68 @@ function MessagesTab({dark, messages, readIds, onRead, onRefresh}) {
 }
 
 // ════════════════════════════════════════════════════
+// LEGAL TAB (was web/js/legal.js, never mounted)
+// ════════════════════════════════════════════════════
+function LegalTab({dark}) {
+  const t = tk(dark);
+  const [text, setText] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState(null);
+  const [res, setRes] = useState(null);
+  const [lawyers, setLawyers] = useState([]);
+  const analyze = async () => {
+    const description = text.trim();
+    if (!description || busy) return;
+    setBusy(true); setErr(null); setRes(null);
+    try {
+      const r = await fetch('/api/legal', {method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({description})});
+      const data = await r.json();
+      if (!r.ok) throw new Error(data.error || 'Analysis failed');
+      const cats = Array.isArray(data.categories) ? data.categories : [];
+      let dir = [];
+      try { dir = (await (await fetch('/data/lawyers.json')).json()).directory || []; } catch {}
+      const wanted = new Set(cats.map(c => String(c.name).toLowerCase()));
+      setLawyers(dir.filter(e => (e.categories||[]).some(c => wanted.has(String(c).toLowerCase()))));
+      setRes({cats, steps: Array.isArray(data.nextSteps) ? data.nextSteps : [], resources: Array.isArray(data.resources) ? data.resources : []});
+    } catch (e) { setErr(e.message || 'Failed to analyze issue.'); }
+    finally { setBusy(false); }
+  };
+  const H = ({children}) => <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,margin:'18px 0 8px'}}>{children}</div>;
+  const Row = ({title, meta, children}) => (
+    <div style={{padding:'12px 0',borderBottom:`1px solid ${t.border}`}}>
+      <div style={{fontSize:14,fontWeight:600,color:t.text,display:'flex',justifyContent:'space-between',gap:8}}>{title}{children}</div>
+      {meta&&<div style={{fontSize:13,color:t.muted,lineHeight:1.45,marginTop:2}}>{meta}</div>}
+    </div>
+  );
+  return (
+    <div style={{flex:1,overflowY:'auto',padding:'20px 24px 40px',animation:'fadeIn 0.2s ease both'}}>
+      <span style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted}}>{window.I18N.t("Legal")}</span>
+      <div style={{fontSize:13,color:t.muted,lineHeight:1.45,margin:'8px 0 12px'}}>{window.I18N.t("Describe a problem with a landlord, an employer, a benefit decision, or anything else. You get the category, next steps, and who in BC can help for free.")}</div>
+      <textarea value={text} onChange={e=>setText(e.target.value)} rows={5} maxLength={5000} placeholder={window.I18N.t("What happened?")}
+        style={{width:'100%',fontSize:14,lineHeight:1.45,padding:12,borderRadius:12,border:`1px solid ${t.border2}`,background:t.bg2,color:t.text,resize:'vertical',fontFamily:'inherit'}}/>
+      <button onClick={analyze} disabled={busy||!text.trim()} style={{marginTop:10,width:'100%',padding:'12px 0',borderRadius:100,border:'none',background:t.text,color:t.bg,fontSize:14,fontWeight:600,opacity:busy||!text.trim()?0.5:1,cursor:'pointer'}}>
+        {busy ? window.I18N.t("Analyzing...") : window.I18N.t("Analyze")}
+      </button>
+      {err&&<div style={{fontSize:13,color:t.error,marginTop:10}}>{err}</div>}
+      {res&&<div>
+        <H>{window.I18N.t("Matched categories")}</H>
+        {res.cats.length===0 ? <div style={{fontSize:13,color:t.muted}}>{window.I18N.t("No clear match. Add more detail.")}</div>
+          : res.cats.map((c,i)=><Row key={i} title={c.name} meta={c.description}><span style={{fontSize:11,color:t.muted,flexShrink:0}}>{Math.round((Number(c.confidence)||0)*100)}%</span></Row>)}
+        <H>{window.I18N.t("Next steps")}</H>
+        {res.steps.length===0 ? <div style={{fontSize:13,color:t.muted}}>{window.I18N.t("No specific steps.")}</div>
+          : <ol style={{paddingLeft:18,fontSize:13,lineHeight:1.6,color:t.text}}>{res.steps.map((s,i)=><li key={i}>{s}</li>)}</ol>}
+        <H>{window.I18N.t("Resources")}</H>
+        {res.resources.length===0 ? <div style={{fontSize:13,color:t.muted}}>{window.I18N.t("No resources matched.")}</div>
+          : res.resources.map((r,i)=><Row key={i} title={<a href={r.url} target="_blank" rel="noopener noreferrer" style={{color:t.accent,textDecoration:'none'}}>{r.name}</a>} meta={r.description}/>)}
+        <H>{window.I18N.t("Legal help near you")}</H>
+        {lawyers.length===0 ? <div style={{fontSize:13,color:t.muted}}>{window.I18N.t("No matching legal help for this issue.")}</div>
+          : lawyers.map((e,i)=><Row key={i} title={e.name} meta={<span>{e.description}{e.phone?` · ${e.phone}`:''}{e.url?<span> · <a href={e.url} target="_blank" rel="noopener noreferrer" style={{color:t.accent,textDecoration:'none'}}>{e.url.replace(/^https?:\/\//,'')}</a></span>:null}</span>}/>)}
+      </div>}
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════
 // SETTINGS TAB
 // ════════════════════════════════════════════════════
 function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, avatarError, setAvatarError, onLogout, onAvatarBroken}) {
@@ -1288,6 +1352,7 @@ function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidC
       {tab==='calendar' &&<CalendarTab dark={dark} payDateObj={payDateObj} amount={amount} daysUntil={daysUntil}/>}
       {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} cgeb={cgeb} skn={skn} onSubmitReport={()=>setShowSubmit(true)} onPwdResubmit={()=>setShowPwdResubmit(true)} reportMonths={reportMonths} username={username} pinSet={pinSet} onSetPin={()=>setShowPinSheet(true)}/>}
       {tab==='messages' &&<MessagesTab dark={dark} messages={messages} readIds={readIds} onRead={onRead} onRefresh={onRefresh}/>}
+      {tab==='legal'    &&<LegalTab dark={dark}/>}
       {tab==='settings' &&<SettingsTab dark={dark} username={username} avatarUrl={avatarUrl} onAvatarBroken={onAvatarBroken} onAvatarRefresh={doRefresh} refreshing={refreshing} avatarError={avatarError} setAvatarError={setAvatarError} onLogout={onLogout}/>}
 
       <TabBar tab={tab} setTab={setTab} dark={dark} msgBadge={unread}/>

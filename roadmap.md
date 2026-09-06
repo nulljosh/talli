@@ -54,7 +54,7 @@ matches lawyers into its results for whenever that tab gets built.
 
 - [ ] Turn this into the $499/mo referral-listing product: paid firms opt in,
       free orgs stay free. Not built -- today it's a static curated list.
-- [ ] Wire `web/js/legal.js` into an actual unified.html tab; it's dead code today.
+- [x] Legal tab in unified.html (React port of the old legal.js, which is deleted) 2026-09-06.
 
 ## Local notifications shipped 2026-09-04
 
