@@ -24,7 +24,12 @@
     "deploy": "wrangler deploy",
     "dev:worker": "wrangler dev"
   },
-  "keywords": [],
+  "keywords": [
+    "web-scraping",
+    "automation",
+    "bc-government",
+    "portal"
+  ],
   "author": "",
   "license": "MIT",
   "type": "commonjs",
