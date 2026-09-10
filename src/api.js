@@ -146,7 +146,12 @@ function clearAllAuthState(req, res, done) {
   });
 }
 
-// Encryption helpers for session credential storage
+// Encryption helpers for session credential storage. The BCeID password has to be
+// stored (not just hashed) because the scraper re-authenticates with it on every
+// live pull, so this is reversible AES-256-CBC, not a password hash. Key is derived
+// from ENCRYPTION_KEY via scrypt (not used raw) so a leaked env var alone isn't a
+// usable AES key, and a random IV per call means encrypting the same password twice
+// produces different ciphertext.
 const DERIVED_SALT = crypto.createHash('sha256').update(ENCRYPTION_KEY + 'talli-salt').digest().slice(0, 16);
 const DERIVED_KEY = crypto.scryptSync(ENCRYPTION_KEY, DERIVED_SALT, 32);
 
@@ -158,7 +163,7 @@ function encrypt(text) {
   const cipher = crypto.createCipheriv(algorithm, key, iv);
   let encrypted = cipher.update(text, 'utf8', 'hex');
   encrypted += cipher.final('hex');
-  return iv.toString('hex') + ':' + encrypted;
+  return iv.toString('hex') + ':' + encrypted; // IV stored alongside ciphertext, needed to decrypt
 }
 
 function decrypt(encrypted) {
