@@ -115,6 +115,7 @@
     @keyframes wall-up   { from { transform: translateY(0); }    to { transform: translateY(-50%); } }
     @keyframes wall-down { from { transform: translateY(-50%); } to { transform: translateY(0); } }
     @media (prefers-reduced-motion: reduce) { .wall-col { animation: none; } }
+    @media (prefers-reduced-motion: no-preference) { .hero-wall { will-change: transform; } }
     /* scrim: keeps the headline and the card readable in either theme */
     .hero-band::after {
       content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
@@ -634,6 +635,20 @@
         });
         wall.appendChild(col);
       }
+    })();
+
+    // Subtle parallax on the hero number wall, rAF-throttled, off under reduced motion.
+    (function () {
+      const wall = document.getElementById('heroWall');
+      if (!wall || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      let ticking = false;
+      function apply() {
+        wall.style.transform = 'translateY(' + (window.scrollY * 0.08) + 'px)';
+        ticking = false;
+      }
+      window.addEventListener('scroll', () => {
+        if (!ticking) { requestAnimationFrame(apply); ticking = true; }
+      }, { passive: true });
     })();
 
     // FadeUp observer
