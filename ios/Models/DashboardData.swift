@@ -50,21 +50,34 @@ struct DashboardData: Codable, Sendable {
         income = try container.decodeIfPresent(Income.self, forKey: .income)
 
         if let stringMessages = try? container.decode([String].self, forKey: .statusMessages) {
-            statusMessages = stringMessages.map { StatusMessage(text: $0) }
+            statusMessages = stringMessages.map { StatusMessage(id: Self.stableId($0), text: $0) }
         } else if let objectMessages = try? container.decode([MessageObject].self, forKey: .statusMessages) {
             statusMessages = objectMessages.map { message in
                 let text = message.text
                     ?? [message.subject, message.body].compactMap { $0 }.joined(separator: " - ")
+                let timestamp = message.timestamp ?? message.date
                 return StatusMessage(
-                    id: message.id ?? UUID().uuidString,
+                    id: message.id ?? Self.stableId(text + (timestamp ?? "")),
                     text: text,
-                    timestamp: message.timestamp ?? message.date,
+                    timestamp: timestamp,
                     actionRequired: message.actionRequired ?? false
                 )
             }.filter { !$0.text.isEmpty }
         } else {
             statusMessages = []
         }
+    }
+
+    // ponytail: no server-supplied id (string-array path, or object path missing id) — hash the
+    // content so read state survives a refetch instead of a random UUID that never matches twice.
+    // Swift's Hasher is randomly seeded per launch, so a plain FNV-1a is used instead.
+    private static func stableId(_ content: String) -> String {
+        var hash: UInt64 = 0xcbf29ce484222325
+        for byte in content.utf8 {
+            hash ^= UInt64(byte)
+            hash = hash &* 0x100000001b3
+        }
+        return String(hash)
     }
 }
 

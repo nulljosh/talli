@@ -310,7 +310,8 @@ private struct DashboardScreen: View {
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(16)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 12)
         .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
     }
 
