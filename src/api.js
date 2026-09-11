@@ -92,10 +92,6 @@ const inFlightRefresh = new Set();
 // Debug logging helper
 const log = (...args) => DEBUG && console.log(...args);
 
-function getUaHash(req) {
-  return crypto.createHash('sha256').update(req.headers['user-agent'] || '').digest('hex');
-}
-
 function deriveUserId(username) {
   return crypto.createHash('sha256').update(username).digest('hex').slice(0, 16);
 }
@@ -115,7 +111,6 @@ function persistAuthCookie(req, res) {
     bceidPassword: req.session.bceidPassword,
     craProfile: req.session.craProfile,
     userId: req.session.userId,
-    uaHash: req.session.uaHash,
     paidStatus: req.session.paidStatus || null,
     lastActivity: req.session.lastActivity || Date.now(),
     maxAgeMs,
@@ -431,12 +426,11 @@ app.use((req, res, next) => {
     return next();
   }
 
-  const currentUaHash = getUaHash(req);
-  if (payload.uaHash && payload.uaHash !== currentUaHash) {
-    clearAuthCookie(res, { secure: IS_PRODUCTION, httpOnly: true, sameSite: 'Strict', path: '/' });
-    return next();
-  }
-
+  // ponytail: dropped the uaHash pin -- iOS's default CFNetwork User-Agent
+  // isn't guaranteed identical request to request, so this was silently
+  // clearing valid sessions (flaky taps, read-state resetting on relaunch).
+  // The cookie is already encrypted + HttpOnly + Secure + SameSite=Strict;
+  // add device binding back only if a real session-theft threat shows up.
   req.session.authenticated = true;
   req.session.bceidUsername = payload.bceidUsername;
   req.session.bceidPassword = payload.bceidPassword;
@@ -444,7 +438,6 @@ app.use((req, res, next) => {
   req.session.userId = payload.userId;
   req.session.paidStatus = payload.paidStatus || null;
   req.session.lastActivity = payload.lastActivity || Date.now();
-  req.session.uaHash = payload.uaHash || currentUaHash;
   req.session.cookie.maxAge = Number(payload.maxAgeMs) || DEFAULT_SESSION_MAX_AGE_MS;
   return next();
 });
@@ -521,15 +514,6 @@ app.use((req, res, next) => {
 // Auth middleware
 const requireAuth = (req, res, next) => {
   if (req.session.authenticated) {
-    // Session fingerprint check — detect token theft
-    if (req.session.uaHash) {
-      const currentUaHash = getUaHash(req);
-      if (currentUaHash !== req.session.uaHash) {
-        return clearAllAuthState(req, res, () => {
-          return res.status(401).json({ error: 'Session invalid. Please login again.' });
-        });
-      }
-    }
     next();
   } else {
     serveAsset(res, '/login.html', 401);
@@ -614,7 +598,6 @@ app.post('/api/login', loginLimiter, async (req, res) => {
     const userId = deriveUserId(username);
     req.session.userId = userId;
     req.session.lastActivity = Date.now();
-    req.session.uaHash = getUaHash(req);
 
     // If "Remember Me" checked, extend session to 30 days
     if (rememberMe) {
@@ -911,7 +894,6 @@ app.get('/', async (req, res) => {
       req.session.bceidPassword = encrypt(password);
       req.session.userId = deriveUserId(username);
       req.session.lastActivity = Date.now();
-      req.session.uaHash = getUaHash(req);
       req.session.cookie.maxAge = DEFAULT_SESSION_MAX_AGE_MS;
       log('[AUTO-LOGIN] Local dev: authenticated with .env credentials');
       return req.session.save((saveError) => {
