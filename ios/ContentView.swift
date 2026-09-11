@@ -65,7 +65,7 @@ private struct AuthenticatedTabShell: View {
                 Task { await appState.refreshDashboard() }
             }
         }
-        .tint(Color.talliOrange)
+        .tint(Color.talliBlue)
     }
 }
 
@@ -119,7 +119,7 @@ private struct LoginScreen: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
-                .background(Color.talliOrange, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .background(Color.talliBlue, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
                 .foregroundStyle(.white)
             }
             .disabled(username.isEmpty || password.isEmpty || appState.isLoading)
@@ -302,7 +302,7 @@ private struct DashboardScreen: View {
             if let days = appState.daysUntilPayment {
                 Text("in \(days) days")
                     .font(.system(size: 22, weight: .semibold))
-                    .foregroundStyle(Color.talliOrange)
+                    .foregroundStyle(Color.talliBlue)
             }
 
             Text(appState.nextPaymentDateText)
@@ -374,9 +374,9 @@ private struct DashboardScreen: View {
             let fillW = geo.size.width * pct
             ZStack(alignment: .leading) {
                 Capsule().fill(Color(.tertiarySystemFill)).frame(height: 3)
-                Capsule().fill(Color.talliOrange).frame(width: max(0, fillW), height: 3)
+                Capsule().fill(Color.talliBlue).frame(width: max(0, fillW), height: 3)
                 Circle()
-                    .fill(Color.talliOrange)
+                    .fill(Color.talliBlue)
                     .frame(width: 7, height: 7)
                     .offset(x: max(0, fillW - 3.5), y: 0)
             }
@@ -391,14 +391,14 @@ private struct DashboardScreen: View {
             } label: {
                 HStack(spacing: 8) {
                     Image(systemName: appState.isPaid ? "checkmark.circle.fill" : "circle")
-                        .foregroundStyle(appState.isPaid ? Color.talliOrange : .secondary)
+                        .foregroundStyle(appState.isPaid ? Color.talliBlue : .secondary)
                     Text(LocalizedStringKey(appState.isPaid ? "Paid" : "Paid yet?"))
                         .font(.subheadline.weight(.medium))
-                        .foregroundStyle(appState.isPaid ? Color.talliOrange : .primary)
+                        .foregroundStyle(appState.isPaid ? Color.talliBlue : .primary)
                 }
                 .padding(.horizontal, 18)
                 .padding(.vertical, 10)
-                .background(Capsule().strokeBorder(appState.isPaid ? Color.talliOrange.opacity(0.5) : Color.secondary.opacity(0.3), lineWidth: 1))
+                .background(Capsule().strokeBorder(appState.isPaid ? Color.talliBlue.opacity(0.5) : Color.secondary.opacity(0.3), lineWidth: 1))
             }
             .buttonStyle(.plain)
         }
@@ -512,11 +512,11 @@ private struct ReportingWindowBanner: View {
     var body: some View {
         HStack(spacing: 10) {
             Image(systemName: "exclamationmark.circle.fill")
-                .foregroundStyle(Color.talliOrange)
+                .foregroundStyle(Color.talliBlue)
             VStack(alignment: .leading, spacing: 2) {
                 Text("Report window open")
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(Color.talliOrange)
+                    .foregroundStyle(Color.talliBlue)
                 Text("Closes the 5th")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
@@ -530,8 +530,8 @@ private struct ReportingWindowBanner: View {
             .controlSize(.mini)
         }
         .padding(12)
-        .background(Color.talliOrange.opacity(0.1), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(Color.talliOrange.opacity(0.3), lineWidth: 1))
+        .background(Color.talliBlue.opacity(0.1), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(Color.talliBlue.opacity(0.3), lineWidth: 1))
     }
 }
 

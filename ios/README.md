@@ -24,7 +24,7 @@ iOS companion for [Talli](https://talli.heyitsmejosh.com), the BC benefits track
 - Offline caching with instant launch
 - CSV export
 - Pixel-art avatar (Core Graphics, 6 palettes)
-- Warm parchment palette, talliOrange accent, solid cards
+- Warm parchment palette, talliBlue accent, solid cards
 
 ## Run
 
@@ -61,7 +61,7 @@ To regenerate App Store screenshots (runs `UITests/PreviewScreenshot.swift` agai
 - Splash screen: talli marks on dark background (#1a1612) via UILaunchScreen + named color/image assets.
 
 ### v2.4.0 (2026-05-07)
-- talliOrange accent throughout (button, tabs, calendar, avatar)
+- talliBlue accent throughout (button, tabs, calendar, avatar)
 - Solid cards replace glass (no ultraThinMaterial)
 - Pixel-art avatar via Core Graphics (6 palettes, mirrors web generatePixelArtSVG)
 - Login screen: orange icon, BCEID section labels, solid fields, orange Sign In button

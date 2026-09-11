@@ -68,7 +68,7 @@ private struct MessageRow: View {
             HStack(alignment: .top, spacing: 12) {
                 ZStack {
                     Circle()
-                        .fill(isRead ? Color(.tertiarySystemFill) : Color.talliOrange)
+                        .fill(isRead ? Color(.tertiarySystemFill) : Color.talliBlue)
                         .frame(width: 38, height: 38)
                     Text(initials)
                         .font(.system(size: 13, weight: .bold))

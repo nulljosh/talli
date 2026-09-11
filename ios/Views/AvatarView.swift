@@ -2,7 +2,7 @@ import SwiftUI
 
 struct AvatarView: View {
     let size: CGFloat
-    var accent: Color = .talliOrange
+    var accent: Color = .talliBlue
     @Environment(AppState.self) private var appState
 
     var body: some View {

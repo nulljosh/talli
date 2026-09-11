@@ -38,7 +38,7 @@ struct WhatsNewSheet: View {
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(.talliOrange)
+                    .tint(.talliBlue)
                 }
                 .padding(24)
                 .background(GeometryReader { geo in

@@ -5,9 +5,9 @@ v2.4.4
 ## Rules
 
 - Portrait-only
-- Portfolio-vibe palette: matches web (#ffffff bg / #1a1a1a text / #5B9BD5 blue accent, `Color.talliOrange` name kept but now blue)
+- Portfolio-vibe palette: matches web (#ffffff bg / #1a1a1a text / #5B9BD5 blue accent, `Color.talliBlue` name kept but now blue)
 - Solid cards: `Color(.secondarySystemGroupedBackground)` -- no ultraThinMaterial
-- `Color.talliOrange` for all accent uses (calendar, paid toggle, tab tint, avatar fallback)
+- `Color.talliBlue` for all accent uses (calendar, paid toggle, tab tint, avatar fallback)
 - Shared `AvatarView(size:)` for all avatar rendering (ContentView toolbar + SettingsView)
 - Avatar: node-graph SVG style (Anthropic dots/lines), generated via `AppState.generateNodeGraphAvatar()`, cached to Documents dir as PNG. Tap in SettingsView to regenerate.
 - SF Pro typography
@@ -20,7 +20,7 @@ v2.4.4
 - Changelog v2.6.0 (2026-05-28): AppState.reportMonths + isCurrentMonthFiled wired from /api/report-status. Dashboard shows orange "Report window open" banner (days 1-5, not filed) or green "Report filed this month" (days 1-5, filed). APIClient.getReportStatus() added.
 - Changelog v2.5.0 (2026-05-11): MessagesView redesigned to match web — initials circles (orange=unread, gray=read), unread dot, tap-to-expand, per-message read marking via AppState. Avatar migrated from UserDefaults to Documents disk cache; generation consolidated into AppState.generateNodeGraphAvatar() (node-graph Anthropic style), SettingsView drops duplicate implementation.
 - Changelog v2.4.1 (2026-05-07): Fixed app icon PNGs — SVG was rasterized without scaling, icon sat in top-left 200px of 1024x1024 canvas. Regenerated all three variants (light, dark, tinted) via cairosvg at full 1024x1024. Splash screen now shows talli marks (LaunchIcon + LaunchBackground assets) instead of blank screen.
-- Changelog v2.4.0 (2026-05-05): talliOrange accent throughout. Solid cards replace glass. Pixel-art avatar (Core Graphics, 6 palettes). Top-right avatar button → Settings. "in X days" hero text + earning rate footnote. Shared AvatarView. daysUntilPayment moved to AppState. Removed accentGlassCard/parchment dead code.
+- Changelog v2.4.0 (2026-05-05): talliBlue accent throughout. Solid cards replace glass. Pixel-art avatar (Core Graphics, 6 palettes). Top-right avatar button → Settings. "in X days" hero text + earning rate footnote. Shared AvatarView. daysUntilPayment moved to AppState. Removed accentGlassCard/parchment dead code.
 - Changelog v2.3.0: SettingsView with avatar generation (node-graph, now replaced). TabView tint updated.
 - Changelog v2.2.0 (2026-03-25): Persistent paid toggle on dashboard (syncs with server). Unread message badge clears on tab open, read state persisted via API. Models refactored to Models/ directory. Concurrent async loads on login.
 - Changelog v2.1.0 (2026-03-24): General benefits guide (grocery rebate, GST/HST, climate credit, CWB, CCB, SAFER, PharmaCare, BC Bus Pass). Native SwiftUI cards. Default tab on Benefits.
