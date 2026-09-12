@@ -16,7 +16,7 @@ struct PaymentGlance: View {
     }
 
     private var isFilingWindow: Bool {
-        Calendar.current.component(.day, from: Date()) <= 5
+        !(summary?.pwdApproved ?? false) && Calendar.current.component(.day, from: Date()) <= 5
     }
 
     private var formattedDate: String {

@@ -19,6 +19,7 @@ final class MacAppState {
     var isOffline = false
     var selectedSection: AppSection = .dashboard
     var reportMonths: [String: String] = [:]
+    var pwdApproved: Bool = false
     var lastSyncDate: Date? = UserDefaults.standard.object(forKey: Constants.lastSyncKey) as? Date
 
     /// Hours after which a successful scrape is old enough to surface quietly.
@@ -40,7 +41,7 @@ final class MacAppState {
     }
 
     var isFilingWindowOpen: Bool {
-        Calendar.current.component(.day, from: Date()) <= 5
+        !pwdApproved && Calendar.current.component(.day, from: Date()) <= 5
     }
 
     private let monitor = NWPathMonitor()
@@ -178,8 +179,9 @@ final class MacAppState {
 
     func refreshReportStatus() async {
         guard isAuthenticated else { return }
-        if let months = try? await MacAPIClient.shared.getReportStatus() {
-            reportMonths = months
+        if let status = try? await MacAPIClient.shared.getReportStatus() {
+            reportMonths = status.months
+            pwdApproved = status.pwdApproved
         }
     }
 

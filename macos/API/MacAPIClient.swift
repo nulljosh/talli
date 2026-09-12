@@ -100,9 +100,10 @@ final class MacAPIClient: @unchecked Sendable {
         return (data, scrapeSucceeded)
     }
 
-    func getReportStatus() async throws -> [String: String] {
-        struct R: Decodable { let reportMonths: [String: String]? }
-        return (try await send(path: "api/report-status", responseType: R.self)).reportMonths ?? [:]
+    func getReportStatus() async throws -> (months: [String: String], pwdApproved: Bool) {
+        struct R: Decodable { let reportMonths: [String: String]?; let pwdApproved: Bool? }
+        let r = try await send(path: "api/report-status", responseType: R.self)
+        return (r.reportMonths ?? [:], r.pwdApproved ?? false)
     }
 
     func setReportStatus(month: String, filed: Bool) async throws {

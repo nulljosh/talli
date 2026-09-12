@@ -27,6 +27,7 @@ final class AppState {
     var readMessageIds: Set<String> = []
     var avatarImageData: Data? = nil
     var reportMonths: [String: String] = [:]
+    var pwdApproved: Bool = false
 
     /// Hours after which a successful scrape is old enough to surface quietly.
     /// The scraper runs on open and on pull-to-refresh, so anything past a day
@@ -229,8 +230,9 @@ final class AppState {
 
     func refreshReportStatus() async {
         guard isAuthenticated else { return }
-        if let months = try? await APIClient.shared.getReportStatus() {
-            reportMonths = months
+        if let status = try? await APIClient.shared.getReportStatus() {
+            reportMonths = status.months
+            pwdApproved = status.pwdApproved
         }
     }
 
@@ -505,8 +507,9 @@ final class AppState {
             // unconditionally would report a wedged scrape as a fresh sync.
             if fresh.scrapeSucceeded { updateSyncDate() }
             errorMessage = nil
-            if let months = try? await APIClient.shared.getReportStatus() {
-                reportMonths = months
+            if let status = try? await APIClient.shared.getReportStatus() {
+                reportMonths = status.months
+                pwdApproved = status.pwdApproved
             }
             await PaydayNotificationScheduler.requestAuthorizationIfNeeded()
             await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate)

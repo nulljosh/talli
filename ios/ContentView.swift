@@ -42,9 +42,11 @@ private struct AuthenticatedTabShell: View {
             DashboardScreen()
                 .tabItem { Label("Home", systemImage: "house.fill") }
                 .tag(0)
-            ReportView()
-                .tabItem { Label("Reports", systemImage: "list.bullet.clipboard.fill") }
-                .tag(1)
+            if !appState.pwdApproved {
+                ReportView()
+                    .tabItem { Label("Reports", systemImage: "list.bullet.clipboard.fill") }
+                    .tag(1)
+            }
             BenefitsView()
                 .tabItem { Label("Benefits", systemImage: "heart.text.clipboard.fill") }
                 .tag(2)
@@ -279,11 +281,11 @@ private struct DashboardScreen: View {
     }
 
     private var isFilingWindowOpen: Bool {
-        Calendar.current.component(.day, from: now) <= 5 && !appState.isCurrentMonthFiled
+        !appState.pwdApproved && Calendar.current.component(.day, from: now) <= 5 && !appState.isCurrentMonthFiled
     }
 
     private var isFiledThisWindow: Bool {
-        Calendar.current.component(.day, from: now) <= 5 && appState.isCurrentMonthFiled
+        !appState.pwdApproved && Calendar.current.component(.day, from: now) <= 5 && appState.isCurrentMonthFiled
     }
 
     private var paymentCard: some View {

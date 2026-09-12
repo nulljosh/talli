@@ -27,5 +27,8 @@
   "observability": { "enabled": true },
   // IS_PRODUCTION in src/api.js reads this. The custom-domain route is added
   // only at DNS cutover -- until then this deploys to talli.<subdomain>.workers.dev.
-  "vars": { "NODE_ENV": "production" }
+  // Joshua's own PWD status. Once approved, monthly filing reports stop
+  // applying to his account (and anyone else's with PWD approved) -- see
+  // pwdApproved gating in src/api.js and the Reports tab hide in each client.
+  "vars": { "NODE_ENV": "production", "PWD_APPROVED": "true" }
 }

@@ -332,18 +332,26 @@ function getStripe() {
 app.post('/api/stripe-webhook', express.raw({ type: 'application/json' }), async (req, res) => {
   let event;
   try {
-    event = getStripe().webhooks.constructEvent(req.body, req.headers['stripe-signature'], process.env.STRIPE_WEBHOOK_SECRET);
+    event = await getStripe().webhooks.constructEventAsync(req.body, req.headers['stripe-signature'], process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
     log('[STRIPE] Webhook signature verification failed:', err.message);
     return res.status(400).json({ error: 'Webhook signature verification failed' });
   }
 
-  if (event.type === 'checkout.session.completed') {
-    const userId = event.data.object.client_reference_id;
-    if (userId) {
-      await saveUserBlob(userId, 'pro-status', { isPro: true });
-      log('[STRIPE] Pro unlocked:', userId);
+  try {
+    if (['checkout.session.completed', 'checkout.session.async_payment_succeeded'].includes(event.type)) {
+      const payment = event.data.object;
+      if (['paid', 'no_payment_required'].includes(payment.payment_status)) {
+        const userId = payment.client_reference_id;
+        if (!userId || !blob.available()) throw new Error('Payment user or storage missing');
+        // Unlike saveUserBlob, this must throw on failure so Stripe retries delivery.
+        await blob.putJSON(`${blobPrefix(userId)}/pro-status.json`, { isPro: true });
+        log('[STRIPE] Pro unlocked:', userId);
+      }
     }
+  } catch (err) {
+    log('[STRIPE] Fulfillment failed:', err.message);
+    return res.status(500).json({ error: 'Payment could not be saved' });
   }
 
   res.status(200).json({ received: true });
@@ -498,10 +506,9 @@ app.use((req, res, next) => {
 // canonical tokens.css from there, and blocking it takes the whole design system
 // with it -- serif fallback, no colours, and a dark-mode toggle that does nothing
 // because [data-theme="dark"] never defines a single variable.
-const CSP_HEADER = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://heyitsmejosh.com; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https://myselfserve.gov.bc.ca; frame-ancestors 'none'; object-src 'none'; base-uri 'self'";
+const CSP_HEADER = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://heyitsmejosh.com; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https://myselfserve.gov.bc.ca; frame-ancestors 'self' https://heyitsmejosh.com; object-src 'none'; base-uri 'self'";
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
   if (IS_PRODUCTION) {
@@ -1046,7 +1053,8 @@ app.get('/api/summary', async (req, res) => {
         requests: requestCount
       },
       lastUpdated: data.timestamp,
-      status: 'ok'
+      status: 'ok',
+      pwd_approved: PWD_APPROVED
     };
 
     res.json(summary);
@@ -1618,10 +1626,9 @@ app.post('/api/stripe-checkout', requireAuth, async (req, res) => {
   try {
     const session = await getStripe().checkout.sessions.create({
       mode: 'payment',
-      payment_method_types: ['card'],
       line_items: [{ price: process.env.STRIPE_PRICE_ID, quantity: 1 }],
-      success_url: 'https://talli.heyitsmejosh.com?pro=1',
-      cancel_url: 'https://talli.heyitsmejosh.com',
+      success_url: 'https://talli.heyitsmejosh.com/app?pro=1',
+      cancel_url: 'https://talli.heyitsmejosh.com/app',
       client_reference_id: req.session.userId,
       customer_creation: 'always',
     });
@@ -1689,15 +1696,17 @@ app.post('/api/paid-status', requireAuth, async (req, res) => {
 app.get('/api/report-status', requireAuth, async (req, res) => {
   try {
     const userId = req.session?.userId;
+    const pwdProfile = await loadUserBlob(userId, 'pwd-profile', { status: 'applied' }).catch(() => ({ status: 'applied' }));
+    const pwdApproved = pwdProfile.status === 'approved' || PWD_APPROVED;
     const cached = req.session.reportStatus;
     if (cached && cached.reportMonths) {
-      return res.json(cached);
+      return res.json({ ...cached, pwdApproved });
     }
     const defaultData = { reportMonths: {} };
     const stored = await loadUserBlob(userId, 'report-status', defaultData);
     const data = stored.reportMonths ? stored : defaultData;
     req.session.reportStatus = data;
-    res.json(data);
+    res.json({ ...data, pwdApproved });
   } catch (err) {
     log('[REPORT] GET error:', err.message);
     res.json({ reportMonths: {} });
