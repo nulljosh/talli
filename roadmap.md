@@ -1,3 +1,11 @@
+## Focus correction, 2026-09-11
+
+Handoff: paused at Joshua's request to conserve usage. Changes are local and uncommitted; no deployment or release. Confirmation remains pending. Completed checks and next steps: [revenue handoff](../REVENUE.md).
+
+Talli is a disability-tracking utility, not a revenue target (Joshua). Prioritize accurate tracking and usable reporting, not new monetization features. Existing checkout fixes remain reliability work: failed entitlement writes trigger retries, checkout errors are visible, and payment returns to the dashboard.
+
+ASC verified today: iOS 3.5.14 and macOS 3.5.6 READY_FOR_DISTRIBUTION. Revenue work belongs to Epiphany and Voxprint. The old proposal to implement Talli password reset needs reassessment: the current login uses BCeID credentials, not a Talli-owned password.
+
 # Talli Roadmap
 
 ## Full cross-platform -- DONE 2026-08-31
