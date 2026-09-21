@@ -1,6 +1,6 @@
 # Architecture
 
-Talli is a Canadian disability benefits navigator. Users scrape their BC Self-Serve portal account, learn about available benefits (PWD, RDSP, CDB), and file monthly income reports directly from the app. Web dashboard (html/js), native iOS/macOS apps, watchOS companion, Kotlin Multiplatform Android stub, Cloudflare Workers backend scraper. Cross-platform state synced via /api endpoints backed by Workers KV and Supabase.
+Talli helps people in BC track and manage their disability benefits. It pulls a user's data from the government's BC Self-Serve portal, explains which benefits they qualify for, and lets them file their monthly income report right from the app instead of the portal. It has a web dashboard, native iOS and macOS apps, a watchOS companion, and an early Android version. A Cloudflare Workers backend does the actual portal scraping, and all versions of the app stay in sync through shared API endpoints backed by Cloudflare's key-value store and Supabase.
 
 ## How it runs
 
