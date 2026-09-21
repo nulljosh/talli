@@ -1177,6 +1177,13 @@ function MessagesTab({dark, messages, readIds, onRead, onRefresh}) {
   const listRef = useRef(null);
   // Refresh whenever the tab is opened (component remounts on each tab switch)
   useEffect(() => { onRefresh && onRefresh(); }, []);
+  // Opening the tab reads everything; tap-per-row alone left the badge stuck.
+  useEffect(() => {
+    const ids = messages.filter(m => m.unread && !readIds[m.id]).map(m => String(m.id));
+    if (!ids.length) return;
+    onRead(ids);
+    fetch('/api/read-messages', {method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({readIds: ids})}).catch(()=>{});
+  }, [messages]);
   const onTouchStartPull = e => { if (listRef.current && listRef.current.scrollTop === 0) pullStart.current = e.touches[0].clientY; else pullStart.current = null; };
   const onTouchEndPull = e => {
     if (pullStart.current !== null && e.changedTouches[0].clientY - pullStart.current > 70) onRefresh && onRefresh();

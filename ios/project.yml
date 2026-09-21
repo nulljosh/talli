@@ -82,7 +82,9 @@ targets:
     type: bundle.unit-test
     platform: iOS
     sources:
-      - Tests
+      - path: Tests
+        excludes:
+          - test_payday_dates.swift # standalone `swift` script, top-level code
     dependencies:
       - target: Talli
     settings:

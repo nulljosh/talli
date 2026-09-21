@@ -43,6 +43,10 @@ struct MessagesView: View {
         }
         .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 90) }
         .navigationTitle("Messages")
+        // Opening the tab reads everything; tap-per-row alone left the badge stuck.
+        .task(id: appState.statusMessageItems.map(\.id)) {
+            await appState.markAllMessagesRead()
+        }
         .refreshable {
             await appState.refreshDashboard()
         }

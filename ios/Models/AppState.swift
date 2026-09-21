@@ -193,7 +193,8 @@ final class AppState {
         guard isAuthenticated else { return }
         do {
             let data = try await APIClient.shared.getReadMessages()
-            readMessageIds = Set(data.readIds)
+            // Union, not replace: a stale server copy must never resurrect the badge.
+            readMessageIds.formUnion(data.readIds)
         } catch {
             // Non-critical
         }
@@ -207,8 +208,9 @@ final class AppState {
     }
 
     func markAllMessagesRead() async {
+        guard unreadMessageCount > 0 else { return }
         let allIds = statusMessageItems.map(\.id)
-        readMessageIds = Set(allIds)
+        readMessageIds.formUnion(allIds)
         guard isAuthenticated else { return }
         _ = try? await APIClient.shared.markMessagesRead(ids: allIds)
     }
@@ -465,6 +467,7 @@ final class AppState {
 
         try? await APIClient.shared.logout()
         isAuthenticated = false
+        readMessageIds = []
         KeychainHelper.clearCredentials()
         clearCookies()
     }
