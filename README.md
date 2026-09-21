@@ -28,6 +28,8 @@ When does the money come, and how much? Talli answers that for people on BC inco
 
 It reads BC Self-Serve for you and shows income, payment dates, PWD application status and government messages in one place. Free, always.
 
+<img src="progress.svg" width="460">
+
 ## Features
 
 - Reads BC Self-Serve. Credentials are encrypted per session
