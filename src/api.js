@@ -1631,6 +1631,7 @@ app.post('/api/stripe-checkout', requireAuth, async (req, res) => {
       cancel_url: 'https://talli.heyitsmejosh.com/app',
       client_reference_id: req.session.userId,
       customer_creation: 'always',
+      allow_promotion_codes: true,
     });
     res.json({ url: session.url });
   } catch (err) {
