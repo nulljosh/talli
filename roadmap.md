@@ -15,8 +15,8 @@ ASC verified today: iOS 3.5.14 and macOS 3.5.6 READY_FOR_DISTRIBUTION. Revenue w
 ### 4.0: the whole money picture
 - [x] Widgets for everyone (2026-10-02). `/api/summary` reads one shared token and one cache key, so iPhone and Mac widgets only work for one account. Move it to the signed-in session (App Group carries a per-user token) and drop the shared key.
 - [x] (2026-10-02, from the CGEB quarterly amount) Yearly total includes GST/HST and other CRA payments on their real dates, not just PWD + CDB.
-- [ ] Real amounts. Read the PWD and CDB figures the portal and CRA actually paid instead of the default rates; fall back to defaults only when nothing is recorded.
-- [ ] Earnings exemption tracker. PWD lets you earn about $15k a year before a dollar-for-dollar clawback. Log earnings, show what's left of the exemption, warn before crossing it.
+- [x] Real amounts. Read the PWD and CDB figures the portal and CRA actually paid instead of the default rates; fall back to defaults only when nothing is recorded.
+- [x] Earnings exemption tracker. PWD lets you earn about $15k a year before a dollar-for-dollar clawback. Log earnings, show what's left of the exemption, warn before crossing it.
 - [ ] Asset limit tracker. PWD caps assets around $100k; RDSP doesn't count. Show where you stand.
 - [ ] Payday push without opening the app: a Workers Cron Trigger checks the portal and pushes new messages and the payday reminder (APNs key needed from Joshua).
 

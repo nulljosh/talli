@@ -66,6 +66,14 @@ t('recorded GST schedule wins, with its own amounts', () => {
   assert.strictEqual(inc.yearRemaining, 1100 * 3 + 112.03);
 });
 
+t('portal amount beats the default rate, not a recorded one', () => {
+  const { deriveIncome, DEFAULT_MONTHLY_RATES } = require('../src/programs/profiles');
+  const now = new Date(2026, 9, 2);
+  assert.strictEqual(deriveIncome({}, {}, now, null, 1535.5).pwdMonthly, 1535.5);
+  assert.strictEqual(deriveIncome({ monthlyAmount: 1000 }, {}, now, null, 1535.5).pwdMonthly, 1000);
+  assert.strictEqual(deriveIncome({}, {}, now, null, null).pwdMonthly, DEFAULT_MONTHLY_RATES.pwd);
+});
+
 t('earnings exemption: this year only, flags going over', () => {
   const { deriveEarnings } = require('../src/programs/profiles');
   const e = deriveEarnings({ entries: [{ date: '2026-03-01', amount: 1000 }, { date: '2025-12-30', amount: 9999 }] }, new Date(2026, 9, 2));

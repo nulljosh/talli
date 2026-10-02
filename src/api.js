@@ -1069,7 +1069,7 @@ app.get('/api/summary', async (req, res) => {
       const pwdProfile = await loadUserBlob(widgetUserId, 'pwd-profile', null).catch(() => null);
       const cdbProfile = await loadUserBlob(widgetUserId, 'cdb-profile', null).catch(() => null);
       const cgebProfile = await loadUserBlob(widgetUserId, 'cgeb-profile', null).catch(() => null);
-      summary.income = deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile);
+      summary.income = deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile, portalPwd(data));
     }
 
     res.json(summary);
@@ -1255,6 +1255,7 @@ app.get('/api/latest', requireAuth, async (req, res) => {
 
     const result = await fetchOrLoadData(req);
     if (result) {
+      uiConfig.income = deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile, portalPwd(result.data));
       return res.json({ file: result.source, data: result.data, uiConfig });
     }
 
@@ -2074,18 +2075,28 @@ app.get('/api/check', scrapeLimiter, requireAuth, async (req, res) => {
 
 // ── Mobile API ──────────────────────────────────────────────────────────────
 
-function extractMobileData(scraperResult, income = null, earnings = null) {
-  const sections = scraperResult?.sections || {};
-
-  // Extract payment amount from Payment Info tableData
-  const paymentSection = sections['Payment Info'] || {};
+// The PWD amount BC is actually paying, read off My Self Serve's Payment Info.
+// Returns the "$1,535.50" string, or null when the scrape has no amount.
+function portalPaymentText(scraperResult) {
+  const paymentSection = scraperResult?.sections?.['Payment Info'] || {};
   const paymentData = (paymentSection.tableData || []).filter(s => typeof s === 'string');
   const paymentAllText = (paymentSection.allText || []).filter(s => typeof s === 'string');
   const raw = [...paymentData, ...paymentAllText].join('\n');
   const amountMatch =
     raw.match(/(?:(?:payment\s+)?amount|cheque(?:\s+amount)?|monthly\s+(?:amount|benefit)|next\s+payment)[:\s]+(\$[\d,]+(?:\.\d{2})?)/i) ||
     raw.match(/(\$\d{1,3}(?:,\d{3})+(?:\.\d{2})?)/);
-  const paymentAmount = amountMatch ? amountMatch[1] : null;
+  return amountMatch ? amountMatch[1] : null;
+}
+
+function portalPwd(scraperResult) {
+  const text = portalPaymentText(scraperResult);
+  const n = text ? Number(text.replace(/[$,]/g, '')) : NaN;
+  return n > 0 ? n : null;
+}
+
+function extractMobileData(scraperResult, income = null, earnings = null) {
+  const sections = scraperResult?.sections || {};
+  const paymentAmount = portalPaymentText(scraperResult);
 
   // My Self Serve's Payment Info line only ever shows the provincial PWD half, so
   // the scraped figure silently drops the federal CDB -- that is why the web
@@ -2129,7 +2140,7 @@ app.get('/api/mobile', requireAuth, async (req, res) => {
     const cdbProfile = await loadUserBlob(userId, 'cdb-profile', {}).catch(() => ({}));
     const cgebProfile = await loadUserBlob(userId, 'cgeb-profile', null).catch(() => null);
     const earnings = deriveEarnings(await loadUserBlob(userId, 'earnings-profile', null).catch(() => null));
-    res.json(extractMobileData(result?.data || null, deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile), earnings));
+    res.json(extractMobileData(result?.data || null, deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile, portalPwd(result?.data)), earnings));
   } catch (error) {
     console.error('[API] /api/mobile error:', error);
     res.status(500).json({ error: safeApiError(error, 'Failed to load data') });

@@ -104,8 +104,10 @@ const DEFAULT_MONTHLY_RATES = { pwd: 1450, cdb: 200 };
 // Year figures count BC's published cheque issue dates in this calendar year, so
 // they are what actually lands in the account, not 12 x monthly. If BC hasn't
 // published the year yet the count is short; refresh CHEQUE_ISSUE_DATES.
-function deriveIncome(pwdProfile, cdbProfile, now = new Date(), cgebProfile = null) {
-  const pwdMonthly = pwdProfile?.monthlyAmount ?? DEFAULT_MONTHLY_RATES.pwd;
+// portalPwd is the amount My Self Serve says BC is actually paying; it beats the
+// default rate but not a figure the user recorded themselves.
+function deriveIncome(pwdProfile, cdbProfile, now = new Date(), cgebProfile = null, portalPwd = null) {
+  const pwdMonthly = pwdProfile?.monthlyAmount ?? portalPwd ?? DEFAULT_MONTHLY_RATES.pwd;
   const cdbMonthly = cdbProfile?.monthlyAmount ?? DEFAULT_MONTHLY_RATES.cdb;
   const totalMonthly = pwdMonthly + cdbMonthly;
   const year = String(now.getFullYear());
