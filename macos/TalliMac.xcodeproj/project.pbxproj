@@ -30,6 +30,7 @@
 		42AEB414954D679EA4080840 /* TallyMacWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD57939601D50F6E8BA4261 /* TallyMacWidgets.swift */; };
 		4BCA3DBEDCAA96B862C734FA /* TalliMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD291A0A6F3E178AE7DBC14D /* TalliMacApp.swift */; };
 		533777806E5A825E0BB6FB75 /* TalliWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 05C53A51618D2F7455BED586 /* TalliWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		59D75C644E8AF87E3EAA040D /* ServiceRequestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95554CD8FF952B439E481BA4 /* ServiceRequestsView.swift */; };
 		62E4A3F5916F04C5C1474AA6 /* View+Glass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB0F7DA1B151C354B363FA0 /* View+Glass.swift */; };
 		648A1E6A1C557E43E91DD2AB /* MacKeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D46509CD0CB994360A6EE /* MacKeychainHelper.swift */; };
 		68003AB732B158D919F3BE14 /* RTLTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47FDBC6806E5A115D749928 /* RTLTracking.swift */; };
@@ -106,6 +107,7 @@
 		8B92B5AB892DBD4B963F8656 /* MacBenefitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBenefitsView.swift; sourceTree = "<group>"; };
 		8BD57939601D50F6E8BA4261 /* TallyMacWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TallyMacWidgets.swift; sourceTree = "<group>"; };
 		8CE4D95EDD23AA9E97925A20 /* MacBenefitsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBenefitsProvider.swift; sourceTree = "<group>"; };
+		95554CD8FF952B439E481BA4 /* ServiceRequestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceRequestsView.swift; sourceTree = "<group>"; };
 		A03D46509CD0CB994360A6EE /* MacKeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacKeychainHelper.swift; sourceTree = "<group>"; };
 		A35803128BD01A8F7B732D9B /* BenefitFinderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenefitFinderView.swift; sourceTree = "<group>"; };
 		A3951E529B6F7FA9B74ABE9C /* ExportOptions.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = ExportOptions.plist; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 				AB7688A8B26D97A128C95FA2 /* RdspTrackerView.swift */,
 				54336877769FA2F896CFAEAA /* ReconsiderationView.swift */,
 				143469F2CCBEE5C354DFA76E /* ReplyDraftView.swift */,
+				95554CD8FF952B439E481BA4 /* ServiceRequestsView.swift */,
 				C3B2AD00D857C67843DE6074 /* SupplementsView.swift */,
 				FBD64342FB49405CC38FC1F7 /* VaultView.swift */,
 			);
@@ -460,6 +463,7 @@
 				2B571A9A6058202934D64E5A /* RdspTrackerView.swift in Sources */,
 				F8E7098F7259513AA5938E0D /* ReconsiderationView.swift in Sources */,
 				266F13C9D2C23B68B5E6F504 /* ReplyDraftView.swift in Sources */,
+				59D75C644E8AF87E3EAA040D /* ServiceRequestsView.swift in Sources */,
 				0407FBFD53DB017B3052008B /* SupplementsView.swift in Sources */,
 				4BCA3DBEDCAA96B862C734FA /* TalliMacApp.swift in Sources */,
 				208D5FDB7E169D6B520AD82D /* VaultCrypto.swift in Sources */,

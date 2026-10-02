@@ -16,6 +16,7 @@ const { attemptHttpLogin, fetchAllSections } = require('./http-scraper');
 const widgetToken = require('./widget-token');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { nextPaymentDate } = require('./pay-dates');
+const { listRequests } = require('./programs/requests');
 const { draftReply } = require('./programs/reply');
 const { deriveReconsideration } = require('./programs/reconsideration');
 const { deriveMissedPayment } = require('./programs/missed');
@@ -1907,6 +1908,9 @@ async function benefitFinderFor(userId, posted) {
 // RDSP grant and bond tracker (src/programs/rdsp.js). Inputs live on the same
 // rdsp-profile blob as the application status, so nothing else has to change.
 const rdspShape = (profile) => ({ profile: cleanRdsp(profile), derived: deriveRdsp(profile) });
+
+// Service requests (src/programs/requests.js): what to say and have ready for the common asks.
+app.get('/api/requests', requireAuth, (req, res) => res.json({ requests: listRequests() }));
 
 // Message replies (src/programs/reply.js): a plain-words read of a ministry message and a draft answer.
 app.post('/api/message-reply', requireAuth, (req, res) => {

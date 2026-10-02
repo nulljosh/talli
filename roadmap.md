@@ -17,7 +17,7 @@ ASC verified today: iOS 3.5.14 and macOS 3.5.6 READY_FOR_DISTRIBUTION. Revenue w
 
 ### 7.0: paperwork done for you
 - [x] (2026-10-02, web/iOS/macOS) Message replies from Talli: answer a ministry message without opening My Self Serve.
-- [ ] Service requests: start the common ones (crisis supplement, address change, shelter update) from the app.
+- [x] (2026-10-02, web/iOS/macOS) Service requests: start the common ones (crisis supplement, address change, shelter update) from the app.
 - [x] (2026-10-02, web/iOS/macOS) Reconsideration helper: denied? Walk the 20-business-day deadline with a checklist and a draft letter.
 
 ### 8.0: the whole household

@@ -138,6 +138,10 @@ final class MacAPIClient: @unchecked Sendable {
         return data
     }
 
+    func serviceRequests() async throws -> ServiceRequests {
+        try await send(path: "api/requests", responseType: ServiceRequests.self)
+    }
+
     func messageReply(text: String) async throws -> MessageReply {
         try await send(path: "api/message-reply", method: "POST", body: MessageReplyRequest(text: text), responseType: MessageReply.self)
     }

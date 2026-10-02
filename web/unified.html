@@ -863,6 +863,47 @@ function ReconsiderationTool({dark}) {
   );
 }
 
+// Service requests: pick the thing you need, get the words, the papers and the door. Catalogue: src/programs/requests.js.
+function RequestsTool({dark}) {
+  const t = tk(dark);
+  const T = window.I18N.t;
+  const [list, setList] = useState(null);
+  const [open, setOpen] = useState(null);
+  const [copied, setCopied] = useState(null);
+  useEffect(() => { fetch('/api/requests', {credentials:'include'}).then(r=>r.json()).then(d=>setList(d.requests)).catch(()=>{}); }, []);
+  if (!list) return <Skel w="100%" h={90} r={12} dark={dark}/>;
+  const pill = (solid) => ({padding:'6px 13px',borderRadius:100,background:solid?t.accent:'transparent',color:solid?'#fff':t.muted,border:solid?'none':`1px solid ${t.border2}`,fontSize:12,fontWeight:600,fontFamily:'inherit',cursor:'pointer',textDecoration:'none',display:'inline-block'});
+  return (
+    <div>
+      <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:6}}>{T('Service requests')}</div>
+      <div style={{fontSize:12,color:t.mutedMid,lineHeight:1.5,marginBottom:12}}>{T('Pick what you need. Talli gives you the words, the papers to have ready, and the way in.')}</div>
+      <div style={{display:'flex',flexDirection:'column',gap:8}}>
+        {list.map(r => { const isOpen = open === r.id; return (
+          <div key={r.id} style={{background:t.bg2,borderRadius:10,border:`1px solid ${t.border}`}}>
+            <button onClick={()=>setOpen(isOpen?null:r.id)} aria-expanded={isOpen} style={{width:'100%',textAlign:'start',background:'none',border:'none',padding:'12px 14px',cursor:'pointer',fontFamily:'inherit'}}>
+              <div style={{fontSize:14,fontWeight:600,color:t.text}}>{r.name}</div>
+              <div style={{fontSize:12,color:t.mutedMid,marginTop:2}}>{r.when}</div>
+            </button>
+            {isOpen && <div style={{padding:'0 14px 14px',animation:'fadeIn 0.2s ease both'}}>
+              <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted}}>{T('Have ready')}</div>
+              <ul style={{margin:'4px 0 0',paddingInlineStart:18,fontSize:13,color:t.mutedMid,lineHeight:1.5}}>{r.ready.map((x,i)=><li key={i}>{x}</li>)}</ul>
+              <div style={{margin:'12px 0 0',padding:'10px 12px',borderRadius:8,border:`1px solid ${t.border2}`}}>
+                <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:4}}>{T('What to say')}</div>
+                <div style={{fontSize:13,color:t.text,lineHeight:1.5}}>{r.say}</div>
+                <button onClick={()=>navigator.clipboard?.writeText(r.say).then(()=>{setCopied(r.id);setTimeout(()=>setCopied(null),1500);}).catch(()=>{})} style={{...pill(false),marginTop:8,padding:'4px 11px',fontSize:11}}>{copied===r.id?T('Copied'):T('Copy')}</button>
+              </div>
+              <div style={{fontSize:12,color:t.mutedMid,lineHeight:1.5,marginTop:10}}>{r.note}</div>
+              <div style={{display:'flex',gap:8,flexWrap:'wrap',marginTop:12}}>
+                <a href={`tel:${r.phone}`} style={pill(true)}>{T('Call')} {r.phone}</a>
+                <a href={r.link} target="_blank" rel="noopener noreferrer" style={pill(false)}>{T('Open the page')}</a>
+              </div>
+            </div>}
+          </div>); })}
+      </div>
+    </div>
+  );
+}
+
 // One quiet line per section; the full section opens on tap. Keeps Status and Calendar short.
 function FoldBox({dark, title, summary, open, setOpen, children}) {
   const t = tk(dark);
@@ -1620,6 +1661,9 @@ function BenniesSection({dark}) {
 
       <FoldTool dark={dark} title="RDSP grants and bonds" url="/api/rdsp-tracker" summarize={d=>d.derived?(d.derived.eligible?'$'+Math.round(d.derived.missing).toLocaleString()+' still on the table this year':'Grants stop after the year you turn 49'):'See what your RDSP is owed'}>
         <RdspTracker dark={dark}/>
+      </FoldTool>
+      <FoldTool dark={dark} title="Service requests" url="/api/requests" summarize={()=>'Crisis supplement, new address, rent change and more'}>
+        <RequestsTool dark={dark}/>
       </FoldTool>
       <FoldTool dark={dark} title="Reconsideration helper" url="/api/reconsideration" summarize={d=>d.derived?(d.derived.status==='passed'?'The 20 days have ended':d.derived.status==='today'?'Last day to hand it in':d.derived.left+' business days left to ask again'):'Denied? Know your deadline'}>
         <ReconsiderationTool dark={dark}/>
