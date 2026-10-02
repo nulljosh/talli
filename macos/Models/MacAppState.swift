@@ -66,6 +66,10 @@ final class MacAppState {
         dashboard?.assets
     }
 
+    var yearReview: MacDashboardData.YearReview? {
+        dashboard?.yearReview
+    }
+
     private let monitor = NWPathMonitor()
     private let monitorQueue = DispatchQueue(label: "com.jt.talli.mac.network")
 

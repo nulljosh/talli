@@ -49,6 +49,21 @@ struct MacBenefitsView: View {
                         }
                     }
                 }
+
+                if let review = appState.yearReview, !review.items.isEmpty {
+                    let cad = FloatingPointFormatStyle<Double>.Currency(code: "CAD").precision(.fractionLength(0))
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("\(String(review.year)) in review\(review.complete ? "" : " so far"): \(review.totals.all.formatted(cad))")
+                            .font(.footnote)
+                        Text("\(review.totals.benefits.formatted(cad)) benefits, \(review.totals.credits.formatted(cad)) credits, \(review.totals.earnings.formatted(cad)) work earnings")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        ShareLink(item: review.csvFile()) {
+                            Label("Export for tax time", systemImage: "square.and.arrow.up")
+                        }
+                        .font(.footnote)
+                    }
+                }
             }
             .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)

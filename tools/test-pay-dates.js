@@ -90,4 +90,23 @@ t('assets: RDSP excluded, flags over', () => {
   assert.deepStrictEqual(deriveAssets(null), { counted: 0, exempt: 0, limit: 100000, left: 100000, over: false });
 });
 
+t('year review: January looks back at the full last year', () => {
+  const { deriveYearReview } = require('../src/programs/profiles');
+  const r = deriveYearReview({ pwd: { monthlyAmount: 1000 }, cdb: { monthlyAmount: 100 }, cgeb: { quarterlyAmount: 50 },
+    earnings: { entries: [{ date: '2026-03-01', amount: 400 }, { date: '2027-01-02', amount: 99 }] } }, new Date(2027, 0, 10));
+  assert.strictEqual(r.year, 2026);
+  assert.strictEqual(r.complete, true);
+  assert.deepStrictEqual(r.totals, { benefits: 1100 * 12, credits: 200, earnings: 400, all: 1100 * 12 + 600 });
+  assert.strictEqual(r.items[0].date <= r.items[r.items.length - 1].date, true);
+});
+
+t('year review mid-year only counts what already landed', () => {
+  const { deriveYearReview } = require('../src/programs/profiles');
+  const r = deriveYearReview({ pwd: { monthlyAmount: 1000 }, cdb: { monthlyAmount: 0 } }, new Date(2026, 9, 2));
+  assert.strictEqual(r.year, 2026);
+  assert.strictEqual(r.complete, false);
+  assert.strictEqual(r.totals.benefits, 1000 * 9); // Oct 21 hasn't landed yet
+  assert.strictEqual(r.items.every((i) => i.what === 'PWD assistance'), true); // $0 CDB lines dropped
+});
+
 console.log(`\n${passed} passed, 0 failed`);

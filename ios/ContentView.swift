@@ -309,6 +309,21 @@ private struct DashboardScreen: View {
                     }
                 }
 
+                if let review = appState.yearReview, !review.items.isEmpty {
+                    HStack {
+                        Text("\(String(review.year)) in review\(review.complete ? "" : " so far")").foregroundStyle(.secondary)
+                        Spacer()
+                        Text(appState.moneyText(review.totals.all)).fontWeight(.semibold)
+                    }
+                    .font(.footnote)
+                    Text("\(appState.moneyText(review.totals.benefits)) benefits, \(appState.moneyText(review.totals.credits)) credits, \(appState.moneyText(review.totals.earnings)) work earnings")
+                        .font(.caption).foregroundStyle(.secondary)
+                    ShareLink(item: review.csvFile()) {
+                        Label("Export for tax time", systemImage: "square.and.arrow.up")
+                    }
+                    .font(.footnote)
+                }
+
                 ForEach(appState.incomeRates, id: \.label) { rate in
                     HStack {
                         Text(rate.label).foregroundStyle(.secondary)

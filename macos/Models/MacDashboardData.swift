@@ -34,6 +34,32 @@ struct MacDashboardData: Codable, Sendable {
         let over: Double?
     }
 
+    struct YearReview: Codable, Sendable {
+        struct Item: Codable, Sendable {
+            let date: String
+            let what: String
+            let amount: Double
+        }
+        struct Totals: Codable, Sendable {
+            let benefits: Double
+            let credits: Double
+            let earnings: Double
+            let all: Double
+        }
+        let year: Int
+        let complete: Bool
+        let items: [Item]
+        let totals: Totals
+
+        /// Writes the year as a CSV for tax time and returns the file to share.
+        func csvFile() -> URL {
+            let rows = ["Date,What,Amount"] + items.map { "\($0.date),\"\($0.what)\",\(String(format: "%.2f", $0.amount))" }
+            let url = FileManager.default.temporaryDirectory.appendingPathComponent("talli-\(year).csv")
+            try? rows.joined(separator: "\n").write(to: url, atomically: true, encoding: .utf8)
+            return url
+        }
+    }
+
     struct Assets: Codable, Sendable {
         let counted: Double?
         let exempt: Double?
@@ -48,6 +74,7 @@ struct MacDashboardData: Codable, Sendable {
     let income: Income?
     let earnings: Earnings?
     let assets: Assets?
+    let yearReview: YearReview?
 
     enum CodingKeys: String, CodingKey {
         case paymentAmount = "payment_amount"
@@ -56,15 +83,17 @@ struct MacDashboardData: Codable, Sendable {
         case income
         case earnings
         case assets
+        case yearReview = "year_review"
     }
 
-    init(paymentAmount: String?, nextPaymentDate: String?, statusMessages: [StatusMessage], income: Income? = nil, earnings: Earnings? = nil, assets: Assets? = nil) {
+    init(paymentAmount: String?, nextPaymentDate: String?, statusMessages: [StatusMessage], income: Income? = nil, earnings: Earnings? = nil, assets: Assets? = nil, yearReview: YearReview? = nil) {
         self.paymentAmount = paymentAmount
         self.nextPaymentDate = nextPaymentDate
         self.statusMessages = statusMessages
         self.income = income
         self.earnings = earnings
         self.assets = assets
+        self.yearReview = yearReview
     }
 
     init(from decoder: Decoder) throws {
@@ -74,6 +103,7 @@ struct MacDashboardData: Codable, Sendable {
         income = try container.decodeIfPresent(Income.self, forKey: .income)
         earnings = try container.decodeIfPresent(Earnings.self, forKey: .earnings)
         assets = try container.decodeIfPresent(Assets.self, forKey: .assets)
+        yearReview = try? container.decodeIfPresent(YearReview.self, forKey: .yearReview)
 
         if let stringMessages = try? container.decode([String].self, forKey: .statusMessages) {
             statusMessages = stringMessages.map { StatusMessage(text: $0) }

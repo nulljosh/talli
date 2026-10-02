@@ -140,6 +140,10 @@ final class AppState {
         dashboard?.assets
     }
 
+    var yearReview: DashboardData.YearReview? {
+        dashboard?.yearReview
+    }
+
     private static let moneyFormat: FloatingPointFormatStyle<Double>.Currency =
         .currency(code: "CAD").precision(.fractionLength(0))
 

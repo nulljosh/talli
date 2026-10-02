@@ -23,7 +23,7 @@ ASC verified today: iOS 3.5.14 and macOS 3.5.6 READY_FOR_DISTRIBUTION. Revenue w
 ### 5.0: one tap, every device
 - [x] (2026-10-02, iPhone; Mac has no report filing) File the monthly report from the reminder itself (notification action), PIN from Keychain.
 - [x] (2026-10-02, embedded as com.heyitsmejosh.tally.watchkitapp, token over WatchConnectivity; ships with next iOS build) Apple Watch app shipped inside the iPhone app, fed by the phone instead of a shared API token.
-- [ ] Year in review each January: every payment, every credit, ready for tax time.
+- [x] (2026-10-02, web/iOS/macOS, CSV export) Year in review each January: every payment, every credit, ready for tax time.
 - [ ] Spanish, Tagalog, Arabic and Farsi on top of English, French, Chinese, Punjabi.
 
 ### 6.0: never miss a dollar

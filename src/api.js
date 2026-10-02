@@ -16,7 +16,7 @@ const { attemptHttpLogin, fetchAllSections } = require('./http-scraper');
 const widgetToken = require('./widget-token');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { nextPaymentDate } = require('./pay-dates');
-const { PROFILE_PROGRAMS, deriveIncome, deriveEarnings, deriveAssets } = require('./programs/profiles');
+const { PROFILE_PROGRAMS, deriveIncome, deriveEarnings, deriveAssets, deriveYearReview } = require('./programs/profiles');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -1234,6 +1234,7 @@ app.get('/api/latest', requireAuth, async (req, res) => {
     const rdspProfile = await loadUserBlob(userId, 'rdsp-profile', { status: 'pending' }).catch(() => ({ status: 'pending' }));
     const cdbProfile = await loadUserBlob(userId, 'cdb-profile', { status: 'pending' }).catch(() => ({ status: 'pending' }));
     const cgebProfile = await loadUserBlob(userId, 'cgeb-profile', { status: 'pending' }).catch(() => ({ status: 'pending' }));
+    const earningsProfile = await loadUserBlob(userId, 'earnings-profile', null).catch(() => null);
     const uiConfig = {
       pwdApproved: pwdProfile.status === 'approved' || PWD_APPROVED,
       pwdMedicalDone: pwdProfile.status === 'medical_done' || pwdProfile.status === 'approved' || PWD_MEDICAL_DONE,
@@ -1250,13 +1251,15 @@ app.get('/api/latest', requireAuth, async (req, res) => {
       cdbRetroactiveEligible: cdbProfile.retroactiveEligible || false,
       cgeb: cgebProfile,
       income: deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile),
-      earnings: deriveEarnings(await loadUserBlob(userId, 'earnings-profile', null).catch(() => null)),
+      earnings: deriveEarnings(earningsProfile),
       assets: deriveAssets(await loadUserBlob(userId, 'assets-profile', null).catch(() => null)),
+      yearReview: deriveYearReview({ pwd: pwdProfile, cdb: cdbProfile, cgeb: cgebProfile, earnings: earningsProfile }),
     };
 
     const result = await fetchOrLoadData(req);
     if (result) {
       uiConfig.income = deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile, portalPwd(result.data));
+      uiConfig.yearReview = deriveYearReview({ pwd: pwdProfile, cdb: cdbProfile, cgeb: cgebProfile, earnings: earningsProfile, portalPwd: portalPwd(result.data) });
       return res.json({ file: result.source, data: result.data, uiConfig });
     }
 
@@ -2095,7 +2098,7 @@ function portalPwd(scraperResult) {
   return n > 0 ? n : null;
 }
 
-function extractMobileData(scraperResult, income = null, earnings = null, assets = null) {
+function extractMobileData(scraperResult, income = null, earnings = null, assets = null, yearReview = null) {
   const sections = scraperResult?.sections || {};
   const paymentAmount = portalPaymentText(scraperResult);
 
@@ -2123,6 +2126,7 @@ function extractMobileData(scraperResult, income = null, earnings = null, assets
     income,
     earnings,
     assets,
+    year_review: yearReview,
     next_date: nextDate,
     messages,
     // First page only -- the portal hides older rows behind "Show More Messages".
@@ -2141,9 +2145,11 @@ app.get('/api/mobile', requireAuth, async (req, res) => {
     const pwdProfile = await loadUserBlob(userId, 'pwd-profile', {}).catch(() => ({}));
     const cdbProfile = await loadUserBlob(userId, 'cdb-profile', {}).catch(() => ({}));
     const cgebProfile = await loadUserBlob(userId, 'cgeb-profile', null).catch(() => null);
-    const earnings = deriveEarnings(await loadUserBlob(userId, 'earnings-profile', null).catch(() => null));
+    const earningsProfile = await loadUserBlob(userId, 'earnings-profile', null).catch(() => null);
+    const earnings = deriveEarnings(earningsProfile);
     const assets = deriveAssets(await loadUserBlob(userId, 'assets-profile', null).catch(() => null));
-    res.json(extractMobileData(result?.data || null, deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile, portalPwd(result?.data)), earnings, assets));
+    const yearReview = deriveYearReview({ pwd: pwdProfile, cdb: cdbProfile, cgeb: cgebProfile, earnings: earningsProfile, portalPwd: portalPwd(result?.data) });
+    res.json(extractMobileData(result?.data || null, deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile, portalPwd(result?.data)), earnings, assets, yearReview));
   } catch (error) {
     console.error('[API] /api/mobile error:', error);
     res.status(500).json({ error: safeApiError(error, 'Failed to load data') });
