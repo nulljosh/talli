@@ -218,12 +218,10 @@ covers the persisted PIN, since Apple has no credentials category.
       Disk Access, and Apple may not offer an SMS path for this flow, timebox it.
 
 ## Ingested 2026-08-22
-- [ ] Messages still stale, separate from the amount bug, not yet investigated.
 
 ## From Apple Notes (imported 2026-08-25)
 
 - [ ] Landing page font doesn't really match other codebase projects. Vibe clone from the others.
-- [ ] Messages is still stale, needs a refresh/fix.
 - [ ] Clone Epiphany's landing page approach across web projects (Lexly, Healstack, Talli, etc.): show the actual product beyond the login/registration wall, Epiphany shows the real map as the home page.
 
 ## WebMCP + REST API rollout -- shipped 2026-08-27
