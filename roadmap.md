@@ -21,7 +21,7 @@ ASC verified today: iOS 3.5.14 and macOS 3.5.6 READY_FOR_DISTRIBUTION. Revenue w
 - [ ] Payday push without opening the app: a Workers Cron Trigger checks the portal and pushes new messages and the payday reminder (APNs key needed from Joshua).
 
 ### 5.0: one tap, every device
-- [ ] File the monthly report from the reminder itself (notification action), PIN from Keychain.
+- [x] (2026-10-02, iPhone; Mac has no report filing) File the monthly report from the reminder itself (notification action), PIN from Keychain.
 - [ ] Apple Watch app shipped inside the iPhone app, fed by the phone instead of a shared API token.
 - [ ] Year in review each January: every payment, every credit, ready for tax time.
 - [ ] Spanish, Tagalog, Arabic and Farsi on top of English, French, Chinese, Punjabi.

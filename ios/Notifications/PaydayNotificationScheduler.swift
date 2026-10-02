@@ -34,9 +34,17 @@ enum PaydayNotificationScheduler {
 
     static func requestAuthorizationIfNeeded() async {
         let center = UNUserNotificationCenter.current()
+        // Categories must be registered every launch, not just on first prompt.
+        setupNotificationCategories(center)
         let settings = await center.notificationSettings()
         guard settings.authorizationStatus == .notDetermined else { return }
         _ = try? await center.requestAuthorization(options: [.alert, .sound, .badge])
+    }
+
+    private static func setupNotificationCategories(_ center: UNUserNotificationCenter) {
+        let fileReportAction = UNNotificationAction(identifier: "FILE_REPORT", title: "File report", options: [.authenticationRequired])
+        let reportCategory = UNNotificationCategory(identifier: "REPORT_WINDOW", actions: [fileReportAction], intentIdentifiers: [])
+        center.setNotificationCategories([reportCategory])
     }
 
     /// Reschedules both reminders. Safe to call after every dashboard refresh -- replacing
@@ -59,6 +67,7 @@ enum PaydayNotificationScheduler {
                 title: "Reporting window is open",
                 body: "You can file your monthly report now through the 5th.",
                 fireDate: fireDate,
+                category: "REPORT_WINDOW",
                 center: center
             )
         }
@@ -74,11 +83,14 @@ enum PaydayNotificationScheduler {
         }
     }
 
-    private static func schedule(id: String, title: String, body: String, fireDate: Date, center: UNUserNotificationCenter) {
+    private static func schedule(id: String, title: String, body: String, fireDate: Date, category: String? = nil, center: UNUserNotificationCenter) {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
         content.sound = .default
+        if let category {
+            content.categoryIdentifier = category
+        }
 
         let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: fireDate)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
