@@ -1,7 +1,10 @@
 import SwiftUI
+import UserNotifications
 
 struct MacSettingsView: View {
     @AppStorage("app_theme") private var rawTheme = "system"
+    @AppStorage("notifications_payday_enabled") private var paydayNotificationsEnabled = true
+    @AppStorage("notifications_reporting_window_enabled") private var reportingWindowNotificationsEnabled = true
     @Environment(MacAppState.self) private var appState
 
     var body: some View {
@@ -12,6 +15,14 @@ struct MacSettingsView: View {
                 AccountCard(username: appState.username) {
                     Task { await appState.logout() }
                 }
+                .modifier(MacGlassCard())
+
+                Text("Notifications")
+                    .font(.headline)
+                NotificationsCard(
+                    paydayEnabled: $paydayNotificationsEnabled,
+                    reportingWindowEnabled: $reportingWindowNotificationsEnabled
+                )
                 .modifier(MacGlassCard())
 
                 Text("Appearance")
@@ -42,6 +53,30 @@ private struct AccountCard: View {
             Button("Sign Out", action: signOut)
                 .buttonStyle(.bordered)
         }
+    }
+}
+
+private struct NotificationsCard: View {
+    @Binding var paydayEnabled: Bool
+    @Binding var reportingWindowEnabled: Bool
+
+    // Off takes effect now; back on waits for the next refresh's reschedule.
+    private func cancel(_ id: String) {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id])
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Toggle("Payday Reminder", isOn: $paydayEnabled)
+                .onChange(of: paydayEnabled) { _, on in
+                    if !on { cancel(PaydayNotificationScheduler.paydayId) }
+                }
+            Toggle("Reporting Window Reminder", isOn: $reportingWindowEnabled)
+                .onChange(of: reportingWindowEnabled) { _, on in
+                    if !on { cancel(PaydayNotificationScheduler.reportingWindowId) }
+                }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 

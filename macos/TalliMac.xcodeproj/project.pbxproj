@@ -12,6 +12,7 @@
 		0BDFE2F644478B6E4DE81162 /* MacDateParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE52B7411BB64FCBF55E718E /* MacDateParsing.swift */; };
 		0D9CD3FBC94EA80A07221C5C /* TalliWidgets-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E6F0CD73F1B533518444D527 /* TalliWidgets-Info.plist */; };
 		0EA33B911B3F3779F824707F /* MacMessagesWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C072FBCF9110200380F476B0 /* MacMessagesWidgetView.swift */; };
+		13B60F9180A94A04BA24C25E /* PaydayNotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCBD3343FCF75BB4A28E8744 /* PaydayNotificationScheduler.swift */; };
 		170DED2AAD7B3037534ED350 /* MacLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712C08E52D3C020E27D13B54 /* MacLoginView.swift */; };
 		190C9A49755892F5842E7855 /* MacMessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB8A17CA2D95C67235E3EB7 /* MacMessagesView.swift */; };
 		1F33700CFE6CC60045C2907B /* MacContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78526D808FDBBD806F7EF05 /* MacContentView.swift */; };
@@ -105,6 +106,7 @@
 		E6F0CD73F1B533518444D527 /* TalliWidgets-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "TalliWidgets-Info.plist"; sourceTree = "<group>"; };
 		E78526D808FDBBD806F7EF05 /* MacContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacContentView.swift; sourceTree = "<group>"; };
 		EC9E6A07378DC7743CCC0E4D /* MacSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacSettingsView.swift; sourceTree = "<group>"; };
+		FCBD3343FCF75BB4A28E8744 /* PaydayNotificationScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaydayNotificationScheduler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -124,6 +126,7 @@
 				D2F09362310FBA9BC12F44AF /* API */,
 				B95C375D38861B1A1EDE2090 /* macos */,
 				78C63CA92784404D8EC46A10 /* Models */,
+				78F55008E85541E57E60C252 /* Notifications */,
 				2ED134DA62A66DFB27FEA399 /* UITests-mac */,
 				EFA8EBF78F5183CCF1769CF9 /* Views */,
 				492E05BCAA24E42AAC03DF51 /* widgets-macos */,
@@ -171,6 +174,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		78F55008E85541E57E60C252 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				FCBD3343FCF75BB4A28E8744 /* PaydayNotificationScheduler.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
 		8B12F9F9BDDCEFD58632185A /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -192,6 +203,7 @@
 				BEE667693AE3B4A55E821898 /* TalliWidgets.entitlements */,
 				D2F09362310FBA9BC12F44AF /* API */,
 				78C63CA92784404D8EC46A10 /* Models */,
+				78F55008E85541E57E60C252 /* Notifications */,
 				EFA8EBF78F5183CCF1769CF9 /* Views */,
 			);
 			name = macos;
@@ -383,6 +395,7 @@
 				0A4F2A936FBED3094781D846 /* MacSettingsView.swift in Sources */,
 				B2B60C9015E6163943DC89CF /* MacTheme.swift in Sources */,
 				37291C624EBCC18BA59688CA /* MenuBarView.swift in Sources */,
+				13B60F9180A94A04BA24C25E /* PaydayNotificationScheduler.swift in Sources */,
 				4BCA3DBEDCAA96B862C734FA /* TalliMacApp.swift in Sources */,
 				62E4A3F5916F04C5C1474AA6 /* View+Glass.swift in Sources */,
 			);

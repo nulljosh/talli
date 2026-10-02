@@ -216,6 +216,10 @@ final class MacAppState {
         dashboard = data
         cacheDashboard(data)
         syncToWidgets(data)
+        if ProcessInfo.processInfo.environment["UITEST_SNAPSHOT"] == nil {
+            await PaydayNotificationScheduler.requestAuthorizationIfNeeded()
+            await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate)
+        }
     }
 
     func refresh() async {
@@ -233,6 +237,10 @@ final class MacAppState {
             syncToWidgets(fresh.data)
             if fresh.scrapeSucceeded { updateSyncDate() }
             errorMessage = nil
+            if ProcessInfo.processInfo.environment["UITEST_SNAPSHOT"] == nil {
+                await PaydayNotificationScheduler.requestAuthorizationIfNeeded()
+                await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate)
+            }
         } catch {
             if dashboard != nil {
                 errorMessage = "Offline. Showing cached data."
