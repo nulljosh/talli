@@ -95,6 +95,12 @@ struct MacBenefitsView: View {
                 }
                 .font(.headline)
 
+                DisclosureGroup("What if I take a job") {
+                    WhatIfView { try await MacAPIClient.shared.whatIf($0) }
+                        .padding(.top, 8)
+                }
+                .font(.headline)
+
                 DisclosureGroup("Trusted helper") {
                     TrustedHelperView(api: MacAPIClient.shared.trustedHelpers)
                         .padding(.top, 8)

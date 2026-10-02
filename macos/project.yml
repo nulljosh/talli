@@ -25,6 +25,7 @@ targets:
       - path: ../ios/Views/ServiceRequestsView.swift
       - path: ../ios/Views/HouseholdView.swift
       - path: ../ios/Views/TrustedHelperView.swift
+      - path: ../ios/Views/WhatIfView.swift
       - path: ../ios/Helpers/VaultCrypto.swift
       - path: .
         excludes:

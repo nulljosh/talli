@@ -22,6 +22,12 @@ struct BenefitsView: View {
                 .font(.headline)
                 .padding(.top, 8)
 
+                DisclosureGroup("What if I take a job") {
+                    WhatIfView { try await APIClient.shared.whatIf($0) }
+                        .padding(.top, 8)
+                }
+                .font(.headline)
+
                 DisclosureGroup("Trusted helper") {
                     TrustedHelperView(api: APIClient.shared.trustedHelpers)
                         .padding(.top, 8)

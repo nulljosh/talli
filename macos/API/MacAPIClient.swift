@@ -147,6 +147,10 @@ final class MacAPIClient: @unchecked Sendable {
         )
     }
 
+    func whatIf(_ request: WhatIfRequest) async throws -> WhatIf {
+        try await send(path: "api/whatif", method: "POST", body: request, responseType: WhatIf.self)
+    }
+
     func household(save: HouseholdRequest?) async throws -> Household {
         if let save {
             return try await send(path: "api/household", method: "POST", body: save, responseType: Household.self)

@@ -1029,6 +1029,68 @@ function HelpersTool({dark}) {
   );
 }
 
+// What if I take a job: wage and hours in, the exemption, the clawback and the money out. Maths: src/programs/whatif.js.
+function WhatIfTool({dark}) {
+  const t = tk(dark);
+  const T = window.I18N.t;
+  const next = (i) => { const d = new Date(new Date().getFullYear(), new Date().getMonth() + 1 + i, 1); return {v:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`, label:d.toLocaleString('en-CA',{month:'long',year:'numeric'})}; };
+  const months = Array.from({length:12}, (_, i) => next(i));
+  const [f, setF] = useState({wage:'', hours:'', start:months[0].v});
+  const [r, setR] = useState(null);
+  const [err, setErr] = useState('');
+  const usd = (n) => '$' + Math.round(n).toLocaleString();
+  const name = (m) => new Date(m+'-01T12:00:00').toLocaleString('en-CA',{month:'long',year:'numeric'});
+  const run = async () => {
+    setErr('');
+    try {
+      const res = await fetch('/api/whatif', {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({wage:+f.wage, hours:+f.hours, start:f.start})});
+      const d = await res.json();
+      if (!res.ok) { setErr(d.error || T('Something went wrong. Try again.')); return; }
+      setR(d);
+    } catch (e) { setErr(T('Something went wrong. Try again.')); }
+  };
+  const label = {fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:14};
+  const card = {padding:'16px 18px',background:t.bg2,borderRadius:12,border:`1px solid ${t.border}`};
+  const input = {width:'100%',boxSizing:'border-box',padding:'10px 12px',borderRadius:8,border:`1px solid ${t.border2}`,background:'transparent',color:t.text,fontSize:14,fontFamily:'inherit',marginTop:4};
+  const ok = f.wage > 0 && f.hours > 0;
+  return (
+    <div style={{animation:'fadeIn 0.2s ease both'}}>
+      <div style={label}>{T('What if I take a job')}</div>
+      <div style={card}>
+        <div style={{fontSize:13,color:t.mutedMid,lineHeight:1.5}}>{T('Type a wage and weekly hours. Talli shows how much of your yearly earnings limit it uses, when your assistance starts to drop, and what you end up with each month.')}</div>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginTop:12}}>
+          <label style={{fontSize:11,color:t.muted}}>{T('Hourly wage')} ($)<input inputMode="decimal" value={f.wage} onChange={e=>setF({...f,wage:e.target.value})} style={input}/></label>
+          <label style={{fontSize:11,color:t.muted}}>{T('Hours a week')}<input inputMode="decimal" value={f.hours} onChange={e=>setF({...f,hours:e.target.value})} style={input}/></label>
+        </div>
+        <label style={{display:'block',fontSize:11,color:t.muted,marginTop:10}}>{T('Starting')}
+          <select value={f.start} onChange={e=>setF({...f,start:e.target.value})} style={input}>{months.map(m=><option key={m.v} value={m.v}>{m.label}</option>)}</select>
+        </label>
+        <button onClick={run} disabled={!ok} style={{marginTop:12,padding:'9px 16px',borderRadius:100,background:t.accent,color:'#fff',border:'none',fontSize:13,fontWeight:600,fontFamily:'inherit',cursor:'pointer',opacity:ok?1:0.5}}>{T('See what happens')}</button>
+        {err && <div role="alert" style={{fontSize:12,color:t.warning,fontWeight:600,marginTop:10}}>{err}</div>}
+      </div>
+      {r && r.unknown && <div style={{...card,marginTop:12,fontSize:13,color:t.text,lineHeight:1.5}}>{T('Talli does not have the yearly earnings limit for your household. Ask the ministry what it is, then you can work this out.')}</div>}
+      {r && !r.unknown && <>
+        <div style={{...card,marginTop:12}}>
+          <div style={{fontSize:12,color:t.mutedMid}}>{T('Over 12 months you earn')} {usd(r.totalEarnings)} {T('and keep')}</div>
+          <div style={{fontSize:34,fontWeight:800,letterSpacing:'-1.2px',color:t.text,lineHeight:1.15}}>{usd(r.keep)}</div>
+          <div style={{fontSize:13,color:t.text,marginTop:6,lineHeight:1.5}}>
+            {r.firstClawback ? <>{T('Until')} <b>{name(r.firstClawback)}</b> {T('working costs you nothing. After that, each dollar over your limit comes off your assistance.')}{r.assistanceEnds && <> {T('Assistance reaches zero in')} <b>{name(r.assistanceEnds)}</b>.</>}</> : T('You stay under your yearly limit, so your assistance does not change.')}
+          </div>
+          <div style={{fontSize:13,color:r.better>0?t.success:t.warning,fontWeight:700,marginTop:8}}>{r.better>=0?T('You end up'):T('You end up')} {usd(Math.abs(r.better))} {r.better>=0?T('ahead of not working.'):T('behind not working.')}</div>
+          {r.room!=null && <div style={{fontSize:12,color:t.mutedMid,marginTop:8,lineHeight:1.5}}>{T('Room left under the limit this year:')} {usd(r.room)}.{r.safeHours!=null&&<> {T('That is about')} {r.safeHours} {T('hours a week from your start month to December.')}</>}</div>}
+          {r.assumed && <div style={{fontSize:11,color:t.muted,marginTop:8,lineHeight:1.5}}>{T('BC has not posted next year limit yet. Talli assumes it stays the same.')}</div>}
+        </div>
+        <details style={{...card,marginTop:12}}>
+          <summary style={{fontSize:13,fontWeight:600,color:t.text,cursor:'pointer'}}>{T('Month by month')}</summary>
+          <div style={{marginTop:8}}>{r.rows.map(m=><div key={m.month} style={{display:'grid',gridTemplateColumns:'1.3fr 1fr 1fr 1fr',gap:6,fontSize:12,padding:'4px 0',color:t.mutedMid}}><span>{name(m.month)}</span><span>+{usd(m.earnings)}</span><span style={{color:m.reduction>0?t.warning:t.mutedMid}}>{m.reduction>0?'-'+usd(m.reduction):'0'}</span><span style={{color:t.text,fontWeight:600,textAlign:'end'}}>{usd(m.total)}</span></div>)}
+          <div style={{fontSize:10,color:t.muted,marginTop:6}}>{T('Month, pay, assistance cut, total money')}</div></div>
+        </details>
+        <div style={{fontSize:11,color:t.muted,marginTop:12,lineHeight:1.5}}>{r.note}</div>
+      </>}
+    </div>
+  );
+}
+
 // One quiet line per section; the full section opens on tap. Keeps Status and Calendar short.
 function FoldBox({dark, title, summary, open, setOpen, children}) {
   const t = tk(dark);
@@ -1786,6 +1848,9 @@ function BenniesSection({dark}) {
 
       <FoldTool dark={dark} title="RDSP grants and bonds" url="/api/rdsp-tracker" summarize={d=>d.derived?(d.derived.eligible?'$'+Math.round(d.derived.missing).toLocaleString()+' still on the table this year':'Grants stop after the year you turn 49'):'See what your RDSP is owed'}>
         <RdspTracker dark={dark}/>
+      </FoldTool>
+      <FoldTool dark={dark} title="What if I take a job" url="/api/household" summarize={()=>'See your limit, the clawback and the money month by month'}>
+        <WhatIfTool dark={dark}/>
       </FoldTool>
       <FoldTool dark={dark} title="Trusted helper" url="/api/helpers" summarize={d=>d.helpers.length?'Shared with '+d.helpers.length+(d.helpers.length===1?' person':' people'):'Let a caseworker or family see your payments'}>
         <HelpersTool dark={dark}/>

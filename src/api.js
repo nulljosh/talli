@@ -17,6 +17,7 @@ const widgetToken = require('./widget-token');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { nextPaymentDate } = require('./pay-dates');
 const helper = require('./programs/helper');
+const { deriveWhatIf } = require('./programs/whatif');
 const { deriveHousehold, cleanHousehold, withRentHistory } = require('./programs/household');
 const { listRequests } = require('./programs/requests');
 const { draftReply } = require('./programs/reply');
@@ -25,7 +26,7 @@ const { deriveMissedPayment } = require('./programs/missed');
 const { deriveSupplements, cleanSupplements } = require('./programs/supplements');
 const { deriveRdsp, cleanRdsp } = require('./programs/rdsp');
 const { findBenefits, prefill: prefillFinder } = require('./programs/finder');
-const { PROFILE_PROGRAMS, deriveIncome, deriveEarnings, deriveAssets, deriveYearReview } = require('./programs/profiles');
+const { PROFILE_PROGRAMS, DEFAULT_MONTHLY_RATES, deriveIncome, deriveEarnings, deriveAssets, deriveYearReview } = require('./programs/profiles');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -1997,6 +1998,27 @@ async function rememberIncome(req, userId, income) {
   } catch (err) { log('[HELPER] remember income:', err.message); }
   return income;
 }
+
+// What-if job calculator (src/programs/whatif.js). Uses the household, the logged earnings and
+// the monthly assistance Talli already knows, so the person only types a wage and hours.
+app.post('/api/whatif', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    const [pwd, last, household, earningsProfile] = await Promise.all([
+      loadUserBlob(userId, 'pwd-profile', {}), loadUserBlob(userId, 'last-income', null),
+      loadUserBlob(userId, 'household-profile', {}), loadUserBlob(userId, 'earnings-profile', null),
+    ]);
+    const type = household?.type || 'single';
+    const base = pwd?.monthlyAmount ?? last?.pwdMonthly ?? DEFAULT_MONTHLY_RATES.pwd;
+    const earnedSoFar = deriveEarnings(earningsProfile, new Date(), type).earned;
+    const result = deriveWhatIf(req.body, { base, household: type, earnedSoFar });
+    if (!result) return res.status(400).json({ error: 'Enter an hourly wage and weekly hours' });
+    res.json({ ...result, context: { household: type, base, earnedSoFar } });
+  } catch (err) {
+    log('[WHATIF] error:', err.message);
+    res.status(500).json({ error: 'Failed to work it out' });
+  }
+});
 
 // My household (src/programs/household.js): family type, children and rent. `actual`
 // is what the portal says BC pays, passed by the client so the check needs no scrape.

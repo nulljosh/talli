@@ -16,7 +16,7 @@ ASC verified today: iOS 3.5.14 and macOS 3.5.6 READY_FOR_DISTRIBUTION. Revenue w
 - [ ] Payday push without opening the app: a Workers Cron Trigger checks the portal and pushes new messages and the payday reminder (APNs key needed from Joshua).
 
 ### 9.0: plan ahead
-- [ ] What-if: "if I take this job at 20 hours a week", see the exemption, clawback and take-home month by month.
+- [x] (2026-10-02, web/iOS/macOS) What-if: "if I take this job at 20 hours a week", see the exemption, clawback and take-home month by month.
 - [ ] Moving out of BC or turning 65: what changes (OAS/GIS hand-off), when, and what to file.
 - [ ] Budget against real paydays: bills land on the calendar next to the money that pays them.
 

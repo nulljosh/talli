@@ -12,6 +12,7 @@
 		0A4F2A936FBED3094781D846 /* MacSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9E6A07378DC7743CCC0E4D /* MacSettingsView.swift */; };
 		0BDFE2F644478B6E4DE81162 /* MacDateParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE52B7411BB64FCBF55E718E /* MacDateParsing.swift */; };
 		0D9CD3FBC94EA80A07221C5C /* TalliWidgets-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E6F0CD73F1B533518444D527 /* TalliWidgets-Info.plist */; };
+		0E1D333BEFC2600DACFC16BF /* WhatIfView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE181ECEB1BE3E5FBE2F705D /* WhatIfView.swift */; };
 		0EA33B911B3F3779F824707F /* MacMessagesWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C072FBCF9110200380F476B0 /* MacMessagesWidgetView.swift */; };
 		13B60F9180A94A04BA24C25E /* PaydayNotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCBD3343FCF75BB4A28E8744 /* PaydayNotificationScheduler.swift */; };
 		1623130FC8E0A8FF3C7C74CB /* HouseholdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3957E7C2F9B33E31A48633BD /* HouseholdView.swift */; };
@@ -133,6 +134,7 @@
 		F47FDBC6806E5A115D749928 /* RTLTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTLTracking.swift; sourceTree = "<group>"; };
 		FBD64342FB49405CC38FC1F7 /* VaultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultView.swift; sourceTree = "<group>"; };
 		FCBD3343FCF75BB4A28E8744 /* PaydayNotificationScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaydayNotificationScheduler.swift; sourceTree = "<group>"; };
+		FE181ECEB1BE3E5FBE2F705D /* WhatIfView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatIfView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -193,6 +195,7 @@
 				C3B2AD00D857C67843DE6074 /* SupplementsView.swift */,
 				BD11C951DE3513CC516BB2B3 /* TrustedHelperView.swift */,
 				FBD64342FB49405CC38FC1F7 /* VaultView.swift */,
+				FE181ECEB1BE3E5FBE2F705D /* WhatIfView.swift */,
 			);
 			name = Views;
 			path = ../ios/Views;
@@ -477,6 +480,7 @@
 				208D5FDB7E169D6B520AD82D /* VaultCrypto.swift in Sources */,
 				AD729A551BB19926E28B3FF2 /* VaultView.swift in Sources */,
 				62E4A3F5916F04C5C1474AA6 /* View+Glass.swift in Sources */,
+				0E1D333BEFC2600DACFC16BF /* WhatIfView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
