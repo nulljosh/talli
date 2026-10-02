@@ -25,6 +25,8 @@ targets:
           - ".asc"
           - "fastlane"
           - UITests-mac
+          - screenshots
+          - "*.zip"
     settings:
       base:
         INFOPLIST_FILE: ""
