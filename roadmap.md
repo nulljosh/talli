@@ -186,7 +186,7 @@ App Store Connect closed the pre-release train for v3.5.12 (build 139 was reject
 - Not uploaded to ASC, App Store submission freeze, which lifted 2026-08-18.
 
 ## From Apple Notes (imported 2026-08-13)
-- [ ] Analyze project from CLAUDE.md + README.md, then refresh the app icon based on that analysis
+- [x] Analyze project from CLAUDE.md + README.md, then refresh the app icon based on that analysis (2026-10-02: tally marks fit the name, kept)
 
 ## App Privacy corrected + published, 2026-08-18
 
