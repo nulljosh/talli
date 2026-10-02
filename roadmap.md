@@ -13,21 +13,9 @@ ASC verified today: iOS 3.5.14 and macOS 3.5.6 READY_FOR_DISTRIBUTION. Revenue w
 3.6.0 is in review on iPhone and Mac. Talli is free and stays free. The job is accuracy: what lands, when, and what you're allowed to earn.
 
 ### 4.0: the whole money picture
-- [x] Widgets for everyone (2026-10-02). `/api/summary` reads one shared token and one cache key, so iPhone and Mac widgets only work for one account. Move it to the signed-in session (App Group carries a per-user token) and drop the shared key.
-- [x] (2026-10-02, from the CGEB quarterly amount) Yearly total includes GST/HST and other CRA payments on their real dates, not just PWD + CDB.
-- [x] Real amounts. Read the PWD and CDB figures the portal and CRA actually paid instead of the default rates; fall back to defaults only when nothing is recorded.
-- [x] Earnings exemption tracker. PWD lets you earn about $15k a year before a dollar-for-dollar clawback. Log earnings, show what's left of the exemption, warn before crossing it.
-- [x] Asset limit tracker. PWD caps assets around $100k; RDSP doesn't count. Show where you stand.
 - [ ] Payday push without opening the app: a Workers Cron Trigger checks the portal and pushes new messages and the payday reminder (APNs key needed from Joshua).
 
-### 5.0: one tap, every device
-- [x] (2026-10-02, iPhone; Mac has no report filing) File the monthly report from the reminder itself (notification action), PIN from Keychain.
-- [x] (2026-10-02, embedded as com.heyitsmejosh.tally.watchkitapp, token over WatchConnectivity; ships with next iOS build) Apple Watch app shipped inside the iPhone app, fed by the phone instead of a shared API token.
-- [x] (2026-10-02, web/iOS/macOS, CSV export) Year in review each January: every payment, every credit, ready for tax time.
-- [x] Spanish, Tagalog, Arabic and Farsi on top of English, French, Chinese, Punjabi.
-
 ### 6.0: never miss a dollar
-- [x] (2026-10-02, web/iOS/macOS, 33 programs, rates checked) Benefit finder. Answer a few questions, see every BC and federal program you qualify for but aren't getting (bus pass, crisis supplement, Fair PharmaCare, Canada Dental, RDSP grants).
 - [ ] RDSP grant and bond tracker: what the government has matched, what's left this year, what carries forward.
 - [ ] Supplements on the calendar: transportation, dietary, annual bus pass renewal, each with its own reminder.
 - [ ] Missed-payment alert: payday passes and the portal shows nothing, Talli tells you who to call and what to say.
@@ -69,14 +57,6 @@ can only build an installer for the OS it runs on.
 
 Deliberately left out:
 
-- [x] No "remember me" (skipped 2026-10-02, Compose not shipping). Storing a BCeID password needs a real keystore per platform
-      (EncryptedSharedPreferences / DPAPI / libsecret); today you sign in each launch.
-      Add it when the friction is an actual complaint.
-- [x] No monthly report submission on the Compose clients (`ReportView` on iOS) -- **Skipped 2026-10-02: Compose builds not shipping.**
-      it wants the SIN/phone/PIN form and a dry-run preview.
-- [x] Payment calendar and theme picker are iOS/macOS only. **Skipped 2026-10-02: Compose builds not shipping.**
-- [x] Android and desktop builds are unsigned CI artifacts, not store listings. **Decided 2026-10-02: no store listings; iOS, macOS and web are the product.**
-
 ## ASC state VERIFIED 2026-08-30
 
 **iOS 3.5.13 is LIVE** (`READY_FOR_SALE`), macOS 3.5.6 LIVE. The 4.3(a) rejection was
@@ -105,9 +85,6 @@ Linked from the landing page footer. `web/js/legal.js` (the /api/legal analyzer,
 currently unmounted -- no HTML wires its element IDs or loads the script) also
 matches lawyers into its results for whenever that tab gets built.
 
-- [x] Turn this into the $499/mo referral-listing product: paid firms opt in, **Dropped 2026-10-02: Talli is free.**
-      free orgs stay free. Not built -- today it's a static curated list.
-
 ## Local notifications shipped 2026-09-04
 
 Built the "cheaper shape" the Stashed 2026-08-10 note below called for: `ios/Notifications/PaydayNotificationScheduler.swift`
@@ -119,26 +96,6 @@ date). Pure date math lives in `nextReportingWindowFireDate`/`paydayReminderFire
 `ios/Tests/test_payday_dates.swift` (`swift ios/Tests/test_payday_dates.swift`, 6 assertions, excluded
 from the app target same as `Tests/`) -- the first version of the window-date logic was inverted
 (fired on day 1-5 instead of skipping to next month) and the check caught it before it shipped.
-
-- [x] macOS/watchOS not wired yet, iOS only. Same pure functions would port directly; the watchOS **macOS done 2026-10-02; watchOS skipped, watch app not shipped.**
-      target doesn't have a real dashboard screen yet either (see "Mirror the same income block to
-      watchOS" below), do both together.
-- [x] No Settings toggle to turn reminders off individually, revoking notification permission in
-      iOS Settings is the only way today. Add if it comes up as friction.
-
-## Open
-- [x] Large unused whitespace at bottom of payment card view, **investigated in the sim 2026-08-03, no removable padding found.** The gap is the `.safeAreaPadding(.bottom, 90)` clearance (`ContentView.swift:326`) reserved for `TalliFloatingTabBar`, not excess padding, if anything it's ~4pt short. Closing this properly is a design decision (more content, or a non-floating bar), not a padding tweak. Don't re-investigate blind.
-- [x] Confirm banner shows "Report window open" (not filed) on next login; file report by Jul 5.
-- [x] Confirm header avatar renders (blob repointed) on next login.
-- [x] Navbar glitch: intermittent, "solved itself," no repro. Checked 2026-07-26: `TalliFloatingTabBar` (ContentView.swift:75) is a plain fixed-layout HStack/Capsule with no timers/animations/async work, no code-level lead found. Needs a live repro to make progress.
-- [x] asc web login failed 401, `asc web auth login` requires live 2FA input, needs Joshua to run it interactively.
-- [x] App Privacy publish state flagged as unverifiable via API (`asc validate` info-level), confirm published at appstoreconnect.apple.com/apps/6782366555/appPrivacy if a future review comes back privacy-related.
-- [x] App Store screenshot refresh (stale resolutions/content), screenshots were regenerated 2026-08-11 (see Screenshots section); the 5th (Settings) still doesn't capture and is held from publication, which is what's left here.
-
-## Stashed 2026-08-10
-
-- [x] **Push notifications (payday + reporting window days 1–5).** Not started, talli has **zero** push infrastructure: no `UNUserNotificationCenter` usage, no `registerForRemoteNotifications`, no `aps-environment` entitlement, no `remote-notification` background mode, no device-token storage, no sender. A real APNs build also needs an Apple Developer APNs key (credentialed dashboard step) plus a scheduler, and talli's host has no cron.
-  **Cheaper shape to build instead:** both triggers are *known calendar dates*, not server events, the reporting window is always days 1–5, and payday is derivable from the scraped payment history. So this wants **local** notifications (`UNCalendarNotificationTrigger`), which need no APNs key, no device tokens, no server, and no background mode at all. Scope is then: permission prompt on first run, schedule/reschedule on launch + after each scrape, mirror across iOS/macOS/watchOS. Don't start by building a push backend.
 
 ## Status (2026-08-10), Messages pagination + two bugs it exposed
 
@@ -181,10 +138,6 @@ iOS 3.5.7 and Mac 3.5.6 both WAITING_FOR_REVIEW under the unified app `678236655
 
 `.env` exists now (gitignored) with real BC Self-Serve credentials for local testing.
 
-## Ingested 2026-07-25
-- [x] Release/update notes need more variety and intelligence, feels formulaic currently.
-- [x] Add BC benefit tracking: BC Renter's Credit (auto via tax return), BC Bus Pass ($45/yr, apply once PWD confirmed), Fuel tax refund/Home Reno credit (if applicable), CLBC funding (autism dx), CPP-D (check contribution room). RDSP + RBC, CDB, PWD already in motion.
-
 ## Ship 3.5.12, SUBMITTED 2026-07-28 night
 Today's message-parser fix (94808a3) was committed+pushed but not in any build. Bumped
 `ios/project.yml` MARKETING_VERSION 3.5.10 → 3.5.12, regenerated project, added
@@ -209,10 +162,6 @@ Localization pipeline wired: `i18n/strings.json` master keys now match literal U
 
 App Store Connect closed the pre-release train for v3.5.12 (build 139 was rejected). Bumped `MARKETING_VERSION` in `ios/project.yml` from 3.5.12 to 3.5.13, regenerated the Xcode project, and pushed to trigger a new Xcode Cloud build. Build execution pending. The 3.5.12 release remains valid for current distribution; the 3.5.13 rebuild is the next pre-release candidate.
 
-## From Apple Notes (imported 2026-08-10)
-- [x] (2026-10-02: iOS reads and writes the same SVG as web) iOS avatar is device-local only (`AppState.generateNodeGraphAvatar`, disk-cached PNG) and never syncs with the server's avatar, so iOS and web show different avatars. Real fix needs SVG rendering on iOS (server stores SVG) or a server-side PNG variant, deliberately not built as part of the letter-icon fix.
-- [x] Refresh `CHEQUE_ISSUE_DATES` in `src/pay-dates.js` when BC publishes the 2027 cheque issue schedule, after 2026-12-16 the app shows "--" for the next payment date until it is added. **2027 added 2026-10-02; refresh again when BC posts 2028 (runs out after 2027-12-22).**
-
 ## Screenshots (2026-08-11)
 - iOS App Store screenshots regenerated via `cd ios && fastlane screenshots`. Two real bugs
   fixed to make the run produce usable images:
@@ -229,9 +178,6 @@ App Store Connect closed the pre-release train for v3.5.12 (build 139 was reject
   earlier shots land fine). 4 screens per device shipped instead of 5. Debug
   `UITests/PreviewScreenshot.swift` when there's usage headroom.
 - Not uploaded to ASC, App Store submission freeze, which lifted 2026-08-18.
-
-## From Apple Notes (imported 2026-08-13)
-- [x] Analyze project from CLAUDE.md + README.md, then refresh the app icon based on that analysis (2026-10-02: tally marks fit the name, kept)
 
 ## App Privacy corrected + published, 2026-08-18
 
@@ -252,35 +198,11 @@ by session `userId`), and BCeID/CRA credentials are transmitted to log into BC S
 persisted (`src/api.js:2015`), so they aren't "collected" under Apple's definition. `OTHER_DATA`
 covers the persisted PIN, since Apple has no credentials category.
 
-## From Notes (imported 2026-08-19)
-- [x] Mirror the same income block to watchOS (iOS widget done 2026-10-02 via App Group). The payload **macOS done 2026-10-02; watchOS skipped, watch app not shipped.**
-      already carries `income`, so each is a decode + small view; deferred 2026-08-19
-      only to conserve weekly quota. `watchos/ContentView.swift` is a 12-line stub and
-      needs a real screen first.
-- [x] Automate the ASC 2FA code (currently Joshua screenshots it every login). Idea:
-      route the code to SMS and read it from `~/Library/Messages/chat.db` via SQL, wired
-      to `ASC_WEB_2FA_CODE_COMMAND`. Headless, no System Events. Unproven: needs Full
-      Disk Access, and Apple may not offer an SMS path for this flow, timebox it.
-
-## Ingested 2026-08-22
-
-## From Apple Notes (imported 2026-08-25)
-
-- [x] Landing page font doesn't really match other codebase projects. Vibe clone from the others.
-- [x] (Skipped for Talli 2026-10-02: login-gated, no honest demo) Clone Epiphany's landing page approach across web projects (Lexly, Healstack, Talli, etc.): show the actual product beyond the login/registration wall, Epiphany shows the real map as the home page.
-
 ## WebMCP + REST API rollout -- shipped 2026-08-27
 
 Done. 12 tools over the existing Express API. Gated: `submit_monthly_report` (files a real report with the ministry) and `mark_taxes_filed`. Credentials never become tool arguments -- `tools/test-webmcp.js` enforces that and runs first in `npm test`.
 
 See `docs/API.md` for the full tool table, linked from the README.
-- [x] iOS rejected 4.3(a) Spam 2026-08-26. Appeal draft: ~/Documents/Code/notes/appeal-4-3-spam.md (Resolution Center, web only).
-
-## From Notes (imported 2026-08-27)
-- [x] App Review flagged **Talli 3.5.13 for iOS** (submitted Aug 27 2026 01:48 PM PDT, submission `bbb79864-00aa-4d6d-bd55-93459bcd7086`). Get the real reason via `asc web review show`, fix, resubmit.
-- [x] Decide: `landing.html`/`login.html` still hardcode 16 border-radius values and 3 box-shadows, against canonical's square/no-shadow signature, but `CLAUDE.md` documents the "14px border-radius standard" as deliberate. Squaring a live product's UI is a taste call. Settle the conflict, then make CLAUDE.md and the CSS agree. **Decided 2026-10-02: keep rounded, CLAUDE.md's 14px standard stands.**
-- [x] Decide: web accent is now bulb yellow while the shipped iOS/macOS icon and App Store screenshots are blue `#5B9BD5`. Web and native have diverged. **Decided 2026-10-02: blue everywhere; web tokens already #5B9BD5.**
-talli/roadmap.md
 
 ### 4.3(a) status, verified 2026-08-27
   - Talli iOS 3.5.13 REJECTED under **Guideline 4.3(a) Design: Spam**, part of the account-level pattern hitting Sparkjar, NYC Survive, Talli, Curvely and Doorstock together. Already recorded in this roadmap; re-confirmed against the API.
@@ -298,21 +220,5 @@ Canonical `metadata/` now checked in (pulled live from ASC, then corrected). It 
 version. Both `asc metadata push` and `asc apps info edit` fail with "Attribute '<field>' cannot be
 edited at this time". **The next version bump must push this dir**, which applies all three fixes:
 
-- [x] **marketingUrl + supportUrl were dead.** They pointed at `tally.heyitsmejosh.com`, stale from
-      the Talli rename; that host does not resolve (curl 000, vs 200 for `talli.`). A live App Store
-      listing is currently advertising a broken support link. Fixed in `metadata/`, awaiting release.
-- [x] Keywords retuned: dropped `benefits` (generic) and `disability tax credit` (21 chars) for
-      `cheque day`, `BC Self-Serve`, and `hardship`, higher intent, uncontested. 92/100 chars.
-
 Note: `asc metadata push` prints a full JSON result even when it applied nothing. Always re-pull to
 a scratch dir and diff; the `actions[].status` field is the only truth.
-
-## Ingested 2026-10-01
-- [x] (2026-10-02: live login, 26 messages, stable ids, two-session read sync verified on production) Playwright QA against myselfserve.gov.bc.ca. Confirm Talli syncs completely with it (screenshot notes/attachments/2026-10-01/talli-1.png: 2026 Annual Earnings Exemption balance $10800.00; Oct 21 2026 payment $1535.50 = Support $983.50 + Shelter rent $500.00 + Transportation supplement $52.00; previous payment Sep 23 2026 $1535.50 direct deposit). BLOCKED: needs Joshua's login, do not store credentials.
-
-## Ingested 2026-10-02
-- [x] Remove the share button. Already gone on web, iOS and macOS since cf1ef23; nothing left to strip.
-- [x] Personal information in Settings should be stored securely, not in a plain text field. SIN, phone and PIN were already Keychain-only; phone is now a masked SecureField too (iOS build green).
-- [x] After typing in the SIN, the keypad cannot be dismissed. Settings now has a keyboard Done button and drag-to-dismiss (iOS build green; macOS has no SIN field, web uses the system keyboard).
-- [x] Home view needs simplifying. "Paid yet" should not sit inline; move it to the top right. Now a compact pill in the payment card's top right (iOS build green; not eyeballed on a simulator yet).
-- [x] (2026-10-02: verified live, and fixed the frozen background refresh) QA messages and confirm they are syncing. Read-messages, parse and pagination tests pass (32/32) and /api/read-messages is live (401 without a session). Still needs a real logged-in check: read a message on iPhone, confirm it shows read on web.
