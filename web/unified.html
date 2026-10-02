@@ -912,17 +912,149 @@ function PwdResubmitModal({dark, pwdDeniedDate, onClose, onResubmitted}) {
 // ════════════════════════════════════════════════════
 // BENNIES SECTION — DTC + debt payoff, embedded in Status tab
 // ════════════════════════════════════════════════════
-const OTHER_BENEFITS = [
-  {id:'rdsp_grants', label:'RDSP grants and bonds', detail:'Govt matches up to 300% ($3,500/yr) + up to $1,000/yr bond with zero contribution. $70k/$20k lifetime caps.'},
-  {id:'dtc_retro_refund', label:'DTC retroactive refund', detail:'Reassess up to 10 past tax years via a T1 adjustment for a possible lump sum.'},
-  {id:'dtc_transfer', label:'DTC transfer', detail:'Transfer unused credit to a supporting spouse or parent if income is too low to use it all.'},
-  {id:'fair_pharmacare', label:'Fair PharmaCare', detail:'Income-tested, often lower deductibles for PWD recipients.'},
-  {id:'bc_bus_pass', label:'BC bus pass', detail:'~$52/yr transit pass, or a $52/month transport supplement instead.'},
-  {id:'cpp_d', label:'CPP disability + CWB supplement', detail:"CPP-D if you've worked enough; CWB disability supplement if you ever do paid work."},
-  {id:'clbc', label:'CLBC', detail:'Separate eligibility (usually tied to significant support needs). Worth a call to check.'},
-  {id:'bc_renters_credit', label:"BC renter's tax credit", detail:'Up to $400/yr, claimed automatically on your BC income tax return if you paid rent.'},
-  {id:'home_reno_credit', label:'BC home renovation tax credit', detail:'Up to $1,000 refundable credit for accessibility renovations, claimed on your tax return.'},
-];
+// Benefit finder: questions and results both come from /api/benefit-finder
+// (src/programs/finder.js). This only renders them.
+const FINDER_GROUPS = [['crisis','Help this week'],['money','Money to claim'],['savings','Free and cheaper'],['help','People who help']];
+
+function BenefitFinder({dark}) {
+  const t = tk(dark);
+  const T = window.I18N.t;
+  const [data, setData] = useState(null);
+  const [answers, setAnswers] = useState({});
+  const [step, setStep] = useState(null); // question id being asked, null when not asking
+  const [open, setOpen] = useState(null);
+  const [copied, setCopied] = useState(null);
+  const total = useCountUp(data?.missingYearly || 0);
+
+  const take = (d) => { setData(d); setAnswers(d.answers || {}); };
+  useEffect(() => { fetch('/api/benefit-finder', {credentials:'include'}).then(r=>r.json()).then(take).catch(()=>{}); }, []);
+  const save = async (next) => {
+    setAnswers(next);
+    try {
+      const r = await fetch('/api/benefit-finder', {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({answers: next})});
+      if (r.ok) take(await r.json());
+    } catch (e) {}
+  };
+
+  if (!data) return <Skel w="100%" h={90} r={12} dark={dark}/>;
+
+  // Same skip rule the server applies, so the flow reacts before the round trip.
+  const skipped = (q, a) => q.skipIf && Object.entries(q.skipIf).every(([k, v]) => (a[k]||[]).some(x => v.includes(x)));
+  const all = data.questions;
+  const asked = (a) => all.filter(q => !skipped(q, a));
+  const label = {fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:14};
+  const card = {padding:'16px 18px',background:t.bg2,borderRadius:12,border:`1px solid ${t.border}`};
+  const pill = (solid) => ({padding:'9px 16px',borderRadius:100,background:solid?t.accent:'transparent',color:solid?'#fff':t.muted,border:solid?'none':`1px solid ${t.border2}`,fontSize:13,fontWeight:600,fontFamily:'inherit',cursor:'pointer'});
+
+  if (step) {
+    const list = asked(answers);
+    const i = Math.max(0, list.findIndex(q => q.id === step));
+    const q = list[i];
+    const picked = answers[q.id] || [];
+    const go = (a) => {
+      const rest = asked(a);
+      const next = rest[rest.findIndex(x => x.id === q.id) + 1];
+      if (next) { setAnswers(a); setStep(next.id); } else { setStep(null); save(a); }
+    };
+    const pick = (id) => {
+      if (q.multi) setAnswers({...answers, [q.id]: picked.includes(id) ? picked.filter(x => x !== id) : [...picked, id]});
+      else go({...answers, [q.id]: [id]});
+    };
+    return (
+      <div style={{animation:'fadeIn 0.2s ease both'}}>
+        <div style={label}>{T('Benefit finder')}</div>
+        <div style={card}>
+          <div style={{height:4,background:t.border,borderRadius:2,marginBottom:16}}>
+            <div style={{height:'100%',width:`${((i+1)/list.length)*100}%`,background:t.accent,borderRadius:2,transition:'width 0.3s ease'}}/>
+          </div>
+          <div style={{fontSize:17,fontWeight:700,letterSpacing:'-0.3px',color:t.text,lineHeight:1.3}}>{q.text}</div>
+          {q.hint && <div style={{fontSize:12,color:t.mutedMid,marginTop:6,lineHeight:1.4}}>{q.hint}</div>}
+          <div style={{display:'flex',flexDirection:'column',gap:8,marginTop:16}}>
+            {q.options.map(o => {
+              const on = picked.includes(o.id);
+              return <button key={o.id} onClick={()=>pick(o.id)} aria-pressed={on} style={{textAlign:'start',padding:'13px 16px',borderRadius:10,background:on?`${t.accent}18`:'transparent',border:`1px solid ${on?t.accent:t.border2}`,color:t.text,fontSize:14,fontWeight:500,fontFamily:'inherit',cursor:'pointer'}}>{o.label}</button>;
+            })}
+          </div>
+          <div style={{display:'flex',justifyContent:'space-between',marginTop:16}}>
+            <button onClick={()=> i === 0 ? setStep(null) : setStep(list[i-1].id)} style={pill(false)}>{i === 0 ? T('Cancel') : T('Back')}</button>
+            {q.multi && <button onClick={()=>go({...answers, [q.id]: picked})} style={pill(true)}>{picked.length ? T('Done') : T('None of these')}</button>}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const start = () => { const list = asked(answers); setStep((list.find(q => !(answers[q.id]||[]).length) || list[0]).id); };
+
+  if (!data.complete) return (
+    <div>
+      <div style={label}>{T('Benefit finder')}</div>
+      <div style={card}>
+        <div style={{fontSize:17,fontWeight:700,letterSpacing:'-0.3px',color:t.text}}>{T('Find what you are missing')}</div>
+        <div style={{fontSize:13,color:t.mutedMid,marginTop:6,lineHeight:1.5}}>{T('A few questions, about a minute. Talli checks every BC and federal program and tells you how to get each one.')}</div>
+        <button onClick={start} style={{...pill(true),marginTop:14}}>{T('Start')}</button>
+      </div>
+    </div>
+  );
+
+  const toggleHave = (id) => { const have = answers.have || []; save({...answers, have: have.includes(id) ? have.filter(x => x !== id) : [...have, id]}); };
+  const copy = (r) => { navigator.clipboard?.writeText(r.say).then(()=>{ setCopied(r.id); setTimeout(()=>setCopied(null), 1500); }).catch(()=>{}); };
+
+  return (
+    <div style={{animation:'fadeIn 0.2s ease both'}}>
+      <div style={label}>{T('Benefit finder')}</div>
+      <div style={{...card,marginBottom:20}}>
+        {data.missingYearly > 0 ? <>
+          <div style={{fontSize:12,color:t.mutedMid}}>{T('You could be missing up to')}</div>
+          <div style={{fontSize:34,fontWeight:800,letterSpacing:'-1.2px',color:t.text,lineHeight:1.15}}>${Math.round(total).toLocaleString()}<span style={{fontSize:14,fontWeight:500,color:t.mutedMid,letterSpacing:0}}> {T('a year')}</span></div>
+        </> : <div style={{fontSize:17,fontWeight:700,color:t.text}}>{T('You are getting the big ones.')}</div>}
+        <div style={{fontSize:12,color:t.mutedMid,marginTop:6,lineHeight:1.5}}>{data.missingCount} {T('programs to look at. Tap one for the steps. Tick the ones you already get.')}</div>
+        <button onClick={()=>setStep(asked(answers)[0].id)} style={{...pill(false),marginTop:12,padding:'6px 13px',fontSize:12}}>{T('Change my answers')}</button>
+      </div>
+
+      {FINDER_GROUPS.map(([g, title]) => {
+        const rows = data.results.filter(r => r.group === g);
+        if (!rows.length) return null;
+        return <div key={g} style={{marginBottom:20}}>
+          <div style={{...label,marginBottom:10,color:g==='crisis'?t.accent:t.muted}}>{T(title)}</div>
+          <div style={{display:'flex',flexDirection:'column',gap:8}}>
+            {rows.map(r => {
+              const isOpen = open === r.id;
+              return <div key={r.id} style={{background:t.bg2,borderRadius:10,border:`1px solid ${r.have?t.success+'50':t.border}`,opacity:r.have&&!isOpen?0.6:1}}>
+                <div style={{display:'flex',gap:10,alignItems:'flex-start',padding:'12px 14px'}}>
+                  <button onClick={()=>toggleHave(r.id)} aria-label={T('I already get this')} aria-pressed={r.have} style={{width:18,height:18,borderRadius:'50%',border:`1.5px solid ${r.have?t.success:t.border2}`,background:r.have?t.success:'none',flexShrink:0,marginTop:2,padding:0,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                    {r.have&&<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
+                  </button>
+                  <button onClick={()=>setOpen(isOpen?null:r.id)} aria-expanded={isOpen} style={{flex:1,textAlign:'start',background:'none',border:'none',padding:0,cursor:'pointer',fontFamily:'inherit'}}>
+                    <div style={{fontSize:14,fontWeight:600,color:t.text}}>{r.name}</div>
+                    <div style={{fontSize:12,color:t.accent,fontWeight:600,marginTop:2}}>{r.value}</div>
+                    {(r.first || r.auto) && <div style={{fontSize:11,color:t.mutedMid,marginTop:3}}>{r.first || T('Automatic')}</div>}
+                  </button>
+                </div>
+                {isOpen && <div style={{padding:'0 14px 14px 42px',animation:'fadeIn 0.2s ease both'}}>
+                  <div style={{fontSize:13,color:t.text,lineHeight:1.5}}>{r.why}</div>
+                  <ol style={{margin:'10px 0 0',paddingInlineStart:18,fontSize:13,color:t.mutedMid,lineHeight:1.5}}>
+                    {r.how.map((h, i) => <li key={i} style={{marginBottom:4}}>{h}</li>)}
+                  </ol>
+                  {r.say && <div style={{marginTop:10,padding:'10px 12px',borderRadius:8,border:`1px solid ${t.border2}`}}>
+                    <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:4}}>{T('What to say')}</div>
+                    <div style={{fontSize:13,color:t.text,lineHeight:1.5}}>{r.say}</div>
+                    <button onClick={()=>copy(r)} style={{...pill(false),marginTop:8,padding:'4px 11px',fontSize:11}}>{copied===r.id ? T('Copied') : T('Copy')}</button>
+                  </div>}
+                  <div style={{display:'flex',gap:8,flexWrap:'wrap',marginTop:12}}>
+                    {r.phone && <a href={`tel:${r.phone}`} style={{...pill(true),textDecoration:'none',padding:'7px 14px',fontSize:12}}>{T('Call')} {r.phone}</a>}
+                    <a href={r.link} target="_blank" rel="noopener noreferrer" style={{...pill(false),textDecoration:'none',padding:'7px 14px',fontSize:12}}>{T('Official page')}</a>
+                  </div>
+                </div>}
+              </div>;
+            })}
+          </div>
+        </div>;
+      })}
+      <div style={{fontSize:11,color:t.muted,lineHeight:1.5}}>{T('Rates checked')} {data.verified}. {T('Talli is a guide. Each program makes its own decision.')}</div>
+    </div>
+  );
+}
 
 function BenniesSection({dark}) {
   const t = tk(dark);
@@ -930,20 +1062,18 @@ function BenniesSection({dark}) {
   const [pwd, setPwd] = useState(null);
   const [cdb, setCdb] = useState(null);
   const [debt, setDebt] = useState(null);
-  const [other, setOther] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
       try {
-        const [d, p, c, deb, o] = await Promise.all([
+        const [d, p, c, deb] = await Promise.all([
           fetch('/api/dtc-profile', {credentials:'include'}).then(r=>r.json()),
           fetch('/api/pwd-profile', {credentials:'include'}).then(r=>r.json()),
           fetch('/api/cdb-profile', {credentials:'include'}).then(r=>r.json()),
           fetch('/api/debt-payoff-profile', {credentials:'include'}).then(r=>r.json()),
-          fetch('/api/other-benefits-profile', {credentials:'include'}).then(r=>r.json()),
         ]);
-        setDtc(d); setPwd(p); setCdb(c); setDebt(deb); setOther(o);
+        setDtc(d); setPwd(p); setCdb(c); setDebt(deb);
       } catch (e) { /* leave nulls, fields show '—' */ }
       setLoading(false);
     })();
@@ -954,13 +1084,6 @@ function BenniesSection({dark}) {
     setDebt(next);
     try { await fetch('/api/debt-payoff-profile', {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(patch)}); } catch (e) {}
   };
-  const toggleOther = async (id) => {
-    const nextChecked = {...(other?.checked||{}), [id]: !(other?.checked||{})[id]};
-    const next = {...other, checked: nextChecked};
-    setOther(next);
-    try { await fetch('/api/other-benefits-profile', {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({checked: nextChecked})}); } catch (e) {}
-  };
-
   // Real per-user amounts when recorded; the constants are the current BC/CRA rates as fallback.
   // Same derivation as deriveIncome() in src/programs/profiles.js -- keep the
   // fallback rates in sync with DEFAULT_MONTHLY_RATES there. ?? not ||, so a real
@@ -1042,23 +1165,7 @@ function BenniesSection({dark}) {
         </button>
       </div>
 
-      <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:14}}>Other benefits to look into</div>
-      <div style={{display:'flex',flexDirection:'column',gap:8}}>
-        {OTHER_BENEFITS.map(b=>{
-          const checked = !!(other?.checked||{})[b.id];
-          return (
-            <button key={b.id} onClick={()=>toggleOther(b.id)} style={{textAlign:'left',display:'flex',gap:10,padding:'12px 14px',background:t.bg2,borderRadius:10,border:`1px solid ${checked?t.success+'50':t.border}`,cursor:'pointer',fontFamily:'inherit'}}>
-              <div style={{width:16,height:16,borderRadius:'50%',border:`1.5px solid ${checked?t.success:t.border2}`,background:checked?t.success:'none',flexShrink:0,marginTop:2,display:'flex',alignItems:'center',justifyContent:'center'}}>
-                {checked&&<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
-              </div>
-              <div>
-                <div style={{fontSize:13,fontWeight:600,color:t.text}}>{b.label}</div>
-                <div style={{fontSize:11,color:t.mutedMid,marginTop:2,lineHeight:1.4}}>{b.detail}</div>
-              </div>
-            </button>
-          );
-        })}
-      </div>
+      <BenefitFinder dark={dark}/>
     </div>
   );
 }

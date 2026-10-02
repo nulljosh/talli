@@ -16,6 +16,7 @@ const { attemptHttpLogin, fetchAllSections } = require('./http-scraper');
 const widgetToken = require('./widget-token');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { nextPaymentDate } = require('./pay-dates');
+const { findBenefits, prefill: prefillFinder } = require('./programs/finder');
 const { PROFILE_PROGRAMS, deriveIncome, deriveEarnings, deriveAssets, deriveYearReview } = require('./programs/profiles');
 
 const app = express();
@@ -1883,6 +1884,38 @@ function registerProfileRoutes(program) {
 }
 
 PROFILE_PROGRAMS.forEach(registerProfileRoutes);
+
+// Benefit finder. GET returns the questions, saved answers and results; POST
+// saves answers and returns the same shape. Saved answers win over what the
+// profiles imply, so a person can correct Talli.
+async function benefitFinderFor(userId, posted) {
+  const [pwd, dtc, rdsp, cdb, saved] = await Promise.all([
+    ...['pwd-profile', 'dtc-profile', 'rdsp-profile', 'cdb-profile'].map((r) => loadUserBlob(userId, r, {})),
+    loadUserBlob(userId, 'benefit-finder', {}),
+  ]);
+  const answers = posted || { ...prefillFinder({ pwd, dtc, rdsp, cdb }), ...saved };
+  const found = findBenefits(answers);
+  if (posted) await saveUserBlob(userId, 'benefit-finder', found.answers);
+  return found;
+}
+
+app.get('/api/benefit-finder', requireAuth, async (req, res) => {
+  try {
+    res.json(await benefitFinderFor(req.session?.userId, null));
+  } catch (err) {
+    log('[FINDER] GET error:', err.message);
+    res.json(findBenefits({}));
+  }
+});
+
+app.post('/api/benefit-finder', requireAuth, async (req, res) => {
+  try {
+    res.json(await benefitFinderFor(req.session?.userId, req.body?.answers || {}));
+  } catch (err) {
+    log('[FINDER] POST error:', err.message);
+    res.status(500).json({ error: 'Failed to save answers' });
+  }
+});
 
 // Avatar -- pixel art SVG stored in Vercel Blob
 app.get('/api/avatar', requireAuth, async (req, res) => {

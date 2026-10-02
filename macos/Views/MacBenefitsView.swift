@@ -89,6 +89,9 @@ struct MacBenefitsView: View {
                 incomeCard
                 callToAction
 
+                Text("Benefit finder").font(.headline)
+                BenefitFinderView { try await MacAPIClient.shared.benefitFinder(answers: $0) }
+
                 // Automatic benefits
                 benefitCard(
                     title: "GST/HST Credit",

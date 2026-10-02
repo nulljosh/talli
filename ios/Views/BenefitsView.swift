@@ -14,17 +14,11 @@ struct BenefitsView: View {
                     .foregroundStyle(.primary)
 
                 benefitRow("GST/HST Credit", "\(CRADates.lastKnownGSTQuarterlyText) next \(CRADates.nextGSTPaymentText)", "Automatic")
-                benefitRow("BC Renter's Tax Credit", "$400/yr max", "Claim on return")
-                benefitRow("Canada Workers Benefit", "$1,633/yr single", "Claim on return")
-                benefitRow("Canadian Dental Care Plan", "Free under $70K", "Application required")
-                benefitRow("National Pharmacare", "Free diabetes/hormone/contraceptive meds", "Application required")
-                benefitRow("Fair PharmaCare", "Income-based prescription coverage", "Application required")
-                benefitRow("SAFER", "Rent subsidy for 60+ renters", "Application required")
-                benefitRow("RAP", "Rent subsidy for families (~$700/mo avg)", "Application required")
-                benefitRow("BC Bus Pass", "$45/yr transit for PWD/GIS seniors", "Application required")
-                benefitRow("CPP Disability", "If you've worked enough", "Application required")
-                benefitRow("CLBC", "Support for significant needs", "Call to check")
-                benefitRow("BC Home Renovation Credit", "Up to $1,000 for accessibility", "Claim on return")
+
+                Text("Benefit finder")
+                    .font(.headline)
+                    .padding(.top, 8)
+                BenefitFinderView { try await APIClient.shared.benefitFinder(answers: $0) }
             }
             .padding()
         }

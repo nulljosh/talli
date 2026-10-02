@@ -27,7 +27,7 @@ ASC verified today: iOS 3.5.14 and macOS 3.5.6 READY_FOR_DISTRIBUTION. Revenue w
 - [x] Spanish, Tagalog, Arabic and Farsi on top of English, French, Chinese, Punjabi.
 
 ### 6.0: never miss a dollar
-- [ ] Benefit finder. Answer a few questions, see every BC and federal program you qualify for but aren't getting (bus pass, crisis supplement, Fair PharmaCare, Canada Dental, RDSP grants).
+- [x] (2026-10-02, web/iOS/macOS, 33 programs, rates checked) Benefit finder. Answer a few questions, see every BC and federal program you qualify for but aren't getting (bus pass, crisis supplement, Fair PharmaCare, Canada Dental, RDSP grants).
 - [ ] RDSP grant and bond tracker: what the government has matched, what's left this year, what carries forward.
 - [ ] Supplements on the calendar: transportation, dietary, annual bus pass renewal, each with its own reminder.
 - [ ] Missed-payment alert: payday passes and the portal shows nothing, Talli tells you who to call and what to say.
