@@ -42,6 +42,9 @@ struct MessagesView: View {
             }
             .padding(.horizontal, 4)
         }
+        .onReceive(NotificationCenter.default.publisher(for: .talliTokenChanged)) { _ in
+            Task { await loadData() }
+        }
         .task {
             await loadData()
         }

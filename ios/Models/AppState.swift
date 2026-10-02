@@ -330,6 +330,7 @@ final class AppState {
             let token = try await APIClient.shared.widgetToken()
             let shared = UserDefaults(suiteName: "group.com.heyitsmejosh.tally")
             shared?.set(token, forKey: "api_token")
+            WatchSync.shared.send(token: token)
             WidgetCenter.shared.reloadAllTimelines()
         } catch {
             // Non-critical
