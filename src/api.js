@@ -16,6 +16,7 @@ const { attemptHttpLogin, fetchAllSections } = require('./http-scraper');
 const widgetToken = require('./widget-token');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { nextPaymentDate } = require('./pay-dates');
+const { deriveRdsp, cleanRdsp } = require('./programs/rdsp');
 const { findBenefits, prefill: prefillFinder } = require('./programs/finder');
 const { PROFILE_PROGRAMS, deriveIncome, deriveEarnings, deriveAssets, deriveYearReview } = require('./programs/profiles');
 
@@ -1898,6 +1899,35 @@ async function benefitFinderFor(userId, posted) {
   if (posted) await saveUserBlob(userId, 'benefit-finder', found.answers);
   return found;
 }
+
+// RDSP grant and bond tracker (src/programs/rdsp.js). Inputs live on the same
+// rdsp-profile blob as the application status, so nothing else has to change.
+const rdspShape = (profile) => ({ profile: cleanRdsp(profile), derived: deriveRdsp(profile) });
+
+app.get('/api/rdsp-tracker', requireAuth, async (req, res) => {
+  try {
+    res.json(rdspShape(await loadUserBlob(req.session?.userId, 'rdsp-profile', {})));
+  } catch (err) {
+    log('[RDSP] tracker GET error:', err.message);
+    res.json(rdspShape({}));
+  }
+});
+
+app.post('/api/rdsp-tracker', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    const existing = await loadUserBlob(userId, 'rdsp-profile', {});
+    const body = req.body || {};
+    const next = { ...existing };
+    for (const k of ['birthYear', 'dtcYear', 'band', 'entries']) if (body[k] !== undefined) next[k] = body[k];
+    const saved = { ...existing, ...cleanRdsp(next) };
+    await saveUserBlob(userId, 'rdsp-profile', saved);
+    res.json(rdspShape(saved));
+  } catch (err) {
+    log('[RDSP] tracker POST error:', err.message);
+    res.status(500).json({ error: 'Failed to save RDSP details' });
+  }
+});
 
 app.get('/api/benefit-finder', requireAuth, async (req, res) => {
   try {

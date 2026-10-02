@@ -50,7 +50,7 @@ function run() {
   test('rdsp validStatuses match pre-refactor set', () => {
     const rdsp = PROFILE_PROGRAMS.find((p) => p.id === 'rdsp');
     assert.deepStrictEqual(rdsp.validStatuses, ['pending', 'dtc_required', 'account_opened', 'funded', 'active', 'closed']);
-    assert.deepStrictEqual(rdsp.defaults, { status: 'pending', accountOpenedDate: null, accountNumber: null, notes: '' });
+    assert.deepStrictEqual(rdsp.defaults, { status: 'pending', accountOpenedDate: null, accountNumber: null, notes: '', birthYear: null, dtcYear: null, band: null, entries: [] });
   });
 
   test('cdb validStatuses match pre-refactor set', () => {

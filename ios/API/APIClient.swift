@@ -185,6 +185,13 @@ final class APIClient: @unchecked Sendable {
         return try await send(path: "api/benefit-finder", responseType: BenefitFinder.self)
     }
 
+    func rdspTracker(patch: RdspTrackerRequest?) async throws -> RdspTracker {
+        if let patch {
+            return try await send(path: "api/rdsp-tracker", method: "POST", body: patch, responseType: RdspTracker.self)
+        }
+        return try await send(path: "api/rdsp-tracker", responseType: RdspTracker.self)
+    }
+
     func widgetToken() async throws -> String {
         struct TokenResponse: Decodable { let token: String }
         let response = try await send(path: "api/widget-token", responseType: TokenResponse.self)

@@ -21,7 +21,7 @@ const PROFILE_PROGRAMS = [
     name: 'Registered Disability Savings Plan (RDSP)',
     jurisdiction: 'CA-federal',
     validStatuses: ['pending', 'dtc_required', 'account_opened', 'funded', 'active', 'closed'],
-    defaults: { status: 'pending', accountOpenedDate: null, accountNumber: null, notes: '' },
+    defaults: { status: 'pending', accountOpenedDate: null, accountNumber: null, notes: '', birthYear: null, dtcYear: null, band: null, entries: [] },
   },
   {
     id: 'cdb',

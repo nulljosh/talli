@@ -1056,6 +1056,106 @@ function BenefitFinder({dark}) {
   );
 }
 
+// RDSP grant and bond tracker: maths lives in src/programs/rdsp.js, served by /api/rdsp-tracker.
+const RDSP_BANDS = [['low','Under $38,237'],['mid','$38,237 to $117,045'],['high','Over $117,045']];
+
+function RdspTracker({dark}) {
+  const t = tk(dark);
+  const T = window.I18N.t;
+  const [data, setData] = useState(null);
+  const [editing, setEditing] = useState(false);
+  const [form, setForm] = useState({birthYear:'', dtcYear:'', band:'low'});
+  const [row, setRow] = useState({year:String(new Date().getFullYear()), contribution:'', grant:'', bond:''});
+  const left = useCountUp(data?.derived?.missing || 0);
+  const usd = (n) => '$' + Math.round(n).toLocaleString();
+
+  const post = async (patch) => {
+    try {
+      const r = await fetch('/api/rdsp-tracker', {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(patch)});
+      if (r.ok) { const d = await r.json(); setData(d); return d; }
+    } catch (e) {}
+  };
+  useEffect(() => { fetch('/api/rdsp-tracker', {credentials:'include'}).then(r=>r.json()).then(d=>{ setData(d); setForm({birthYear:d.profile.birthYear||'', dtcYear:d.profile.dtcYear||'', band:d.profile.band||'low'}); }).catch(()=>{}); }, []);
+  if (!data) return <Skel w="100%" h={90} r={12} dark={dark}/>;
+
+  const label = {fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:14};
+  const card = {padding:'16px 18px',background:t.bg2,borderRadius:12,border:`1px solid ${t.border}`};
+  const input = {width:'100%',boxSizing:'border-box',padding:'10px 12px',borderRadius:8,border:`1px solid ${t.border2}`,background:'transparent',color:t.text,fontSize:14,fontFamily:'inherit'};
+  const pill = (solid) => ({padding:'9px 16px',borderRadius:100,background:solid?t.accent:'transparent',color:solid?'#fff':t.muted,border:solid?'none':`1px solid ${t.border2}`,fontSize:13,fontWeight:600,fontFamily:'inherit',cursor:'pointer'});
+  const d = data.derived;
+
+  if (!d || editing) return (
+    <div>
+      <div style={label}>{T('RDSP grants and bonds')}</div>
+      <div style={card}>
+        <div style={{fontSize:17,fontWeight:700,letterSpacing:'-0.3px',color:t.text}}>{T('See what your RDSP is owed')}</div>
+        <div style={{fontSize:13,color:t.mutedMid,marginTop:6,lineHeight:1.5}}>{T('Three details. Talli works out what the government has matched, what is left this year and what carries forward.')}</div>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginTop:14}}>
+          <label style={{fontSize:11,color:t.muted}}>{T('Year you were born')}<input inputMode="numeric" maxLength={4} value={form.birthYear} onChange={e=>setForm({...form,birthYear:e.target.value})} style={{...input,marginTop:4}}/></label>
+          <label style={{fontSize:11,color:t.muted}}>{T('Year DTC was approved')}<input inputMode="numeric" maxLength={4} value={form.dtcYear} onChange={e=>setForm({...form,dtcYear:e.target.value})} style={{...input,marginTop:4}}/></label>
+        </div>
+        <div style={{fontSize:11,color:t.muted,margin:'12px 0 6px'}}>{T('Family income a year')}</div>
+        <div style={{display:'flex',flexDirection:'column',gap:6}}>
+          {RDSP_BANDS.map(([id, text]) => {
+            const on = form.band === id;
+            return <button key={id} onClick={()=>setForm({...form,band:id})} aria-pressed={on} style={{textAlign:'start',padding:'11px 14px',borderRadius:10,background:on?`${t.accent}18`:'transparent',border:`1px solid ${on?t.accent:t.border2}`,color:t.text,fontSize:13,fontFamily:'inherit',cursor:'pointer'}}>{text}</button>;
+          })}
+        </div>
+        <div style={{display:'flex',gap:8,marginTop:14}}>
+          <button onClick={async()=>{ if (await post({birthYear:+form.birthYear||null, dtcYear:+form.dtcYear||null, band:form.band})) setEditing(false); }} style={pill(true)}>{T('Save')}</button>
+          {editing && <button onClick={()=>setEditing(false)} style={pill(false)}>{T('Cancel')}</button>}
+        </div>
+        <div style={{fontSize:11,color:t.muted,marginTop:12,lineHeight:1.5}}>{T('No DTC yet? Leave that blank. The DTC comes first, and the grant and bond follow it.')}</div>
+      </div>
+    </div>
+  );
+
+  const bar = (got, cap) => <div style={{height:5,background:t.border,borderRadius:3,marginTop:6}}><div style={{height:'100%',width:`${Math.min(100,got/cap*100)}%`,background:t.accent,borderRadius:3,transition:'width 0.6s ease'}}/></div>;
+  return (
+    <div style={{animation:'fadeIn 0.2s ease both'}}>
+      <div style={label}>{T('RDSP grants and bonds')}</div>
+      <div style={{...card,marginBottom:12}}>
+        {!d.eligible ? <div style={{fontSize:15,fontWeight:600,color:t.text,lineHeight:1.4}}>{T('Grants and bonds stop after the year you turn 49. Your plan keeps growing and you can still contribute.')}</div> : <>
+          <div style={{fontSize:12,color:t.mutedMid}}>{T('Still on the table this year')}</div>
+          <div style={{fontSize:34,fontWeight:800,letterSpacing:'-1.2px',color:t.text,lineHeight:1.15}}>{usd(left)}</div>
+          <div style={{fontSize:12,color:t.mutedMid,marginTop:6,lineHeight:1.5}}>{usd(d.grantLeft)} {T('grant')} + {usd(d.bondLeft)} {T('bond')}. {d.putToMax > 0 && <>{T('Put in')} <b style={{color:t.text}}>{usd(d.putToMax)}</b> {T('to get the whole grant.')}</>}</div>
+          {d.carry.years > 0 && (d.carry.grant > 0 || d.carry.bond > 0) && <div style={{fontSize:12,color:t.mutedMid,marginTop:6,lineHeight:1.5}}>{usd(d.carry.grant)} {T('grant and')} {usd(d.carry.bond)} {T('bond carried forward from the last')} {d.carry.years} {T('years. The yearly limits are $10,500 and $11,000, so catch up over a few years.')}</div>}
+          {d.needsDtc && <div style={{fontSize:12,color:t.accent,fontWeight:600,marginTop:8}}>{T('Add the year your DTC was approved to see what carries forward.')}</div>}
+        </>}
+      </div>
+
+      <div style={{...card,marginBottom:12}}>
+        {[['Grant received', d.lifetime.grant],['Bond received', d.lifetime.bond],['Contributions', d.lifetime.contribution]].map(([name, l], i) => (
+          <div key={name} style={{marginTop:i?12:0}}>
+            <div style={{display:'flex',justifyContent:'space-between',fontSize:13}}><span style={{color:t.text,fontWeight:600}}>{T(name)}</span><span style={{color:t.mutedMid}}>{usd(l.got)} {T('of')} {usd(l.cap)}</span></div>
+            {bar(l.got, l.cap)}
+          </div>
+        ))}
+      </div>
+
+      <div style={{...card,marginBottom:12}}>
+        <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:8}}>{T('What your statements show')}</div>
+        {d.entries.length === 0 && <div style={{fontSize:12,color:t.mutedMid,marginBottom:8,lineHeight:1.5}}>{T('Add each year from your RDSP statement: what you put in, the grant and the bond.')}</div>}
+        {d.entries.map(e => (
+          <div key={e.year} style={{display:'flex',justifyContent:'space-between',alignItems:'center',fontSize:12,color:t.mutedMid,padding:'5px 0'}}>
+            <span><b style={{color:t.text}}>{e.year}</b> {usd(e.contribution)} in, {usd(e.grant)} {T('grant')}, {usd(e.bond)} {T('bond')}</span>
+            <button onClick={()=>post({entries: d.entries.filter(x => x.year !== e.year)})} aria-label={T('Remove')} style={{background:'none',border:'none',color:t.muted,fontSize:16,cursor:'pointer',padding:'0 4px'}}>×</button>
+          </div>
+        ))}
+        <div style={{display:'grid',gridTemplateColumns:'0.8fr 1fr 1fr 1fr',gap:6,marginTop:8}}>
+          {[['year','Year'],['contribution','Put in'],['grant','Grant'],['bond','Bond']].map(([k, ph]) => (
+            <input key={k} inputMode="decimal" placeholder={T(ph)} aria-label={T(ph)} value={row[k]} onChange={e=>setRow({...row,[k]:e.target.value})} style={{...input,padding:'8px 8px',fontSize:13}}/>
+          ))}
+        </div>
+        <button onClick={async()=>{ const y = +row.year; if (!y) return; const rest = d.entries.filter(x => x.year !== y); if (await post({entries:[...rest,{year:y,contribution:+row.contribution||0,grant:+row.grant||0,bond:+row.bond||0}]})) setRow({...row,contribution:'',grant:'',bond:''}); }} style={{...pill(true),marginTop:10,padding:'7px 14px',fontSize:12}}>{T('Save year')}</button>
+      </div>
+
+      <button onClick={()=>setEditing(true)} style={{...pill(false),padding:'6px 13px',fontSize:12}}>{T('Edit my details')}</button>
+      <div style={{fontSize:11,color:t.muted,lineHeight:1.5,marginTop:12}}>{T('Estimate. Assumes the same family income every year and 2026 rates. Your RDSP statement and CRA My Account show the exact carry forward. Take money out within 10 years of the last grant or bond and you repay it.')}</div>
+    </div>
+  );
+}
+
 function BenniesSection({dark}) {
   const t = tk(dark);
   const [dtc, setDtc] = useState(null);
@@ -1165,6 +1265,8 @@ function BenniesSection({dark}) {
         </button>
       </div>
 
+      <RdspTracker dark={dark}/>
+      <div style={{height:28}}/>
       <BenefitFinder dark={dark}/>
     </div>
   );

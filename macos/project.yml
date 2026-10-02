@@ -16,6 +16,7 @@ targets:
       - path: ../ios/Talli/Localizable.xcstrings
       - path: ../ios/Helpers/RTLTracking.swift
       - path: ../ios/Views/BenefitFinderView.swift
+      - path: ../ios/Views/RdspTrackerView.swift
       - path: .
         excludes:
           - "*.xcodeproj"

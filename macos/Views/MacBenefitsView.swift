@@ -89,6 +89,9 @@ struct MacBenefitsView: View {
                 incomeCard
                 callToAction
 
+                Text("RDSP grants and bonds").font(.headline)
+                RdspTrackerView { try await MacAPIClient.shared.rdspTracker(patch: $0) }
+
                 Text("Benefit finder").font(.headline)
                 BenefitFinderView { try await MacAPIClient.shared.benefitFinder(answers: $0) }
 

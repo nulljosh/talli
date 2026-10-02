@@ -15,6 +15,11 @@ struct BenefitsView: View {
 
                 benefitRow("GST/HST Credit", "\(CRADates.lastKnownGSTQuarterlyText) next \(CRADates.nextGSTPaymentText)", "Automatic")
 
+                Text("RDSP grants and bonds")
+                    .font(.headline)
+                    .padding(.top, 8)
+                RdspTrackerView { try await APIClient.shared.rdspTracker(patch: $0) }
+
                 Text("Benefit finder")
                     .font(.headline)
                     .padding(.top, 8)
