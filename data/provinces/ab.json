@@ -1,0 +1,22 @@
+{
+  "code": "ab",
+  "name": "Alberta",
+  "program": "AISH, and ADAP for new applicants",
+  "asOf": "2026-10-02",
+  "monthlySingle": 1940,
+  "monthlyNote": "AISH living allowance. New applicants since July 2, 2026 may be placed in ADAP, whose core benefit is $1,740 a month. People moved from AISH to ADAP get a $200 monthly transition benefit until December 31, 2027.",
+  "children": "AISH adds $232 a month for the first child and $117 for each one after.",
+  "earnings": {
+    "kind": "monthly",
+    "tiers": [{ "upTo": 1072, "keep": 1 }, { "upTo": 2009, "keep": 0.5 }, { "upTo": null, "keep": 0 }],
+    "familyTiers": [{ "upTo": 2612, "keep": 1 }, { "upTo": 3349, "keep": 0.5 }, { "upTo": null, "keep": 0 }]
+  },
+  "paid": "Four business days before the 1st by direct deposit.",
+  "apply": "https://www.alberta.ca/aish-how-to-apply",
+  "payments": "https://www.alberta.ca/aish-adap-and-income-support-payment-dates",
+  "confidence": "official links, amounts from news and benefit guides: check the official page",
+  "sources": [
+    "https://www.alberta.ca/alberta-disability-assistance-program",
+    "https://www.alberta.ca/aish-how-to-apply"
+  ]
+}

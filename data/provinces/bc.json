@@ -1,0 +1,16 @@
+{
+  "code": "bc",
+  "name": "British Columbia",
+  "program": "PWD (disability assistance)",
+  "asOf": "2026-10-02",
+  "monthlySingle": 1483.5,
+  "monthlyNote": "Support allowance $983.50 plus a shelter allowance of up to $500.",
+  "earnings": { "kind": "annual", "exemption": { "single": 16200, "couple_one": 23400, "couple_both": 32400 } },
+  "paid": "On the ministry's published cheque dates.",
+  "apply": "https://www2.gov.bc.ca/gov/content/family-social-supports/services-for-people-with-disabilities/disability-assistance",
+  "confidence": "official",
+  "sources": [
+    "https://www2.gov.bc.ca/gov/content/governments/policies-for-government/bcea-policy-and-procedure-manual/bc-employment-and-assistance-rate-tables/disability-assistance-rate-table",
+    "https://www2.gov.bc.ca/gov/content/family-social-supports/services-for-people-with-disabilities/disability-assistance/on-disability-assistance/annual-earnings-exemption"
+  ]
+}

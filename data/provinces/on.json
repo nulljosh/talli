@@ -1,0 +1,21 @@
+{
+  "code": "on",
+  "name": "Ontario",
+  "program": "ODSP (Ontario Disability Support Program)",
+  "asOf": "2026-10-02",
+  "monthlySingle": 1436,
+  "monthlyNote": "Basic needs $825 plus a shelter allowance of up to $611, from July 1, 2026.",
+  "children": "ODSP adds amounts for dependants. Ask Ontario for your household.",
+  "earnings": {
+    "kind": "monthly",
+    "tiers": [{ "upTo": 1000, "keep": 1 }, { "upTo": null, "keep": 0.25 }]
+  },
+  "extra": "A $100 Work-Related Benefit is added in months you earn. Talli does not count it.",
+  "paid": "Monthly, near the end of the month for the month ahead.",
+  "apply": "https://www.ontario.ca/page/ontario-disability-support-program",
+  "confidence": "official link, amounts from news and benefit guides: check the official page",
+  "sources": [
+    "https://www.ontario.ca/page/ontario-disability-support-program",
+    "https://www.ontario.ca/page/working-and-earning-ontario-disability-support-program"
+  ]
+}
