@@ -1808,6 +1808,7 @@ function BenniesSection({dark}) {
         ))}
       </div>
 
+      <Fold dark={dark} title="Daily income and debt" summary={`$${(totalMonthly/30).toFixed(0)} a day, $${(totalDebt-paidToDate).toLocaleString()} of debt left`}>
       <div style={{padding:'14px 16px',background:t.bg2,borderRadius:10,border:`1px solid ${t.border}`,marginBottom:28}}>
         <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:8}}>Daily disability income</div>
         <div style={{fontSize:20,fontWeight:700,letterSpacing:'-0.5px',color:t.text}}>${(totalMonthly/30).toFixed(2)}<span style={{fontSize:12,fontWeight:500,color:t.mutedMid}}>/day</span></div>
@@ -1845,31 +1846,35 @@ function BenniesSection({dark}) {
           Apply August backpay (${backpay.toLocaleString()})
         </button>
       </div>
-
-      <FoldTool dark={dark} title="RDSP grants and bonds" url="/api/rdsp-tracker" summarize={d=>d.derived?(d.derived.eligible?'$'+Math.round(d.derived.missing).toLocaleString()+' still on the table this year':'Grants stop after the year you turn 49'):'See what your RDSP is owed'}>
-        <RdspTracker dark={dark}/>
-      </FoldTool>
-      <FoldTool dark={dark} title="What if I take a job" url="/api/household" summarize={()=>'See your limit, the clawback and the money month by month'}>
-        <WhatIfTool dark={dark}/>
-      </FoldTool>
-      <FoldTool dark={dark} title="Trusted helper" url="/api/helpers" summarize={d=>d.helpers.length?'Shared with '+d.helpers.length+(d.helpers.length===1?' person':' people'):'Let a caseworker or family see your payments'}>
-        <HelpersTool dark={dark}/>
-      </FoldTool>
-      <FoldTool dark={dark} title="My household and rent" url="/api/household" summarize={d=>d.derived?(d.derived.mismatch?'Your cheque is off from the table':(d.derived.rent==null?'Add your rent':'Rent '+'$'+Math.round(d.derived.rent).toLocaleString()+' a month')):'Couple, family or single: see your table amounts'}>
-        <HouseholdTool dark={dark}/>
-      </FoldTool>
-      <FoldTool dark={dark} title="Service requests" url="/api/requests" summarize={()=>'Crisis supplement, new address, rent change and more'}>
-        <RequestsTool dark={dark}/>
-      </FoldTool>
-      <FoldTool dark={dark} title="Reconsideration helper" url="/api/reconsideration" summarize={d=>d.derived?(d.derived.status==='passed'?'The 20 days have ended':d.derived.status==='today'?'Last day to hand it in':d.derived.left+' business days left to ask again'):'Denied? Know your deadline'}>
-        <ReconsiderationTool dark={dark}/>
-      </FoldTool>
-      <FoldTool dark={dark} title="Document vault" url="/api/vault" summarize={d=>d.salt?'Locked. Your passphrase opens it.':'Keep your letters and ID safe'}>
-        <VaultTool dark={dark}/>
-      </FoldTool>
-      <FoldTool dark={dark} title="Benefit finder" url="/api/benefit-finder" summarize={d=>d.complete?(d.missingYearly>0?'Up to $'+d.missingYearly.toLocaleString()+' a year you may be missing':'You are getting the big ones'):'Find what you are missing'}>
-        <BenefitFinder dark={dark}/>
-      </FoldTool>
+      </Fold>
+      <Fold dark={dark} title="Money tools" summary="Benefit finder, RDSP, what if, household">
+        <FoldTool dark={dark} title="Benefit finder" url="/api/benefit-finder" summarize={d=>d.complete?(d.missingYearly>0?'Up to $'+d.missingYearly.toLocaleString()+' a year you may be missing':'You are getting the big ones'):'Find what you are missing'}>
+          <BenefitFinder dark={dark}/>
+        </FoldTool>
+        <FoldTool dark={dark} title="RDSP grants and bonds" url="/api/rdsp-tracker" summarize={d=>d.derived?(d.derived.eligible?'$'+Math.round(d.derived.missing).toLocaleString()+' still on the table this year':'Grants stop after the year you turn 49'):'See what your RDSP is owed'}>
+          <RdspTracker dark={dark}/>
+        </FoldTool>
+        <FoldTool dark={dark} title="What if I take a job" url="/api/household" summarize={()=>'See your limit, the clawback and the money month by month'}>
+          <WhatIfTool dark={dark}/>
+        </FoldTool>
+        <FoldTool dark={dark} title="My household and rent" url="/api/household" summarize={d=>d.derived?(d.derived.mismatch?'Your cheque is off from the table':(d.derived.rent==null?'Add your rent':'Rent '+'$'+Math.round(d.derived.rent).toLocaleString()+' a month')):'Couple, family or single: see your table amounts'}>
+          <HouseholdTool dark={dark}/>
+        </FoldTool>
+      </Fold>
+      <Fold dark={dark} title="Help and papers" summary="Reconsideration, requests, vault, helper">
+        <FoldTool dark={dark} title="Reconsideration helper" url="/api/reconsideration" summarize={d=>d.derived?(d.derived.status==='passed'?'The 20 days have ended':d.derived.status==='today'?'Last day to hand it in':d.derived.left+' business days left to ask again'):'Denied? Know your deadline'}>
+          <ReconsiderationTool dark={dark}/>
+        </FoldTool>
+        <FoldTool dark={dark} title="Service requests" url="/api/requests" summarize={()=>'Crisis supplement, new address, rent change and more'}>
+          <RequestsTool dark={dark}/>
+        </FoldTool>
+        <FoldTool dark={dark} title="Document vault" url="/api/vault" summarize={d=>d.salt?'Locked. Your passphrase opens it.':'Keep your letters and ID safe'}>
+          <VaultTool dark={dark}/>
+        </FoldTool>
+        <FoldTool dark={dark} title="Trusted helper" url="/api/helpers" summarize={d=>d.helpers.length?'Shared with '+d.helpers.length+(d.helpers.length===1?' person':' people'):'Let a caseworker or family see your payments'}>
+          <HelpersTool dark={dark}/>
+        </FoldTool>
+      </Fold>
     </div>
   );
 }
@@ -1934,6 +1939,7 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate,
         <button onClick={onPwdResubmit} style={{marginTop:12,background:t.accent,color:'#fff',border:'none',borderRadius:100,padding:'8px 18px',fontSize:12,fontWeight:700,fontFamily:'inherit',cursor:'pointer',letterSpacing:'-0.01em'}}>Resubmit PWD Application</button>
       </div>}
 
+      <Fold dark={dark} title="My applications" summary={'PWD '+(isDenied?'denied':pwdApproved?'approved':pwdMedicalDone?'with the ministry':'in review')+', RDSP, Canada Disability Benefit'} defaultOpen={isDenied}>
       <Fold dark={dark} title="PWD application" summary={isDenied?'Denied':pwdApproved?'Approved':pwdMedicalDone?'With the ministry':'Medical review in progress'} defaultOpen={isDenied}>
       <div style={{marginBottom:28}}>
         <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:16}}>PWD Application</div>
@@ -2024,6 +2030,7 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate,
           ))}
         </div>
       </div>
+      </Fold>
       </Fold>
 
       <BenniesSection dark={dark}/>

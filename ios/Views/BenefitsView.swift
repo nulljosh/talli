@@ -15,52 +15,58 @@ struct BenefitsView: View {
 
                 benefitRow("GST/HST Credit", "\(CRADates.lastKnownGSTQuarterlyText) next \(CRADates.nextGSTPaymentText)", "Automatic")
 
-                DisclosureGroup("RDSP grants and bonds") {
-                    RdspTrackerView { try await APIClient.shared.rdspTracker(patch: $0) }
-                        .padding(.top, 8)
-                }
-                .font(.headline)
-                .padding(.top, 8)
+                DisclosureGroup("Money tools") {
+                    DisclosureGroup("Benefit finder") {
+                        BenefitFinderView { try await APIClient.shared.benefitFinder(answers: $0) }
+                            .padding(.top, 8)
+                    }
+                    .font(.headline)
 
-                DisclosureGroup("What if I take a job") {
-                    WhatIfView { try await APIClient.shared.whatIf($0) }
-                        .padding(.top, 8)
-                }
-                .font(.headline)
+                    DisclosureGroup("RDSP grants and bonds") {
+                        RdspTrackerView { try await APIClient.shared.rdspTracker(patch: $0) }
+                            .padding(.top, 8)
+                    }
+                    .font(.headline)
+                    .padding(.top, 8)
 
-                DisclosureGroup("Trusted helper") {
-                    TrustedHelperView(api: APIClient.shared.trustedHelpers)
-                        .padding(.top, 8)
-                }
-                .font(.headline)
+                    DisclosureGroup("What if I take a job") {
+                        WhatIfView { try await APIClient.shared.whatIf($0) }
+                            .padding(.top, 8)
+                    }
+                    .font(.headline)
 
-                DisclosureGroup("My household and rent") {
-                    HouseholdView { try await APIClient.shared.household(save: $0) }
-                        .padding(.top, 8)
-                }
-                .font(.headline)
-
-                DisclosureGroup("Service requests") {
-                    ServiceRequestsView { try await APIClient.shared.serviceRequests() }
-                        .padding(.top, 8)
+                    DisclosureGroup("My household and rent") {
+                        HouseholdView { try await APIClient.shared.household(save: $0) }
+                            .padding(.top, 8)
+                    }
+                    .font(.headline)
                 }
                 .font(.headline)
 
-                DisclosureGroup("Reconsideration helper") {
-                    ReconsiderationView { try await APIClient.shared.reconsideration(received: $0) }
-                        .padding(.top, 8)
-                }
-                .font(.headline)
+                DisclosureGroup("Help and papers") {
+                    DisclosureGroup("Reconsideration helper") {
+                        ReconsiderationView { try await APIClient.shared.reconsideration(received: $0) }
+                            .padding(.top, 8)
+                    }
+                    .font(.headline)
 
-                DisclosureGroup("Document vault") {
-                    VaultView(api: APIClient.shared.vault)
-                        .padding(.top, 8)
-                }
-                .font(.headline)
+                    DisclosureGroup("Service requests") {
+                        ServiceRequestsView { try await APIClient.shared.serviceRequests() }
+                            .padding(.top, 8)
+                    }
+                    .font(.headline)
 
-                DisclosureGroup("Benefit finder") {
-                    BenefitFinderView { try await APIClient.shared.benefitFinder(answers: $0) }
-                        .padding(.top, 8)
+                    DisclosureGroup("Document vault") {
+                        VaultView(api: APIClient.shared.vault)
+                            .padding(.top, 8)
+                    }
+                    .font(.headline)
+
+                    DisclosureGroup("Trusted helper") {
+                        TrustedHelperView(api: APIClient.shared.trustedHelpers)
+                            .padding(.top, 8)
+                    }
+                    .font(.headline)
                 }
                 .font(.headline)
             }

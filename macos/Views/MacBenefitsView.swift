@@ -89,54 +89,59 @@ struct MacBenefitsView: View {
                 incomeCard
                 callToAction
 
-                DisclosureGroup("RDSP grants and bonds") {
-                    RdspTrackerView { try await MacAPIClient.shared.rdspTracker(patch: $0) }
-                        .padding(.top, 8)
+                DisclosureGroup("Money tools") {
+                    DisclosureGroup("Benefit finder") {
+                        BenefitFinderView { try await MacAPIClient.shared.benefitFinder(answers: $0) }
+                            .padding(.top, 8)
+                    }
+                    .font(.headline)
+
+                    DisclosureGroup("RDSP grants and bonds") {
+                        RdspTrackerView { try await MacAPIClient.shared.rdspTracker(patch: $0) }
+                            .padding(.top, 8)
+                    }
+                    .font(.headline)
+
+                    DisclosureGroup("What if I take a job") {
+                        WhatIfView { try await MacAPIClient.shared.whatIf($0) }
+                            .padding(.top, 8)
+                    }
+                    .font(.headline)
+
+                    DisclosureGroup("My household and rent") {
+                        HouseholdView { try await MacAPIClient.shared.household(save: $0) }
+                            .padding(.top, 8)
+                    }
+                    .font(.headline)
                 }
                 .font(.headline)
 
-                DisclosureGroup("What if I take a job") {
-                    WhatIfView { try await MacAPIClient.shared.whatIf($0) }
-                        .padding(.top, 8)
+                DisclosureGroup("Help and papers") {
+                    DisclosureGroup("Reconsideration helper") {
+                        ReconsiderationView { try await MacAPIClient.shared.reconsideration(received: $0) }
+                            .padding(.top, 8)
+                    }
+                    .font(.headline)
+
+                    DisclosureGroup("Service requests") {
+                        ServiceRequestsView { try await MacAPIClient.shared.serviceRequests() }
+                            .padding(.top, 8)
+                    }
+                    .font(.headline)
+
+                    DisclosureGroup("Document vault") {
+                        VaultView(api: MacAPIClient.shared.vault)
+                            .padding(.top, 8)
+                    }
+                    .font(.headline)
+
+                    DisclosureGroup("Trusted helper") {
+                        TrustedHelperView(api: MacAPIClient.shared.trustedHelpers)
+                            .padding(.top, 8)
+                    }
+                    .font(.headline)
                 }
                 .font(.headline)
-
-                DisclosureGroup("Trusted helper") {
-                    TrustedHelperView(api: MacAPIClient.shared.trustedHelpers)
-                        .padding(.top, 8)
-                }
-                .font(.headline)
-
-                DisclosureGroup("My household and rent") {
-                    HouseholdView { try await MacAPIClient.shared.household(save: $0) }
-                        .padding(.top, 8)
-                }
-                .font(.headline)
-
-                DisclosureGroup("Service requests") {
-                    ServiceRequestsView { try await MacAPIClient.shared.serviceRequests() }
-                        .padding(.top, 8)
-                }
-                .font(.headline)
-
-                DisclosureGroup("Reconsideration helper") {
-                    ReconsiderationView { try await MacAPIClient.shared.reconsideration(received: $0) }
-                        .padding(.top, 8)
-                }
-                .font(.headline)
-
-                DisclosureGroup("Document vault") {
-                    VaultView(api: MacAPIClient.shared.vault)
-                        .padding(.top, 8)
-                }
-                .font(.headline)
-
-                DisclosureGroup("Benefit finder") {
-                    BenefitFinderView { try await MacAPIClient.shared.benefitFinder(answers: $0) }
-                        .padding(.top, 8)
-                }
-                .font(.headline)
-
                 // Automatic benefits
                 benefitCard(
                     title: "GST/HST Credit",
