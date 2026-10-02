@@ -662,6 +662,44 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
 // ════════════════════════════════════════════════════
 // CALENDAR TAB
 // ════════════════════════════════════════════════════
+// One quiet line per section; the full section opens on tap. Keeps Status and Calendar short.
+function FoldBox({dark, title, summary, open, setOpen, children}) {
+  const t = tk(dark);
+  const T = window.I18N.t;
+  if (!open) return (
+    <button onClick={()=>setOpen(true)} aria-expanded="false" style={{width:'100%',display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,textAlign:'start',padding:'14px 16px',background:t.bg2,borderRadius:12,border:`1px solid ${t.border}`,fontFamily:'inherit',cursor:'pointer',marginBottom:12}}>
+      <span style={{minWidth:0}}>
+        <span style={{display:'block',fontSize:14,fontWeight:600,color:t.text}}>{title}</span>
+        {summary && <span style={{display:'block',fontSize:12,color:t.accent,fontWeight:600,marginTop:2}}>{summary}</span>}
+      </span>
+      <span style={{color:t.muted,fontSize:18,lineHeight:1}} aria-hidden="true">›</span>
+    </button>
+  );
+  return (
+    <div style={{marginBottom:12}}>
+      {children}
+      <button onClick={()=>setOpen(false)} style={{marginTop:12,background:'none',border:'none',padding:0,color:t.muted,fontSize:12,fontWeight:600,fontFamily:'inherit',cursor:'pointer'}}>{T('Hide')}</button>
+    </div>
+  );
+}
+
+// A tool that fetches its own one-line summary; the tool itself mounts only when opened.
+function FoldTool({dark, title, url, summarize, children}) {
+  const [open, setOpen] = useState(false);
+  const [sum, setSum] = useState('');
+  useEffect(() => {
+    if (open) return;
+    fetch(url, {credentials:'include'}).then(r=>r.json()).then(d=>setSum(summarize(d)||'')).catch(()=>{});
+  }, [open]);
+  return <FoldBox dark={dark} title={title} summary={sum} open={open} setOpen={setOpen}>{children}</FoldBox>;
+}
+
+// A section whose summary the parent already knows (the application timelines).
+function Fold({dark, title, summary, defaultOpen, children}) {
+  const [open, setOpen] = useState(!!defaultOpen);
+  return <FoldBox dark={dark} title={title} summary={summary} open={open} setOpen={setOpen}>{children}</FoldBox>;
+}
+
 // Which supplements land on the calendar. Maths and dates: src/programs/supplements.js via /api/supplements.
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
@@ -820,7 +858,11 @@ function CalendarTab({dark, payDateObj, amount, daysUntil}) {
           ))}
         </div>
 
-        <SupplementsManage dark={dark} data={supp} onSave={saveSupp}/>
+        <div style={{marginTop:24}}>
+          <FoldTool dark={dark} title="Your supplements" url="/api/supplements" summarize={d=>d.derived.monthly>0?'+$'+Math.round(d.derived.monthly).toLocaleString()+' a month on top of your cheque':'Add the ones you get'}>
+            <SupplementsManage dark={dark} data={supp} onSave={saveSupp}/>
+          </FoldTool>
+        </div>
 
         <div style={{display:'flex',gap:14,paddingTop:20,flexWrap:'wrap'}}>
           {[{fill:true,small:false,label:'Payment day'},{fill:false,small:false,label:'Today'},{fill:true,small:true,label:'Past payment'}].map(({fill,small,label},i)=>(
@@ -1375,9 +1417,12 @@ function BenniesSection({dark}) {
         </button>
       </div>
 
-      <RdspTracker dark={dark}/>
-      <div style={{height:28}}/>
-      <BenefitFinder dark={dark}/>
+      <FoldTool dark={dark} title="RDSP grants and bonds" url="/api/rdsp-tracker" summarize={d=>d.derived?(d.derived.eligible?'$'+Math.round(d.derived.missing).toLocaleString()+' still on the table this year':'Grants stop after the year you turn 49'):'See what your RDSP is owed'}>
+        <RdspTracker dark={dark}/>
+      </FoldTool>
+      <FoldTool dark={dark} title="Benefit finder" url="/api/benefit-finder" summarize={d=>d.complete?(d.missingYearly>0?'Up to $'+d.missingYearly.toLocaleString()+' a year you may be missing':'You are getting the big ones'):'Find what you are missing'}>
+        <BenefitFinder dark={dark}/>
+      </FoldTool>
     </div>
   );
 }
@@ -1442,6 +1487,7 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate,
         <button onClick={onPwdResubmit} style={{marginTop:12,background:t.accent,color:'#fff',border:'none',borderRadius:100,padding:'8px 18px',fontSize:12,fontWeight:700,fontFamily:'inherit',cursor:'pointer',letterSpacing:'-0.01em'}}>Resubmit PWD Application</button>
       </div>}
 
+      <Fold dark={dark} title="PWD application" summary={isDenied?'Denied':pwdApproved?'Approved':pwdMedicalDone?'With the ministry':'Medical review in progress'} defaultOpen={isDenied}>
       <div style={{marginBottom:28}}>
         <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:16}}>PWD Application</div>
         <div style={{borderLeft:`1.5px solid ${t.border}`,marginLeft:5,paddingLeft:18}}>
@@ -1464,8 +1510,9 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate,
         </div>
       </div>
 
-      <div style={{height:1,background:t.border,marginBottom:24}}/>
+      </Fold>
 
+      <Fold dark={dark} title="RDSP application" summary={({pending:'Not started',dtc_required:'Needs the DTC first',account_opened:'Account opened',funded:'Funded',active:'Active'})[rdspStatus]||'Not started'}>
       <div style={{marginBottom:28}}>
         <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:16}}>RDSP Application</div>
         <div style={{borderLeft:`1.5px solid ${t.border}`,marginLeft:5,paddingLeft:18}}>
@@ -1493,8 +1540,9 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate,
         </div>
       </div>
 
-      <div style={{height:1,background:t.border,marginBottom:24}}/>
+      </Fold>
 
+      <Fold dark={dark} title="Canada Disability Benefit" summary={({pending:'Not applied',applied:'Applied',under_review:'Under review',approved:'Approved',rejected:'Not approved',funded:'Paying'})[cdbStatus]||'Not applied'}>
       <div style={{marginBottom:28}}>
         <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:16}}>Canada Disability Benefit</div>
         {cdbStatus!=='pending'&&(
@@ -1529,6 +1577,7 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate,
           ))}
         </div>
       </div>
+      </Fold>
 
       <BenniesSection dark={dark}/>
 

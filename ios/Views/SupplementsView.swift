@@ -102,7 +102,7 @@ struct SupplementsView: View {
                     Text("Tick the supplements you get and they land on your calendar with a reminder.")
                         .font(.footnote).foregroundStyle(.secondary)
                 }
-                ForEach(d.upcoming.prefix(5)) { e in
+                ForEach(d.upcoming.prefix(3)) { e in
                     HStack {
                         Circle().fill(Color.orange).frame(width: 6, height: 6)
                         Text(e.name).font(.footnote)

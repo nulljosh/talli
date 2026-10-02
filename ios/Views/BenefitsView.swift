@@ -15,15 +15,18 @@ struct BenefitsView: View {
 
                 benefitRow("GST/HST Credit", "\(CRADates.lastKnownGSTQuarterlyText) next \(CRADates.nextGSTPaymentText)", "Automatic")
 
-                Text("RDSP grants and bonds")
-                    .font(.headline)
-                    .padding(.top, 8)
-                RdspTrackerView { try await APIClient.shared.rdspTracker(patch: $0) }
+                DisclosureGroup("RDSP grants and bonds") {
+                    RdspTrackerView { try await APIClient.shared.rdspTracker(patch: $0) }
+                        .padding(.top, 8)
+                }
+                .font(.headline)
+                .padding(.top, 8)
 
-                Text("Benefit finder")
-                    .font(.headline)
-                    .padding(.top, 8)
-                BenefitFinderView { try await APIClient.shared.benefitFinder(answers: $0) }
+                DisclosureGroup("Benefit finder") {
+                    BenefitFinderView { try await APIClient.shared.benefitFinder(answers: $0) }
+                        .padding(.top, 8)
+                }
+                .font(.headline)
             }
             .padding()
         }
