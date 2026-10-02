@@ -17,7 +17,7 @@ ASC verified today: iOS 3.5.14 and macOS 3.5.6 READY_FOR_DISTRIBUTION. Revenue w
 
 ### 6.0: never miss a dollar
 - [x] (2026-10-02, web/iOS/macOS, 2026 rates checked) RDSP grant and bond tracker: what the government has matched, what's left this year, what carries forward.
-- [ ] Supplements on the calendar: transportation, dietary, annual bus pass renewal, each with its own reminder.
+- [x] (2026-10-02, web/iOS/macOS, local reminders) Supplements on the calendar: transportation, dietary, annual bus pass renewal, each with its own reminder.
 - [ ] Missed-payment alert: payday passes and the portal shows nothing, Talli tells you who to call and what to say.
 
 ### 7.0: paperwork done for you

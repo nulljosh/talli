@@ -397,7 +397,11 @@ private struct DashboardScreen: View {
     }
 
     private var dateCard: some View {
-        PaymentCalendarView(paymentDate: appState.parsedNextPaymentDate, today: now)
+        VStack(alignment: .leading, spacing: 14) {
+            PaymentCalendarView(paymentDate: appState.parsedNextPaymentDate, today: now)
+            Divider()
+            SupplementsView { try await APIClient.shared.supplements(save: $0) }
+        }
         .padding(.horizontal, 16)
         .padding(.top, 14)
         .padding(.bottom, 12)

@@ -119,6 +119,13 @@ final class MacAPIClient: @unchecked Sendable {
         return try await send(path: "api/benefit-finder", responseType: BenefitFinder.self)
     }
 
+    func supplements(save: SupplementsRequest?) async throws -> Supplements {
+        if let save {
+            return try await send(path: "api/supplements", method: "POST", body: save, responseType: Supplements.self)
+        }
+        return try await send(path: "api/supplements", responseType: Supplements.self)
+    }
+
     func rdspTracker(patch: RdspTrackerRequest?) async throws -> RdspTracker {
         if let patch {
             return try await send(path: "api/rdsp-tracker", method: "POST", body: patch, responseType: RdspTracker.self)

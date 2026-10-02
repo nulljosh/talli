@@ -16,6 +16,7 @@ const { attemptHttpLogin, fetchAllSections } = require('./http-scraper');
 const widgetToken = require('./widget-token');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { nextPaymentDate } = require('./pay-dates');
+const { deriveSupplements, cleanSupplements } = require('./programs/supplements');
 const { deriveRdsp, cleanRdsp } = require('./programs/rdsp');
 const { findBenefits, prefill: prefillFinder } = require('./programs/finder');
 const { PROFILE_PROGRAMS, deriveIncome, deriveEarnings, deriveAssets, deriveYearReview } = require('./programs/profiles');
@@ -1903,6 +1904,29 @@ async function benefitFinderFor(userId, posted) {
 // RDSP grant and bond tracker (src/programs/rdsp.js). Inputs live on the same
 // rdsp-profile blob as the application status, so nothing else has to change.
 const rdspShape = (profile) => ({ profile: cleanRdsp(profile), derived: deriveRdsp(profile) });
+
+// Supplements on the calendar (src/programs/supplements.js).
+const supplementsShape = (profile) => ({ profile: cleanSupplements(profile), derived: deriveSupplements(profile) });
+
+app.get('/api/supplements', requireAuth, async (req, res) => {
+  try {
+    res.json(supplementsShape(await loadUserBlob(req.session?.userId, 'supplements-profile', {})));
+  } catch (err) {
+    log('[SUPPLEMENTS] GET error:', err.message);
+    res.json(supplementsShape({}));
+  }
+});
+
+app.post('/api/supplements', requireAuth, async (req, res) => {
+  try {
+    const saved = cleanSupplements(req.body);
+    await saveUserBlob(req.session?.userId, 'supplements-profile', saved);
+    res.json(supplementsShape(saved));
+  } catch (err) {
+    log('[SUPPLEMENTS] POST error:', err.message);
+    res.status(500).json({ error: 'Failed to save supplements' });
+  }
+});
 
 app.get('/api/rdsp-tracker', requireAuth, async (req, res) => {
   try {

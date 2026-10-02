@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0282B5C8EA56EEF919DA487F /* MacBenefitsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE4D95EDD23AA9E97925A20 /* MacBenefitsProvider.swift */; };
+		0407FBFD53DB017B3052008B /* SupplementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B2AD00D857C67843DE6074 /* SupplementsView.swift */; };
 		0A4F2A936FBED3094781D846 /* MacSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9E6A07378DC7743CCC0E4D /* MacSettingsView.swift */; };
 		0BDFE2F644478B6E4DE81162 /* MacDateParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE52B7411BB64FCBF55E718E /* MacDateParsing.swift */; };
 		0D9CD3FBC94EA80A07221C5C /* TalliWidgets-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E6F0CD73F1B533518444D527 /* TalliWidgets-Info.plist */; };
@@ -106,6 +107,7 @@
 		BEE667693AE3B4A55E821898 /* TalliWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TalliWidgets.entitlements; sourceTree = "<group>"; };
 		BEEEC581169CEBE335A51EF3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C072FBCF9110200380F476B0 /* MacMessagesWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMessagesWidgetView.swift; sourceTree = "<group>"; };
+		C3B2AD00D857C67843DE6074 /* SupplementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementsView.swift; sourceTree = "<group>"; };
 		CD19AB31AA4F0A6DD858E063 /* MacAppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAppState.swift; sourceTree = "<group>"; };
 		CD291A0A6F3E178AE7DBC14D /* TalliMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalliMacApp.swift; sourceTree = "<group>"; };
 		DDE374C826B98CFF02FCED84 /* MacAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAPIClient.swift; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 			children = (
 				A35803128BD01A8F7B732D9B /* BenefitFinderView.swift */,
 				AB7688A8B26D97A128C95FA2 /* RdspTrackerView.swift */,
+				C3B2AD00D857C67843DE6074 /* SupplementsView.swift */,
 			);
 			name = Views;
 			path = ../ios/Views;
@@ -439,6 +442,7 @@
 				13B60F9180A94A04BA24C25E /* PaydayNotificationScheduler.swift in Sources */,
 				68003AB732B158D919F3BE14 /* RTLTracking.swift in Sources */,
 				2B571A9A6058202934D64E5A /* RdspTrackerView.swift in Sources */,
+				0407FBFD53DB017B3052008B /* SupplementsView.swift in Sources */,
 				4BCA3DBEDCAA96B862C734FA /* TalliMacApp.swift in Sources */,
 				62E4A3F5916F04C5C1474AA6 /* View+Glass.swift in Sources */,
 			);

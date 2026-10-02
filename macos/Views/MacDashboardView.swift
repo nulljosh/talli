@@ -115,9 +115,13 @@ struct MacDashboardView: View {
     // MARK: - Calendar
 
     private var calendarCard: some View {
-        MacPaymentCalendarView(paymentDate: appState.parsedNextPaymentDate)
-            .frame(maxWidth: .infinity)
-            .padding(20)
+        VStack(alignment: .leading, spacing: 14) {
+            MacPaymentCalendarView(paymentDate: appState.parsedNextPaymentDate)
+            Divider()
+            SupplementsView { try await MacAPIClient.shared.supplements(save: $0) }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(20)
             .background(macCard)
     }
 

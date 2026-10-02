@@ -17,6 +17,7 @@ targets:
       - path: ../ios/Helpers/RTLTracking.swift
       - path: ../ios/Views/BenefitFinderView.swift
       - path: ../ios/Views/RdspTrackerView.swift
+      - path: ../ios/Views/SupplementsView.swift
       - path: .
         excludes:
           - "*.xcodeproj"
