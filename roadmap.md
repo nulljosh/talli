@@ -24,7 +24,7 @@ can only build an installer for the OS it runs on.
 
 Deliberately left out:
 
-- [ ] No "remember me". Storing a BCeID password needs a real keystore per platform
+- [x] No "remember me" (skipped 2026-10-02, Compose not shipping). Storing a BCeID password needs a real keystore per platform
       (EncryptedSharedPreferences / DPAPI / libsecret); today you sign in each launch.
       Add it when the friction is an actual complaint.
 - [x] No monthly report submission on the Compose clients (`ReportView` on iOS) -- **Skipped 2026-10-02: Compose builds not shipping.**
