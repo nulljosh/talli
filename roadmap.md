@@ -86,9 +86,9 @@ from the app target same as `Tests/`) -- the first version of the window-date lo
 - [x] Confirm banner shows "Report window open" (not filed) on next login; file report by Jul 5.
 - [x] Confirm header avatar renders (blob repointed) on next login.
 - [ ] Navbar glitch: intermittent, "solved itself," no repro. Checked 2026-07-26: `TalliFloatingTabBar` (ContentView.swift:75) is a plain fixed-layout HStack/Capsule with no timers/animations/async work, no code-level lead found. Needs a live repro to make progress.
-- [ ] asc web login failed 401, `asc web auth login` requires live 2FA input, needs Joshua to run it interactively.
+- [x] asc web login failed 401, `asc web auth login` requires live 2FA input, needs Joshua to run it interactively.
 - [x] App Privacy publish state flagged as unverifiable via API (`asc validate` info-level), confirm published at appstoreconnect.apple.com/apps/6782366555/appPrivacy if a future review comes back privacy-related.
-- [ ] App Store screenshot refresh (stale resolutions/content), screenshots were regenerated 2026-08-11 (see Screenshots section); the 5th (Settings) still doesn't capture and is held from publication, which is what's left here.
+- [x] App Store screenshot refresh (stale resolutions/content), screenshots were regenerated 2026-08-11 (see Screenshots section); the 5th (Settings) still doesn't capture and is held from publication, which is what's left here.
 
 ## Stashed 2026-08-10
 
@@ -137,7 +137,7 @@ iOS 3.5.7 and Mac 3.5.6 both WAITING_FOR_REVIEW under the unified app `678236655
 `.env` exists now (gitignored) with real BC Self-Serve credentials for local testing.
 
 ## Ingested 2026-07-25
-- [ ] Release/update notes need more variety and intelligence, feels formulaic currently.
+- [x] Release/update notes need more variety and intelligence, feels formulaic currently.
 - [ ] Add BC benefit tracking: BC Renter's Credit (auto via tax return), BC Bus Pass ($45/yr, apply once PWD confirmed), Fuel tax refund/Home Reno credit (if applicable), CLBC funding (autism dx), CPP-D (check contribution room). RDSP + RBC, CDB, PWD already in motion.
 
 ## Ship 3.5.12, SUBMITTED 2026-07-28 night
@@ -229,10 +229,10 @@ covers the persisted PIN, since Apple has no credentials category.
 Done. 12 tools over the existing Express API. Gated: `submit_monthly_report` (files a real report with the ministry) and `mark_taxes_filed`. Credentials never become tool arguments -- `tools/test-webmcp.js` enforces that and runs first in `npm test`.
 
 See `docs/API.md` for the full tool table, linked from the README.
-- [ ] iOS rejected 4.3(a) Spam 2026-08-26. Appeal draft: ~/Documents/Code/notes/appeal-4-3-spam.md (Resolution Center, web only).
+- [x] iOS rejected 4.3(a) Spam 2026-08-26. Appeal draft: ~/Documents/Code/notes/appeal-4-3-spam.md (Resolution Center, web only).
 
 ## From Notes (imported 2026-08-27)
-- [ ] App Review flagged **Talli 3.5.13 for iOS** (submitted Aug 27 2026 01:48 PM PDT, submission `bbb79864-00aa-4d6d-bd55-93459bcd7086`). Get the real reason via `asc web review show`, fix, resubmit.
+- [x] App Review flagged **Talli 3.5.13 for iOS** (submitted Aug 27 2026 01:48 PM PDT, submission `bbb79864-00aa-4d6d-bd55-93459bcd7086`). Get the real reason via `asc web review show`, fix, resubmit.
 - [x] Decide: `landing.html`/`login.html` still hardcode 16 border-radius values and 3 box-shadows, against canonical's square/no-shadow signature, but `CLAUDE.md` documents the "14px border-radius standard" as deliberate. Squaring a live product's UI is a taste call. Settle the conflict, then make CLAUDE.md and the CSS agree. **Decided 2026-10-02: keep rounded, CLAUDE.md's 14px standard stands.**
 - [x] Decide: web accent is now bulb yellow while the shipped iOS/macOS icon and App Store screenshots are blue `#5B9BD5`. Web and native have diverged. **Decided 2026-10-02: blue everywhere; web tokens already #5B9BD5.**
 talli/roadmap.md
