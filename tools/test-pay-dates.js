@@ -49,4 +49,12 @@ t('year totals count the published paydays, not 12 x monthly', () => {
   assert.strictEqual(inc.yearRemaining, 1100 * 3);
 });
 
+t('GST credit adds on CRA dates when recorded', () => {
+  const { deriveIncome } = require('../src/programs/profiles');
+  const inc = deriveIncome({ monthlyAmount: 1000 }, { monthlyAmount: 100 }, new Date(2026, 9, 2), { quarterlyAmount: 174.5 });
+  assert.strictEqual(inc.yearCredits, 174.5 * 4);
+  assert.strictEqual(inc.yearTotal, 1100 * 12 + 174.5 * 4);
+  assert.strictEqual(inc.yearRemaining, 1100 * 3 + 174.5); // Oct 5 credit still ahead
+});
+
 console.log(`\n${passed} passed, 0 failed`);

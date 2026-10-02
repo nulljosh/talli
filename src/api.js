@@ -1068,7 +1068,8 @@ app.get('/api/summary', async (req, res) => {
     if (widgetUserId) {
       const pwdProfile = await loadUserBlob(widgetUserId, 'pwd-profile', null).catch(() => null);
       const cdbProfile = await loadUserBlob(widgetUserId, 'cdb-profile', null).catch(() => null);
-      summary.income = deriveIncome(pwdProfile, cdbProfile);
+      const cgebProfile = await loadUserBlob(widgetUserId, 'cgeb-profile', null).catch(() => null);
+      summary.income = deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile);
     }
 
     res.json(summary);
@@ -1248,7 +1249,7 @@ app.get('/api/latest', requireAuth, async (req, res) => {
       cdbMonthlyAmount: cdbProfile.monthlyAmount || null,
       cdbRetroactiveEligible: cdbProfile.retroactiveEligible || false,
       cgeb: cgebProfile,
-      income: deriveIncome(pwdProfile, cdbProfile),
+      income: deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile),
     };
 
     const result = await fetchOrLoadData(req);
@@ -2124,7 +2125,8 @@ app.get('/api/mobile', requireAuth, async (req, res) => {
     const userId = req.session?.userId;
     const pwdProfile = await loadUserBlob(userId, 'pwd-profile', {}).catch(() => ({}));
     const cdbProfile = await loadUserBlob(userId, 'cdb-profile', {}).catch(() => ({}));
-    res.json(extractMobileData(result?.data || null, deriveIncome(pwdProfile, cdbProfile)));
+    const cgebProfile = await loadUserBlob(userId, 'cgeb-profile', null).catch(() => null);
+    res.json(extractMobileData(result?.data || null, deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile)));
   } catch (error) {
     console.error('[API] /api/mobile error:', error);
     res.status(500).json({ error: safeApiError(error, 'Failed to load data') });

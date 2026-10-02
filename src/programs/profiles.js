@@ -95,7 +95,7 @@ const DEFAULT_MONTHLY_RATES = { pwd: 1450, cdb: 200 };
 // Year figures count BC's published cheque issue dates in this calendar year, so
 // they are what actually lands in the account, not 12 x monthly. If BC hasn't
 // published the year yet the count is short; refresh CHEQUE_ISSUE_DATES.
-function deriveIncome(pwdProfile, cdbProfile, now = new Date()) {
+function deriveIncome(pwdProfile, cdbProfile, now = new Date(), cgebProfile = null) {
   const pwdMonthly = pwdProfile?.monthlyAmount ?? DEFAULT_MONTHLY_RATES.pwd;
   const cdbMonthly = cdbProfile?.monthlyAmount ?? DEFAULT_MONTHLY_RATES.cdb;
   const totalMonthly = pwdMonthly + cdbMonthly;
@@ -103,11 +103,19 @@ function deriveIncome(pwdProfile, cdbProfile, now = new Date()) {
   const today = `${year}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   const thisYear = CHEQUE_ISSUE_DATES.filter((d) => d.startsWith(year));
   const left = thisYear.filter((d) => d >= today).length;
+  // GST/HST credit (CGEB): only when the user recorded a quarterly amount. CRA
+  // pays the 5th of Jan/Apr/Jul/Oct unless the profile lists its own schedule.
+  const quarterly = cgebProfile?.quarterlyAmount ?? 0;
+  const creditDates = (cgebProfile?.paymentSchedule?.length
+    ? cgebProfile.paymentSchedule
+    : ['01', '04', '07', '10'].map((m) => `${year}-${m}-05`)).filter((d) => String(d).startsWith(year));
+  const creditsLeft = creditDates.filter((d) => d >= today).length;
   return {
     pwdMonthly, cdbMonthly, totalMonthly,
-    yearTotal: totalMonthly * thisYear.length,
-    yearRemaining: totalMonthly * left,
+    yearTotal: totalMonthly * thisYear.length + quarterly * creditDates.length,
+    yearRemaining: totalMonthly * left + quarterly * creditsLeft,
     paymentsLeft: left,
+    yearCredits: quarterly * creditDates.length,
   };
 }
 
