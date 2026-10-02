@@ -975,6 +975,60 @@ function HouseholdTool({dark}) {
   );
 }
 
+// Trusted helper: a revocable read-only link for a caseworker, advocate or family member. Rules: src/programs/helper.js.
+function HelpersTool({dark}) {
+  const t = tk(dark);
+  const T = window.I18N.t;
+  const [data, setData] = useState(null);
+  const [name, setName] = useState('');
+  const [link, setLink] = useState(null);
+  const [copied, setCopied] = useState(false);
+  const [err, setErr] = useState('');
+  const load = () => fetch('/api/helpers', {credentials:'include'}).then(r=>r.json()).then(setData).catch(()=>{});
+  useEffect(() => { load(); }, []);
+  if (!data) return <Skel w="100%" h={90} r={12} dark={dark}/>;
+  const create = async () => {
+    setErr('');
+    try {
+      const r = await fetch('/api/helpers', {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({name})});
+      const d = await r.json();
+      if (!r.ok) { setErr(d.error || T('Something went wrong. Try again.')); return; }
+      setLink({name: d.name, url: location.origin + d.path}); setName(''); load();
+    } catch (e) { setErr(T('Something went wrong. Try again.')); }
+  };
+  const remove = async (id) => { try { await fetch('/api/helpers/' + id, {method:'DELETE',credentials:'include'}); } catch (e) {} setLink(null); load(); };
+  const label = {fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:14};
+  const card = {padding:'16px 18px',background:t.bg2,borderRadius:12,border:`1px solid ${t.border}`};
+  const pill = (solid) => ({padding:'8px 15px',borderRadius:100,background:solid?t.accent:'transparent',color:solid?'#fff':t.muted,border:solid?'none':`1px solid ${t.border2}`,fontSize:13,fontWeight:600,fontFamily:'inherit',cursor:'pointer'});
+  const when = (s) => new Date(s+'T12:00:00').toLocaleString('en-CA',{month:'short',day:'numeric',year:'numeric'});
+  return (
+    <div style={{animation:'fadeIn 0.2s ease both'}}>
+      <div style={label}>{T('Trusted helper')}</div>
+      <div style={card}>
+        <div style={{fontSize:13,color:t.mutedMid,lineHeight:1.5}}>{T('Give a caseworker, advocate or family member a link. They see your next payment date, your monthly amount, your application status and whether your report is filed. Nothing else: no messages, no documents, no rent, no ID.')}</div>
+        {data.helpers.map(h => (
+          <div key={h.id} style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:10,padding:'10px 0',borderTop:`1px solid ${t.border}`,marginTop:12}}>
+            <div><div style={{fontSize:14,fontWeight:600,color:t.text}}>{h.name}</div><div style={{fontSize:11,color:t.mutedMid,marginTop:2}}>{T('Link works until')} {when(h.expiresAt)}</div></div>
+            <button onClick={()=>remove(h.id)} style={{...pill(false),padding:'5px 12px',fontSize:12}}>{T('Remove access')}</button>
+          </div>
+        ))}
+        {link && <div style={{marginTop:12,padding:'12px 14px',borderRadius:10,border:`1px solid ${t.accent}60`,background:`${t.accent}10`}}>
+          <div style={{fontSize:13,fontWeight:700,color:t.text}}>{T('Link for')} {link.name}</div>
+          <div style={{fontSize:12,color:t.mutedMid,marginTop:4,lineHeight:1.5}}>{T('This is the only time you will see it. Anyone with the link can see what is listed above until you remove it.')}</div>
+          <input readOnly value={link.url} onFocus={e=>e.target.select()} style={{width:'100%',boxSizing:'border-box',marginTop:8,padding:'8px 10px',borderRadius:8,border:`1px solid ${t.border2}`,background:'transparent',color:t.text,fontSize:12,fontFamily:'inherit'}}/>
+          <button onClick={()=>navigator.clipboard?.writeText(link.url).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),1500);}).catch(()=>{})} style={{...pill(true),marginTop:8}}>{copied?T('Copied'):T('Copy link')}</button>
+        </div>}
+        {data.helpers.length < data.max && <div style={{marginTop:14,display:'flex',gap:8,flexWrap:'wrap'}}>
+          <input value={name} onChange={e=>setName(e.target.value)} maxLength={40} placeholder={T('Who is it for? (for example, Sam, advocate)')} aria-label={T('Who is it for?')} style={{flex:1,minWidth:160,padding:'10px 12px',borderRadius:8,border:`1px solid ${t.border2}`,background:'transparent',color:t.text,fontSize:14,fontFamily:'inherit'}}/>
+          <button onClick={create} disabled={!name.trim()} style={{...pill(true),opacity:name.trim()?1:0.5}}>{T('Create link')}</button>
+        </div>}
+        {err && <div role="alert" style={{fontSize:12,color:t.warning,fontWeight:600,marginTop:10}}>{err}</div>}
+        <div style={{fontSize:11,color:t.muted,marginTop:12,lineHeight:1.5}}>{T('Links stop working after')} {data.ttlDays} {T('days. You can share with up to')} {data.max} {T('people.')}</div>
+      </div>
+    </div>
+  );
+}
+
 // One quiet line per section; the full section opens on tap. Keeps Status and Calendar short.
 function FoldBox({dark, title, summary, open, setOpen, children}) {
   const t = tk(dark);
@@ -1732,6 +1786,9 @@ function BenniesSection({dark}) {
 
       <FoldTool dark={dark} title="RDSP grants and bonds" url="/api/rdsp-tracker" summarize={d=>d.derived?(d.derived.eligible?'$'+Math.round(d.derived.missing).toLocaleString()+' still on the table this year':'Grants stop after the year you turn 49'):'See what your RDSP is owed'}>
         <RdspTracker dark={dark}/>
+      </FoldTool>
+      <FoldTool dark={dark} title="Trusted helper" url="/api/helpers" summarize={d=>d.helpers.length?'Shared with '+d.helpers.length+(d.helpers.length===1?' person':' people'):'Let a caseworker or family see your payments'}>
+        <HelpersTool dark={dark}/>
       </FoldTool>
       <FoldTool dark={dark} title="My household and rent" url="/api/household" summarize={d=>d.derived?(d.derived.mismatch?'Your cheque is off from the table':(d.derived.rent==null?'Add your rent':'Rent '+'$'+Math.round(d.derived.rent).toLocaleString()+' a month')):'Couple, family or single: see your table amounts'}>
         <HouseholdTool dark={dark}/>

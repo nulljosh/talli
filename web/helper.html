@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>Shared with you | Talli</title>
+  <style>
+    :root { color-scheme: light dark; --bg:#fff; --text:#111; --muted:#6b6b6b; --line:#e6e6e6; --card:#f5f5f5; --accent:#5B9BD5; }
+    @media (prefers-color-scheme: dark) { :root { --bg:#0e0e0e; --text:#f2f2f2; --muted:#9a9a9a; --line:#262626; --card:#171717; } }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif; }
+    main { max-width:430px; margin:0 auto; padding:28px 20px 48px; }
+    h1 { font-size:13px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:0 0 18px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin-bottom:12px; }
+    .label { font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+    .big { font-size:30px; font-weight:800; letter-spacing:-1px; line-height:1.15; }
+    .row { display:flex; justify-content:space-between; gap:12px; font-size:14px; padding:6px 0; }
+    .row span:last-child { font-weight:600; text-align:end; }
+    .note { font-size:12px; color:var(--muted); line-height:1.5; margin-top:8px; }
+    .ok { color:#2e9e5b; font-weight:600; } .warn { color:#d98a1c; font-weight:600; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Shared with you</h1>
+  <div id="out"><div class="note">Loading...</div></div>
+</main>
+<script>
+(function () {
+  var out = document.getElementById('out');
+  var m = /(?:^|[#&])t=([A-Za-z0-9_-]+)/.exec(location.hash);
+  var usd = function (n) { return '$' + Number(n).toLocaleString('en-CA', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }); };
+  var day = function (s) { return new Date(s + 'T12:00:00').toLocaleDateString('en-CA', { month: 'long', day: 'numeric', year: 'numeric' }); };
+  var el = function (tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  var fail = function () { out.replaceChildren(el('div', 'card', 'This link no longer works. Ask the person who shared it for a new one.')); };
+  if (!m) return fail();
+  fetch('/api/helper-view', { headers: { 'X-Helper-Token': m[1] }, cache: 'no-store', referrerPolicy: 'no-referrer' })
+    .then(function (r) { if (!r.ok) throw new Error('gone'); return r.json(); })
+    .then(function (v) {
+      var frag = document.createDocumentFragment();
+      var pay = el('div', 'card');
+      pay.append(el('div', 'label', 'Next payment'), el('div', 'big', v.nextPayment ? day(v.nextPayment) : 'Not published yet'));
+      if (v.monthly) pay.append(el('div', 'note', usd(v.monthly.total) + ' a month (' + usd(v.monthly.pwd) + ' PWD + ' + usd(v.monthly.cdb) + ' disability benefit)'));
+      frag.append(pay);
+      var prog = el('div', 'card');
+      prog.append(el('div', 'label', 'Applications'));
+      v.programs.forEach(function (p) { var r = el('div', 'row'); r.append(el('span', null, p.name), el('span', null, p.status)); prog.append(r); });
+      frag.append(prog);
+      var rep = el('div', 'card');
+      rep.append(el('div', 'label', 'Monthly report'));
+      rep.append(el('div', v.report.filed ? 'ok' : 'warn', v.report.filed ? 'Filed this month' : 'Not filed yet this month'));
+      frag.append(rep);
+      frag.append(el('div', 'note', 'Read only. This link works until ' + day(v.expiresAt) + ', or until the person removes it. It shows payment timing and application status only.'));
+      out.replaceChildren(frag);
+    })
+    .catch(fail);
+})();
+</script>
+</body>
+</html>

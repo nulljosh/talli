@@ -24,6 +24,7 @@
 		2549FEFAACF6366B21309CAB /* MacBenefitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B92B5AB892DBD4B963F8656 /* MacBenefitsView.swift */; };
 		266F13C9D2C23B68B5E6F504 /* ReplyDraftView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 143469F2CCBEE5C354DFA76E /* ReplyDraftView.swift */; };
 		2B571A9A6058202934D64E5A /* RdspTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7688A8B26D97A128C95FA2 /* RdspTrackerView.swift */; };
+		310EC3E0110AA4099DCDA7D2 /* TrustedHelperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD11C951DE3513CC516BB2B3 /* TrustedHelperView.swift */; };
 		334EA37E0B895B20EF2496BB /* MacPaymentCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B87D84FEC8981517B9093CB /* MacPaymentCalendarView.swift */; };
 		33981909AF9C8FE1F5F103AA /* MacWidgetModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED7313B160FD0FF894E40D8 /* MacWidgetModels.swift */; };
 		37291C624EBCC18BA59688CA /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4671E8BA45907193EDB8BC4 /* MenuBarView.swift */; };
@@ -116,6 +117,7 @@
 		AB7688A8B26D97A128C95FA2 /* RdspTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RdspTrackerView.swift; sourceTree = "<group>"; };
 		AF4D522BAA69042C54EEA0D3 /* TalliMacUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalliMacUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4671E8BA45907193EDB8BC4 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		BD11C951DE3513CC516BB2B3 /* TrustedHelperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustedHelperView.swift; sourceTree = "<group>"; };
 		BE52B7411BB64FCBF55E718E /* MacDateParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDateParsing.swift; sourceTree = "<group>"; };
 		BEE667693AE3B4A55E821898 /* TalliWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TalliWidgets.entitlements; sourceTree = "<group>"; };
 		BEEEC581169CEBE335A51EF3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 				143469F2CCBEE5C354DFA76E /* ReplyDraftView.swift */,
 				95554CD8FF952B439E481BA4 /* ServiceRequestsView.swift */,
 				C3B2AD00D857C67843DE6074 /* SupplementsView.swift */,
+				BD11C951DE3513CC516BB2B3 /* TrustedHelperView.swift */,
 				FBD64342FB49405CC38FC1F7 /* VaultView.swift */,
 			);
 			name = Views;
@@ -470,6 +473,7 @@
 				59D75C644E8AF87E3EAA040D /* ServiceRequestsView.swift in Sources */,
 				0407FBFD53DB017B3052008B /* SupplementsView.swift in Sources */,
 				4BCA3DBEDCAA96B862C734FA /* TalliMacApp.swift in Sources */,
+				310EC3E0110AA4099DCDA7D2 /* TrustedHelperView.swift in Sources */,
 				208D5FDB7E169D6B520AD82D /* VaultCrypto.swift in Sources */,
 				AD729A551BB19926E28B3FF2 /* VaultView.swift in Sources */,
 				62E4A3F5916F04C5C1474AA6 /* View+Glass.swift in Sources */,

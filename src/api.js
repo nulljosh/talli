@@ -16,6 +16,7 @@ const { attemptHttpLogin, fetchAllSections } = require('./http-scraper');
 const widgetToken = require('./widget-token');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { nextPaymentDate } = require('./pay-dates');
+const helper = require('./programs/helper');
 const { deriveHousehold, cleanHousehold, withRentHistory } = require('./programs/household');
 const { listRequests } = require('./programs/requests');
 const { draftReply } = require('./programs/reply');
@@ -1258,7 +1259,7 @@ app.get('/api/latest', requireAuth, async (req, res) => {
       cdbMonthlyAmount: cdbProfile.monthlyAmount || null,
       cdbRetroactiveEligible: cdbProfile.retroactiveEligible || false,
       cgeb: cgebProfile,
-      income: deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile),
+      income: await rememberIncome(req, userId, deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile)),
       earnings: deriveEarnings(earningsProfile, new Date(), (await loadUserBlob(userId, 'household-profile', {}).catch(() => ({}))).type || 'single'),
       assets: deriveAssets(await loadUserBlob(userId, 'assets-profile', null).catch(() => null)),
       yearReview: deriveYearReview({ pwd: pwdProfile, cdb: cdbProfile, cgeb: cgebProfile, earnings: earningsProfile }),
@@ -1910,6 +1911,93 @@ async function benefitFinderFor(userId, posted) {
 // rdsp-profile blob as the application status, so nothing else has to change.
 const rdspShape = (profile) => ({ profile: cleanRdsp(profile), derived: deriveRdsp(profile) });
 
+// Trusted helper (src/programs/helper.js). The token lives only in the link the owner
+// hands over; we keep its hash. Removing a helper deletes the token index at once.
+const helperKey = (hash) => `talli-helper/${hash}.json`;
+const helperReady = () => IS_PRODUCTION && blob.available();
+const helperLimiter = rateLimit({ windowMs: 60 * 1000, max: 30, message: { error: 'Too many requests' }, standardHeaders: true, legacyHeaders: false });
+const publicHelper = (h) => ({ id: h.id, name: h.name, createdAt: h.createdAt, expiresAt: h.expiresAt });
+
+app.get('/api/helpers', requireAuth, async (req, res) => {
+  try {
+    const saved = await loadUserBlob(req.session?.userId, 'helpers', { list: [] });
+    res.json({ helpers: (saved.list || []).map(publicHelper), ttlDays: helper.TTL_DAYS, max: helper.MAX_HELPERS });
+  } catch (err) {
+    log('[HELPER] list error:', err.message);
+    res.json({ helpers: [], ttlDays: helper.TTL_DAYS, max: helper.MAX_HELPERS });
+  }
+});
+
+app.post('/api/helpers', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    if (!helperReady()) return res.status(503).json({ error: 'Sharing is unavailable here' });
+    const name = helper.cleanName(req.body?.name);
+    if (!name) return res.status(400).json({ error: 'Give the helper a name' });
+    const saved = await loadUserBlob(userId, 'helpers', { list: [] });
+    const list = saved.list || [];
+    if (list.length >= helper.MAX_HELPERS) return res.status(400).json({ error: `You can share with ${helper.MAX_HELPERS} people at a time` });
+    const token = helper.newToken();
+    const hash = helper.hashToken(token);
+    const entry = { id: crypto.randomBytes(8).toString('hex'), name, createdAt: new Date().toISOString().slice(0, 10), expiresAt: helper.expiryFrom(), hash };
+    await blob.putJSON(helperKey(hash), { userId, id: entry.id, expiresAt: entry.expiresAt });
+    await saveUserBlob(userId, 'helpers', { list: [...list, entry] });
+    // The only time the token is ever shown. It rides in the fragment so it never reaches a server log.
+    res.json({ ...publicHelper(entry), path: `/helper#t=${token}` });
+  } catch (err) {
+    log('[HELPER] create error:', err.message);
+    res.status(500).json({ error: 'Failed to create the link' });
+  }
+});
+
+app.delete('/api/helpers/:id', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    const saved = await loadUserBlob(userId, 'helpers', { list: [] });
+    const found = (saved.list || []).find((h) => h.id === req.params.id);
+    if (!found) return res.status(404).json({ error: 'Not found' });
+    if (helperReady()) await blob.del(helperKey(found.hash));
+    await saveUserBlob(userId, 'helpers', { list: saved.list.filter((h) => h.id !== found.id) });
+    res.json({ ok: true });
+  } catch (err) {
+    log('[HELPER] remove error:', err.message);
+    res.status(500).json({ error: 'Failed to remove the helper' });
+  }
+});
+
+// Public, read-only. No session; the token is the whole credential, so every miss looks the same.
+app.get('/api/helper-view', helperLimiter, async (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
+  const gone = () => res.status(401).json({ error: 'This link no longer works' });
+  try {
+    const token = req.headers['x-helper-token'];
+    if (!helper.validToken(token) || !helperReady()) return gone();
+    const rec = await blob.getJSON(helperKey(helper.hashToken(token)));
+    if (!rec || helper.isExpired(rec.expiresAt)) return gone();
+    const [pwd, rdsp, cdb, report, income] = await Promise.all([
+      loadUserBlob(rec.userId, 'pwd-profile', {}), loadUserBlob(rec.userId, 'rdsp-profile', {}),
+      loadUserBlob(rec.userId, 'cdb-profile', {}), loadUserBlob(rec.userId, 'report-status', { reportMonths: {} }),
+      loadUserBlob(rec.userId, 'last-income', null),
+    ]);
+    res.json(helper.buildHelperView({ pwd, rdsp, cdb, income, reportMonths: report?.reportMonths || {}, expiresAt: rec.expiresAt }));
+  } catch (err) {
+    log('[HELPER] view error:', err.message);
+    gone();
+  }
+});
+
+// Remembers the income Talli last showed, so a helper sees the same number without a scrape.
+async function rememberIncome(req, userId, income) {
+  try {
+    const snap = JSON.stringify({ pwdMonthly: income.pwdMonthly, cdbMonthly: income.cdbMonthly, totalMonthly: income.totalMonthly });
+    if (req.session.lastIncomeSnap !== snap) {
+      req.session.lastIncomeSnap = snap;
+      await saveUserBlob(userId, 'last-income', JSON.parse(snap));
+    }
+  } catch (err) { log('[HELPER] remember income:', err.message); }
+  return income;
+}
+
 // My household (src/programs/household.js): family type, children and rent. `actual`
 // is what the portal says BC pays, passed by the client so the check needs no scrape.
 app.get('/api/household', requireAuth, async (req, res) => {
@@ -2426,7 +2514,7 @@ app.get('/api/mobile', requireAuth, async (req, res) => {
     const earnings = deriveEarnings(earningsProfile, new Date(), (await loadUserBlob(userId, 'household-profile', {}).catch(() => ({}))).type || 'single');
     const assets = deriveAssets(await loadUserBlob(userId, 'assets-profile', null).catch(() => null));
     const yearReview = deriveYearReview({ pwd: pwdProfile, cdb: cdbProfile, cgeb: cgebProfile, earnings: earningsProfile, portalPwd: portalPwd(result?.data) });
-    res.json(extractMobileData(result?.data || null, deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile, portalPwd(result?.data)), earnings, assets, yearReview));
+    res.json(extractMobileData(result?.data || null, await rememberIncome(req, userId, deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile, portalPwd(result?.data))), earnings, assets, yearReview));
   } catch (error) {
     console.error('[API] /api/mobile error:', error);
     res.status(500).json({ error: safeApiError(error, 'Failed to load data') });

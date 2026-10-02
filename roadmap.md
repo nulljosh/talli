@@ -17,7 +17,7 @@ ASC verified today: iOS 3.5.14 and macOS 3.5.6 READY_FOR_DISTRIBUTION. Revenue w
 
 ### 8.0: the whole household
 - [x] (2026-10-02, web/iOS/macOS) Couples and families: two-adult PWD rates, spouse earnings, dependants, shared exemption math.
-- [ ] Trusted helper: share read-only access with a caseworker, advocate or family member, revocable any time.
+- [x] (2026-10-02, web/iOS/macOS) Trusted helper: share read-only access with a caseworker, advocate or family member, revocable any time.
 - [x] (2026-10-02, web/iOS/macOS) Rent and shelter: log rent changes, see the shelter maximum, flag when the shelter amount is wrong.
 
 ### 9.0: plan ahead

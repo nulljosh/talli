@@ -204,6 +204,15 @@ final class APIClient: @unchecked Sendable {
         return data
     }
 
+    var trustedHelpers: TrustedHelperAPI {
+        struct Ack: Decodable { let ok: Bool }
+        return TrustedHelperAPI(
+            list: { try await APIClient.shared.send(path: "api/helpers", responseType: TrustedHelpers.self) },
+            create: { name in try await APIClient.shared.send(path: "api/helpers", method: "POST", body: HelperRequest(name: name), responseType: NewHelper.self) },
+            remove: { id in _ = try await APIClient.shared.send(path: "api/helpers/\(id)", method: "DELETE", responseType: Ack.self) }
+        )
+    }
+
     func household(save: HouseholdRequest?) async throws -> Household {
         if let save {
             return try await send(path: "api/household", method: "POST", body: save, responseType: Household.self)
@@ -250,7 +259,7 @@ final class APIClient: @unchecked Sendable {
         return response.token
     }
 
-    private func send<Response: Decodable>(
+    fileprivate func send<Response: Decodable>(
         path: String,
         method: String = "GET",
         responseType: Response.Type
@@ -262,7 +271,7 @@ final class APIClient: @unchecked Sendable {
         return try await execute(request, responseType: responseType)
     }
 
-    private func send<Body: Encodable, Response: Decodable>(
+    fileprivate func send<Body: Encodable, Response: Decodable>(
         path: String,
         method: String,
         body: Body,

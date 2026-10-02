@@ -95,6 +95,12 @@ struct MacBenefitsView: View {
                 }
                 .font(.headline)
 
+                DisclosureGroup("Trusted helper") {
+                    TrustedHelperView(api: MacAPIClient.shared.trustedHelpers)
+                        .padding(.top, 8)
+                }
+                .font(.headline)
+
                 DisclosureGroup("My household and rent") {
                     HouseholdView { try await MacAPIClient.shared.household(save: $0) }
                         .padding(.top, 8)

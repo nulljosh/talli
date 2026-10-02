@@ -22,6 +22,12 @@ struct BenefitsView: View {
                 .font(.headline)
                 .padding(.top, 8)
 
+                DisclosureGroup("Trusted helper") {
+                    TrustedHelperView(api: APIClient.shared.trustedHelpers)
+                        .padding(.top, 8)
+                }
+                .font(.headline)
+
                 DisclosureGroup("My household and rent") {
                     HouseholdView { try await APIClient.shared.household(save: $0) }
                         .padding(.top, 8)
