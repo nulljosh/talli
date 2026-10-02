@@ -75,7 +75,7 @@ final class MacAppState {
     }
 
     init() {
-        if CommandLine.arguments.contains("UITEST_SNAPSHOT") {
+        if (ProcessInfo.processInfo.environment["UITEST_SNAPSHOT"] != nil) {
             isAuthenticated = true
             // Dates relative to today, so store shots never show a past payday
             // or a stale-sync banner. Same as the iOS mock.
@@ -144,7 +144,7 @@ final class MacAppState {
     // MARK: - Auth
 
     func bootstrap() async {
-        if CommandLine.arguments.contains("UITEST_SNAPSHOT") { return }
+        if (ProcessInfo.processInfo.environment["UITEST_SNAPSHOT"] != nil) { return }
         if let credentials = MacKeychainHelper.loadCredentials() {
             // Fast path: check if server session is still alive (no BC Self-Serve roundtrip)
             if let sessionValid = try? await MacAPIClient.shared.sessionCheck(), sessionValid {

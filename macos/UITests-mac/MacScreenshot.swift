@@ -9,7 +9,9 @@ final class MacScreenshot: XCTestCase {
 
     func testCaptureMacScreenshot() throws {
         let app = XCUIApplication()
-        app.launchArguments += ["UITEST_SNAPSHOT", "-ApplePersistenceIgnoreState", "YES"]
+        // An environment flag, not a launch argument: AppKit reads a bare argument
+        // as a file to open, and SwiftUI then skips the main window.
+        app.launchEnvironment["UITEST_SNAPSHOT"] = "1"
         app.launch()
         app.activate()
         XCTAssertTrue(app.windows.firstMatch.waitForExistence(timeout: 20), "App window never appeared")

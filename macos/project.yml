@@ -26,6 +26,7 @@ targets:
           - "fastlane"
           - UITests-mac
           - screenshots
+          - scripts
           - "*.zip"
     settings:
       base:
