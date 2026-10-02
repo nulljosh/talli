@@ -147,6 +147,13 @@ final class MacAPIClient: @unchecked Sendable {
         )
     }
 
+    func lifeChange(save: LifeRequest?) async throws -> LifeChange {
+        if let save {
+            return try await send(path: "api/life", method: "POST", body: save, responseType: LifeChange.self)
+        }
+        return try await send(path: "api/life", responseType: LifeChange.self)
+    }
+
     func whatIf(_ request: WhatIfRequest) async throws -> WhatIf {
         try await send(path: "api/whatif", method: "POST", body: request, responseType: WhatIf.self)
     }

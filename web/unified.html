@@ -1091,6 +1091,86 @@ function WhatIfTool({dark}) {
   );
 }
 
+// Big changes: turning 65 and moving out of BC. Dates and steps: src/programs/lifechange.js.
+function LifeTool({dark}) {
+  const t = tk(dark);
+  const T = window.I18N.t;
+  const [data, setData] = useState(null);
+  const [tab, setTab] = useState('65');
+  const [form, setForm] = useState({month:'', year:'', leave:''});
+  const [copied, setCopied] = useState(null);
+  const [editing, setEditing] = useState(false);
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const take = (d) => { setData(d); setForm({month:d.life.birthMonth||'', year:d.life.birthYear||'', leave:d.life.leaveDate||''}); };
+  useEffect(() => { fetch('/api/life', {credentials:'include'}).then(r=>r.json()).then(take).catch(()=>{}); }, []);
+  if (!data) return <Skel w="100%" h={90} r={12} dark={dark}/>;
+  const post = async (body) => { try { const r = await fetch('/api/life', {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); if (r.ok) { take(await r.json()); setEditing(false); } } catch (e) {} };
+  const label = {fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:14};
+  const card = {padding:'16px 18px',background:t.bg2,borderRadius:12,border:`1px solid ${t.border}`};
+  const input = {width:'100%',boxSizing:'border-box',padding:'10px 12px',borderRadius:8,border:`1px solid ${t.border2}`,background:'transparent',color:t.text,fontSize:14,fontFamily:'inherit',marginTop:4};
+  const pill = (solid) => ({padding:'8px 15px',borderRadius:100,background:solid?t.accent:'transparent',color:solid?'#fff':t.muted,border:solid?'none':`1px solid ${t.border2}`,fontSize:13,fontWeight:600,fontFamily:'inherit',cursor:'pointer',textDecoration:'none',display:'inline-block'});
+  const name = (m) => new Date(m+'-01T12:00:00').toLocaleString('en-CA',{month:'long',year:'numeric'});
+  const script = (key, text) => <div style={{marginTop:12,padding:'10px 12px',borderRadius:8,border:`1px solid ${t.border2}`}}>
+    <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:4}}>{T('What to say')}</div>
+    <div style={{fontSize:13,color:t.text,lineHeight:1.5}}>{text}</div>
+    <button onClick={()=>navigator.clipboard?.writeText(text).then(()=>{setCopied(key);setTimeout(()=>setCopied(null),1500);}).catch(()=>{})} style={{...pill(false),marginTop:8,padding:'4px 11px',fontSize:11}}>{copied===key?T('Copied'):T('Copy')}</button>
+  </div>;
+  const links = (v) => <div style={{display:'flex',gap:8,flexWrap:'wrap',marginTop:12}}>
+    <a href={`tel:${v.phone}`} style={pill(true)}>{T('Call')} {v.phone}</a>
+    {v.links.map(l=><a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer" style={pill(false)}>{l.label}</a>)}
+  </div>;
+  const steps = (list) => <ol style={{margin:'10px 0 0',paddingInlineStart:18,fontSize:13,color:t.mutedMid,lineHeight:1.5}}>{list.map((s,i)=><li key={i} style={{marginBottom:6}}>{s}</li>)}</ol>;
+  const d65 = data.turning65, mv = data.leaving;
+  return (
+    <div style={{animation:'fadeIn 0.2s ease both'}}>
+      <div style={label}>{T('Big changes')}</div>
+      <div style={{display:'flex',gap:8,marginBottom:12}}>
+        <button onClick={()=>setTab('65')} aria-pressed={tab==='65'} style={{...pill(tab==='65'),padding:'7px 14px'}}>{T('Turning 65')}</button>
+        <button onClick={()=>setTab('move')} aria-pressed={tab==='move'} style={{...pill(tab==='move'),padding:'7px 14px'}}>{T('Moving out of BC')}</button>
+      </div>
+      {tab==='65' && (!d65 || editing ? (
+        <div style={card}>
+          <div style={{fontSize:15,fontWeight:700,color:t.text}}>{T('When were you born?')}</div>
+          <div style={{fontSize:12,color:t.mutedMid,marginTop:4}}>{T('Month and year is enough.')}</div>
+          <div style={{display:'grid',gridTemplateColumns:'1.4fr 1fr',gap:10,marginTop:8}}>
+            <select value={form.month} onChange={e=>setForm({...form,month:e.target.value})} style={input} aria-label={T('Month')}><option value="">{T('Month')}</option>{MONTHS.map((m,i)=><option key={m} value={i+1}>{m}</option>)}</select>
+            <input inputMode="numeric" maxLength={4} placeholder={T('Year')} aria-label={T('Year')} value={form.year} onChange={e=>setForm({...form,year:e.target.value})} style={input}/>
+          </div>
+          <div style={{display:'flex',gap:8,marginTop:12}}>
+            <button onClick={()=>post({birthMonth:+form.month, birthYear:+form.year})} disabled={!form.month||!form.year} style={{...pill(true),opacity:(form.month&&form.year)?1:0.5}}>{T('Save')}</button>
+            {editing && <button onClick={()=>setEditing(false)} style={pill(false)}>{T('Cancel')}</button>}
+          </div>
+        </div>
+      ) : (
+        <div>
+          <div style={{...card,marginBottom:12}}>
+            <div style={{fontSize:17,fontWeight:700,letterSpacing:'-0.3px',color:t.text}}>{d65.headline}</div>
+            {d65.stage!=='far' && d65.stage!=='now' && <div style={{fontSize:13,color:d65.stage==='apply'?t.warning:t.mutedMid,fontWeight:d65.stage==='apply'?700:400,marginTop:4}}>{d65.stage==='apply'?T('Apply for OAS and GIS now.'):d65.stage==='open'?T('You can apply for OAS and GIS now.'):T('Start getting ready.')}</div>}
+            {d65.timeline.map(x=><div key={x.when} style={{display:'flex',gap:12,padding:'8px 0',borderTop:`1px solid ${t.border}`,marginTop:10}}><div style={{width:92,flexShrink:0,fontSize:12,fontWeight:700,color:t.text}}>{name(x.when)}</div><div><div style={{fontSize:13,color:t.text,fontWeight:600}}>{x.what}</div><div style={{fontSize:12,color:t.mutedMid,marginTop:2,lineHeight:1.45}}>{x.detail}</div></div></div>)}
+          </div>
+          <div style={card}>
+            <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted}}>{T('What to do')}</div>
+            {steps(d65.steps)}
+            {script('65', d65.say)}
+            {links(d65)}
+          </div>
+          <button onClick={()=>setEditing(true)} style={{marginTop:10,background:'none',border:'none',padding:0,color:t.muted,fontSize:12,fontWeight:600,fontFamily:'inherit',cursor:'pointer'}}>{T('Change my birth month')}</button>
+        </div>
+      ))}
+      {tab==='move' && <div style={card}>
+        <div style={{fontSize:15,fontWeight:700,color:t.text}}>{T('Moving out of BC')}</div>
+        <label style={{display:'block',fontSize:11,color:t.muted,marginTop:10}}>{T('Day you leave (if you know it)')}
+          <input type="date" value={form.leave} onChange={e=>setForm({...form,leave:e.target.value})} onBlur={()=>post({leaveDate:form.leave||null})} style={input}/>
+        </label>
+        {mv.mspEnds && <div style={{fontSize:13,color:t.text,fontWeight:700,marginTop:10}}>{T('Your BC medical coverage runs to')} {new Date(mv.mspEnds+'T12:00:00').toLocaleString('en-CA',{month:'long',day:'numeric',year:'numeric'})}.</div>}
+        {steps(mv.steps)}
+        {script('move', mv.say)}
+        {links(mv)}
+      </div>}
+    </div>
+  );
+}
+
 // One quiet line per section; the full section opens on tap. Keeps Status and Calendar short.
 function FoldBox({dark, title, summary, open, setOpen, children}) {
   const t = tk(dark);
@@ -1861,7 +1941,10 @@ function BenniesSection({dark}) {
           <HouseholdTool dark={dark}/>
         </FoldTool>
       </Fold>
-      <Fold dark={dark} title="Help and papers" summary="Reconsideration, requests, vault, helper">
+      <Fold dark={dark} title="Help and papers" summary="Reconsideration, requests, vault, helper, big changes">
+        <FoldTool dark={dark} title="Turning 65 or moving out of BC" url="/api/life" summarize={d=>d.turning65?d.turning65.headline:'Know what changes and when'}>
+          <LifeTool dark={dark}/>
+        </FoldTool>
         <FoldTool dark={dark} title="Reconsideration helper" url="/api/reconsideration" summarize={d=>d.derived?(d.derived.status==='passed'?'The 20 days have ended':d.derived.status==='today'?'Last day to hand it in':d.derived.left+' business days left to ask again'):'Denied? Know your deadline'}>
           <ReconsiderationTool dark={dark}/>
         </FoldTool>

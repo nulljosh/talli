@@ -117,6 +117,12 @@ struct MacBenefitsView: View {
                 .font(.headline)
 
                 DisclosureGroup("Help and papers") {
+                    DisclosureGroup("Turning 65 or moving out of BC") {
+                        LifeChangeView { try await MacAPIClient.shared.lifeChange(save: $0) }
+                            .padding(.top, 8)
+                    }
+                    .font(.headline)
+
                     DisclosureGroup("Reconsideration helper") {
                         ReconsiderationView { try await MacAPIClient.shared.reconsideration(received: $0) }
                             .padding(.top, 8)

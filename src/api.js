@@ -17,6 +17,7 @@ const widgetToken = require('./widget-token');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { nextPaymentDate } = require('./pay-dates');
 const helper = require('./programs/helper');
+const { deriveLife, cleanLife } = require('./programs/lifechange');
 const { deriveWhatIf } = require('./programs/whatif');
 const { deriveHousehold, cleanHousehold, withRentHistory } = require('./programs/household');
 const { listRequests } = require('./programs/requests');
@@ -1998,6 +1999,30 @@ async function rememberIncome(req, userId, income) {
   } catch (err) { log('[HELPER] remember income:', err.message); }
   return income;
 }
+
+// Big changes (src/programs/lifechange.js): turning 65 and moving out of BC. Only a birth
+// month and year and an optional leave date are kept.
+app.get('/api/life', requireAuth, async (req, res) => {
+  try {
+    res.json(deriveLife(await loadUserBlob(req.session?.userId, 'life-profile', {})));
+  } catch (err) {
+    log('[LIFE] GET error:', err.message);
+    res.json(deriveLife({}));
+  }
+});
+
+app.post('/api/life', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    const existing = await loadUserBlob(userId, 'life-profile', {});
+    const saved = cleanLife({ ...existing, ...(req.body || {}) });
+    await saveUserBlob(userId, 'life-profile', saved);
+    res.json(deriveLife(saved));
+  } catch (err) {
+    log('[LIFE] POST error:', err.message);
+    res.status(500).json({ error: 'Failed to save' });
+  }
+});
 
 // What-if job calculator (src/programs/whatif.js). Uses the household, the logged earnings and
 // the monthly assistance Talli already knows, so the person only types a wage and hours.
