@@ -5,6 +5,7 @@
 // before tax. Federal benefits (CDB, GST credit) also move with income and are not
 // modelled here. Exemption figures live in profiles.js.
 const { EARNINGS_EXEMPTION } = require('./profiles');
+const { getProvince, monthlyDeduction, tiersFor, describeRule } = require('./provinces');
 
 const pad = (n) => String(n).padStart(2, '0');
 const r2 = (n) => Math.round(n * 100) / 100;
@@ -24,7 +25,8 @@ function cleanInputs(raw, now) {
   const fallback = new Date(now.getFullYear(), now.getMonth() + 1, 1);
   const start = m && +m[2] >= 1 && +m[2] <= 12 ? { y: +m[1], m: +m[2] - 1 } : { y: fallback.getFullYear(), m: fallback.getMonth() };
   if (!(wage > 0 && wage <= 500) || !(hours > 0 && hours <= 80)) return null;
-  return { wage: r2(wage), hours: r2(hours), start };
+  const province = ['ab', 'on'].includes(String(r.province || '').toLowerCase()) ? String(r.province).toLowerCase() : 'bc';
+  return { wage: r2(wage), hours: r2(hours), start, province };
 }
 
 // base: monthly assistance with no job. earnedSoFar: logged earnings this calendar year.
@@ -33,6 +35,7 @@ function deriveWhatIf(raw, { base, household = 'single', earnedSoFar = 0, now = 
   if (!input || !(base > 0)) return null;
   const grossRaw = input.wage * input.hours * 52 / 12;   // kept unrounded so cents never drift
   const gross = r2(grossRaw);
+  if (input.province !== 'bc') return monthlyProvince(input, grossRaw, gross, household, months);
   const earned = { [now.getFullYear()]: Number(earnedSoFar) || 0 };
   const rows = [];
   let assumed = false, noExemption = false;
@@ -72,6 +75,38 @@ function deriveWhatIf(raw, { base, household = 'single', earnedSoFar = 0, now = 
     assumed,
     room, safeHours: safeHours != null && safeHours <= 60 ? safeHours : null,
     note: 'Gross pay, before tax. Free dental, drug and other health coverage on PWD does not depend on this. The Canada Disability Benefit and GST credit also change with income and are not counted.',
+  };
+}
+
+// Alberta and Ontario: the rule is monthly tiers from the province's data file, so each
+// month stands alone and there is no yearly limit to track.
+function monthlyProvince(input, grossRaw, gross, household, months) {
+  const p = getProvince(input.province);
+  const family = household !== 'single';
+  const base = p.monthlySingle;
+  const tiers = tiersFor(p, family);
+  const cut = monthlyDeduction(tiers, grossRaw);
+  const reduction = r2(Math.min(base, cut));
+  const rows = [];
+  for (let i = 0; i < months; i++) {
+    const d = new Date(input.start.y, input.start.m + i, 1);
+    rows.push({ month: `${d.getFullYear()}-${pad(d.getMonth() + 1)}`, earnings: gross, reduction, assistance: r2(base - reduction), total: r2(gross + base - reduction), exemptionUsed: null });
+  }
+  const totalEarnings = r2(grossRaw * months);
+  const totalReduction = r2(reduction * months);
+  const free = tiers[0].upTo;
+  const noWork = r2(base * months), withWork = r2(rows.reduce((a, r) => a + r.total, 0));
+  return {
+    input, gross, base, rows, months, province: { code: p.code, name: p.name, program: p.program, confidence: p.confidence, apply: p.apply },
+    totalEarnings, totalReduction, keep: r2(totalEarnings - totalReduction),
+    keepPct: totalEarnings ? Math.round((totalEarnings - totalReduction) / totalEarnings * 100) : 100,
+    firstClawback: reduction > 0 ? rows[0].month : null,
+    assistanceEnds: reduction >= base ? rows[0].month : null,
+    noWork, withWork, better: r2(withWork - noWork),
+    assumed: false, monthlyRule: true,
+    room: free, safeHours: r2(free / (input.wage * 52 / 12)) <= 60 ? r2(free / (input.wage * 52 / 12)) : null,
+    rule: describeRule(p, family),
+    note: `${p.name} ${p.program}. Gross pay, before tax. ${p.extra ? p.extra + ' ' : ''}Federal benefits also change with income and are not counted. ${p.confidence}.`,
   };
 }
 

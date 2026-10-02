@@ -23,12 +23,15 @@ struct WhatIf: Codable, Sendable {
     let room: Double?
     let safeHours: Double?
     let note: String?
+    let monthlyRule: Bool?
+    let rule: String?
 }
 
 struct WhatIfRequest: Codable, Sendable {
     let wage: Double
     let hours: Double
     let start: String
+    let province: String
 }
 
 private let monthKey: DateFormatter = {
@@ -44,6 +47,7 @@ struct WhatIfView: View {
     @State private var wage = ""
     @State private var hours = ""
     @State private var start = ""
+    @State private var province = "bc"
     @State private var result: WhatIf?
     @State private var notice = ""
 
@@ -86,13 +90,18 @@ struct WhatIfView: View {
                         numberField("Hourly wage ($)", $wage)
                         numberField("Hours a week", $hours)
                     }
+                    Picker("Where do you live?", selection: $province) {
+                        Text("British Columbia (PWD)").tag("bc")
+                        Text("Alberta (AISH)").tag("ab")
+                        Text("Ontario (ODSP)").tag("on")
+                    }
                     Picker("Starting", selection: $start) {
                         ForEach(months, id: \.0) { Text($0.1).tag($0.0) }
                     }
                     Button("See what happens") {
                         guard let w = Double(wage), let h = Double(hours) else { return }
                         Task {
-                            do { result = try await run(WhatIfRequest(wage: w, hours: h, start: start.isEmpty ? (months.first?.0 ?? "") : start)); notice = "" }
+                            do { result = try await run(WhatIfRequest(wage: w, hours: h, start: start.isEmpty ? (months.first?.0 ?? "") : start, province: province)); notice = "" }
                             catch { notice = "Enter an hourly wage and weekly hours." }
                         }
                     }
@@ -115,7 +124,10 @@ struct WhatIfView: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Over 12 months you earn \(earned.formatted(money)) and keep").font(.footnote).foregroundStyle(.secondary)
                     Text(keep.formatted(money)).font(.system(size: 32, weight: .bold)).contentTransition(.numericText())
-                    if let first = r.firstClawback {
+                    if r.monthlyRule == true, let row = rows.first {
+                        Text(row.reduction > 0 ? "Each month your assistance is cut by \(row.reduction.formatted(money)), leaving \(row.assistance.formatted(money))." : "You stay under the first limit, so your assistance does not change.")
+                            .font(.footnote)
+                    } else if let first = r.firstClawback {
                         Text("Until \(label(first)) working costs you nothing. After that, each dollar over your limit comes off your assistance." + (r.assistanceEnds.map { " Assistance reaches zero in \(label($0))." } ?? ""))
                             .font(.footnote)
                     } else {
@@ -125,7 +137,10 @@ struct WhatIfView: View {
                         Text("You end up \(abs(better).formatted(money)) \(better >= 0 ? "ahead of" : "behind") not working.")
                             .font(.footnote.weight(.bold)).foregroundStyle(better >= 0 ? Color.green : Color.orange)
                     }
-                    if let room = r.room {
+                    if r.monthlyRule == true, let rule = r.rule {
+                        Text(rule + (r.room.map { " The first \($0.formatted(money)) is about " } ?? "") + (r.safeHours.map { "\($0.formatted(.number.precision(.fractionLength(0...1)))) hours a week at your wage." } ?? ""))
+                            .font(.caption).foregroundStyle(.secondary)
+                    } else if let room = r.room {
                         Text("Room left under the limit this year: \(room.formatted(money))." + (r.safeHours.map { " That is about \($0.formatted(.number.precision(.fractionLength(0...1)))) hours a week from your start month to December." } ?? ""))
                             .font(.caption).foregroundStyle(.secondary)
                     }

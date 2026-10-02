@@ -21,7 +21,7 @@ ASC verified today: iOS 3.5.14 and macOS 3.5.6 READY_FOR_DISTRIBUTION. Revenue w
 - [x] (2026-10-02, web/iOS/macOS) Budget against real paydays: bills land on the calendar next to the money that pays them.
 
 ### 10.0: every province
-- [ ] Alberta AISH and Ontario ODSP on the same profile engine; adding a province is a data file, not new code.
+- [x] (2026-10-02, web/iOS/macOS) Alberta AISH and Ontario ODSP on the same profile engine; adding a province is a data file, not new code.
 - [ ] Federal-only mode for anyone on CDB, GST credit and the Canada Dental Benefit without a provincial portal.
 - [ ] Open data: publish the pay-date and rate tables as a free API other advocates can build on.
 

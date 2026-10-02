@@ -17,6 +17,7 @@ const widgetToken = require('./widget-token');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { nextPaymentDate } = require('./pay-dates');
 const helper = require('./programs/helper');
+const { listProvinces } = require('./programs/provinces');
 const { deriveBudget, cleanBudget } = require('./programs/budget');
 const { deriveLife, cleanLife } = require('./programs/lifechange');
 const { deriveWhatIf } = require('./programs/whatif');
@@ -2000,6 +2001,10 @@ async function rememberIncome(req, userId, income) {
   } catch (err) { log('[HELPER] remember income:', err.message); }
   return income;
 }
+
+// Provinces (data/provinces/*.json via src/programs/provinces.js): what each program pays and
+// how earnings are treated. Adding a province is a data file.
+app.get('/api/provinces', requireAuth, (req, res) => res.json({ provinces: listProvinces() }));
 
 // Budget against paydays (src/programs/budget.js). What lands per cheque is the PWD and
 // disability benefit amount Talli last showed, plus supplements the person turned on.

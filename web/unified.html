@@ -1035,7 +1035,7 @@ function WhatIfTool({dark}) {
   const T = window.I18N.t;
   const next = (i) => { const d = new Date(new Date().getFullYear(), new Date().getMonth() + 1 + i, 1); return {v:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`, label:d.toLocaleString('en-CA',{month:'long',year:'numeric'})}; };
   const months = Array.from({length:12}, (_, i) => next(i));
-  const [f, setF] = useState({wage:'', hours:'', start:months[0].v});
+  const [f, setF] = useState({wage:'', hours:'', start:months[0].v, province:'bc'});
   const [r, setR] = useState(null);
   const [err, setErr] = useState('');
   const usd = (n) => '$' + Math.round(n).toLocaleString();
@@ -1043,7 +1043,7 @@ function WhatIfTool({dark}) {
   const run = async () => {
     setErr('');
     try {
-      const res = await fetch('/api/whatif', {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({wage:+f.wage, hours:+f.hours, start:f.start})});
+      const res = await fetch('/api/whatif', {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({wage:+f.wage, hours:+f.hours, start:f.start, province:f.province})});
       const d = await res.json();
       if (!res.ok) { setErr(d.error || T('Something went wrong. Try again.')); return; }
       setR(d);
@@ -1062,6 +1062,9 @@ function WhatIfTool({dark}) {
           <label style={{fontSize:11,color:t.muted}}>{T('Hourly wage')} ($)<input inputMode="decimal" value={f.wage} onChange={e=>setF({...f,wage:e.target.value})} style={input}/></label>
           <label style={{fontSize:11,color:t.muted}}>{T('Hours a week')}<input inputMode="decimal" value={f.hours} onChange={e=>setF({...f,hours:e.target.value})} style={input}/></label>
         </div>
+        <label style={{display:'block',fontSize:11,color:t.muted,marginTop:10}}>{T('Where do you live?')}
+          <select value={f.province} onChange={e=>setF({...f,province:e.target.value})} style={input}><option value="bc">British Columbia (PWD)</option><option value="ab">Alberta (AISH)</option><option value="on">Ontario (ODSP)</option></select>
+        </label>
         <label style={{display:'block',fontSize:11,color:t.muted,marginTop:10}}>{T('Starting')}
           <select value={f.start} onChange={e=>setF({...f,start:e.target.value})} style={input}>{months.map(m=><option key={m.v} value={m.v}>{m.label}</option>)}</select>
         </label>
@@ -1074,10 +1077,12 @@ function WhatIfTool({dark}) {
           <div style={{fontSize:12,color:t.mutedMid}}>{T('Over 12 months you earn')} {usd(r.totalEarnings)} {T('and keep')}</div>
           <div style={{fontSize:34,fontWeight:800,letterSpacing:'-1.2px',color:t.text,lineHeight:1.15}}>{usd(r.keep)}</div>
           <div style={{fontSize:13,color:t.text,marginTop:6,lineHeight:1.5}}>
-            {r.firstClawback ? <>{T('Until')} <b>{name(r.firstClawback)}</b> {T('working costs you nothing. After that, each dollar over your limit comes off your assistance.')}{r.assistanceEnds && <> {T('Assistance reaches zero in')} <b>{name(r.assistanceEnds)}</b>.</>}</> : T('You stay under your yearly limit, so your assistance does not change.')}
+            {r.monthlyRule ? (r.rows[0].reduction>0 ? <>{T('Each month your assistance is cut by')} <b>{usd(r.rows[0].reduction)}</b>, {T('leaving')} {usd(r.rows[0].assistance)}.</> : T('You stay under the first limit, so your assistance does not change.')) : r.firstClawback ? <>{T('Until')} <b>{name(r.firstClawback)}</b> {T('working costs you nothing. After that, each dollar over your limit comes off your assistance.')}{r.assistanceEnds && <> {T('Assistance reaches zero in')} <b>{name(r.assistanceEnds)}</b>.</>}</> : T('You stay under your yearly limit, so your assistance does not change.')}
           </div>
           <div style={{fontSize:13,color:r.better>0?t.success:t.warning,fontWeight:700,marginTop:8}}>{r.better>=0?T('You end up'):T('You end up')} {usd(Math.abs(r.better))} {r.better>=0?T('ahead of not working.'):T('behind not working.')}</div>
-          {r.room!=null && <div style={{fontSize:12,color:t.mutedMid,marginTop:8,lineHeight:1.5}}>{T('Room left under the limit this year:')} {usd(r.room)}.{r.safeHours!=null&&<> {T('That is about')} {r.safeHours} {T('hours a week from your start month to December.')}</>}</div>}
+          {r.monthlyRule
+            ? <div style={{fontSize:12,color:t.mutedMid,marginTop:8,lineHeight:1.5}}>{r.rule}{r.safeHours!=null&&<> {T('The first')} {usd(r.room)} {T('is about')} {r.safeHours} {T('hours a week at your wage.')}</>}</div>
+            : r.room!=null && <div style={{fontSize:12,color:t.mutedMid,marginTop:8,lineHeight:1.5}}>{T('Room left under the limit this year:')} {usd(r.room)}.{r.safeHours!=null&&<> {T('That is about')} {r.safeHours} {T('hours a week from your start month to December.')}</>}</div>}
           {r.assumed && <div style={{fontSize:11,color:t.muted,marginTop:8,lineHeight:1.5}}>{T('BC has not posted next year limit yet. Talli assumes it stays the same.')}</div>}
         </div>
         <details style={{...card,marginTop:12}}>

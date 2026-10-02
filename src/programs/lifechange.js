@@ -7,6 +7,8 @@
 // for ages 18 to 64. Sources: gov.bc.ca "Leaving disability assistance" and
 // "Supports for seniors", Disability Alliance BC help sheet 12B.
 
+const { PROVINCES } = require('./provinces');
+
 const pad = (n) => String(n).padStart(2, '0');
 const ym = (y, m) => `${y}-${pad(m)}`;               // m is 1-12
 const monthIndex = (y, m) => y * 12 + (m - 1);
@@ -79,6 +81,8 @@ function leavingBC(life) {
     links: [
       { label: 'Leaving disability assistance (BC)', url: 'https://www2.gov.bc.ca/gov/content/family-social-supports/services-for-people-with-disabilities/disability-assistance/leaving-disability-assistance' },
       { label: 'Medical Services Plan when you move', url: 'https://www2.gov.bc.ca/gov/content/health/health-drug-coverage/msp/bc-residents/managing-your-msp-account/leaving-bc-temporarily' },
+      { label: `${PROVINCES.ab.name}: apply for ${PROVINCES.ab.program.split(',')[0]}`, url: PROVINCES.ab.apply },
+      { label: `${PROVINCES.on.name}: apply for ${PROVINCES.on.program.split(' (')[0]}`, url: PROVINCES.on.apply },
     ],
   };
 }
