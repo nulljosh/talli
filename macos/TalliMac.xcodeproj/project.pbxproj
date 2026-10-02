@@ -21,6 +21,7 @@
 		1FB85B34B74BF2B55A8A09AB /* MacPaymentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04123E4DE54AEC07C172692B /* MacPaymentProvider.swift */; };
 		208D5FDB7E169D6B520AD82D /* VaultCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C99C8A261E7DB1D39095B44 /* VaultCrypto.swift */; };
 		2549FEFAACF6366B21309CAB /* MacBenefitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B92B5AB892DBD4B963F8656 /* MacBenefitsView.swift */; };
+		266F13C9D2C23B68B5E6F504 /* ReplyDraftView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 143469F2CCBEE5C354DFA76E /* ReplyDraftView.swift */; };
 		2B571A9A6058202934D64E5A /* RdspTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7688A8B26D97A128C95FA2 /* RdspTrackerView.swift */; };
 		334EA37E0B895B20EF2496BB /* MacPaymentCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B87D84FEC8981517B9093CB /* MacPaymentCalendarView.swift */; };
 		33981909AF9C8FE1F5F103AA /* MacWidgetModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED7313B160FD0FF894E40D8 /* MacWidgetModels.swift */; };
@@ -85,6 +86,7 @@
 		04123E4DE54AEC07C172692B /* MacPaymentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPaymentProvider.swift; sourceTree = "<group>"; };
 		05C53A51618D2F7455BED586 /* TalliWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TalliWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		062CBBD651BF3B7840A05137 /* MacBenefitsWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBenefitsWidgetView.swift; sourceTree = "<group>"; };
+		143469F2CCBEE5C354DFA76E /* ReplyDraftView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyDraftView.swift; sourceTree = "<group>"; };
 		1777E1F0FD107545870F598B /* MacScreenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacScreenshot.swift; sourceTree = "<group>"; };
 		253DEBB17503562A3842CF40 /* MacDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDashboardView.swift; sourceTree = "<group>"; };
 		2C99C8A261E7DB1D39095B44 /* VaultCrypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultCrypto.swift; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 				0046C4CA8530BB849F37AAA5 /* MissedPaymentView.swift */,
 				AB7688A8B26D97A128C95FA2 /* RdspTrackerView.swift */,
 				54336877769FA2F896CFAEAA /* ReconsiderationView.swift */,
+				143469F2CCBEE5C354DFA76E /* ReplyDraftView.swift */,
 				C3B2AD00D857C67843DE6074 /* SupplementsView.swift */,
 				FBD64342FB49405CC38FC1F7 /* VaultView.swift */,
 			);
@@ -456,6 +459,7 @@
 				68003AB732B158D919F3BE14 /* RTLTracking.swift in Sources */,
 				2B571A9A6058202934D64E5A /* RdspTrackerView.swift in Sources */,
 				F8E7098F7259513AA5938E0D /* ReconsiderationView.swift in Sources */,
+				266F13C9D2C23B68B5E6F504 /* ReplyDraftView.swift in Sources */,
 				0407FBFD53DB017B3052008B /* SupplementsView.swift in Sources */,
 				4BCA3DBEDCAA96B862C734FA /* TalliMacApp.swift in Sources */,
 				208D5FDB7E169D6B520AD82D /* VaultCrypto.swift in Sources */,

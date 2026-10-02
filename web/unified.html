@@ -1873,6 +1873,38 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate,
 // ════════════════════════════════════════════════════
 // MESSAGES TAB
 // ════════════════════════════════════════════════════
+// Reply helper under an open message: what it asks in plain words, and a draft to send in My Self Serve.
+function ReplyDraft({dark, text}) {
+  const t = tk(dark);
+  const T = window.I18N.t;
+  const [d, setD] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const pill = (solid) => ({padding:'6px 13px',borderRadius:100,background:solid?t.accent:'transparent',color:solid?'#fff':t.muted,border:solid?'none':`1px solid ${t.border2}`,fontSize:12,fontWeight:600,fontFamily:'inherit',cursor:'pointer',textDecoration:'none',display:'inline-block'});
+  const load = async (e) => {
+    e.stopPropagation();
+    if (d) { setOpen(!open); return; }
+    try { const r = await fetch('/api/message-reply', {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})}); if (r.ok) { setD(await r.json()); setOpen(true); } } catch (err) {}
+  };
+  return (
+    <div onClick={e=>e.stopPropagation()} style={{marginTop:10}}>
+      <button onClick={load} aria-expanded={open} style={pill(false)}>{open?T('Hide reply'):T('Draft a reply')}</button>
+      {open && d && <div style={{marginTop:10,padding:'12px 14px',borderRadius:10,border:`1px solid ${t.border2}`,animation:'fadeIn 0.2s ease both'}}>
+        <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted}}>{d.label}</div>
+        <div style={{fontSize:13,color:t.text,lineHeight:1.5,marginTop:4}}>{d.asks}</div>
+        <pre style={{margin:'10px 0 0',whiteSpace:'pre-wrap',fontFamily:'inherit',fontSize:12,color:t.text,lineHeight:1.55,padding:'10px 12px',background:t.bg2,borderRadius:8}}>{d.reply}</pre>
+        <ul style={{margin:'10px 0 0',paddingInlineStart:18,fontSize:12,color:t.mutedMid,lineHeight:1.5}}>{d.extra.map((x,i)=><li key={i}>{x}</li>)}</ul>
+        <div style={{display:'flex',gap:8,flexWrap:'wrap',marginTop:12}}>
+          <button onClick={()=>navigator.clipboard?.writeText(d.reply).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),1500);}).catch(()=>{})} style={pill(true)}>{copied?T('Copied'):T('Copy reply')}</button>
+          <a href={d.link} target="_blank" rel="noopener noreferrer" style={pill(false)}>{T('Open My Self Serve')}</a>
+          <a href={`tel:${d.phone}`} style={pill(false)}>{T('Call')} {d.phone}</a>
+        </div>
+        <div style={{fontSize:11,color:t.muted,marginTop:8}}>{d.note}</div>
+      </div>}
+    </div>
+  );
+}
+
 function MessagesTab({dark, messages, readIds, onRead, onRefresh}) {
   const t = tk(dark);
   const [expanded, setExpanded] = useState(null);
@@ -1929,6 +1961,7 @@ function MessagesTab({dark, messages, readIds, onRead, onRefresh}) {
                     {m.body||m.title}
                   </div>
                   {isOpen&&m.body&&<div style={{fontSize:13,color:t.muted,lineHeight:1.45,marginTop:4,animation:'fadeUp 0.2s ease both'}}>{m.body}</div>}
+                  {isOpen&&m.body&&<ReplyDraft dark={dark} text={m.body}/>}
                 </div>
               </div>
             </div>

@@ -33,6 +33,11 @@ struct MessagesView: View {
                                 Task { await appState.markMessageRead(message.id) }
                             }
                         }
+                        if expanded == message.id {
+                            ReplyDraftView(text: message.text) { try await APIClient.shared.messageReply(text: $0) }
+                                .padding(.horizontal, 20)
+                                .padding(.bottom, 14)
+                        }
                         if i < items.count - 1 {
                             Divider()
                                 .padding(.leading, 70)

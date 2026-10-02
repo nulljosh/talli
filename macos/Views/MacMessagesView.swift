@@ -30,6 +30,8 @@ struct MacMessagesView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
+
+            ReplyDraftView(text: message.text) { try await MacAPIClient.shared.messageReply(text: $0) }
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)

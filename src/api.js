@@ -16,6 +16,7 @@ const { attemptHttpLogin, fetchAllSections } = require('./http-scraper');
 const widgetToken = require('./widget-token');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { nextPaymentDate } = require('./pay-dates');
+const { draftReply } = require('./programs/reply');
 const { deriveReconsideration } = require('./programs/reconsideration');
 const { deriveMissedPayment } = require('./programs/missed');
 const { deriveSupplements, cleanSupplements } = require('./programs/supplements');
@@ -1906,6 +1907,13 @@ async function benefitFinderFor(userId, posted) {
 // RDSP grant and bond tracker (src/programs/rdsp.js). Inputs live on the same
 // rdsp-profile blob as the application status, so nothing else has to change.
 const rdspShape = (profile) => ({ profile: cleanRdsp(profile), derived: deriveRdsp(profile) });
+
+// Message replies (src/programs/reply.js): a plain-words read of a ministry message and a draft answer.
+app.post('/api/message-reply', requireAuth, (req, res) => {
+  const draft = draftReply(req.body?.text);
+  if (!draft) return res.status(400).json({ error: 'Missing message text' });
+  res.json(draft);
+});
 
 // Reconsideration helper (src/programs/reconsideration.js). The date the denial
 // letter arrived is saved here; the PWD profile's denied date fills it in until then.
