@@ -176,66 +176,9 @@ private struct TimelineCard: View {
     }
 }
 
-private struct ApplicationTimelinesCard: View {
-    let pwdSteps: [(label: String, date: String, done: Bool)]
-    let dtcSteps: [(label: String, date: String, done: Bool)]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            timelineSection(title: "PWD APPLICATION", steps: pwdSteps)
-            Divider()
-            timelineSection(title: "DTC APPLICATION", steps: dtcSteps)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
-    }
-
-    private func timelineSection(title: String, steps: [(label: String, date: String, done: Bool)]) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(title)
-                .font(.system(size: 11, weight: .semibold))
-                .tracking(1.5)
-                .foregroundStyle(.secondary)
-
-            ForEach(steps, id: \.label) { step in
-                HStack(alignment: .top, spacing: 12) {
-                    Circle()
-                        .fill(step.done ? Color.primary : Color.secondary.opacity(0.3))
-                        .frame(width: 10, height: 10)
-                        .padding(.top, 4)
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(step.label)
-                            .font(.subheadline.weight(.medium))
-                        Text(step.date)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
-        }
-    }
-}
-
 private struct DashboardScreen: View {
     @Environment(AppState.self) private var appState
     @State private var now = Date()
-    private let ticker = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-
-    private var liveCountdownText: String {
-        guard let date = appState.parsedNextPaymentDate else { return "--" }
-        var target = date
-        let cal = Calendar.current
-        target = cal.startOfDay(for: target)
-        let diff = max(0, target.timeIntervalSince(now))
-        let days = Int(diff) / 86400
-        let hrs = (Int(diff) % 86400) / 3600
-        let mins = (Int(diff) % 3600) / 60
-        let secs = Int(diff) % 60
-        if days > 0 { return "\(days)d \(String(format: "%02d", hrs)):\(String(format: "%02d", mins)):\(String(format: "%02d", secs))" }
-        return String(format: "%02d:%02d:%02d", hrs, mins, secs)
-    }
 
     var body: some View {
         ScrollView {
@@ -260,14 +203,14 @@ private struct DashboardScreen: View {
                 }
                 incomeBreakdown
                 dateCard
-                ApplicationTimelinesCard(pwdSteps: pwdSteps, dtcSteps: dtcSteps)
-                craPayments
             }
             .padding()
         }
         .refreshable { await appState.refreshDashboard() }
-        .task { await appState.loadDashboardIfNeeded() }
-        .onReceive(ticker) { now = $0 }
+        .task {
+            now = Date()
+            await appState.loadDashboardIfNeeded()
+        }
         .navigationTitle("Home")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -407,71 +350,12 @@ private struct DashboardScreen: View {
     }
 
     private var dateCard: some View {
-        VStack(spacing: 4) {
-            PaymentCalendarView(paymentDate: appState.parsedNextPaymentDate, today: now)
-
-            HStack {
-                Text(appState.nextPaymentDateText)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                Spacer()
-                Text(liveCountdownText)
-                    .font(.subheadline.weight(.bold).monospacedDigit())
-                    .contentTransition(.numericText())
-            }
-        }
+        PaymentCalendarView(paymentDate: appState.parsedNextPaymentDate, today: now)
         .padding(.horizontal, 16)
         .padding(.top, 14)
         .padding(.bottom, 12)
         .background(RoundedRectangle(cornerRadius: 12, style: .continuous)
             .fill(Color(.secondarySystemGroupedBackground)))
-    }
-
-    private var pwdSteps: [(label: String, date: String, done: Bool)] {
-        [
-            ("Application submitted", "Jan 14, 2026", true),
-            ("Medical review", "Complete", true),
-            ("Decision", "Third-round resubmission in progress", false),
-            ("Backdated payments", "Upon approval", false)
-        ]
-    }
-
-    private var dtcSteps: [(label: String, date: String, done: Bool)] {
-        [
-            ("Application submitted", "April 2026", true),
-            ("CRA processing", "Complete", true),
-            ("Decision", "Accepted July 2026", true),
-            ("Credit applied retroactively", "In progress", false)
-        ]
-    }
-
-    private var craPayments: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("CRA BENEFITS")
-                .font(.system(size: 11, weight: .semibold))
-                .tracking(1.5)
-                .foregroundStyle(.secondary)
-
-            HStack {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("GST/HST Credit")
-                        .font(.subheadline.weight(.medium))
-                    Text(CRADates.nextGSTPaymentText)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                Spacer()
-                Text(CRADates.lastKnownGSTQuarterlyText)
-                    .font(.subheadline.weight(.semibold))
-            }
-
-            Text("Last known amount. 4 payments per year. Not all CRA credits shown.")
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
     }
 
 }

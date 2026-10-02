@@ -948,7 +948,7 @@ function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate,
   const reconDeadline = isDenied ? new Date('2026-06-18') : null;
   const reconDaysLeft = reconDeadline ? Math.ceil((reconDeadline - now) / 86400000) : null;
   const steps = [
-    {label:'Application submitted',date:'Jan 14, 2026',done:true},
+    {label:'Application submitted',date:'On file',done:true},
     {label:'Medical review',date:pwdApproved?'Complete':(pwdMedicalDone?'Complete':'In progress'),done:pwdApproved||pwdMedicalDone||isDenied||isResubmitted,current:!pwdApproved&&!pwdMedicalDone&&!isDenied&&!isResubmitted},
     {label:'Ministry decision',date:isDenied?'Denied':(isResubmitted?'Resubmitted':pwdApproved?'Approved':'Est. Jul 2026'),done:pwdApproved,denied:isDenied,resubmitted:isResubmitted,current:!isDenied&&!isResubmitted&&!pwdApproved&&pwdMedicalDone},
     {label:'Backdated payments',date:pwdApproved?'Issued':'Upon approval',done:pwdApproved},
