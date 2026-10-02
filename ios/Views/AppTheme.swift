@@ -33,7 +33,7 @@ extension View {
     func sectionLabel() -> some View {
         self
             .font(.system(size: 11, weight: .semibold))
-            .tracking(1.5)
+            .ltrTracking(1.5)
             .textCase(.uppercase)
             .foregroundStyle(.secondary)
     }

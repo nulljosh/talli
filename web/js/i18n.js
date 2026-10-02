@@ -2,10 +2,12 @@
 // swaps [data-i18n] text, and exposes locale-correct formatters.
 // The formatting helpers are the part browser auto-translate can never do.
 (function () {
-  const SUPPORTED = ["en", "fr", "zh", "pa"];
+  const SUPPORTED = ["en", "fr", "zh", "pa", "es", "fil", "ar", "fa"];
+  const RTL = ["ar", "fa"];
   const FALLBACK = "en";
   const stored = localStorage.getItem("talli.lang");
-  const detected = (navigator.language || "en").slice(0, 2);
+  const base = (navigator.language || "en").split("-")[0].toLowerCase();
+  const detected = base === "tl" ? "fil" : base; // Tagalog reports as tl or fil
   let lang = SUPPORTED.includes(stored) ? stored : SUPPORTED.includes(detected) ? detected : FALLBACK;
 
   let dict = {};
@@ -36,6 +38,7 @@
       });
     });
     document.documentElement.lang = lang;
+    document.documentElement.dir = RTL.includes(lang) ? "rtl" : "ltr";
   }
 
   async function setLang(lng) {

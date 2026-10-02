@@ -51,9 +51,9 @@ async function main() {
   console.log('i18n Pipeline Tests\n');
 
   // --- Group A: master source validity ---
-  await test('strings.json: _meta source is en, locales en/fr/zh/pa', () => {
+  await test('strings.json: _meta source is en, locales en/fr/zh/pa/es/fil/ar/fa', () => {
     assert.strictEqual(sourceLanguage, 'en');
-    assert.deepStrictEqual(locales, ['en', 'fr', 'zh', 'pa']);
+    assert.deepStrictEqual(locales, ['en', 'fr', 'zh', 'pa', 'es', 'fil', 'ar', 'fa']);
   });
 
   await test('strings.json: every key has a non-empty en value', () => {
@@ -94,6 +94,7 @@ async function main() {
   await test('web/locales/zh.json + pa.json: only non-empty keys (drift check)', () => {
     assert.deepStrictEqual(readJSON('web/locales/zh.json'), expectedWeb('zh'));
     assert.deepStrictEqual(readJSON('web/locales/pa.json'), expectedWeb('pa'));
+    for (const l of ['es', 'fil', 'ar', 'fa']) assert.deepStrictEqual(readJSON(`web/locales/${l}.json`), expectedWeb(l));
   });
 
   await test('zh.json omits review-empty flagged key (en-fallback path)', () => {
@@ -164,6 +165,16 @@ async function main() {
     await I18N.setLang('zh');
     assert.strictEqual(I18N.t(liveKey), src[liveKey].zh, 'zh present');
     assert.strictEqual(I18N.t(reviewKey), src[reviewKey].en, 'zh missing -> en fallback');
+    assert.strictEqual(sandbox.document.documentElement.dir, 'ltr', 'zh is ltr');
+
+    await I18N.setLang('ar');
+    assert.strictEqual(I18N.t('Home'), src.Home.ar, 'ar t()');
+    assert.strictEqual(sandbox.document.documentElement.dir, 'rtl', 'ar flips to rtl');
+    await I18N.setLang('fa');
+    assert.strictEqual(sandbox.document.documentElement.dir, 'rtl', 'fa flips to rtl');
+    await I18N.setLang('fil');
+    assert.strictEqual(I18N.t('Home'), src.Home.fil, 'fil t()');
+    assert.strictEqual(sandbox.document.documentElement.dir, 'ltr', 'fil back to ltr');
 
     // formatters: the part translation can never do
     await I18N.setLang('en');

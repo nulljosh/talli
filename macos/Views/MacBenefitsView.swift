@@ -12,7 +12,7 @@ struct MacBenefitsView: View {
             VStack(alignment: .leading, spacing: 10) {
                 Text("YOUR MONTHLY INCOME")
                     .font(.system(size: 11, weight: .semibold))
-                    .tracking(1.5)
+                    .ltrTracking(1.5)
                     .foregroundStyle(.secondary)
 
                 HStack(spacing: 20) {
@@ -75,7 +75,7 @@ struct MacBenefitsView: View {
         VStack(alignment: .leading, spacing: 3) {
             Text(label)
                 .font(.system(size: 10, weight: .semibold))
-                .tracking(1.1)
+                .ltrTracking(1.1)
                 .foregroundStyle(.secondary)
             Text(amount.formatted(.currency(code: "CAD").precision(.fractionLength(0))))
                 .font(.system(size: 17, weight: .semibold))
@@ -215,7 +215,7 @@ struct MacBenefitsView: View {
             Text("MUST APPLY SEPARATELY")
                 .font(.caption.weight(.medium))
                 .foregroundStyle(.secondary)
-                .kerning(0.5)
+                .ltrTracking(0.5)
 
             applyRow("National Pharmacare", desc: "Free diabetes/hormone/contraceptive meds", color: .green)
             applyRow("Fair PharmaCare", desc: "Income-based prescription coverage", color: .green)

@@ -150,7 +150,7 @@ private struct TimelineCard: View {
         VStack(alignment: .leading, spacing: 12) {
             Text(title)
                 .font(.system(size: 11, weight: .semibold))
-                .tracking(1.5)
+                .ltrTracking(1.5)
                 .foregroundStyle(.secondary)
 
             ForEach(steps, id: \.label) { step in
@@ -234,7 +234,7 @@ private struct DashboardScreen: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("NEXT PAYMENT")
                 .font(.system(size: 11, weight: .semibold))
-                .tracking(1.5)
+                .ltrTracking(1.5)
                 .foregroundStyle(.secondary)
 
             Text(appState.paymentAmountText)
@@ -268,7 +268,7 @@ private struct DashboardScreen: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("MONTHLY INCOME")
                     .font(.system(size: 11, weight: .semibold))
-                    .tracking(1.5)
+                    .ltrTracking(1.5)
                     .foregroundStyle(.secondary)
 
                 HStack(spacing: 12) {
@@ -349,7 +349,7 @@ private struct DashboardScreen: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(label)
                 .font(.system(size: 10, weight: .semibold))
-                .tracking(1.2)
+                .ltrTracking(1.2)
                 .foregroundStyle(.secondary)
             Text(value)
                 .font(.system(size: 16, weight: .semibold))

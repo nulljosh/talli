@@ -27,6 +27,30 @@
             "state": "translated",
             "value": "Talli"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Talli"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Talli"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تالي"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تالی"
+          }
         }
       }
     },
@@ -43,6 +67,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vos prestations. Sans bureaucratie."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus beneficios. Sin burocracia."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ang iyong mga benepisyo. Walang abala."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مستحقاتك. بلا بيروقراطية."
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مزایای شما. بدون دردسر اداری."
           }
         }
       }
@@ -73,6 +121,30 @@
             "state": "translated",
             "value": "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ..."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cargando..."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naglo-load..."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ التحميل..."
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "در حال بارگذاری..."
+          }
         }
       }
     },
@@ -101,6 +173,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "ਘਰ"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inicio"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الرئيسية"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "خانه"
           }
         }
       }
@@ -131,6 +227,30 @@
             "state": "translated",
             "value": "ਰਿਪੋਰਟਾਂ"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Informes"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mga Ulat"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التقارير"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "گزارش‌ها"
+          }
         }
       }
     },
@@ -159,6 +279,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "ਲਾਭ"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beneficios"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mga Benepisyo"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المستحقات"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مزایا"
           }
         }
       }
@@ -189,6 +333,30 @@
             "state": "translated",
             "value": "ਸੁਨੇਹੇ"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensajes"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mga Mensahe"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الرسائل"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "پیام‌ها"
+          }
         }
       }
     },
@@ -218,6 +386,30 @@
             "state": "translated",
             "value": "ਸੈਟਿੰਗਾਂ"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajustes"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mga Setting"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإعدادات"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تنظیمات"
+          }
         }
       }
     },
@@ -246,6 +438,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "ਰੱਦ ਕਰੋ"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelar"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kanselahin"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إلغاء"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لغو"
           }
         }
       }
@@ -281,6 +497,30 @@
             "state": "translated",
             "value": "NOM D'UTILISATEUR BCEID"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "USUARIO DE BCEID"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "USERNAME SA BCEID"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اسم مستخدم BCEID"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نام کاربری BCEID"
+          }
         }
       }
     },
@@ -297,6 +537,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "MOT DE PASSE"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CONTRASEÑA"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PASSWORD"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "كلمة المرور"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رمز عبور"
           }
         }
       }
@@ -327,6 +591,30 @@
             "state": "translated",
             "value": "ਸਾਈਨ ਇਨ ਕਰੋ"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Iniciar sesión"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mag-sign In"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تسجيل الدخول"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ورود"
+          }
         }
       }
     },
@@ -344,6 +632,30 @@
             "state": "translated",
             "value": "PROCHAIN PAIEMENT"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PRÓXIMO PAGO"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SUSUNOD NA BAYAD"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الدفعة القادمة"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "پرداخت بعدی"
+          }
         }
       }
     },
@@ -360,6 +672,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "PRESTATIONS ARC"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BENEFICIOS DE LA CRA"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MGA BENEPISYO NG CRA"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مستحقات CRA"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مزایای CRA"
           }
         }
       }
@@ -407,6 +743,30 @@
             "state": "translated",
             "value": "ਆਫਲਾਈਨ"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin conexión"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Offline"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "غير متصل"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آفلاین"
+          }
         }
       }
     },
@@ -423,6 +783,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Affichage des dernières données enregistrées"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrando los últimos datos guardados"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ipinapakita ang huling na-save na data"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عرض آخر بيانات محفوظة"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نمایش آخرین داده‌های ذخیره‌شده"
           }
         }
       }
@@ -606,6 +990,30 @@
             "state": "translated",
             "value": "ਜਮ੍ਹਾਂ ਕਰੋ"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviar"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Isumite"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إرسال"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ارسال"
+          }
         }
       }
     },
@@ -623,6 +1031,30 @@
             "state": "translated",
             "value": "Envoi en cours..."
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviando..."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Isinusumite..."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ الإرسال..."
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "در حال ارسال..."
+          }
         }
       }
     },
@@ -639,6 +1071,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Prestations actives"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beneficios activos"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mga Aktibong Benepisyo"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المستحقات النشطة"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مزایای فعال"
           }
         }
       }
@@ -793,6 +1249,30 @@
             "state": "translated",
             "value": "Automatique"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automático"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Awtomatiko"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تلقائي"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "خودکار"
+          }
         }
       }
     },
@@ -810,6 +1290,30 @@
             "state": "translated",
             "value": "Réclamer sur la déclaration"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se reclama en la declaración"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I-claim sa tax return"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يُطلب في الإقرار الضريبي"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "در اظهارنامه مالیاتی درخواست شود"
+          }
         }
       }
     },
@@ -826,6 +1330,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Demande requise"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Requiere solicitud"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kailangang mag-apply"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يتطلب تقديم طلب"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نیاز به درخواست"
           }
         }
       }
@@ -856,6 +1384,30 @@
             "state": "translated",
             "value": "ਭੁਗਤਾਨ ਕੀਤਾ"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pagado"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bayad na"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم الدفع"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "پرداخت شد"
+          }
         }
       }
     },
@@ -885,6 +1437,30 @@
             "state": "translated",
             "value": "ਕੀ ਭੁਗਤਾਨ ਹੋਇਆ?"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Ya te pagaron?"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bayad na ba?"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هل تم الدفع؟"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "پرداخت شده؟"
+          }
         }
       }
     },
@@ -898,6 +1474,30 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BC Self-Serve"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BC Self-Serve"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BC Self-Serve"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BC Self-Serve"
+          }
+        },
+        "fa": {
           "stringUnit": {
             "state": "translated",
             "value": "BC Self-Serve"
@@ -931,6 +1531,30 @@
             "state": "translated",
             "value": "ਖਾਤਾ"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cuenta"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحساب"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حساب"
+          }
         }
       }
     },
@@ -960,6 +1584,30 @@
             "state": "translated",
             "value": "ਲੌਗ ਆਉਟ ਕਰੋ"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cerrar sesión"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mag-log Out"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تسجيل الخروج"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "خروج"
+          }
         }
       }
     },
@@ -976,6 +1624,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Touchez pour régénérer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca para regenerar"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I-tap para gumawa ulit"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اضغط لإعادة الإنشاء"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "برای ساخت دوباره ضربه بزنید"
           }
         }
       }
@@ -1023,6 +1695,30 @@
             "state": "translated",
             "value": "ਕੋਈ ਸੁਨੇਹਾ ਨਹੀਂ"
           }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay mensajes"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Walang mensahe"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد رسائل"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "پیامی نیست"
+          }
         }
       }
     },
@@ -1051,6 +1747,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "ਸਮਝ ਗਿਆ"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entendido"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sige"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حسنًا"
+          }
+        },
+        "fa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "متوجه شدم"
           }
         }
       }

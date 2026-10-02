@@ -43,7 +43,7 @@ struct MacDashboardView: View {
             Text("PAYMENT AMOUNT")
                 .font(.caption.weight(.medium))
                 .foregroundStyle(.secondary)
-                .kerning(0.5)
+                .ltrTracking(0.5)
 
             Text(appState.paymentAmountText)
                 .font(.system(size: 48, weight: .bold))
