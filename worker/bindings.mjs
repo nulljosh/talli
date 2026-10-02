@@ -8,6 +8,7 @@
 //
 // Its own module because ES imports are hoisted and this has to evaluate
 // before src/api.js.
-import { env } from 'cloudflare:workers';
+import { env, waitUntil } from 'cloudflare:workers';
 
 globalThis.__cfEnv = env;
+globalThis.__cfWaitUntil = waitUntil; // read by keepAlive in src/api.js

@@ -1102,6 +1102,23 @@ async function mergeScrapedReportMonths(req, userId, scrapeResult) {
 }
 
 // Helper: try live HTTP scrape, fall back to Blob cache, fall back to local files
+// Workers cancels un-awaited promises once the response is sent, so a
+// fire-and-forget scrape or Blob write silently never landed: the stored
+// results froze and Messages went stale. waitUntil (set in worker/bindings.mjs)
+// keeps the isolate alive until the work finishes; under plain Node it's absent
+// and the promise just runs.
+function keepAlive(promise) {
+  globalThis.__cfWaitUntil?.(promise);
+  return promise;
+}
+
+function persistScrape(req, userId, checkResult, result) {
+  return Promise.all([
+    saveUserBlob(userId, 'results', checkResult).catch(err => log('[API] Blob persist failed:', err.message)),
+    mergeScrapedReportMonths(req, userId, result).catch(err => log('[API] Report-month merge failed:', err.message)),
+  ]);
+}
+
 async function fetchOrLoadData(req, { allowLiveScrape = true } = {}) {
   const creds = getSessionCredentials(req);
   const userId = req.session?.userId;
@@ -1132,20 +1149,19 @@ async function fetchOrLoadData(req, { allowLiveScrape = true } = {}) {
       if (inFlightRefresh.has(userId)) return;
       inFlightRefresh.add(userId);
     }
-    fetchAllSectionsWithHybridAuth(creds.username, creds.password).then(result => {
+    keepAlive(fetchAllSectionsWithHybridAuth(creds.username, creds.password).then(result => {
       if (result && result.success) {
         log('[API] Background live HTTP scrape succeeded');
         lastCheckResult = { ...result, checkedAt: new Date().toISOString() };
-        saveUserBlob(userId, 'results', lastCheckResult).catch(err => log('[API] Blob persist failed:', err.message));
-        mergeScrapedReportMonths(req, userId, result).catch(err => log('[API] Report-month merge failed:', err.message));
         if (userId) {
           liveCache.set(userId, { ts: Date.now(), result: { source: 'live', data: result } });
         }
+        return persistScrape(req, userId, lastCheckResult, result);
       } else {
         log('[API] Background live scrape returned failure:', result?.error);
       }
     }).catch(err => log('[API] Background live scrape failed:', err.message))
-      .finally(() => { if (userId) inFlightRefresh.delete(userId); });
+      .finally(() => { if (userId) inFlightRefresh.delete(userId); }));
   }
 
   // Stale-while-revalidate: if we already have cached data (Blob/in-memory), return it
@@ -1170,8 +1186,7 @@ async function fetchOrLoadData(req, { allowLiveScrape = true } = {}) {
       if (result && result.success) {
         log('[API] Live HTTP scrape succeeded');
         lastCheckResult = { ...result, checkedAt: new Date().toISOString() };
-        saveUserBlob(userId, 'results', lastCheckResult).catch(err => log('[API] Blob persist failed:', err.message));
-        mergeScrapedReportMonths(req, userId, result).catch(err => log('[API] Report-month merge failed:', err.message));
+        keepAlive(persistScrape(req, userId, lastCheckResult, result));
         const liveResult = { source: 'live', data: result };
         if (userId) {
           liveCache.set(userId, { ts: Date.now(), result: liveResult });
