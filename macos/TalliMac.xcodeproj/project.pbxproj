@@ -32,6 +32,7 @@
 		648A1E6A1C557E43E91DD2AB /* MacKeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D46509CD0CB994360A6EE /* MacKeychainHelper.swift */; };
 		68003AB732B158D919F3BE14 /* RTLTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47FDBC6806E5A115D749928 /* RTLTracking.swift */; };
 		968B1E3C1D50FB8FCEB0F738 /* MacWidgetAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED469812914B2A45C10F666 /* MacWidgetAPI.swift */; };
+		986E03B04A8F7FCBE7E15610 /* MissedPaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0046C4CA8530BB849F37AAA5 /* MissedPaymentView.swift */; };
 		9BAFF0507C634EDA6EF0F6E2 /* ExportOptions.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3951E529B6F7FA9B74ABE9C /* ExportOptions.plist */; };
 		A1B3992F899C2CC9E4CD2DFC /* MacAppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD19AB31AA4F0A6DD858E063 /* MacAppState.swift */; };
 		A4F29351A1EDEEA85B7B12D7 /* MacDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 253DEBB17503562A3842CF40 /* MacDashboardView.swift */; };
@@ -77,6 +78,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0046C4CA8530BB849F37AAA5 /* MissedPaymentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissedPaymentView.swift; sourceTree = "<group>"; };
 		04123E4DE54AEC07C172692B /* MacPaymentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPaymentProvider.swift; sourceTree = "<group>"; };
 		05C53A51618D2F7455BED586 /* TalliWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TalliWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		062CBBD651BF3B7840A05137 /* MacBenefitsWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBenefitsWidgetView.swift; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				A35803128BD01A8F7B732D9B /* BenefitFinderView.swift */,
+				0046C4CA8530BB849F37AAA5 /* MissedPaymentView.swift */,
 				AB7688A8B26D97A128C95FA2 /* RdspTrackerView.swift */,
 				C3B2AD00D857C67843DE6074 /* SupplementsView.swift */,
 			);
@@ -439,6 +442,7 @@
 				0A4F2A936FBED3094781D846 /* MacSettingsView.swift in Sources */,
 				B2B60C9015E6163943DC89CF /* MacTheme.swift in Sources */,
 				37291C624EBCC18BA59688CA /* MenuBarView.swift in Sources */,
+				986E03B04A8F7FCBE7E15610 /* MissedPaymentView.swift in Sources */,
 				13B60F9180A94A04BA24C25E /* PaydayNotificationScheduler.swift in Sources */,
 				68003AB732B158D919F3BE14 /* RTLTracking.swift in Sources */,
 				2B571A9A6058202934D64E5A /* RdspTrackerView.swift in Sources */,

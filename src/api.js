@@ -16,6 +16,7 @@ const { attemptHttpLogin, fetchAllSections } = require('./http-scraper');
 const widgetToken = require('./widget-token');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { nextPaymentDate } = require('./pay-dates');
+const { deriveMissedPayment } = require('./programs/missed');
 const { deriveSupplements, cleanSupplements } = require('./programs/supplements');
 const { deriveRdsp, cleanRdsp } = require('./programs/rdsp');
 const { findBenefits, prefill: prefillFinder } = require('./programs/finder');
@@ -1904,6 +1905,27 @@ async function benefitFinderFor(userId, posted) {
 // RDSP grant and bond tracker (src/programs/rdsp.js). Inputs live on the same
 // rdsp-profile blob as the application status, so nothing else has to change.
 const rdspShape = (profile) => ({ profile: cleanRdsp(profile), derived: deriveRdsp(profile) });
+
+// Missed-payment alert (src/programs/missed.js). Reads the same paid-status and
+// report-status the clients already write; the session copy is fresher than the blob.
+app.get('/api/missed-payment', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    const [paid, report, pwd] = await Promise.all([
+      req.session.paidStatus?.paidMonths ? req.session.paidStatus : loadUserBlob(userId, 'paid-status', { paidMonths: {} }),
+      req.session.reportStatus?.reportMonths ? req.session.reportStatus : loadUserBlob(userId, 'report-status', { reportMonths: {} }),
+      loadUserBlob(userId, 'pwd-profile', {}),
+    ]);
+    res.json(deriveMissedPayment({
+      paidMonths: paid?.paidMonths || {},
+      reportMonths: report?.reportMonths || {},
+      onAssistance: pwd?.status === 'approved' || PWD_APPROVED,
+    }));
+  } catch (err) {
+    log('[MISSED] GET error:', err.message);
+    res.json({ missed: null, watch: [] });
+  }
+});
 
 // Supplements on the calendar (src/programs/supplements.js).
 const supplementsShape = (profile) => ({ profile: cleanSupplements(profile), derived: deriveSupplements(profile) });

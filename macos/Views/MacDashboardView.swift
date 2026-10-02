@@ -19,6 +19,11 @@ struct MacDashboardView: View {
                     reportFiledBanner
                 }
 
+                MissedPaymentView(
+                    fetch: { try await MacAPIClient.shared.missedPayment() },
+                    arrived: { try? await MacAPIClient.shared.markPaid(month: $0) }
+                )
+
                 // Payment hero card
                 paymentCard
 

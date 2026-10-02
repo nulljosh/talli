@@ -313,6 +313,15 @@ final class AppState {
         }
     }
 
+    /// Marks the cheque for one month key (YYYY-MM) as received, e.g. from the missed-payment alert.
+    func markPaid(month: String) async {
+        guard isAuthenticated else { return }
+        var months = paidStatus?.paidMonths ?? [:]
+        months[month] = ISO8601DateFormatter().string(from: Date())
+        paidStatus = PaidStatus(paidMonths: months)
+        if let saved = try? await APIClient.shared.setPaidStatus(paid: true, month: month) { paidStatus = saved }
+    }
+
     func togglePaid() async {
         guard isAuthenticated else { return }
         let previous = paidStatus

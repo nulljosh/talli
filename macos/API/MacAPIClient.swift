@@ -119,6 +119,17 @@ final class MacAPIClient: @unchecked Sendable {
         return try await send(path: "api/benefit-finder", responseType: BenefitFinder.self)
     }
 
+    func missedPayment() async throws -> MissedPayment {
+        try await send(path: "api/missed-payment", responseType: MissedPayment.self)
+    }
+
+    /// Marks the cheque for one month key (YYYY-MM) as received.
+    func markPaid(month: String) async throws {
+        struct Body: Encodable { let paid: Bool; let month: String }
+        struct Ack: Decodable { let paidMonths: [String: String] }
+        _ = try await send(path: "api/paid-status", method: "POST", body: Body(paid: true, month: month), responseType: Ack.self)
+    }
+
     func supplements(save: SupplementsRequest?) async throws -> Supplements {
         if let save {
             return try await send(path: "api/supplements", method: "POST", body: save, responseType: Supplements.self)

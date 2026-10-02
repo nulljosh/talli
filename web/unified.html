@@ -369,6 +369,52 @@ function AssetsForm({assets, onAddAccount, t}) {
 // ════════════════════════════════════════════════════
 // HOME TAB
 // ════════════════════════════════════════════════════
+// Missed-payment alert: the cheque date passed and it is not marked received.
+// Dates, cause and script come from src/programs/missed.js via /api/missed-payment.
+function MissedPayment({dark, onPaidChange}) {
+  const t = tk(dark);
+  const T = window.I18N.t;
+  const [data, setData] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const load = () => fetch('/api/missed-payment', {credentials:'include'}).then(r=>r.json()).then(setData).catch(()=>{});
+  useEffect(() => { load(); }, []);
+  const m = data?.missed;
+  if (!m) return null;
+  const nowKey = `${new Date().getFullYear()}-${String(new Date().getMonth()+1).padStart(2,'0')}`;
+  const arrived = async () => {
+    // Mark the month the cheque belongs to, so a late tick never marks next month paid early.
+    if (m.month === nowKey && onPaidChange) await onPaidChange(true);
+    else { try { await fetch('/api/paid-status',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({month:m.month,paid:true})}); } catch(e){} }
+    load();
+  };
+  const when = new Date(m.due+'T12:00:00').toLocaleString('en-CA',{month:'long',day:'numeric'});
+  const pill = (solid) => ({padding:'6px 14px',borderRadius:100,background:solid?t.warning:'none',color:solid?t.bg:t.muted,border:solid?'none':`1px solid ${t.border2}`,fontSize:12,fontWeight:700,fontFamily:'inherit',cursor:'pointer'});
+  return (
+    <div style={{background:`${t.warning}14`,border:`1px solid ${t.warning}40`,borderRadius:10,padding:'13px 14px',marginBottom:18,animation:'fadeUp 0.3s ease both'}}>
+      <div style={{fontSize:13,fontWeight:700,color:t.warning}}>{T('Has your cheque arrived?')}</div>
+      <div style={{fontSize:13,color:t.text,marginTop:4,lineHeight:1.45}}>{T('It was due')} {when}{m.daysLate>1?`, ${m.daysLate} ${T('days ago')}`:''}. {T('You have not marked it received.')}</div>
+      <div style={{display:'flex',gap:8,marginTop:10,flexWrap:'wrap'}}>
+        <button onClick={arrived} style={pill(true)}>{T('It arrived')}</button>
+        <button onClick={()=>setOpen(!open)} aria-expanded={open} style={pill(false)}>{open?T('Hide'):T('Still missing')}</button>
+      </div>
+      {open && <div style={{marginTop:12,animation:'fadeIn 0.2s ease both'}}>
+        {m.cause && <div style={{fontSize:12,color:t.text,lineHeight:1.5,marginBottom:8,padding:'8px 10px',borderRadius:8,background:`${t.warning}18`}}>{m.cause}</div>}
+        <ol style={{margin:0,paddingInlineStart:18,fontSize:13,color:t.mutedMid,lineHeight:1.5}}>{m.steps.map((s,i)=><li key={i} style={{marginBottom:4}}>{s}</li>)}</ol>
+        <div style={{marginTop:10,padding:'10px 12px',borderRadius:8,border:`1px solid ${t.border2}`}}>
+          <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:4}}>{T('What to say')}</div>
+          <div style={{fontSize:13,color:t.text,lineHeight:1.5}}>{m.say}</div>
+          <button onClick={()=>navigator.clipboard?.writeText(m.say).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),1500);}).catch(()=>{})} style={{...pill(false),marginTop:8,padding:'4px 11px',fontSize:11}}>{copied?T('Copied'):T('Copy')}</button>
+        </div>
+        <div style={{display:'flex',gap:8,marginTop:12,flexWrap:'wrap'}}>
+          <a href={`tel:${m.phone}`} style={{...pill(true),textDecoration:'none'}}>{T('Call')} {m.phone}</a>
+          <a href={m.link} target="_blank" rel="noopener noreferrer" style={{...pill(false),textDecoration:'none'}}>{T('My Self Serve')}</a>
+        </div>
+      </div>}
+    </div>
+  );
+}
+
 function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings, assets, onAddAssets, daysUntil, paymentDate, paid, onPaidChange, reportMonths, onSubmitReport, onMarkFiled, pwdApproved}) {
   const t = tk(dark);
   const [loaded, setLoaded] = useState(false);
@@ -463,6 +509,7 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={t.success} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         <span style={{fontSize:13,fontWeight:600,color:t.success}}>Report filed this month</span>
       </div>}
+      <MissedPayment dark={dark} onPaidChange={onPaidChange}/>
 
       <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:18,animation:'fadeUp 0.45s 0s ease both'}}>
         Next payment

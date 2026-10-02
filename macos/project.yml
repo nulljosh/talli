@@ -18,6 +18,7 @@ targets:
       - path: ../ios/Views/BenefitFinderView.swift
       - path: ../ios/Views/RdspTrackerView.swift
       - path: ../ios/Views/SupplementsView.swift
+      - path: ../ios/Views/MissedPaymentView.swift
       - path: .
         excludes:
           - "*.xcodeproj"

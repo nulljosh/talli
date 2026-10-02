@@ -197,6 +197,11 @@ private struct DashboardScreen: View {
                     ReportFiledBanner()
                 }
 
+                MissedPaymentView(
+                    fetch: { try await APIClient.shared.missedPayment() },
+                    arrived: { await appState.markPaid(month: $0) }
+                )
+
                 paymentCard
                 if appState.daysUntilPayment != nil {
                     paymentProgress

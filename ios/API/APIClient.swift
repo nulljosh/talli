@@ -185,6 +185,10 @@ final class APIClient: @unchecked Sendable {
         return try await send(path: "api/benefit-finder", responseType: BenefitFinder.self)
     }
 
+    func missedPayment() async throws -> MissedPayment {
+        try await send(path: "api/missed-payment", responseType: MissedPayment.self)
+    }
+
     func supplements(save: SupplementsRequest?) async throws -> Supplements {
         if let save {
             return try await send(path: "api/supplements", method: "POST", body: save, responseType: Supplements.self)
