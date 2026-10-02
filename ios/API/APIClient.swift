@@ -204,6 +204,13 @@ final class APIClient: @unchecked Sendable {
         return data
     }
 
+    func reconsideration(received: String?) async throws -> Reconsideration {
+        if let received {
+            return try await send(path: "api/reconsideration", method: "POST", body: ReconsiderationRequest(received: received), responseType: Reconsideration.self)
+        }
+        return try await send(path: "api/reconsideration", responseType: Reconsideration.self)
+    }
+
     func missedPayment() async throws -> MissedPayment {
         try await send(path: "api/missed-payment", responseType: MissedPayment.self)
     }

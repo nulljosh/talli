@@ -795,6 +795,74 @@ function VaultTool({dark}) {
   );
 }
 
+// Reconsideration helper: deadline, checklist and a draft letter. Dates and text: src/programs/reconsideration.js.
+function ReconsiderationTool({dark}) {
+  const t = tk(dark);
+  const T = window.I18N.t;
+  const [data, setData] = useState(null);
+  const [date, setDate] = useState('');
+  const [editing, setEditing] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const load = () => fetch('/api/reconsideration', {credentials:'include'}).then(r=>r.json()).then(d=>{ setData(d); setDate(d.received||''); }).catch(()=>{});
+  useEffect(() => { load(); }, []);
+  if (!data) return <Skel w="100%" h={90} r={12} dark={dark}/>;
+  const save = async (value) => {
+    try { const r = await fetch('/api/reconsideration', {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({received:value})}); if (r.ok) { const d = await r.json(); setData(d); setDate(d.received||''); setEditing(false); } } catch (e) {}
+  };
+  const label = {fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:14};
+  const card = {padding:'16px 18px',background:t.bg2,borderRadius:12,border:`1px solid ${t.border}`};
+  const pill = (solid) => ({padding:'9px 16px',borderRadius:100,background:solid?t.accent:'transparent',color:solid?'#fff':t.muted,border:solid?'none':`1px solid ${t.border2}`,fontSize:13,fontWeight:600,fontFamily:'inherit',cursor:'pointer',textDecoration:'none',display:'inline-block'});
+  const d = data.derived;
+  if (!d || editing) return (
+    <div>
+      <div style={label}>{T('Reconsideration helper')}</div>
+      <div style={card}>
+        <div style={{fontSize:17,fontWeight:700,letterSpacing:'-0.3px',color:t.text}}>{T('Denied? You can ask again.')}</div>
+        <div style={{fontSize:13,color:t.mutedMid,marginTop:6,lineHeight:1.5}}>{T('You have 20 business days from the day the letter arrived. Enter that day and Talli counts it for you.')}</div>
+        <label style={{display:'block',fontSize:11,color:t.muted,marginTop:12}}>{T('Day the letter arrived')}
+          <input type="date" value={date} onChange={e=>setDate(e.target.value)} style={{display:'block',width:'100%',boxSizing:'border-box',marginTop:4,padding:'10px 12px',borderRadius:8,border:`1px solid ${t.border2}`,background:'transparent',color:t.text,fontSize:14,fontFamily:'inherit'}}/>
+        </label>
+        <div style={{display:'flex',gap:8,marginTop:12}}>
+          <button onClick={()=>date&&save(date)} disabled={!date} style={{...pill(true),opacity:date?1:0.5}}>{T('Save')}</button>
+          {editing && <button onClick={()=>setEditing(false)} style={pill(false)}>{T('Cancel')}</button>}
+        </div>
+      </div>
+    </div>
+  );
+  const tone = d.status==='passed' ? t.error : (d.status==='soon'||d.status==='today') ? t.warning : t.accent;
+  const when = new Date(d.deadline+'T12:00:00').toLocaleString('en-CA',{month:'long',day:'numeric',year:'numeric'});
+  return (
+    <div style={{animation:'fadeIn 0.2s ease both'}}>
+      <div style={label}>{T('Reconsideration helper')}</div>
+      <div style={{...card,marginBottom:12}}>
+        {d.status==='passed' ? <>
+          <div style={{fontSize:17,fontWeight:700,color:tone}}>{T('The 20 days ended')} {when}</div>
+          <div style={{fontSize:13,color:t.mutedMid,marginTop:6,lineHeight:1.5}}>{T('Call Disability Alliance BC on')} {d.phone}. {T('They can tell you if a late request or a new application is your best move.')}</div>
+        </> : <>
+          <div style={{fontSize:34,fontWeight:800,letterSpacing:'-1.2px',color:tone,lineHeight:1.15}}>{d.status==='today'?T('Today'):d.left}</div>
+          <div style={{fontSize:13,color:t.text,marginTop:2}}>{d.status==='today'?T('is the last day to hand it in'):T('business days left to ask for reconsideration')}</div>
+          <div style={{fontSize:12,color:t.mutedMid,marginTop:6}}>{T('Deadline')} {when}</div>
+        </>}
+      </div>
+      <div style={{...card,marginBottom:12}}>
+        <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:8}}>{T('What to do')}</div>
+        <ol style={{margin:0,paddingInlineStart:18,fontSize:13,color:t.mutedMid,lineHeight:1.5}}>{d.steps.map((s,i)=><li key={i} style={{marginBottom:6}}>{s}</li>)}</ol>
+        <div style={{fontSize:11,color:t.muted,marginTop:8,lineHeight:1.5}}>{d.note}</div>
+      </div>
+      <div style={{...card,marginBottom:12}}>
+        <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:8}}>{T('Draft letter')}</div>
+        <pre style={{margin:0,whiteSpace:'pre-wrap',fontFamily:'inherit',fontSize:12,color:t.text,lineHeight:1.55}}>{d.draft}</pre>
+        <button onClick={()=>navigator.clipboard?.writeText(d.draft).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),1500);}).catch(()=>{})} style={{...pill(false),marginTop:10,padding:'6px 13px',fontSize:12}}>{copied?T('Copied'):T('Copy the letter')}</button>
+      </div>
+      <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+        <a href={`tel:${d.phone}`} style={pill(true)}>{T('Call')} {d.phone}</a>
+        {d.links.map(l=><a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer" style={pill(false)}>{l.label}</a>)}
+      </div>
+      <button onClick={()=>setEditing(true)} style={{marginTop:12,background:'none',border:'none',padding:0,color:t.muted,fontSize:12,fontWeight:600,fontFamily:'inherit',cursor:'pointer',display:'block'}}>{T('Change the date')}</button>
+    </div>
+  );
+}
+
 // One quiet line per section; the full section opens on tap. Keeps Status and Calendar short.
 function FoldBox({dark, title, summary, open, setOpen, children}) {
   const t = tk(dark);
@@ -1552,6 +1620,9 @@ function BenniesSection({dark}) {
 
       <FoldTool dark={dark} title="RDSP grants and bonds" url="/api/rdsp-tracker" summarize={d=>d.derived?(d.derived.eligible?'$'+Math.round(d.derived.missing).toLocaleString()+' still on the table this year':'Grants stop after the year you turn 49'):'See what your RDSP is owed'}>
         <RdspTracker dark={dark}/>
+      </FoldTool>
+      <FoldTool dark={dark} title="Reconsideration helper" url="/api/reconsideration" summarize={d=>d.derived?(d.derived.status==='passed'?'The 20 days have ended':d.derived.status==='today'?'Last day to hand it in':d.derived.left+' business days left to ask again'):'Denied? Know your deadline'}>
+        <ReconsiderationTool dark={dark}/>
       </FoldTool>
       <FoldTool dark={dark} title="Document vault" url="/api/vault" summarize={d=>d.salt?'Locked. Your passphrase opens it.':'Keep your letters and ID safe'}>
         <VaultTool dark={dark}/>

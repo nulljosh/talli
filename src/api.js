@@ -16,6 +16,7 @@ const { attemptHttpLogin, fetchAllSections } = require('./http-scraper');
 const widgetToken = require('./widget-token');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { nextPaymentDate } = require('./pay-dates');
+const { deriveReconsideration } = require('./programs/reconsideration');
 const { deriveMissedPayment } = require('./programs/missed');
 const { deriveSupplements, cleanSupplements } = require('./programs/supplements');
 const { deriveRdsp, cleanRdsp } = require('./programs/rdsp');
@@ -1905,6 +1906,39 @@ async function benefitFinderFor(userId, posted) {
 // RDSP grant and bond tracker (src/programs/rdsp.js). Inputs live on the same
 // rdsp-profile blob as the application status, so nothing else has to change.
 const rdspShape = (profile) => ({ profile: cleanRdsp(profile), derived: deriveRdsp(profile) });
+
+// Reconsideration helper (src/programs/reconsideration.js). The date the denial
+// letter arrived is saved here; the PWD profile's denied date fills it in until then.
+const reconShape = (saved, pwd) => {
+  const fromPwd = typeof pwd?.deniedDate === 'string' ? pwd.deniedDate.slice(0, 10) : null;
+  const raw = { received: saved?.received || fromPwd };
+  return { received: raw.received || null, derived: deriveReconsideration(raw) };
+};
+
+app.get('/api/reconsideration', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    const [saved, pwd] = await Promise.all([loadUserBlob(userId, 'reconsideration-profile', {}), loadUserBlob(userId, 'pwd-profile', {})]);
+    res.json(reconShape(saved, pwd));
+  } catch (err) {
+    log('[RECON] GET error:', err.message);
+    res.json({ received: null, derived: null });
+  }
+});
+
+app.post('/api/reconsideration', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    const received = req.body?.received;
+    if (received !== null && !deriveReconsideration({ received })) return res.status(400).json({ error: 'received must be YYYY-MM-DD or null' });
+    const saved = { received };
+    await saveUserBlob(userId, 'reconsideration-profile', saved);
+    res.json(reconShape(saved, await loadUserBlob(userId, 'pwd-profile', {})));
+  } catch (err) {
+    log('[RECON] POST error:', err.message);
+    res.status(500).json({ error: 'Failed to save the date' });
+  }
+});
 
 // Document vault. The server only ever holds ciphertext: the key comes from a
 // passphrase that never leaves the device (web/js/vault.js, ios/Helpers/VaultCrypto.swift).

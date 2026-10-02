@@ -22,6 +22,12 @@ struct BenefitsView: View {
                 .font(.headline)
                 .padding(.top, 8)
 
+                DisclosureGroup("Reconsideration helper") {
+                    ReconsiderationView { try await APIClient.shared.reconsideration(received: $0) }
+                        .padding(.top, 8)
+                }
+                .font(.headline)
+
                 DisclosureGroup("Document vault") {
                     VaultView(api: APIClient.shared.vault)
                         .padding(.top, 8)

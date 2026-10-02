@@ -20,6 +20,7 @@ targets:
       - path: ../ios/Views/SupplementsView.swift
       - path: ../ios/Views/MissedPaymentView.swift
       - path: ../ios/Views/VaultView.swift
+      - path: ../ios/Views/ReconsiderationView.swift
       - path: ../ios/Helpers/VaultCrypto.swift
       - path: .
         excludes:

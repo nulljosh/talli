@@ -95,6 +95,12 @@ struct MacBenefitsView: View {
                 }
                 .font(.headline)
 
+                DisclosureGroup("Reconsideration helper") {
+                    ReconsiderationView { try await MacAPIClient.shared.reconsideration(received: $0) }
+                        .padding(.top, 8)
+                }
+                .font(.headline)
+
                 DisclosureGroup("Document vault") {
                     VaultView(api: MacAPIClient.shared.vault)
                         .padding(.top, 8)
