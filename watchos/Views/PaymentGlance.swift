@@ -16,7 +16,7 @@ struct PaymentGlance: View {
     }
 
     private var isFilingWindow: Bool {
-        !(summary?.pwdApproved ?? false) && Calendar.current.component(.day, from: Date()) <= 5
+        summary != nil && !(summary?.pwdApproved ?? false) && Calendar.current.component(.day, from: Date()) <= 5
     }
 
     private var formattedDate: String {
@@ -75,7 +75,8 @@ struct PaymentGlance: View {
                             .padding(.horizontal, 8)
                     }
                 } else {
-                    Text("No data")
+                    Text(WatchAPI.shared.apiToken.isEmpty ? "Open Talli on your iPhone to sign in" : "No data")
+                        .multilineTextAlignment(.center)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
