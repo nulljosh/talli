@@ -26,6 +26,33 @@ ASC verified today: iOS 3.5.14 and macOS 3.5.6 READY_FOR_DISTRIBUTION. Revenue w
 - [ ] Year in review each January: every payment, every credit, ready for tax time.
 - [ ] Spanish, Tagalog, Arabic and Farsi on top of English, French, Chinese, Punjabi.
 
+### 6.0: never miss a dollar
+- [ ] Benefit finder. Answer a few questions, see every BC and federal program you qualify for but aren't getting (bus pass, crisis supplement, Fair PharmaCare, Canada Dental, RDSP grants).
+- [ ] RDSP grant and bond tracker: what the government has matched, what's left this year, what carries forward.
+- [ ] Supplements on the calendar: transportation, dietary, annual bus pass renewal, each with its own reminder.
+- [ ] Missed-payment alert: payday passes and the portal shows nothing, Talli tells you who to call and what to say.
+
+### 7.0: paperwork done for you
+- [ ] Document vault: PWD decision letter, medical report, ID, leases. Encrypted, in iCloud, ready to attach.
+- [ ] Message replies from Talli: answer a ministry message without opening My Self Serve.
+- [ ] Service requests: start the common ones (crisis supplement, address change, shelter update) from the app.
+- [ ] Reconsideration helper: denied? Walk the 20-business-day deadline with a checklist and a draft letter.
+
+### 8.0: the whole household
+- [ ] Couples and families: two-adult PWD rates, spouse earnings, dependants, shared exemption math.
+- [ ] Trusted helper: share read-only access with a caseworker, advocate or family member, revocable any time.
+- [ ] Rent and shelter: log rent changes, see the shelter maximum, flag when the shelter amount is wrong.
+
+### 9.0: plan ahead
+- [ ] What-if: "if I take this job at 20 hours a week", see the exemption, clawback and take-home month by month.
+- [ ] Moving out of BC or turning 65: what changes (OAS/GIS hand-off), when, and what to file.
+- [ ] Budget against real paydays: bills land on the calendar next to the money that pays them.
+
+### 10.0: every province
+- [ ] Alberta AISH and Ontario ODSP on the same profile engine; adding a province is a data file, not new code.
+- [ ] Federal-only mode for anyone on CDB, GST credit and the Canada Dental Benefit without a provincial portal.
+- [ ] Open data: publish the pay-date and rate tables as a free API other advocates can build on.
+
 ## Full cross-platform -- DONE 2026-08-31
 
 Talli is now a real app on all six platforms: native iOS and macOS (Swift), a
