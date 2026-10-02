@@ -165,6 +165,19 @@ final class APIClient: @unchecked Sendable {
         )
     }
 
+    func getProfile() async throws -> ProfileResponse {
+        try await send(path: "api/profile", responseType: ProfileResponse.self)
+    }
+
+    func uploadAvatar(svgBase64: String) async throws {
+        try await send(
+            path: "api/avatar",
+            method: "POST",
+            body: AvatarUploadRequest(svgBase64: svgBase64),
+            responseType: AvatarUploadResponse.self
+        )
+    }
+
     private func send<Response: Decodable>(
         path: String,
         method: String = "GET",
@@ -275,4 +288,19 @@ private struct PaidStatusRequest: Encodable {
 
 private struct ReadMessagesRequest: Encodable {
     let readIds: [String]
+}
+
+struct ProfileResponse: Decodable {
+    let username: String?
+    let avatarUrl: String?
+    let pinSet: Bool?
+}
+
+private struct AvatarUploadRequest: Encodable {
+    let svgBase64: String
+}
+
+private struct AvatarUploadResponse: Decodable {
+    let ok: Bool?
+    let avatarUrl: String?
 }

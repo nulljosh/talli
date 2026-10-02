@@ -79,7 +79,7 @@ struct SettingsView: View {
                 isGeneratingAvatar = true
                 Task { @MainActor in
                     await Task.yield()
-                    appState.regenerateAvatar()
+                    await appState.regenerateAvatar()
                     isGeneratingAvatar = false
                 }
             } label: {

@@ -165,7 +165,7 @@ Localization pipeline wired: `i18n/strings.json` master keys now match literal U
 App Store Connect closed the pre-release train for v3.5.12 (build 139 was rejected). Bumped `MARKETING_VERSION` in `ios/project.yml` from 3.5.12 to 3.5.13, regenerated the Xcode project, and pushed to trigger a new Xcode Cloud build. Build execution pending. The 3.5.12 release remains valid for current distribution; the 3.5.13 rebuild is the next pre-release candidate.
 
 ## From Apple Notes (imported 2026-08-10)
-- [ ] iOS avatar is device-local only (`AppState.generateNodeGraphAvatar`, disk-cached PNG) and never syncs with the server's avatar, so iOS and web show different avatars. Real fix needs SVG rendering on iOS (server stores SVG) or a server-side PNG variant, deliberately not built as part of the letter-icon fix.
+- [x] (2026-10-02: iOS reads and writes the same SVG as web) iOS avatar is device-local only (`AppState.generateNodeGraphAvatar`, disk-cached PNG) and never syncs with the server's avatar, so iOS and web show different avatars. Real fix needs SVG rendering on iOS (server stores SVG) or a server-side PNG variant, deliberately not built as part of the letter-icon fix.
 - [x] Refresh `CHEQUE_ISSUE_DATES` in `src/pay-dates.js` when BC publishes the 2027 cheque issue schedule, after 2026-12-16 the app shows "--" for the next payment date until it is added. **2027 added 2026-10-02; refresh again when BC posts 2028 (runs out after 2027-12-22).**
 
 ## Screenshots (2026-08-11)

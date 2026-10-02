@@ -274,6 +274,32 @@ final class AppState {
         }
     }
 
+    func syncAvatar() async {
+        guard isAuthenticated else { return }
+        do {
+            let profile = try await APIClient.shared.getProfile()
+            if let avatarUrl = profile.avatarUrl, !avatarUrl.isEmpty {
+                // Relative URLs resolve against the API host; async so the main actor never blocks.
+                if let url = URL(string: avatarUrl, relativeTo: URL(string: "https://talli.heyitsmejosh.com")),
+                   let (svgData, _) = try? await URLSession.shared.data(from: url),
+                   let svgString = String(data: svgData, encoding: .utf8),
+                   let img = Self.renderSVGToImage(svgString) {
+                    saveAvatarData(img.pngData() ?? Data())
+                }
+            } else {
+                let svg = Self.generateNodeGraphSVG()
+                if let svgData = svg.data(using: .utf8) {
+                    if let img = Self.renderSVGToImage(svg) {
+                        saveAvatarData(img.pngData() ?? Data())
+                    }
+                    try await APIClient.shared.uploadAvatar(svgBase64: svgData.base64EncodedString())
+                }
+            }
+        } catch {
+            // Non-critical
+        }
+    }
+
     func togglePaid() async {
         guard isAuthenticated else { return }
         let previous = paidStatus
@@ -294,10 +320,87 @@ final class AppState {
         try? data.write(to: Self.avatarFileURL)
     }
 
-    func regenerateAvatar() {
-        let img = Self.generateNodeGraphAvatar()
-        if let png = img.pngData() {
-            saveAvatarData(png)
+    func regenerateAvatar() async {
+        let svg = Self.generateNodeGraphSVG()
+        guard let svgData = svg.data(using: .utf8) else { return }
+        if let img = Self.renderSVGToImage(svg) {
+            saveAvatarData(img.pngData() ?? Data())
+        }
+        guard isAuthenticated else { return }
+        do {
+            try await APIClient.shared.uploadAvatar(svgBase64: svgData.base64EncodedString())
+        } catch {
+            // Non-critical
+        }
+    }
+
+    static func generateNodeGraphSVG() -> String {
+        let s = 200, cx = 100, cy = 100
+        typealias Pt = (CGFloat, CGFloat)
+        let topologies: [([Pt], [(Int, Int)])] = [
+            ([(0,-58),(46,-30),(55,18),(20,56),(-20,56),(-55,18),(-46,-30),(0,0)],
+             [(7,0),(7,1),(7,2),(7,3),(7,4),(7,5),(7,6),(0,1),(1,2),(2,3),(3,4),(4,5),(5,6),(6,0)]),
+            ([(0,-55),(48,-27),(48,27),(0,55),(-48,27),(-48,-27),(0,-22),(22,11),(-22,11)],
+             [(0,1),(1,2),(2,3),(3,4),(4,5),(5,0),(6,7),(7,8),(8,6),(0,6),(2,7),(4,8)]),
+            ([(-38,-50),(18,-52),(52,-10),(44,42),(0,55),(-44,34),(-54,-10),(0,-10),(30,12),(-25,18)],
+             [(0,1),(1,2),(2,3),(3,4),(4,5),(5,6),(6,0),(0,7),(2,8),(4,9),(7,8),(8,9),(7,9)]),
+        ]
+        let (baseOffsets, allEdges) = topologies.randomElement()!
+        let jitter = CGFloat.random(in: 8...20)
+        let nodes = baseOffsets.map { dx, dy in
+            (CGFloat(cx) + dx + CGFloat.random(in: -jitter...jitter), CGFloat(cy) + dy + CGFloat.random(in: -jitter...jitter))
+        }
+        let edgeDensity = Double.random(in: 0.55...0.85)
+        let activeEdges = allEdges.filter { _ in Double.random(in: 0...1) < edgeDensity }
+
+        var out = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 \(s) \(s)\" width=\"\(s)\" height=\"\(s)\"><circle cx=\"\(cx)\" cy=\"\(cy)\" r=\"\(cx)\" fill=\"#0d0c0b\"/>"
+        for (a, b) in activeEdges where a < nodes.count && b < nodes.count {
+            let x1 = String(format: "%.1f", nodes[a].0), y1 = String(format: "%.1f", nodes[a].1)
+            let x2 = String(format: "%.1f", nodes[b].0), y2 = String(format: "%.1f", nodes[b].1)
+            out += "<line x1=\"\(x1)\" y1=\"\(y1)\" x2=\"\(x2)\" y2=\"\(y2)\" stroke=\"rgba(91,155,213,0.3)\" stroke-width=\"1.5\" stroke-linecap=\"round\"/>"
+        }
+        for (i, node) in nodes.enumerated() {
+            let r = CGFloat.random(in: 5...11)
+            let isAccent = i == 0 || i == nodes.count / 2
+            let cx = String(format: "%.1f", node.0), cy = String(format: "%.1f", node.1), radius = String(format: "%.1f", r)
+            let fill = isAccent ? "#5B9BD5" : "rgba(242,237,232,0.75)"
+            out += "<circle cx=\"\(cx)\" cy=\"\(cy)\" r=\"\(radius)\" fill=\"\(fill)\"/>"
+            if isAccent {
+                out += "<circle cx=\"\(cx)\" cy=\"\(cy)\" r=\"2.5\" fill=\"rgba(255,255,255,0.4)\"/>"
+            }
+        }
+        out += "</svg>"
+        return out
+    }
+
+    static func renderSVGToImage(_ svgString: String) -> UIImage? {
+        let parser = SVGParser()
+        guard let (circles, lines) = parser.parse(svgString) else { return nil }
+
+        let s: CGFloat = 200
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: s, height: s))
+        return renderer.image { ctx in
+            let cg = ctx.cgContext
+            UIColor(hex: "0d0c0b").setFill()
+            cg.fillEllipse(in: CGRect(x: 0, y: 0, width: s, height: s))
+
+            for line in lines {
+                if let color = UIColor(rgba: line.stroke) {
+                    cg.setStrokeColor(color.cgColor)
+                }
+                cg.setLineWidth(line.strokeWidth)
+                cg.setLineCap(.round)
+                cg.move(to: CGPoint(x: line.x1, y: line.y1))
+                cg.addLine(to: CGPoint(x: line.x2, y: line.y2))
+            }
+            cg.strokePath()
+
+            for circle in circles {
+                if let color = UIColor(rgba: circle.fill) {
+                    color.setFill()
+                }
+                cg.fillEllipse(in: CGRect(x: circle.cx - circle.r, y: circle.cy - circle.r, width: circle.r * 2, height: circle.r * 2))
+            }
         }
     }
 
@@ -376,7 +479,8 @@ final class AppState {
                 isAuthenticated = true
                 async let paidTask: Void = loadPaidStatus()
                 async let readTask: Void = loadReadMessages()
-                _ = await (paidTask, readTask)
+                async let avatarTask: Void = syncAvatar()
+                _ = await (paidTask, readTask, avatarTask)
                 do {
                     try await loadLatestData()
                 } catch {
@@ -612,5 +716,51 @@ final class AppState {
     private func authenticateWithBiometrics() async throws {
         let context = LAContext()
         try await context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "Sign in to Talli")
+    }
+}
+
+struct SVGCircle { let cx: CGFloat; let cy: CGFloat; let r: CGFloat; let fill: String }
+struct SVGLine { let x1: CGFloat; let y1: CGFloat; let x2: CGFloat; let y2: CGFloat; let stroke: String; let strokeWidth: CGFloat }
+
+class SVGParser: NSObject, XMLParserDelegate {
+    var circles: [SVGCircle] = []
+    var lines: [SVGLine] = []
+
+    func parse(_ svgString: String) -> ([SVGCircle], [SVGLine])? {
+        guard let data = svgString.data(using: .utf8) else { return nil }
+        let parser = XMLParser(data: data)
+        parser.delegate = self
+        if parser.parse() { return (circles, lines) }
+        return nil
+    }
+
+    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String: String] = [:]) {
+        if elementName == "circle" {
+            if let cx = attributeDict["cx"].flatMap(Double.init), let cy = attributeDict["cy"].flatMap(Double.init),
+               let r = attributeDict["r"].flatMap(Double.init), let fill = attributeDict["fill"] {
+                circles.append(SVGCircle(cx: CGFloat(cx), cy: CGFloat(cy), r: CGFloat(r), fill: fill))
+            }
+        } else if elementName == "line" {
+            if let x1 = attributeDict["x1"].flatMap(Double.init), let y1 = attributeDict["y1"].flatMap(Double.init),
+               let x2 = attributeDict["x2"].flatMap(Double.init), let y2 = attributeDict["y2"].flatMap(Double.init),
+               let stroke = attributeDict["stroke"] {
+                let width = attributeDict["stroke-width"].flatMap(Double.init) ?? 1.5
+                lines.append(SVGLine(x1: CGFloat(x1), y1: CGFloat(y1), x2: CGFloat(x2), y2: CGFloat(y2), stroke: stroke, strokeWidth: CGFloat(width)))
+            }
+        }
+    }
+}
+
+extension UIColor {
+    convenience init?(rgba: String) {
+        if rgba.hasPrefix("#") {
+            self.init(hex: rgba)
+        } else if rgba.hasPrefix("rgba(") {
+            let parts = rgba.dropFirst(5).dropLast(1).split(separator: ",").map { String($0).trimmingCharacters(in: .whitespaces) }
+            guard parts.count == 4, let r = Double(parts[0]), let g = Double(parts[1]), let b = Double(parts[2]), let a = Double(parts[3]) else { return nil }
+            self.init(red: r / 255, green: g / 255, blue: b / 255, alpha: a)
+        } else {
+            return nil
+        }
     }
 }
