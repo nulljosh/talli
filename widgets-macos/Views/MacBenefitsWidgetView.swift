@@ -53,6 +53,16 @@ struct MacBenefitsWidgetView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
+            if let income = entry.monthlyIncome {
+                Divider()
+                    .padding(.vertical, 4)
+                Text(income)
+                    .font(.body.bold().monospacedDigit())
+                Text("Monthly income")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
             Spacer()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -83,6 +93,12 @@ struct MacBenefitsWidgetView: View {
                 benefitColumn("Shelter", entry.shelterAmount, primary: false)
             }
 
+            if let income = entry.monthlyIncome {
+                Divider()
+                    .padding(.vertical, 4)
+                benefitColumn("Monthly income", income, primary: false)
+            }
+
             Spacer()
         }
         .redacted(reason: entry.isPlaceholder ? .placeholder : [])
@@ -108,6 +124,11 @@ struct MacBenefitsWidgetView: View {
             benefitRow("Total Payment", entry.paymentAmount, icon: "dollarsign.circle.fill")
             benefitRow("Support Allowance", entry.supportAmount, icon: "person.fill")
             benefitRow("Shelter Allowance", entry.shelterAmount, icon: "house.fill")
+
+            if let income = entry.monthlyIncome {
+                Divider()
+                benefitRow("Monthly income", income, icon: "banknote.fill")
+            }
 
             Divider()
 

@@ -40,11 +40,20 @@ struct MacBenefitsProvider: TimelineProvider {
             updated = "--"
         }
 
+        let monthlyIncome: String?
+        if let defaults = UserDefaults(suiteName: "group.com.heyitsmejosh.tally"),
+           let income = defaults.object(forKey: "widget_income_total") as? Double {
+            monthlyIncome = income.formatted(.currency(code: "CAD").precision(.fractionLength(0)))
+        } else {
+            monthlyIncome = nil
+        }
+
         return MacBenefitsEntry(
             date: .now,
             paymentAmount: summary?.payment.total ?? "--",
             supportAmount: summary?.payment.support ?? "--",
             shelterAmount: summary?.payment.shelter ?? "--",
+            monthlyIncome: monthlyIncome,
             lastUpdated: updated,
             isPlaceholder: false
         )

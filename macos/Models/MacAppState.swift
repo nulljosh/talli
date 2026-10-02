@@ -15,7 +15,16 @@ final class MacAppState {
     var username = ""
     var isLoading = false
     var errorMessage: String?
-    var dashboard: MacDashboardData?
+    var dashboard: MacDashboardData? {
+        didSet {
+            let shared = UserDefaults(suiteName: Constants.appGroup)
+            if let total = dashboard?.income?.totalMonthly {
+                shared?.set(total, forKey: "widget_income_total")
+            } else if dashboard == nil {
+                shared?.removeObject(forKey: "widget_income_total")
+            }
+        }
+    }
     var isOffline = false
     var selectedSection: AppSection = .dashboard
     var reportMonths: [String: String] = [:]

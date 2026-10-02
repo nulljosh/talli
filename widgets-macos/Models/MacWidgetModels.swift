@@ -46,6 +46,7 @@ struct MacBenefitsEntry: TimelineEntry {
     let paymentAmount: String
     let supportAmount: String
     let shelterAmount: String
+    let monthlyIncome: String?
     let lastUpdated: String
     let isPlaceholder: Bool
 
@@ -55,6 +56,7 @@ struct MacBenefitsEntry: TimelineEntry {
             paymentAmount: "$1,358.50",
             supportAmount: "$1,060.50",
             shelterAmount: "$298.00",
+            monthlyIncome: "$2,400.00",
             lastUpdated: "Today",
             isPlaceholder: true
         )
