@@ -8,6 +8,24 @@ ASC verified today: iOS 3.5.14 and macOS 3.5.6 READY_FOR_DISTRIBUTION. Revenue w
 
 # Talli Roadmap
 
+## Next: 4.0 and 5.0 (planned 2026-10-02)
+
+3.6.0 is in review on iPhone and Mac. Talli is free and stays free. The job is accuracy: what lands, when, and what you're allowed to earn.
+
+### 4.0: the whole money picture
+- [ ] Widgets for everyone. `/api/summary` reads one shared token and one cache key, so iPhone and Mac widgets only work for one account. Move it to the signed-in session (App Group carries a per-user token) and drop the shared key.
+- [ ] Yearly total includes GST/HST and other CRA payments on their real dates, not just PWD + CDB.
+- [ ] Real amounts. Read the PWD and CDB figures the portal and CRA actually paid instead of the default rates; fall back to defaults only when nothing is recorded.
+- [ ] Earnings exemption tracker. PWD lets you earn about $15k a year before a dollar-for-dollar clawback. Log earnings, show what's left of the exemption, warn before crossing it.
+- [ ] Asset limit tracker. PWD caps assets around $100k; RDSP doesn't count. Show where you stand.
+- [ ] Payday push without opening the app: a Workers Cron Trigger checks the portal and pushes new messages and the payday reminder (APNs key needed from Joshua).
+
+### 5.0: one tap, every device
+- [ ] File the monthly report from the reminder itself (notification action), PIN from Keychain.
+- [ ] Apple Watch app shipped inside the iPhone app, fed by the phone instead of a shared API token.
+- [ ] Year in review each January: every payment, every credit, ready for tax time.
+- [ ] Spanish, Tagalog, Arabic and Farsi on top of English, French, Chinese, Punjabi.
+
 ## Full cross-platform -- DONE 2026-08-31
 
 Talli is now a real app on all six platforms: native iOS and macOS (Swift), a
