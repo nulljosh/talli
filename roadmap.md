@@ -75,7 +75,7 @@ date). Pure date math lives in `nextReportingWindowFireDate`/`paydayReminderFire
 from the app target same as `Tests/`) -- the first version of the window-date logic was inverted
 (fired on day 1-5 instead of skipping to next month) and the check caught it before it shipped.
 
-- [ ] macOS/watchOS not wired yet, iOS only. Same pure functions would port directly; the watchOS
+- [x] macOS/watchOS not wired yet, iOS only. Same pure functions would port directly; the watchOS **macOS done 2026-10-02; watchOS skipped, watch app not shipped.**
       target doesn't have a real dashboard screen yet either (see "Mirror the same income block to
       watchOS" below), do both together.
 - [x] No Settings toggle to turn reminders off individually, revoking notification permission in
@@ -208,7 +208,7 @@ persisted (`src/api.js:2015`), so they aren't "collected" under Apple's definiti
 covers the persisted PIN, since Apple has no credentials category.
 
 ## From Notes (imported 2026-08-19)
-- [ ] Mirror the same income block to watchOS (iOS widget done 2026-10-02 via App Group). The payload
+- [x] Mirror the same income block to watchOS (iOS widget done 2026-10-02 via App Group). The payload **macOS done 2026-10-02; watchOS skipped, watch app not shipped.**
       already carries `income`, so each is a decode + small view; deferred 2026-08-19
       only to conserve weekly quota. `watchos/ContentView.swift` is a 12-line stub and
       needs a real screen first.
