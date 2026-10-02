@@ -9,7 +9,7 @@ final class MacScreenshot: XCTestCase {
 
     func testCaptureMacScreenshot() throws {
         let app = XCUIApplication()
-        app.launchArguments.append("UITEST_SNAPSHOT")
+        app.launchArguments += ["UITEST_SNAPSHOT", "-ApplePersistenceIgnoreState", "YES"]
         app.launch()
         app.activate()
         XCTAssertTrue(app.windows.firstMatch.waitForExistence(timeout: 20), "App window never appeared")

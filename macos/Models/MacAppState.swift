@@ -77,14 +77,23 @@ final class MacAppState {
     init() {
         if CommandLine.arguments.contains("UITEST_SNAPSHOT") {
             isAuthenticated = true
+            // Dates relative to today, so store shots never show a past payday
+            // or a stale-sync banner. Same as the iOS mock.
+            let day: (Int) -> String = { offset in
+                let d = Calendar.current.date(byAdding: .day, value: offset, to: Date())!
+                return d.formatted(Date.ISO8601FormatStyle(timeZone: .current).year().month().day())
+            }
             dashboard = MacDashboardData(
                 paymentAmount: "$1,080.00",
-                nextPaymentDate: "2026-07-25",
+                nextPaymentDate: day(18),
                 statusMessages: [
-                    .init(text: "Your monthly report has been received.", timestamp: "2026-06-02"),
-                    .init(text: "PWD application resubmitted.", timestamp: "2026-06-19")
+                    .init(text: "Your monthly report has been received.", timestamp: day(-1)),
+                    .init(text: "PWD application resubmitted.", timestamp: day(-12))
                 ]
             )
+            lastSyncDate = Date()
+            let c = Calendar.current
+            reportMonths = [String(format: "%04d-%02d", c.component(.year, from: Date()), c.component(.month, from: Date())): "filed"]
             return
         }
         startNetworkMonitoring()
