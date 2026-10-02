@@ -268,8 +268,8 @@ a scratch dir and diff; the `actions[].status` field is the only truth.
 - [ ] Playwright QA against myselfserve.gov.bc.ca. Confirm Talli syncs completely with it (screenshot notes/attachments/2026-10-01/talli-1.png: 2026 Annual Earnings Exemption balance $10800.00; Oct 21 2026 payment $1535.50 = Support $983.50 + Shelter rent $500.00 + Transportation supplement $52.00; previous payment Sep 23 2026 $1535.50 direct deposit). BLOCKED: needs Joshua's login, do not store credentials.
 
 ## Ingested 2026-10-02
-- [ ] Remove the share button.
-- [ ] Personal information in Settings should be stored securely, not in a plain text field.
-- [ ] After typing in the SIN, the keypad cannot be dismissed.
-- [ ] Home view needs simplifying. "Paid yet" should not sit inline; move it to the top right.
-- [ ] QA messages and confirm they are syncing.
+- [x] Remove the share button. Already gone on web, iOS and macOS since cf1ef23; nothing left to strip.
+- [x] Personal information in Settings should be stored securely, not in a plain text field. SIN, phone and PIN were already Keychain-only; phone is now a masked SecureField too (iOS build green).
+- [x] After typing in the SIN, the keypad cannot be dismissed. Settings now has a keyboard Done button and drag-to-dismiss (iOS build green; macOS has no SIN field, web uses the system keyboard).
+- [x] Home view needs simplifying. "Paid yet" should not sit inline; move it to the top right. Now a compact pill in the payment card's top right (iOS build green; not eyeballed on a simulator yet).
+- [ ] QA messages and confirm they are syncing. Read-messages, parse and pagination tests pass (32/32) and /api/read-messages is live (401 without a session). Still needs a real logged-in check: read a message on iPhone, confirm it shows read on web.

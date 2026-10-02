@@ -16,7 +16,7 @@ struct SettingsView: View {
                 HStack(spacing: 14) {
                     avatarButton
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(appState.username ?? "—")
+                        Text(appState.username ?? "-")
                             .font(.body.weight(.semibold))
                         Text("BC Self-Serve")
                             .font(.caption)
@@ -31,7 +31,7 @@ struct SettingsView: View {
                     Text("Account")
                         .foregroundStyle(.secondary)
                     Spacer()
-                    Text(appState.username ?? "—")
+                    Text(appState.username ?? "-")
                         .foregroundStyle(.primary)
                 }
             }
@@ -47,6 +47,7 @@ struct SettingsView: View {
             }
         }
         .navigationTitle("Settings")
+        .scrollDismissesKeyboard(.interactively)
         // Clear the FloatingTabBar capsule, same inset MessagesView uses.
         .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 90) }
     }
@@ -99,7 +100,7 @@ private struct PersonalInfoSection: View {
             }
 
             field("Phone Number", validation: phoneValidationMessage) {
-                TextField("Phone", text: $phone)
+                SecureField("Phone", text: $phone)
                     .keyboardType(.phonePad)
                     .onChange(of: phone) { _, newValue in
                         phone = PersonalInfo.formatPhone(newValue)
@@ -119,6 +120,15 @@ private struct PersonalInfoSection: View {
             Text("Used to file your monthly report. Stored only in this device's keychain.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
+        }
+        .toolbar {
+            // Number pads have no return key, so give them a way out.
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }
+            }
         }
         .onAppear {
             sin = KeychainHelper.loadReportSIN() ?? ""

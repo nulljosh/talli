@@ -259,7 +259,6 @@ private struct DashboardScreen: View {
                     paymentProgress
                 }
                 incomeBreakdown
-                paidToggle
                 dateCard
                 ApplicationTimelinesCard(pwdSteps: pwdSteps, dtcSteps: dtcSteps)
                 craPayments
@@ -314,6 +313,7 @@ private struct DashboardScreen: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 20)
         .padding(.vertical, 12)
+        .overlay(alignment: .topTrailing) { paidToggle.padding(12) }
         .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
     }
 
@@ -398,8 +398,8 @@ private struct DashboardScreen: View {
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(appState.isPaid ? Color.talliBlue : .primary)
                 }
-                .padding(.horizontal, 18)
-                .padding(.vertical, 10)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
                 .background(Capsule().strokeBorder(appState.isPaid ? Color.talliBlue.opacity(0.5) : Color.secondary.opacity(0.3), lineWidth: 1))
             }
             .buttonStyle(.plain)
