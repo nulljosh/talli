@@ -72,3 +72,7 @@ npm run upload-blob # upload to Vercel Blob
 - [x] Upload attempt #1 (before the App Group fix): failed with errors 90345 + 90348.
 - [x] Upload attempt #2 (after the App Group fix): 90345 is **gone**, confirms the App Group mismatch was the real cause of that one. **90348 still persists.**
 - [ ] **90348 needs the Apple validation email**, no detail text available via the public API or the authenticated `asc web` session either (checked both 2026-07-21). Not blindly guessable further; check trommatic@icloud.com for Apple's ITMS validation message, then resume: `asc builds upload --app 6782366555 --pkg ".asc/artifacts/TalliMacMerged2Export/Talli.pkg" --version "3.5.6" --build-number "<new>"`.
+
+## The loop
+
+See `docs/LOOP-HANDOFF.md` for the running loop toward 10.0: RDSP grant tracker, supplements calendar, missed-payment alerts, document vault, and more. Payday push (4.0) blocked on Joshua's APNs key.
