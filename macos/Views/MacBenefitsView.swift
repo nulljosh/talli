@@ -22,9 +22,17 @@ struct MacBenefitsView: View {
                 }
                 if let year = income.yearTotal, let left = income.yearRemaining, let n = income.paymentsLeft, year > 0 {
                     let cad = FloatingPointFormatStyle<Double>.Currency(code: "CAD").precision(.fractionLength(0))
-                    Text("\(year.formatted(cad)) this year, \(left.formatted(cad)) still to come (\(n) \(n == 1 ? "payday" : "paydays"))")
+                    Text("\(year.formatted(cad)) this year at today's rate: \((year - left).formatted(cad)) in, \(left.formatted(cad)) to come")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
+                }
+
+                if let earnings = appState.earnings, let exemption = earnings.exemption, exemption > 0, let earned = earnings.earned, let left = earnings.left, let y = earnings.year {
+                    let cad = FloatingPointFormatStyle<Double>.Currency(code: "CAD").precision(.fractionLength(0))
+                    let isOver = (earnings.over ?? 0) > 0
+                    Text("Work earnings \(y): \(earned.formatted(cad)) of \(exemption.formatted(cad)), \(left.formatted(cad)) left")
+                        .font(.footnote)
+                        .foregroundStyle(isOver ? .red : .secondary)
                 }
             }
             .padding(16)

@@ -54,6 +54,14 @@ final class MacAppState {
         !pwdApproved && Calendar.current.component(.day, from: Date()) <= 5
     }
 
+    var income: MacDashboardData.Income? {
+        dashboard?.income
+    }
+
+    var earnings: MacDashboardData.Earnings? {
+        dashboard?.earnings
+    }
+
     private let monitor = NWPathMonitor()
     private let monitorQueue = DispatchQueue(label: "com.jt.talli.mac.network")
 

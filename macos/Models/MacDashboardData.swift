@@ -26,23 +26,34 @@ struct MacDashboardData: Codable, Sendable {
         let paymentsLeft: Int?
     }
 
+    struct Earnings: Codable, Sendable {
+        let year: Int?
+        let earned: Double?
+        let exemption: Double?
+        let left: Double?
+        let over: Double?
+    }
+
     let paymentAmount: String?
     let nextPaymentDate: String?
     let statusMessages: [StatusMessage]
     let income: Income?
+    let earnings: Earnings?
 
     enum CodingKeys: String, CodingKey {
         case paymentAmount = "payment_amount"
         case nextPaymentDate = "next_date"
         case statusMessages = "messages"
         case income
+        case earnings
     }
 
-    init(paymentAmount: String?, nextPaymentDate: String?, statusMessages: [StatusMessage], income: Income? = nil) {
+    init(paymentAmount: String?, nextPaymentDate: String?, statusMessages: [StatusMessage], income: Income? = nil, earnings: Earnings? = nil) {
         self.paymentAmount = paymentAmount
         self.nextPaymentDate = nextPaymentDate
         self.statusMessages = statusMessages
         self.income = income
+        self.earnings = earnings
     }
 
     init(from decoder: Decoder) throws {
@@ -50,6 +61,7 @@ struct MacDashboardData: Codable, Sendable {
         paymentAmount = try container.decodeIfPresent(String.self, forKey: .paymentAmount)
         nextPaymentDate = try container.decodeIfPresent(String.self, forKey: .nextPaymentDate)
         income = try container.decodeIfPresent(Income.self, forKey: .income)
+        earnings = try container.decodeIfPresent(Earnings.self, forKey: .earnings)
 
         if let stringMessages = try? container.decode([String].self, forKey: .statusMessages) {
             statusMessages = stringMessages.map { StatusMessage(text: $0) }

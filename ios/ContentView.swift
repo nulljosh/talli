@@ -281,7 +281,17 @@ private struct DashboardScreen: View {
                     HStack {
                         Text("This year").foregroundStyle(.secondary)
                         Spacer()
-                        Text("\(appState.moneyText(year)), \(appState.moneyText(left)) still to come (\(n))").fontWeight(.semibold)
+                        Text("\(appState.moneyText(year)) at today's rate: \(appState.moneyText(year - left)) in, \(appState.moneyText(left)) to come").fontWeight(.semibold)
+                    }
+                    .font(.footnote)
+                }
+
+                if let earnings = appState.earnings, let exemption = earnings.exemption, exemption > 0, let earned = earnings.earned, let left = earnings.left, let y = earnings.year {
+                    let isOver = (earnings.over ?? 0) > 0
+                    HStack {
+                        Text("Work earnings \(y)").foregroundStyle(.secondary)
+                        Spacer()
+                        Text("\(appState.moneyText(earned)) of \(appState.moneyText(exemption)), \(appState.moneyText(left)) left").fontWeight(.semibold).foregroundStyle(isOver ? .red : .primary)
                     }
                     .font(.footnote)
                 }

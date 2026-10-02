@@ -2074,7 +2074,7 @@ app.get('/api/check', scrapeLimiter, requireAuth, async (req, res) => {
 
 // ── Mobile API ──────────────────────────────────────────────────────────────
 
-function extractMobileData(scraperResult, income = null) {
+function extractMobileData(scraperResult, income = null, earnings = null) {
   const sections = scraperResult?.sections || {};
 
   // Extract payment amount from Payment Info tableData
@@ -2109,6 +2109,7 @@ function extractMobileData(scraperResult, income = null) {
   return {
     payment_amount: derivedAmount || paymentAmount,
     income,
+    earnings,
     next_date: nextDate,
     messages,
     // First page only -- the portal hides older rows behind "Show More Messages".
@@ -2127,7 +2128,8 @@ app.get('/api/mobile', requireAuth, async (req, res) => {
     const pwdProfile = await loadUserBlob(userId, 'pwd-profile', {}).catch(() => ({}));
     const cdbProfile = await loadUserBlob(userId, 'cdb-profile', {}).catch(() => ({}));
     const cgebProfile = await loadUserBlob(userId, 'cgeb-profile', null).catch(() => null);
-    res.json(extractMobileData(result?.data || null, deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile)));
+    const earnings = deriveEarnings(await loadUserBlob(userId, 'earnings-profile', null).catch(() => null));
+    res.json(extractMobileData(result?.data || null, deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile), earnings));
   } catch (error) {
     console.error('[API] /api/mobile error:', error);
     res.status(500).json({ error: safeApiError(error, 'Failed to load data') });
