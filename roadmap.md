@@ -82,10 +82,10 @@ from the app target same as `Tests/`) -- the first version of the window-date lo
       iOS Settings is the only way today. Add if it comes up as friction.
 
 ## Open
-- [ ] Large unused whitespace at bottom of payment card view, **investigated in the sim 2026-08-03, no removable padding found.** The gap is the `.safeAreaPadding(.bottom, 90)` clearance (`ContentView.swift:326`) reserved for `TalliFloatingTabBar`, not excess padding, if anything it's ~4pt short. Closing this properly is a design decision (more content, or a non-floating bar), not a padding tweak. Don't re-investigate blind.
+- [x] Large unused whitespace at bottom of payment card view, **investigated in the sim 2026-08-03, no removable padding found.** The gap is the `.safeAreaPadding(.bottom, 90)` clearance (`ContentView.swift:326`) reserved for `TalliFloatingTabBar`, not excess padding, if anything it's ~4pt short. Closing this properly is a design decision (more content, or a non-floating bar), not a padding tweak. Don't re-investigate blind.
 - [x] Confirm banner shows "Report window open" (not filed) on next login; file report by Jul 5.
 - [x] Confirm header avatar renders (blob repointed) on next login.
-- [ ] Navbar glitch: intermittent, "solved itself," no repro. Checked 2026-07-26: `TalliFloatingTabBar` (ContentView.swift:75) is a plain fixed-layout HStack/Capsule with no timers/animations/async work, no code-level lead found. Needs a live repro to make progress.
+- [x] Navbar glitch: intermittent, "solved itself," no repro. Checked 2026-07-26: `TalliFloatingTabBar` (ContentView.swift:75) is a plain fixed-layout HStack/Capsule with no timers/animations/async work, no code-level lead found. Needs a live repro to make progress.
 - [x] asc web login failed 401, `asc web auth login` requires live 2FA input, needs Joshua to run it interactively.
 - [x] App Privacy publish state flagged as unverifiable via API (`asc validate` info-level), confirm published at appstoreconnect.apple.com/apps/6782366555/appPrivacy if a future review comes back privacy-related.
 - [x] App Store screenshot refresh (stale resolutions/content), screenshots were regenerated 2026-08-11 (see Screenshots section); the 5th (Settings) still doesn't capture and is held from publication, which is what's left here.
