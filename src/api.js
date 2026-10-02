@@ -16,6 +16,7 @@ const { attemptHttpLogin, fetchAllSections } = require('./http-scraper');
 const widgetToken = require('./widget-token');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { nextPaymentDate } = require('./pay-dates');
+const { deriveHousehold, cleanHousehold, withRentHistory } = require('./programs/household');
 const { listRequests } = require('./programs/requests');
 const { draftReply } = require('./programs/reply');
 const { deriveReconsideration } = require('./programs/reconsideration');
@@ -1258,7 +1259,7 @@ app.get('/api/latest', requireAuth, async (req, res) => {
       cdbRetroactiveEligible: cdbProfile.retroactiveEligible || false,
       cgeb: cgebProfile,
       income: deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile),
-      earnings: deriveEarnings(earningsProfile),
+      earnings: deriveEarnings(earningsProfile, new Date(), (await loadUserBlob(userId, 'household-profile', {}).catch(() => ({}))).type || 'single'),
       assets: deriveAssets(await loadUserBlob(userId, 'assets-profile', null).catch(() => null)),
       yearReview: deriveYearReview({ pwd: pwdProfile, cdb: cdbProfile, cgeb: cgebProfile, earnings: earningsProfile }),
     };
@@ -1909,6 +1910,35 @@ async function benefitFinderFor(userId, posted) {
 // rdsp-profile blob as the application status, so nothing else has to change.
 const rdspShape = (profile) => ({ profile: cleanRdsp(profile), derived: deriveRdsp(profile) });
 
+// My household (src/programs/household.js): family type, children and rent. `actual`
+// is what the portal says BC pays, passed by the client so the check needs no scrape.
+app.get('/api/household', requireAuth, async (req, res) => {
+  try {
+    const saved = await loadUserBlob(req.session?.userId, 'household-profile', {});
+    const cached = await fetchOrLoadData(req, { allowLiveScrape: false }).catch(() => null);
+    const actual = Number(req.query.actual) || portalPwd(cached?.data) || null;
+    res.json({ profile: cleanHousehold(saved), derived: deriveHousehold(saved, { actual }) });
+  } catch (err) {
+    log('[HOUSEHOLD] GET error:', err.message);
+    res.json({ profile: cleanHousehold({}), derived: null });
+  }
+});
+
+app.post('/api/household', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    const existing = await loadUserBlob(userId, 'household-profile', {});
+    const next = withRentHistory(existing, { ...cleanHousehold(existing), ...req.body });
+    if (!next.type) return res.status(400).json({ error: 'Pick your household type' });
+    await saveUserBlob(userId, 'household-profile', next);
+    const cached = await fetchOrLoadData(req, { allowLiveScrape: false }).catch(() => null);
+    res.json({ profile: next, derived: deriveHousehold(next, { actual: portalPwd(cached?.data) || null }) });
+  } catch (err) {
+    log('[HOUSEHOLD] POST error:', err.message);
+    res.status(500).json({ error: 'Failed to save household' });
+  }
+});
+
 // Service requests (src/programs/requests.js): what to say and have ready for the common asks.
 app.get('/api/requests', requireAuth, (req, res) => res.json({ requests: listRequests() }));
 
@@ -2393,7 +2423,7 @@ app.get('/api/mobile', requireAuth, async (req, res) => {
     const cdbProfile = await loadUserBlob(userId, 'cdb-profile', {}).catch(() => ({}));
     const cgebProfile = await loadUserBlob(userId, 'cgeb-profile', null).catch(() => null);
     const earningsProfile = await loadUserBlob(userId, 'earnings-profile', null).catch(() => null);
-    const earnings = deriveEarnings(earningsProfile);
+    const earnings = deriveEarnings(earningsProfile, new Date(), (await loadUserBlob(userId, 'household-profile', {}).catch(() => ({}))).type || 'single');
     const assets = deriveAssets(await loadUserBlob(userId, 'assets-profile', null).catch(() => null));
     const yearReview = deriveYearReview({ pwd: pwdProfile, cdb: cdbProfile, cgeb: cgebProfile, earnings: earningsProfile, portalPwd: portalPwd(result?.data) });
     res.json(extractMobileData(result?.data || null, deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile, portalPwd(result?.data)), earnings, assets, yearReview));

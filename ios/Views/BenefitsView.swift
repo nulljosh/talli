@@ -22,6 +22,12 @@ struct BenefitsView: View {
                 .font(.headline)
                 .padding(.top, 8)
 
+                DisclosureGroup("My household and rent") {
+                    HouseholdView { try await APIClient.shared.household(save: $0) }
+                        .padding(.top, 8)
+                }
+                .font(.headline)
+
                 DisclosureGroup("Service requests") {
                     ServiceRequestsView { try await APIClient.shared.serviceRequests() }
                         .padding(.top, 8)

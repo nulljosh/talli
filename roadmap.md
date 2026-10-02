@@ -15,15 +15,10 @@ ASC verified today: iOS 3.5.14 and macOS 3.5.6 READY_FOR_DISTRIBUTION. Revenue w
 ### 4.0: the whole money picture
 - [ ] Payday push without opening the app: a Workers Cron Trigger checks the portal and pushes new messages and the payday reminder (APNs key needed from Joshua).
 
-### 7.0: paperwork done for you
-- [x] (2026-10-02, web/iOS/macOS) Message replies from Talli: answer a ministry message without opening My Self Serve.
-- [x] (2026-10-02, web/iOS/macOS) Service requests: start the common ones (crisis supplement, address change, shelter update) from the app.
-- [x] (2026-10-02, web/iOS/macOS) Reconsideration helper: denied? Walk the 20-business-day deadline with a checklist and a draft letter.
-
 ### 8.0: the whole household
-- [ ] Couples and families: two-adult PWD rates, spouse earnings, dependants, shared exemption math.
+- [x] (2026-10-02, web/iOS/macOS) Couples and families: two-adult PWD rates, spouse earnings, dependants, shared exemption math.
 - [ ] Trusted helper: share read-only access with a caseworker, advocate or family member, revocable any time.
-- [ ] Rent and shelter: log rent changes, see the shelter maximum, flag when the shelter amount is wrong.
+- [x] (2026-10-02, web/iOS/macOS) Rent and shelter: log rent changes, see the shelter maximum, flag when the shelter amount is wrong.
 
 ### 9.0: plan ahead
 - [ ] What-if: "if I take this job at 20 hours a week", see the exemption, clawback and take-home month by month.

@@ -204,6 +204,13 @@ final class APIClient: @unchecked Sendable {
         return data
     }
 
+    func household(save: HouseholdRequest?) async throws -> Household {
+        if let save {
+            return try await send(path: "api/household", method: "POST", body: save, responseType: Household.self)
+        }
+        return try await send(path: "api/household", responseType: Household.self)
+    }
+
     func serviceRequests() async throws -> ServiceRequests {
         try await send(path: "api/requests", responseType: ServiceRequests.self)
     }

@@ -174,18 +174,19 @@ function deriveYearReview({ pwd, cdb, cgeb, earnings, portalPwd = null }, now = 
   };
 }
 
-// BC's annual earnings exemption for a single person with PWD: earn up to this
-// in a calendar year and assistance doesn't change. Past it, clawback starts.
+// BC's annual earnings exemption on PWD: earn up to this in a calendar year and
+// assistance doesn't change. Past it, assistance drops by the amount over. It is
+// shared across a couple. Not published here for single parents, so that is null.
 // Add each year when BC posts it (gov.bc.ca "Annual earnings exemption").
-const EARNINGS_EXEMPTION = { 2026: 16200 };
+const EARNINGS_EXEMPTION = { 2026: { single: 16200, couple_one: 23400, couple_both: 32400 } };
 
 // Entries are {date: 'YYYY-MM-DD', amount}. Null exemption = year not posted yet.
-function deriveEarnings(earningsProfile, now = new Date()) {
+function deriveEarnings(earningsProfile, now = new Date(), household = 'single') {
   const year = now.getFullYear();
   const earned = Math.round((earningsProfile?.entries || [])
     .filter((e) => String(e.date).startsWith(String(year)))
     .reduce((a, e) => a + (Number(e.amount) || 0), 0) * 100) / 100;
-  const exemption = EARNINGS_EXEMPTION[year] ?? null;
+  const exemption = EARNINGS_EXEMPTION[year]?.[household] ?? null;
   return { year, earned, exemption, left: exemption == null ? null : Math.max(0, exemption - earned), over: exemption != null && earned > exemption };
 }
 

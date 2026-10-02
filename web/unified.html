@@ -904,6 +904,77 @@ function RequestsTool({dark}) {
   );
 }
 
+// My household: couples, families, rent and shelter. Table figures and the check: src/programs/household.js.
+const HOUSEHOLD_TYPES = [['single','Just me'],['couple_one','Couple, one of us on PWD'],['couple_both','Couple, both on PWD'],['single_parent','Single parent']];
+
+function HouseholdTool({dark}) {
+  const t = tk(dark);
+  const T = window.I18N.t;
+  const [data, setData] = useState(null);
+  const [form, setForm] = useState({type:'', children:0, rent:''});
+  const [editing, setEditing] = useState(false);
+  const usd = (n) => '$' + (Math.round(n*100)/100).toLocaleString(undefined,{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2});
+  const take = (d) => { setData(d); setForm({type:d.profile.type||'', children:d.profile.children||0, rent:d.profile.rent||''}); };
+  useEffect(() => { fetch('/api/household', {credentials:'include'}).then(r=>r.json()).then(take).catch(()=>{}); }, []);
+  if (!data) return <Skel w="100%" h={90} r={12} dark={dark}/>;
+  const save = async () => {
+    try { const r = await fetch('/api/household', {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:form.type, children:+form.children||0, rent:+form.rent||null})}); if (r.ok) { take(await r.json()); setEditing(false); } } catch (e) {}
+  };
+  const label = {fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:14};
+  const card = {padding:'16px 18px',background:t.bg2,borderRadius:12,border:`1px solid ${t.border}`};
+  const input = {width:'100%',boxSizing:'border-box',padding:'10px 12px',borderRadius:8,border:`1px solid ${t.border2}`,background:'transparent',color:t.text,fontSize:14,fontFamily:'inherit',marginTop:4};
+  const pill = (solid) => ({padding:'9px 16px',borderRadius:100,background:solid?t.accent:'transparent',color:solid?'#fff':t.muted,border:solid?'none':`1px solid ${t.border2}`,fontSize:13,fontWeight:600,fontFamily:'inherit',cursor:'pointer'});
+  const d = data.derived;
+  if (!d || editing) return (
+    <div>
+      <div style={label}>{T('My household')}</div>
+      <div style={card}>
+        <div style={{fontSize:17,fontWeight:700,letterSpacing:'-0.3px',color:t.text}}>{T('Who is in your household?')}</div>
+        <div style={{display:'flex',flexDirection:'column',gap:6,marginTop:12}}>
+          {HOUSEHOLD_TYPES.map(([id, text]) => { const on = form.type === id; return <button key={id} onClick={()=>setForm({...form,type:id})} aria-pressed={on} style={{textAlign:'start',padding:'11px 14px',borderRadius:10,background:on?`${t.accent}18`:'transparent',border:`1px solid ${on?t.accent:t.border2}`,color:t.text,fontSize:13,fontFamily:'inherit',cursor:'pointer'}}>{T(text)}</button>; })}
+        </div>
+        {form.type && form.type !== 'single' && <label style={{display:'block',fontSize:11,color:t.muted,marginTop:12}}>{T('Children living with you')}<input inputMode="numeric" value={form.children} onChange={e=>setForm({...form,children:e.target.value})} style={input}/></label>}
+        <label style={{display:'block',fontSize:11,color:t.muted,marginTop:12}}>{T('Your rent a month')} ($)<input inputMode="decimal" value={form.rent} onChange={e=>setForm({...form,rent:e.target.value})} style={input}/></label>
+        <div style={{display:'flex',gap:8,marginTop:14}}>
+          <button onClick={save} disabled={!form.type} style={{...pill(true),opacity:form.type?1:0.5}}>{T('Save')}</button>
+          {editing && <button onClick={()=>setEditing(false)} style={pill(false)}>{T('Cancel')}</button>}
+        </div>
+      </div>
+    </div>
+  );
+  const row = (name, val, strong) => <div style={{display:'flex',justifyContent:'space-between',fontSize:13,padding:'5px 0',color:strong?t.text:t.mutedMid,fontWeight:strong?700:400}}><span>{name}</span><span style={{color:t.text,fontWeight:strong?700:600}}>{val}</span></div>;
+  return (
+    <div style={{animation:'fadeIn 0.2s ease both'}}>
+      <div style={label}>{T('My household')}</div>
+      {d.mismatch && <div style={{padding:'13px 14px',borderRadius:10,background:`${t.warning}14`,border:`1px solid ${t.warning}40`,marginBottom:12}}>
+        <div style={{fontSize:13,fontWeight:700,color:t.warning}}>{T('Your cheque is off from the table')}</div>
+        <div style={{fontSize:13,color:t.text,marginTop:4,lineHeight:1.5}}>{T('My Self Serve says')} {usd(d.mismatch.actual)}. {T('The table says')} {usd(d.mismatch.expected)} {T('for your household and rent.')}</div>
+        <div style={{fontSize:12,color:t.mutedMid,marginTop:8,lineHeight:1.5,padding:'8px 10px',borderRadius:8,border:`1px solid ${t.border2}`}}>{d.say}</div>
+        <a href="tel:1-866-866-0800" style={{...pill(true),textDecoration:'none',display:'inline-block',marginTop:10,padding:'6px 14px',fontSize:12}}>{T('Call')} 1-866-866-0800</a>
+      </div>}
+      <div style={card}>
+        {row(T('Support allowance'), usd(d.support))}
+        {row(d.rent==null?T('Shelter, up to'):T('Shelter paid'), usd(d.shelter.paid ?? d.shelter.max))}
+        {row(T('Bus supplement'), '+' + usd(d.transport))}
+        {row(d.rent==null?T('Most you can get'):T('Per month by the table'), usd(d.rent==null?d.monthlyMax:d.expected), true)}
+        {d.youCover>0 && <div style={{fontSize:12,color:t.warning,fontWeight:600,marginTop:6}}>{T('Your rent is')} {usd(d.youCover)} {T('over the shelter maximum. That part comes out of your support.')}</div>}
+        <div style={{fontSize:11,color:t.muted,marginTop:8,lineHeight:1.5}}>{T('Shelter is paid between')} {usd(d.shelter.min)} {T('and')} {usd(d.shelter.max)} {T('for a household of')} {d.unit}.</div>
+      </div>
+      <div style={{...card,marginTop:12}}>
+        <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:6}}>{T('Work earnings')}</div>
+        <div style={{fontSize:13,color:t.text,lineHeight:1.5}}>{d.earningsExemption!=null ? <>{T('You can earn')} <b>{usd(d.earningsExemption)}</b> {T('this year before your payment drops.')}{d.shared&&<> {T('The limit is shared by the two of you, so log both of your earnings.')}</>}</> : T('Ask the ministry what your yearly earnings limit is. Talli does not have it for single parents.')}</div>
+      </div>
+      {d.history.length>0 && <div style={{...card,marginTop:12}}>
+        <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:6}}>{T('Rent changes')}</div>
+        {d.history.slice().reverse().slice(0,5).map(h=><div key={h.date} style={{display:'flex',justifyContent:'space-between',fontSize:12,color:t.mutedMid,padding:'3px 0'}}><span>{new Date(h.date+'T12:00:00').toLocaleString('en-CA',{month:'short',day:'numeric',year:'numeric'})}</span><span style={{color:t.text,fontWeight:600}}>{usd(h.rent)}</span></div>)}
+        <div style={{fontSize:11,color:t.muted,marginTop:6}}>{T('When your rent changes, update it here and tell the ministry.')}</div>
+      </div>}
+      <div style={{fontSize:11,color:t.muted,marginTop:12,lineHeight:1.5}}>{T('From the ministry rate table of December 1, 2025. Your cheque stub is the truth.')}</div>
+      <button onClick={()=>setEditing(true)} style={{marginTop:10,background:'none',border:'none',padding:0,color:t.muted,fontSize:12,fontWeight:600,fontFamily:'inherit',cursor:'pointer'}}>{T('Change my household or rent')}</button>
+    </div>
+  );
+}
+
 // One quiet line per section; the full section opens on tap. Keeps Status and Calendar short.
 function FoldBox({dark, title, summary, open, setOpen, children}) {
   const t = tk(dark);
@@ -1661,6 +1732,9 @@ function BenniesSection({dark}) {
 
       <FoldTool dark={dark} title="RDSP grants and bonds" url="/api/rdsp-tracker" summarize={d=>d.derived?(d.derived.eligible?'$'+Math.round(d.derived.missing).toLocaleString()+' still on the table this year':'Grants stop after the year you turn 49'):'See what your RDSP is owed'}>
         <RdspTracker dark={dark}/>
+      </FoldTool>
+      <FoldTool dark={dark} title="My household and rent" url="/api/household" summarize={d=>d.derived?(d.derived.mismatch?'Your cheque is off from the table':(d.derived.rent==null?'Add your rent':'Rent '+'$'+Math.round(d.derived.rent).toLocaleString()+' a month')):'Couple, family or single: see your table amounts'}>
+        <HouseholdTool dark={dark}/>
       </FoldTool>
       <FoldTool dark={dark} title="Service requests" url="/api/requests" summarize={()=>'Crisis supplement, new address, rent change and more'}>
         <RequestsTool dark={dark}/>
