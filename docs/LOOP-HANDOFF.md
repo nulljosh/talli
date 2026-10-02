@@ -1,31 +1,32 @@
-# Talli loop handoff (2026-10-02, late evening, loop stopped)
+# Talli loop handoff (2026-10-02, live)
 
 ## What the loop is
 
-Roadmap to 10.0: take the next unchecked item, ship it on web/iOS/macOS, tests green, commit+push, check it off, release as you go. Skip items blocked on Joshua and note them.
+Roadmap to 10.0: take the next unchecked item, ship it on web/iOS/macOS, tests green, commit+push, check it off, release as you go. Skip items blocked on Joshua and note them. Keep the UI super simple: every new tool is one folded line that opens on tap. At the end submit one fresh native build to App Store review.
 
 ## Where things stand
 
-Five releases shipped today (3.7.0-3.11.0): monthly report filing from notification, Apple Watch app embedded (WatchConnectivity), year in review CSV, Spanish/Tagalog/Arabic/Farsi with right-to-left layout, benefit finder, RDSP grant and bond tracker, supplements calendar with reminders, missed-payment alerts with steps and ministry words, simplified UI timelines, document vault (PWD letter, medical report, ID, lease, encrypted PBKDF2+AES-256-GCM). Payday push (4.0) remains blocked on Joshua's APNs key. Loop stopped per Joshua's request.
+Eleven releases shipped (3.7.0-3.16.0): report from notification, Watch app, year-in-review CSV, four languages, benefit finder, RDSP tracker, supplements calendar, missed-payment alert, simplified UI (one-line tool folds), document vault, reconsideration helper (20-day counter, 8-step checklist, draft letter), message replies (draft answers), service requests (crisis supplement, address, rent, missing cheque), household tracker (couples rates, shared earnings limits in 2026), trusted helper (90-day revocable read-only links, token hash, auto-kill). Status tab tools are now all one-line folds. Sections 7.0 and 8.0 complete. Payday push (4.0) remains blocked on Joshua's APNs key.
 
 ## Next, in order
 
-1. Message replies from Talli: answer a ministry message without opening My Self Serve
-2. Service requests: crisis supplement, address change, shelter update started from app
-3. Reconsideration helper: denied? Walk the 20-business-day deadline with checklist and draft letter
-4. Couples and families: two-adult PWD rates, spouse earnings, dependants, shared exemption math
-5. Trusted helper: share read-only access with a caseworker, advocate, family member
-6. Rent and shelter: log rent changes, see shelter maximum, flag when wrong
-7. What-if scenarios: try job options, see exemption/clawback/take-home by month
+1. What-if job calculator: try "20 hours a week", see exemption, clawback, take-home by month
+2. Moving out of BC or turning 65: what changes (OAS/GIS), when, what to file
+3. Budget against real paydays: bills on calendar next to the money that pays them
+4. Alberta AISH and Ontario ODSP data files and tracking
+5. Federal-only mode for CDB/GST/Dental only users
+6. Open data API: publish pay dates and rate tables
+7. Final UI pass: group Status tools under three themed rows (keeps super simple)
+8. Fresh native build to App Store review
 
-Payday push (4.0) blocked on Joshua's APNs key. Provinces outside BC (8.0-10.0) are future roadmap.
+Blocked on Joshua's APNs key.
 
 ## Restart prompt
 
 ```
-/loop Talli roadmap to 10.0: in ~/Documents/Code/talli, take the next unchecked roadmap.md item (message replies), ship it on web/iOS/macOS, tests green, commit+push, check it off, release as you go. Skip items blocked on Joshua (APNs key) and note them. QA every item as we go (sims, render checks, real numbers) before checking it off.
+/loop Talli roadmap to 10.0: in ~/Documents/Code/talli, take the next unchecked roadmap.md item (what-if), ship it on web/iOS/macOS, tests green, commit+push, check it off, release as you go. Skip items blocked on Joshua (APNs key) and note them. QA every item as we go (sims, render checks, real numbers) before checking it off. Keep the UI super simple: every new tool is one folded line that opens on tap. At the end submit one fresh native build to App Store review.
 ```
 
 ## Release cadence
 
-Releases tagged on GitHub when roadmap items ship. Latest: 3.11.0 shipped 2026-10-02. Next: 3.12.0 for message replies, 4.0.0 for payday push once APNs arrives.
+Releases tagged on GitHub when roadmap items ship. Latest: 3.16.0 shipped 2026-10-02. Next: 3.17.0 for what-if, 4.0.0 for payday push once APNs arrives.
