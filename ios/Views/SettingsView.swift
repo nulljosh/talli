@@ -1,9 +1,18 @@
 import SwiftUI
+import UserNotifications
 
 struct SettingsView: View {
     @Environment(AppState.self) private var appState
     @AppStorage("app_theme") private var rawTheme = "system"
+    @AppStorage("notifications_payday_enabled") private var paydayNotificationsEnabled = true
+    @AppStorage("notifications_reporting_window_enabled") private var reportingWindowNotificationsEnabled = true
     @State private var isGeneratingAvatar = false
+
+    // Turning one off takes effect now; turning it back on waits for the next
+    // reschedule, which runs on every data refresh.
+    private func cancelReminder(_ id: String) {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id])
+    }
 
     var body: some View {
         List {
@@ -37,6 +46,17 @@ struct SettingsView: View {
             }
 
             PersonalInfoSection()
+
+            Section("Notifications") {
+                Toggle("Payday Reminder", isOn: $paydayNotificationsEnabled)
+                    .onChange(of: paydayNotificationsEnabled) { _, on in
+                        if !on { cancelReminder(PaydayNotificationScheduler.paydayId) }
+                    }
+                Toggle("Reporting Window Reminder", isOn: $reportingWindowNotificationsEnabled)
+                    .onChange(of: reportingWindowNotificationsEnabled) { _, on in
+                        if !on { cancelReminder(PaydayNotificationScheduler.reportingWindowId) }
+                    }
+            }
 
             Section {
                 Button(role: .destructive) {

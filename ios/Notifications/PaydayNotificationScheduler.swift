@@ -46,9 +46,14 @@ enum PaydayNotificationScheduler {
         let settings = await center.notificationSettings()
         guard settings.authorizationStatus == .authorized else { return }
 
+        // Unset means on: bool(forKey:) would read a missing key as false.
+        let defaults = UserDefaults.standard
+        let paydayEnabled = defaults.object(forKey: "notifications_payday_enabled") as? Bool ?? true
+        let reportingWindowEnabled = defaults.object(forKey: "notifications_reporting_window_enabled") as? Bool ?? true
+
         center.removePendingNotificationRequests(withIdentifiers: [paydayId, reportingWindowId])
 
-        if let fireDate = nextReportingWindowFireDate(from: now) {
+        if reportingWindowEnabled, let fireDate = nextReportingWindowFireDate(from: now) {
             schedule(
                 id: reportingWindowId,
                 title: "Reporting window is open",
@@ -58,7 +63,7 @@ enum PaydayNotificationScheduler {
             )
         }
 
-        if let paymentDate = nextPaymentDate, let fireDate = paydayReminderFireDate(paymentDate: paymentDate, from: now) {
+        if paydayEnabled, let paymentDate = nextPaymentDate, let fireDate = paydayReminderFireDate(paymentDate: paymentDate, from: now) {
             schedule(
                 id: paydayId,
                 title: "Payment coming tomorrow",

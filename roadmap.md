@@ -78,7 +78,7 @@ from the app target same as `Tests/`) -- the first version of the window-date lo
 - [ ] macOS/watchOS not wired yet, iOS only. Same pure functions would port directly; the watchOS
       target doesn't have a real dashboard screen yet either (see "Mirror the same income block to
       watchOS" below), do both together.
-- [ ] No Settings toggle to turn reminders off individually, revoking notification permission in
+- [x] No Settings toggle to turn reminders off individually, revoking notification permission in
       iOS Settings is the only way today. Add if it comes up as friction.
 
 ## Open
