@@ -57,4 +57,13 @@ t('GST credit adds on CRA dates when recorded', () => {
   assert.strictEqual(inc.yearRemaining, 1100 * 3 + 174.5); // Oct 5 credit still ahead
 });
 
+t('recorded GST schedule wins, with its own amounts', () => {
+  const { deriveIncome } = require('../src/programs/profiles');
+  const cgeb = { quarterlyAmount: 112.03, paymentSchedule: [
+    { date: '2026-07-03', amount: 112.03 }, { date: '2026-10-05', amount: 112.03 }, { date: '2027-01-05', amount: 112.03 }] };
+  const inc = deriveIncome({ monthlyAmount: 1000 }, { monthlyAmount: 100 }, new Date(2026, 9, 2), cgeb);
+  assert.strictEqual(inc.yearCredits, 224.06);
+  assert.strictEqual(inc.yearRemaining, 1100 * 3 + 112.03);
+});
+
 console.log(`\n${passed} passed, 0 failed`);

@@ -105,17 +105,22 @@ function deriveIncome(pwdProfile, cdbProfile, now = new Date(), cgebProfile = nu
   const left = thisYear.filter((d) => d >= today).length;
   // GST/HST credit (CGEB): only when the user recorded a quarterly amount. CRA
   // pays the 5th of Jan/Apr/Jul/Oct unless the profile lists its own schedule.
+  // Schedule entries are {date, amount} (or bare dates); the recorded schedule
+  // wins, since a benefit can start mid-year.
   const quarterly = cgebProfile?.quarterlyAmount ?? 0;
-  const creditDates = (cgebProfile?.paymentSchedule?.length
-    ? cgebProfile.paymentSchedule
-    : ['01', '04', '07', '10'].map((m) => `${year}-${m}-05`)).filter((d) => String(d).startsWith(year));
-  const creditsLeft = creditDates.filter((d) => d >= today).length;
+  const schedule = cgebProfile?.paymentSchedule?.length
+    ? cgebProfile.paymentSchedule.map((p) => ({ date: p.date ?? p, amount: p.amount ?? quarterly }))
+    : quarterly ? ['01', '04', '07', '10'].map((m) => ({ date: `${year}-${m}-05`, amount: quarterly })) : [];
+  const credits = schedule.filter((p) => String(p.date).startsWith(year));
+  const sum = (list) => Math.round(list.reduce((a, p) => a + p.amount, 0) * 100) / 100;
+  const yearCredits = sum(credits);
+  const creditsLeft = sum(credits.filter((p) => p.date >= today));
   return {
     pwdMonthly, cdbMonthly, totalMonthly,
-    yearTotal: totalMonthly * thisYear.length + quarterly * creditDates.length,
-    yearRemaining: totalMonthly * left + quarterly * creditsLeft,
+    yearTotal: totalMonthly * thisYear.length + yearCredits,
+    yearRemaining: totalMonthly * left + creditsLeft,
     paymentsLeft: left,
-    yearCredits: quarterly * creditDates.length,
+    yearCredits,
   };
 }
 
