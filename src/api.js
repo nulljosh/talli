@@ -13,6 +13,7 @@ const { createCorsOptionsDelegate, parseAllowedOrigins } = require('./cors-utils
 const { parseCookies, unsealAuthPayload, setAuthCookie, clearAuthCookie } = require('./auth-cookie');
 const { normalizeReadIds } = require('./read-ids');
 const { attemptHttpLogin, fetchAllSections } = require('./http-scraper');
+const widgetToken = require('./widget-token');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { nextPaymentDate } = require('./pay-dates');
 const { PROFILE_PROGRAMS, deriveIncome } = require('./programs/profiles');
@@ -73,6 +74,8 @@ if (IS_PRODUCTION && !process.env.SESSION_SECRET) {
   throw new Error('SESSION_SECRET must be set in production. Refusing to start with random key.');
 }
 const ENCRYPTION_KEY = process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex');
+const widgetTokenFor = (userId) => widgetToken.sign(ENCRYPTION_KEY, userId);
+const verifyWidgetToken = (token) => widgetToken.verify(ENCRYPTION_KEY, token);
 const BOOT_HAD_SESSION_SECRET = !!process.env.SESSION_SECRET;
 const DEBUG = process.env.DEBUG === 'true' || process.env.NODE_ENV === 'development';
 const PWD_APPROVED = process.env.PWD_APPROVED === 'true';
@@ -964,25 +967,31 @@ app.get('/api/health', (req, res) => {
 
 
 // Summary endpoint for OpenClaw integration
+app.get('/api/widget-token', requireAuth, (req, res) => {
+  res.json({ token: widgetTokenFor(req.session.userId) });
+});
+
 app.get('/api/summary', async (req, res) => {
   try {
-    // Check for API token (header only -- query strings leak in logs/referrers)
+    // Check for API token (header only -- query strings leak in logs/referrers).
+    // A per-user widget token reads that user's own data; the old shared
+    // API_TOKEN still reads the single legacy cache so existing widgets keep working.
     const apiToken = req.headers['x-api-token'];
+    const widgetUserId = verifyWidgetToken(apiToken);
     const expectedToken = process.env.API_TOKEN;
+    const isLegacy = !widgetUserId && expectedToken && apiToken && apiToken.length === expectedToken.length
+      && crypto.timingSafeEqual(Buffer.from(apiToken), Buffer.from(expectedToken));
 
-    if (!expectedToken) {
-      return res.status(401).json({ error: 'API token not configured' });
-    }
-
-    if (!apiToken || apiToken.length !== expectedToken.length || !crypto.timingSafeEqual(Buffer.from(apiToken), Buffer.from(expectedToken))) {
+    if (!widgetUserId && !isLegacy) {
       return res.status(401).json({ error: 'Invalid API token' });
     }
 
     // Get latest data (same logic as /api/latest but simplified)
     let data = null;
 
-    // Try the KV blob store first
-    if (blob.available()) {
+    if (widgetUserId) {
+      data = await loadUserBlob(widgetUserId, 'results', null);
+    } else if (blob.available()) {
       try {
         data = await blob.getJSON('chequecheck-cache/results.json');
       } catch (err) {
@@ -1056,6 +1065,11 @@ app.get('/api/summary', async (req, res) => {
       status: 'ok',
       pwd_approved: PWD_APPROVED
     };
+    if (widgetUserId) {
+      const pwdProfile = await loadUserBlob(widgetUserId, 'pwd-profile', null).catch(() => null);
+      const cdbProfile = await loadUserBlob(widgetUserId, 'cdb-profile', null).catch(() => null);
+      summary.income = deriveIncome(pwdProfile, cdbProfile);
+    }
 
     res.json(summary);
   } catch (error) {
