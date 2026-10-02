@@ -138,7 +138,7 @@ iOS 3.5.7 and Mac 3.5.6 both WAITING_FOR_REVIEW under the unified app `678236655
 
 ## Ingested 2026-07-25
 - [x] Release/update notes need more variety and intelligence, feels formulaic currently.
-- [ ] Add BC benefit tracking: BC Renter's Credit (auto via tax return), BC Bus Pass ($45/yr, apply once PWD confirmed), Fuel tax refund/Home Reno credit (if applicable), CLBC funding (autism dx), CPP-D (check contribution room). RDSP + RBC, CDB, PWD already in motion.
+- [x] Add BC benefit tracking: BC Renter's Credit (auto via tax return), BC Bus Pass ($45/yr, apply once PWD confirmed), Fuel tax refund/Home Reno credit (if applicable), CLBC funding (autism dx), CPP-D (check contribution room). RDSP + RBC, CDB, PWD already in motion.
 
 ## Ship 3.5.12, SUBMITTED 2026-07-28 night
 Today's message-parser fix (94808a3) was committed+pushed but not in any build. Bumped
