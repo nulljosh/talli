@@ -178,6 +178,12 @@ final class APIClient: @unchecked Sendable {
         )
     }
 
+    func widgetToken() async throws -> String {
+        struct TokenResponse: Decodable { let token: String }
+        let response = try await send(path: "api/widget-token", responseType: TokenResponse.self)
+        return response.token
+    }
+
     private func send<Response: Decodable>(
         path: String,
         method: String = "GET",

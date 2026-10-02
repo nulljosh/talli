@@ -3,6 +3,7 @@ import LocalAuthentication
 import Network
 import Observation
 import UIKit
+import WidgetKit
 
 @Observable
 @MainActor
@@ -315,6 +316,18 @@ final class AppState {
         }
     }
 
+    func updateWidgetToken() async {
+        guard !Self.isSnapshot, isAuthenticated else { return }
+        do {
+            let token = try await APIClient.shared.widgetToken()
+            let shared = UserDefaults(suiteName: "group.com.heyitsmejosh.tally")
+            shared?.set(token, forKey: "api_token")
+            WidgetCenter.shared.reloadAllTimelines()
+        } catch {
+            // Non-critical
+        }
+    }
+
     func saveAvatarData(_ data: Data) {
         avatarImageData = data
         try? data.write(to: Self.avatarFileURL)
@@ -577,6 +590,7 @@ final class AppState {
                     errorMessage = error.localizedDescription
                 }
             }
+            await updateWidgetToken()
             Task { await refreshDashboard() }
         } catch {
             isAuthenticated = false
@@ -593,6 +607,8 @@ final class AppState {
         readMessageIds = []
         KeychainHelper.clearCredentials()
         clearCookies()
+        let shared = UserDefaults(suiteName: "group.com.heyitsmejosh.tally")
+        shared?.removeObject(forKey: "api_token")
     }
 
     func loadLatestData() async throws {
@@ -637,6 +653,7 @@ final class AppState {
                 reportMonths = status.months
                 pwdApproved = status.pwdApproved
             }
+            await updateWidgetToken()
             await PaydayNotificationScheduler.requestAuthorizationIfNeeded()
             await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate)
         } catch APIClientError.unauthorized {

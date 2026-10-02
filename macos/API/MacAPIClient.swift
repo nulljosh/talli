@@ -112,6 +112,12 @@ final class MacAPIClient: @unchecked Sendable {
         _ = try await send(path: "api/report-status", method: "POST", body: Body(month: month, filed: filed), responseType: Resp.self)
     }
 
+    func widgetToken() async throws -> String {
+        struct TokenResponse: Decodable { let token: String }
+        let response = try await send(path: "api/widget-token", responseType: TokenResponse.self)
+        return response.token
+    }
+
     private func send<Response: Decodable>(
         path: String,
         method: String = "GET",

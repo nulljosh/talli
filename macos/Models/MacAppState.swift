@@ -1,6 +1,7 @@
 import Foundation
 import Observation
 import Network
+import WidgetKit
 
 @Observable
 @MainActor
@@ -179,6 +180,7 @@ final class MacAppState {
                 MacKeychainHelper.saveCredentials(username: username, password: password)
             }
             try await loadLatest()
+            await updateWidgetToken()
             Task { await refresh() }
         } catch {
             errorMessage = error.localizedDescription
@@ -191,6 +193,8 @@ final class MacAppState {
         username = ""
         MacKeychainHelper.clearCredentials()
         clearCookies()
+        let shared = UserDefaults(suiteName: Constants.appGroup)
+        shared?.removeObject(forKey: "api_token")
     }
 
     // MARK: - Data
@@ -209,6 +213,18 @@ final class MacAppState {
         let key = String(format: "%04d-%02d", c.component(.year, from: now), c.component(.month, from: now))
         try? await MacAPIClient.shared.setReportStatus(month: key, filed: true)
         await refreshReportStatus()
+    }
+
+    func updateWidgetToken() async {
+        guard ProcessInfo.processInfo.environment["UITEST_SNAPSHOT"] == nil, isAuthenticated else { return }
+        do {
+            let token = try await MacAPIClient.shared.widgetToken()
+            let shared = UserDefaults(suiteName: Constants.appGroup)
+            shared?.set(token, forKey: "api_token")
+            WidgetCenter.shared.reloadAllTimelines()
+        } catch {
+            // Non-critical
+        }
     }
 
     func loadLatest() async throws {
@@ -237,6 +253,7 @@ final class MacAppState {
             syncToWidgets(fresh.data)
             if fresh.scrapeSucceeded { updateSyncDate() }
             errorMessage = nil
+            await updateWidgetToken()
             if ProcessInfo.processInfo.environment["UITEST_SNAPSHOT"] == nil {
                 await PaydayNotificationScheduler.requestAuthorizationIfNeeded()
                 await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate)
