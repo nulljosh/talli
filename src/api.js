@@ -1906,6 +1906,98 @@ async function benefitFinderFor(userId, posted) {
 // rdsp-profile blob as the application status, so nothing else has to change.
 const rdspShape = (profile) => ({ profile: cleanRdsp(profile), derived: deriveRdsp(profile) });
 
+// Document vault. The server only ever holds ciphertext: the key comes from a
+// passphrase that never leaves the device (web/js/vault.js, ios/Helpers/VaultCrypto.swift).
+// `vault-meta` keeps the public salt, the encrypted file index and the ids of stored files.
+const VAULT_MAX_DOCS = 40;
+const VAULT_MAX_BYTES = 6 * 1024 * 1024; // a 5 MB file plus encryption overhead
+const VAULT_MAX_INDEX = 90000;           // base64 characters
+const vaultOk = (id) => /^[a-f0-9]{16,32}$/.test(id);
+const vaultKey = (userId, id) => `${blobPrefix(userId)}/vault/${id}`;
+const vaultReady = () => IS_PRODUCTION && blob.available();
+
+app.get('/api/vault', requireAuth, async (req, res) => {
+  try {
+    const meta = await loadUserBlob(req.session?.userId, 'vault-meta', {});
+    res.json({ salt: meta.salt || null, index: meta.index || null, count: (meta.ids || []).length });
+  } catch (err) {
+    log('[VAULT] GET error:', err.message);
+    res.json({ salt: null, index: null, count: 0 });
+  }
+});
+
+app.put('/api/vault/meta', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    const { salt, index } = req.body || {};
+    if (typeof index !== 'string' || index.length > VAULT_MAX_INDEX || !/^[A-Za-z0-9+/]+={0,2}$/.test(index)) {
+      return res.status(400).json({ error: 'Bad index' });
+    }
+    const meta = await loadUserBlob(userId, 'vault-meta', {});
+    if (meta.salt) {
+      if (salt && salt !== meta.salt) return res.status(409).json({ error: 'Vault already exists' });
+    } else if (typeof salt !== 'string' || !/^[A-Za-z0-9+/]{22}==$/.test(salt)) {
+      return res.status(400).json({ error: 'Bad salt' });
+    }
+    await saveUserBlob(userId, 'vault-meta', { ...meta, salt: meta.salt || salt, index, ids: meta.ids || [] });
+    res.json({ ok: true });
+  } catch (err) {
+    log('[VAULT] meta PUT error:', err.message);
+    res.status(500).json({ error: 'Failed to save vault' });
+  }
+});
+
+app.put('/api/vault/doc/:id', requireAuth, express.raw({ type: 'application/octet-stream', limit: '7mb' }), async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    const { id } = req.params;
+    if (!vaultOk(id)) return res.status(400).json({ error: 'Bad id' });
+    if (!vaultReady()) return res.status(503).json({ error: 'Vault storage unavailable' });
+    const body = req.body;
+    if (!Buffer.isBuffer(body) || body.length < 29 || body.length > VAULT_MAX_BYTES) return res.status(400).json({ error: 'File is empty or over 5 MB' });
+    const meta = await loadUserBlob(userId, 'vault-meta', {});
+    if (!meta.salt) return res.status(409).json({ error: 'Create the vault first' });
+    const ids = meta.ids || [];
+    if (!ids.includes(id) && ids.length >= VAULT_MAX_DOCS) return res.status(400).json({ error: `The vault holds ${VAULT_MAX_DOCS} files` });
+    await blob.putBytes(vaultKey(userId, id), body, 'application/octet-stream');
+    if (!ids.includes(id)) await saveUserBlob(userId, 'vault-meta', { ...meta, ids: [...ids, id] });
+    res.json({ ok: true });
+  } catch (err) {
+    log('[VAULT] doc PUT error:', err.message);
+    res.status(500).json({ error: 'Failed to store file' });
+  }
+});
+
+app.get('/api/vault/doc/:id', requireAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!vaultOk(id)) return res.status(400).json({ error: 'Bad id' });
+    const found = vaultReady() && (await blob.getWithMeta(vaultKey(req.session?.userId, id)));
+    if (!found) return res.status(404).json({ error: 'Not found' });
+    res.setHeader('Content-Type', 'application/octet-stream');
+    res.setHeader('Cache-Control', 'no-store');
+    res.send(found.body);
+  } catch (err) {
+    log('[VAULT] doc GET error:', err.message);
+    res.status(500).json({ error: 'Failed to read file' });
+  }
+});
+
+app.delete('/api/vault/doc/:id', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    const { id } = req.params;
+    if (!vaultOk(id)) return res.status(400).json({ error: 'Bad id' });
+    if (vaultReady()) await blob.del(vaultKey(userId, id));
+    const meta = await loadUserBlob(userId, 'vault-meta', {});
+    await saveUserBlob(userId, 'vault-meta', { ...meta, ids: (meta.ids || []).filter((x) => x !== id) });
+    res.json({ ok: true });
+  } catch (err) {
+    log('[VAULT] doc DELETE error:', err.message);
+    res.status(500).json({ error: 'Failed to delete file' });
+  }
+});
+
 // Missed-payment alert (src/programs/missed.js). Reads the same paid-status and
 // report-status the clients already write; the session copy is fresher than the blob.
 app.get('/api/missed-payment', requireAuth, async (req, res) => {

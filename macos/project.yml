@@ -19,6 +19,8 @@ targets:
       - path: ../ios/Views/RdspTrackerView.swift
       - path: ../ios/Views/SupplementsView.swift
       - path: ../ios/Views/MissedPaymentView.swift
+      - path: ../ios/Views/VaultView.swift
+      - path: ../ios/Helpers/VaultCrypto.swift
       - path: .
         excludes:
           - "*.xcodeproj"

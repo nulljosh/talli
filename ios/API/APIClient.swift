@@ -185,6 +185,25 @@ final class APIClient: @unchecked Sendable {
         return try await send(path: "api/benefit-finder", responseType: BenefitFinder.self)
     }
 
+    /// Raw requests for the document vault: ciphertext in and out, so no JSON decoding.
+    var vault: VaultAPI {
+        VaultAPI { path, method, body, contentType in
+            try await APIClient.shared.rawRequest(path: path, method: method, body: body, contentType: contentType)
+        }
+    }
+
+    fileprivate func rawRequest(path: String, method: String, body: Data?, contentType: String) async throws -> Data {
+        var request = URLRequest(url: baseURL.appending(path: path))
+        request.httpMethod = method
+        if let body {
+            request.httpBody = body
+            request.setValue(contentType, forHTTPHeaderField: "Content-Type")
+        }
+        let (data, response) = try await session.data(for: request)
+        guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else { throw URLError(.badServerResponse) }
+        return data
+    }
+
     func missedPayment() async throws -> MissedPayment {
         try await send(path: "api/missed-payment", responseType: MissedPayment.self)
     }

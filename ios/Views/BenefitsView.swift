@@ -22,6 +22,12 @@ struct BenefitsView: View {
                 .font(.headline)
                 .padding(.top, 8)
 
+                DisclosureGroup("Document vault") {
+                    VaultView(api: APIClient.shared.vault)
+                        .padding(.top, 8)
+                }
+                .font(.headline)
+
                 DisclosureGroup("Benefit finder") {
                     BenefitFinderView { try await APIClient.shared.benefitFinder(answers: $0) }
                         .padding(.top, 8)

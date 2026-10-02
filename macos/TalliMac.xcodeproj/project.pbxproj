@@ -19,6 +19,7 @@
 		190C9A49755892F5842E7855 /* MacMessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB8A17CA2D95C67235E3EB7 /* MacMessagesView.swift */; };
 		1F33700CFE6CC60045C2907B /* MacContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78526D808FDBBD806F7EF05 /* MacContentView.swift */; };
 		1FB85B34B74BF2B55A8A09AB /* MacPaymentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04123E4DE54AEC07C172692B /* MacPaymentProvider.swift */; };
+		208D5FDB7E169D6B520AD82D /* VaultCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C99C8A261E7DB1D39095B44 /* VaultCrypto.swift */; };
 		2549FEFAACF6366B21309CAB /* MacBenefitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B92B5AB892DBD4B963F8656 /* MacBenefitsView.swift */; };
 		2B571A9A6058202934D64E5A /* RdspTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7688A8B26D97A128C95FA2 /* RdspTrackerView.swift */; };
 		334EA37E0B895B20EF2496BB /* MacPaymentCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B87D84FEC8981517B9093CB /* MacPaymentCalendarView.swift */; };
@@ -37,6 +38,7 @@
 		A1B3992F899C2CC9E4CD2DFC /* MacAppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD19AB31AA4F0A6DD858E063 /* MacAppState.swift */; };
 		A4F29351A1EDEEA85B7B12D7 /* MacDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 253DEBB17503562A3842CF40 /* MacDashboardView.swift */; };
 		A839CE61888A245D80B8D1F0 /* MacAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE374C826B98CFF02FCED84 /* MacAPIClient.swift */; };
+		AD729A551BB19926E28B3FF2 /* VaultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD64342FB49405CC38FC1F7 /* VaultView.swift */; };
 		ADBE475EB7B2A87AEB9C56F5 /* MacBenefitsWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062CBBD651BF3B7840A05137 /* MacBenefitsWidgetView.swift */; };
 		B2B60C9015E6163943DC89CF /* MacTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829CFD35783E267E334AD80F /* MacTheme.swift */; };
 		B884C9F0B1B9912B814147B5 /* MacDashboardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE300DF4D1CB8C872ECF1C6 /* MacDashboardData.swift */; };
@@ -84,6 +86,7 @@
 		062CBBD651BF3B7840A05137 /* MacBenefitsWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBenefitsWidgetView.swift; sourceTree = "<group>"; };
 		1777E1F0FD107545870F598B /* MacScreenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacScreenshot.swift; sourceTree = "<group>"; };
 		253DEBB17503562A3842CF40 /* MacDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDashboardView.swift; sourceTree = "<group>"; };
+		2C99C8A261E7DB1D39095B44 /* VaultCrypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultCrypto.swift; sourceTree = "<group>"; };
 		4BA58147703D20028DCD974A /* TalliMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TalliMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4ED469812914B2A45C10F666 /* MacWidgetAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacWidgetAPI.swift; sourceTree = "<group>"; };
 		4F7775930C1F9FD312750701 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -118,6 +121,7 @@
 		E78526D808FDBBD806F7EF05 /* MacContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacContentView.swift; sourceTree = "<group>"; };
 		EC9E6A07378DC7743CCC0E4D /* MacSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacSettingsView.swift; sourceTree = "<group>"; };
 		F47FDBC6806E5A115D749928 /* RTLTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTLTracking.swift; sourceTree = "<group>"; };
+		FBD64342FB49405CC38FC1F7 /* VaultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultView.swift; sourceTree = "<group>"; };
 		FCBD3343FCF75BB4A28E8744 /* PaydayNotificationScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaydayNotificationScheduler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -173,6 +177,7 @@
 				0046C4CA8530BB849F37AAA5 /* MissedPaymentView.swift */,
 				AB7688A8B26D97A128C95FA2 /* RdspTrackerView.swift */,
 				C3B2AD00D857C67843DE6074 /* SupplementsView.swift */,
+				FBD64342FB49405CC38FC1F7 /* VaultView.swift */,
 			);
 			name = Views;
 			path = ../ios/Views;
@@ -250,6 +255,7 @@
 			isa = PBXGroup;
 			children = (
 				F47FDBC6806E5A115D749928 /* RTLTracking.swift */,
+				2C99C8A261E7DB1D39095B44 /* VaultCrypto.swift */,
 			);
 			name = Helpers;
 			path = ../ios/Helpers;
@@ -448,6 +454,8 @@
 				2B571A9A6058202934D64E5A /* RdspTrackerView.swift in Sources */,
 				0407FBFD53DB017B3052008B /* SupplementsView.swift in Sources */,
 				4BCA3DBEDCAA96B862C734FA /* TalliMacApp.swift in Sources */,
+				208D5FDB7E169D6B520AD82D /* VaultCrypto.swift in Sources */,
+				AD729A551BB19926E28B3FF2 /* VaultView.swift in Sources */,
 				62E4A3F5916F04C5C1474AA6 /* View+Glass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

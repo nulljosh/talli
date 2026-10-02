@@ -95,6 +95,12 @@ struct MacBenefitsView: View {
                 }
                 .font(.headline)
 
+                DisclosureGroup("Document vault") {
+                    VaultView(api: MacAPIClient.shared.vault)
+                        .padding(.top, 8)
+                }
+                .font(.headline)
+
                 DisclosureGroup("Benefit finder") {
                     BenefitFinderView { try await MacAPIClient.shared.benefitFinder(answers: $0) }
                         .padding(.top, 8)

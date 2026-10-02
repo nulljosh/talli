@@ -67,6 +67,7 @@ function _talliBounceToLogin() {
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous" onerror="_talliScriptError()"></script>
 <!-- i18n runtime: exposes window.I18N (t, setLang, fmtMoney/fmtDate/fmtNum). Static labels retrofitted to I18N.t() 2026-08-02; no re-render hook yet, so setLang() won't repaint this React tree until a language-context/state trigger is added. -->
 <script src="/js/i18n.js"></script>
+<script src="/js/vault.js"></script>
 <!-- WebMCP tool registration: exposes benefit status, payments and messages to
      in-browser agents. Independent of the React tree below -- it talks to the
      same /api routes the app does. -->
@@ -662,6 +663,138 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
 // ════════════════════════════════════════════════════
 // CALENDAR TAB
 // ════════════════════════════════════════════════════
+// Document vault: files are encrypted here, in the browser (web/js/vault.js). The server only stores ciphertext.
+const VAULT_CATEGORIES = [['pwd','PWD letter'],['medical','Medical report'],['id','ID'],['lease','Lease'],['other','Other']];
+const VAULT_MAX_BYTES = 5 * 1024 * 1024;
+
+function VaultTool({dark}) {
+  const t = tk(dark);
+  const T = window.I18N.t;
+  const V = window.Vault;
+  const [meta, setMeta] = useState(null);
+  const [key, setKey] = useState(null);
+  const [items, setItems] = useState([]);
+  const [pass, setPass] = useState('');
+  const [pass2, setPass2] = useState('');
+  const [cat, setCat] = useState('pwd');
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState('');
+  const fileRef = useRef();
+  useEffect(() => { fetch('/api/vault', {credentials:'include'}).then(r=>r.json()).then(setMeta).catch(()=>{}); }, []);
+  if (!meta) return <Skel w="100%" h={90} r={12} dark={dark}/>;
+
+  const json = {'Content-Type':'application/json'};
+  const putIndex = async (k, list, salt) => {
+    const index = V.b64(await V.sealJSON(k, {files: list}));
+    const r = await fetch('/api/vault/meta', {method:'PUT',credentials:'include',headers:json,body:JSON.stringify({salt, index})});
+    if (!r.ok) throw new Error('save');
+    setMeta(m => ({...m, salt: salt || m.salt, index}));
+  };
+  const guard = (fn) => async (...a) => { setBusy(true); setErr(''); try { await fn(...a); } catch (e) { setErr(e.message === 'wrong' ? T('That passphrase does not open this vault.') : e.message === 'big' ? T('Files can be up to 5 MB.') : T('Something went wrong. Try again.')); } setBusy(false); };
+
+  const create = guard(async () => {
+    if (pass.length < 8) throw new Error('short');
+    if (pass !== pass2) throw new Error('match');
+    const salt = V.randomBytes(16);
+    const k = await V.deriveKey(pass, salt);
+    await putIndex(k, [], V.b64(salt));
+    setKey(k); setItems([]); setPass(''); setPass2('');
+  });
+  const unlock = guard(async () => {
+    const k = await V.deriveKey(pass, V.unb64(meta.salt));
+    let list = [];
+    if (meta.index) { try { list = (await V.openJSON(k, V.unb64(meta.index))).files || []; } catch (e) { throw new Error('wrong'); } }
+    setKey(k); setItems(list); setPass('');
+  });
+  const add = guard(async (file) => {
+    if (file.size > VAULT_MAX_BYTES) throw new Error('big');
+    const id = V.hex(V.randomBytes(16));
+    const sealed = await V.seal(key, new Uint8Array(await file.arrayBuffer()));
+    const r = await fetch('/api/vault/doc/' + id, {method:'PUT',credentials:'include',headers:{'Content-Type':'application/octet-stream'},body:sealed});
+    if (!r.ok) throw new Error('save');
+    const list = [...items, {id, name:file.name, type:file.type, category:cat, size:file.size, added:new Date().toISOString()}];
+    await putIndex(key, list);
+    setItems(list);
+  });
+  const download = guard(async (it) => {
+    const r = await fetch('/api/vault/doc/' + it.id, {credentials:'include'});
+    if (!r.ok) throw new Error('save');
+    const bytes = await V.open(key, new Uint8Array(await r.arrayBuffer()));
+    const url = URL.createObjectURL(new Blob([bytes], {type: it.type || 'application/octet-stream'}));
+    const a = document.createElement('a'); a.href = url; a.download = it.name; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+  });
+  const remove = guard(async (it) => {
+    await fetch('/api/vault/doc/' + it.id, {method:'DELETE',credentials:'include'});
+    const list = items.filter(x => x.id !== it.id);
+    await putIndex(key, list);
+    setItems(list);
+  });
+
+  const label = {fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:14};
+  const card = {padding:'16px 18px',background:t.bg2,borderRadius:12,border:`1px solid ${t.border}`};
+  const input = {width:'100%',boxSizing:'border-box',padding:'10px 12px',borderRadius:8,border:`1px solid ${t.border2}`,background:'transparent',color:t.text,fontSize:14,fontFamily:'inherit',marginTop:8};
+  const pill = (solid) => ({padding:'9px 16px',borderRadius:100,background:solid?t.accent:'transparent',color:solid?'#fff':t.muted,border:solid?'none':`1px solid ${t.border2}`,fontSize:13,fontWeight:600,fontFamily:'inherit',cursor:'pointer',opacity:busy?0.6:1});
+  const errLine = err && <div role="alert" style={{fontSize:12,color:t.warning,fontWeight:600,marginTop:10}}>{err}</div>;
+  const size = (n) => n > 1048576 ? (n/1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n/1024)) + ' KB';
+
+  if (!meta.salt) return (
+    <div>
+      <div style={label}>{T('Document vault')}</div>
+      <div style={card}>
+        <div style={{fontSize:17,fontWeight:700,letterSpacing:'-0.3px',color:t.text}}>{T('Keep your papers safe')}</div>
+        <div style={{fontSize:13,color:t.mutedMid,marginTop:6,lineHeight:1.5}}>{T('Your PWD letter, medical report, ID and lease. Files are locked on this device with a passphrase before they are saved. Talli only holds the locked copy and cannot read it.')}</div>
+        <input type="password" autoComplete="new-password" placeholder={T('Choose a passphrase')} aria-label={T('Choose a passphrase')} value={pass} onChange={e=>setPass(e.target.value)} style={input}/>
+        <input type="password" autoComplete="new-password" placeholder={T('Type it again')} aria-label={T('Type it again')} value={pass2} onChange={e=>setPass2(e.target.value)} style={input}/>
+        <div style={{fontSize:11,color:t.warning,fontWeight:600,marginTop:10,lineHeight:1.5}}>{T('If you forget the passphrase, nobody can get your files back. Write it down somewhere safe.')}</div>
+        {pass && pass.length < 8 && <div style={{fontSize:11,color:t.muted,marginTop:6}}>{T('At least 8 characters.')}</div>}
+        {pass2 && pass !== pass2 && <div style={{fontSize:11,color:t.muted,marginTop:6}}>{T('The two do not match yet.')}</div>}
+        <button onClick={create} disabled={busy||pass.length<8||pass!==pass2} style={{...pill(true),marginTop:12,opacity:(busy||pass.length<8||pass!==pass2)?0.5:1}}>{T('Create vault')}</button>
+        {errLine}
+      </div>
+    </div>
+  );
+
+  if (!key) return (
+    <div>
+      <div style={label}>{T('Document vault')}</div>
+      <div style={card}>
+        <div style={{fontSize:17,fontWeight:700,letterSpacing:'-0.3px',color:t.text}}>{T('Locked')}</div>
+        <input type="password" autoComplete="current-password" placeholder={T('Your passphrase')} aria-label={T('Your passphrase')} value={pass} onChange={e=>setPass(e.target.value)} onKeyDown={e=>{ if (e.key==='Enter' && pass) unlock(); }} style={input}/>
+        <button onClick={unlock} disabled={busy||!pass} style={{...pill(true),marginTop:12,opacity:(busy||!pass)?0.5:1}}>{busy?T('Unlocking...'):T('Unlock')}</button>
+        {errLine}
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={{animation:'fadeIn 0.2s ease both'}}>
+      <div style={label}>{T('Document vault')}</div>
+      <div style={card}>
+        {items.length === 0 && <div style={{fontSize:13,color:t.mutedMid,lineHeight:1.5}}>{T('Nothing here yet. Add your PWD letter, medical report, ID or lease.')}</div>}
+        {items.map((it, i) => (
+          <div key={it.id} style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:10,padding:'10px 0',borderTop:i?`1px solid ${t.border}`:'none'}}>
+            <div style={{minWidth:0}}>
+              <div style={{fontSize:14,fontWeight:600,color:t.text,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{it.name}</div>
+              <div style={{fontSize:11,color:t.mutedMid,marginTop:2}}>{T((VAULT_CATEGORIES.find(c=>c[0]===it.category)||[0,'Other'])[1])} · {size(it.size)}</div>
+            </div>
+            <div style={{display:'flex',gap:6,flexShrink:0}}>
+              <button onClick={()=>download(it)} disabled={busy} style={{...pill(false),padding:'5px 12px',fontSize:12}}>{T('Open')}</button>
+              <button onClick={()=>remove(it)} disabled={busy} aria-label={T('Delete')} style={{...pill(false),padding:'5px 10px',fontSize:12}}>×</button>
+            </div>
+          </div>
+        ))}
+        <div style={{display:'flex',gap:8,flexWrap:'wrap',alignItems:'center',marginTop:items.length?14:12}}>
+          <select value={cat} onChange={e=>setCat(e.target.value)} aria-label={T('Type')} style={{...input,marginTop:0,width:'auto'}}>{VAULT_CATEGORIES.map(([id,name])=><option key={id} value={id}>{T(name)}</option>)}</select>
+          <button onClick={()=>fileRef.current?.click()} disabled={busy||items.length>=40} style={pill(true)}>{busy?T('Working...'):T('Add a document')}</button>
+          <input ref={fileRef} type="file" hidden aria-hidden="true" onChange={e=>{ const f=e.target.files[0]; e.target.value=''; if (f) add(f); }}/>
+        </div>
+        {errLine}
+      </div>
+    </div>
+  );
+}
+
 // One quiet line per section; the full section opens on tap. Keeps Status and Calendar short.
 function FoldBox({dark, title, summary, open, setOpen, children}) {
   const t = tk(dark);
@@ -1419,6 +1552,9 @@ function BenniesSection({dark}) {
 
       <FoldTool dark={dark} title="RDSP grants and bonds" url="/api/rdsp-tracker" summarize={d=>d.derived?(d.derived.eligible?'$'+Math.round(d.derived.missing).toLocaleString()+' still on the table this year':'Grants stop after the year you turn 49'):'See what your RDSP is owed'}>
         <RdspTracker dark={dark}/>
+      </FoldTool>
+      <FoldTool dark={dark} title="Document vault" url="/api/vault" summarize={d=>d.salt?'Locked. Your passphrase opens it.':'Keep your letters and ID safe'}>
+        <VaultTool dark={dark}/>
       </FoldTool>
       <FoldTool dark={dark} title="Benefit finder" url="/api/benefit-finder" summarize={d=>d.complete?(d.missingYearly>0?'Up to $'+d.missingYearly.toLocaleString()+' a year you may be missing':'You are getting the big ones'):'Find what you are missing'}>
         <BenefitFinder dark={dark}/>

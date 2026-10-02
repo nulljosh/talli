@@ -21,7 +21,7 @@ ASC verified today: iOS 3.5.14 and macOS 3.5.6 READY_FOR_DISTRIBUTION. Revenue w
 - [x] (2026-10-02, web/iOS/macOS, local reminders) Missed-payment alert: payday passes and the portal shows nothing, Talli tells you who to call and what to say.
 
 ### 7.0: paperwork done for you
-- [ ] Document vault: PWD decision letter, medical report, ID, leases. Encrypted, in iCloud, ready to attach.
+- [x] (2026-10-02, web/iOS/macOS) Document vault: PWD decision letter, medical report, ID, leases. Encrypted on the device, stored as ciphertext only (Talli cloud, not iCloud, so the web works too).
 - [ ] Message replies from Talli: answer a ministry message without opening My Self Serve.
 - [ ] Service requests: start the common ones (crisis supplement, address change, shelter update) from the app.
 - [ ] Reconsideration helper: denied? Walk the 20-business-day deadline with a checklist and a draft letter.
