@@ -66,4 +66,12 @@ t('recorded GST schedule wins, with its own amounts', () => {
   assert.strictEqual(inc.yearRemaining, 1100 * 3 + 112.03);
 });
 
+t('earnings exemption: this year only, flags going over', () => {
+  const { deriveEarnings } = require('../src/programs/profiles');
+  const e = deriveEarnings({ entries: [{ date: '2026-03-01', amount: 1000 }, { date: '2025-12-30', amount: 9999 }] }, new Date(2026, 9, 2));
+  assert.deepStrictEqual(e, { year: 2026, earned: 1000, exemption: 16200, left: 15200, over: false });
+  assert.strictEqual(deriveEarnings({ entries: [{ date: '2026-05-01', amount: 17000 }] }, new Date(2026, 9, 2)).over, true);
+  assert.strictEqual(deriveEarnings(null, new Date(2031, 0, 1)).exemption, null);
+});
+
 console.log(`\n${passed} passed, 0 failed`);

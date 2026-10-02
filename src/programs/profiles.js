@@ -81,6 +81,15 @@ const PROFILE_PROGRAMS = [
     validStatuses: ['pending', 'active', 'adjusted', 'stopped'],
     defaults: { status: 'pending', noticeDate: null, baseYear: null, paymentPeriod: null, annualEntitlement: null, quarterlyAmount: null, paymentSchedule: [], notes: '' },
   },
+  {
+    id: 'earnings',
+    route: 'earnings-profile',
+    logTag: 'EARNINGS',
+    name: 'Work Earnings',
+    jurisdiction: 'BC',
+    validStatuses: ['tracking'],
+    defaults: { status: 'tracking', entries: [], notes: '' },
+  },
 ];
 
 // Current monthly rates, used only when the user has not recorded a real amount.
@@ -124,4 +133,19 @@ function deriveIncome(pwdProfile, cdbProfile, now = new Date(), cgebProfile = nu
   };
 }
 
-module.exports = { PROFILE_PROGRAMS, DEFAULT_MONTHLY_RATES, deriveIncome };
+// BC's annual earnings exemption for a single person with PWD: earn up to this
+// in a calendar year and assistance doesn't change. Past it, clawback starts.
+// Add each year when BC posts it (gov.bc.ca "Annual earnings exemption").
+const EARNINGS_EXEMPTION = { 2026: 16200 };
+
+// Entries are {date: 'YYYY-MM-DD', amount}. Null exemption = year not posted yet.
+function deriveEarnings(earningsProfile, now = new Date()) {
+  const year = now.getFullYear();
+  const earned = Math.round((earningsProfile?.entries || [])
+    .filter((e) => String(e.date).startsWith(String(year)))
+    .reduce((a, e) => a + (Number(e.amount) || 0), 0) * 100) / 100;
+  const exemption = EARNINGS_EXEMPTION[year] ?? null;
+  return { year, earned, exemption, left: exemption == null ? null : Math.max(0, exemption - earned), over: exemption != null && earned > exemption };
+}
+
+module.exports = { PROFILE_PROGRAMS, DEFAULT_MONTHLY_RATES, deriveIncome, deriveEarnings, EARNINGS_EXEMPTION };

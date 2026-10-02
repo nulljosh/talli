@@ -16,7 +16,7 @@ const { attemptHttpLogin, fetchAllSections } = require('./http-scraper');
 const widgetToken = require('./widget-token');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { nextPaymentDate } = require('./pay-dates');
-const { PROFILE_PROGRAMS, deriveIncome } = require('./programs/profiles');
+const { PROFILE_PROGRAMS, deriveIncome, deriveEarnings } = require('./programs/profiles');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -1250,6 +1250,7 @@ app.get('/api/latest', requireAuth, async (req, res) => {
       cdbRetroactiveEligible: cdbProfile.retroactiveEligible || false,
       cgeb: cgebProfile,
       income: deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile),
+      earnings: deriveEarnings(await loadUserBlob(userId, 'earnings-profile', null).catch(() => null)),
     };
 
     const result = await fetchOrLoadData(req);
