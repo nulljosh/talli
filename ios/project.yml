@@ -31,6 +31,12 @@ targets:
           - .asc
           - screenshots
           - .claude
+          - "*.ipa"
+          - "*.zip"
+          - icon.svg
+          - ExportOptions.plist
+          - ci_scripts
+          - scripts
     settings:
       base:
         INFOPLIST_FILE: Info.plist

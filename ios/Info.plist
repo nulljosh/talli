@@ -33,11 +33,6 @@
 	</dict>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Sign in to Talli with Face ID</string>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Fraunces-Variable.ttf</string>
-		<string>DMSans-Variable.ttf</string>
-	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
