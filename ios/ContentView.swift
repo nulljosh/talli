@@ -296,6 +296,19 @@ private struct DashboardScreen: View {
                     .font(.footnote)
                 }
 
+                if let assets = appState.assets, let counted = assets.counted, let limit = assets.limit, let left = assets.left {
+                    let isOver = assets.over ?? false
+                    HStack {
+                        Text("Assets").foregroundStyle(.secondary)
+                        Spacer()
+                        Text("\(appState.moneyText(counted)) of \(appState.moneyText(limit)), \(appState.moneyText(left)) left").fontWeight(.semibold).foregroundStyle(isOver ? .red : .primary)
+                    }
+                    .font(.footnote)
+                    if let exempt = assets.exempt, exempt > 0 {
+                        Text("RDSP \(appState.moneyText(exempt)) not counted").font(.caption).foregroundStyle(.secondary)
+                    }
+                }
+
                 ForEach(appState.incomeRates, id: \.label) { rate in
                     HStack {
                         Text(rate.label).foregroundStyle(.secondary)

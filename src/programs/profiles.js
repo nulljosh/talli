@@ -90,6 +90,15 @@ const PROFILE_PROGRAMS = [
     validStatuses: ['tracking'],
     defaults: { status: 'tracking', entries: [], notes: '' },
   },
+  {
+    id: 'assets',
+    route: 'assets-profile',
+    logTag: 'ASSETS',
+    name: 'Assets',
+    jurisdiction: 'BC',
+    validStatuses: ['tracking'],
+    defaults: { status: 'tracking', accounts: [], notes: '' },
+  },
 ];
 
 // Current monthly rates, used only when the user has not recorded a real amount.
@@ -150,4 +159,20 @@ function deriveEarnings(earningsProfile, now = new Date()) {
   return { year, earned, exemption, left: exemption == null ? null : Math.max(0, exemption - earned), over: exemption != null && earned > exemption };
 }
 
-module.exports = { PROFILE_PROGRAMS, DEFAULT_MONTHLY_RATES, deriveIncome, deriveEarnings, EARNINGS_EXEMPTION };
+// BC PWD single person asset limit; RDSP and exempt accounts don't count.
+const ASSET_LIMIT = 100000;
+
+// Accounts are {name, balance, exempt}. Exempt true for RDSP and other exempt accounts.
+function deriveAssets(assetsProfile) {
+  const accounts = assetsProfile?.accounts || [];
+  const counted = Math.round(accounts
+    .filter((a) => !a.exempt)
+    .reduce((sum, a) => sum + (Number(a.balance) || 0), 0) * 100) / 100;
+  const exempt = Math.round(accounts
+    .filter((a) => a.exempt)
+    .reduce((sum, a) => sum + (Number(a.balance) || 0), 0) * 100) / 100;
+  const left = Math.max(0, ASSET_LIMIT - counted);
+  return { counted, exempt, limit: ASSET_LIMIT, left, over: counted > ASSET_LIMIT };
+}
+
+module.exports = { PROFILE_PROGRAMS, DEFAULT_MONTHLY_RATES, deriveIncome, deriveEarnings, EARNINGS_EXEMPTION, ASSET_LIMIT, deriveAssets };

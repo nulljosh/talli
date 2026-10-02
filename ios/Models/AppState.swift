@@ -136,6 +136,10 @@ final class AppState {
         dashboard?.earnings
     }
 
+    var assets: DashboardData.Assets? {
+        dashboard?.assets
+    }
+
     private static let moneyFormat: FloatingPointFormatStyle<Double>.Currency =
         .currency(code: "CAD").precision(.fractionLength(0))
 

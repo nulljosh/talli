@@ -17,7 +17,7 @@ ASC verified today: iOS 3.5.14 and macOS 3.5.6 READY_FOR_DISTRIBUTION. Revenue w
 - [x] (2026-10-02, from the CGEB quarterly amount) Yearly total includes GST/HST and other CRA payments on their real dates, not just PWD + CDB.
 - [x] Real amounts. Read the PWD and CDB figures the portal and CRA actually paid instead of the default rates; fall back to defaults only when nothing is recorded.
 - [x] Earnings exemption tracker. PWD lets you earn about $15k a year before a dollar-for-dollar clawback. Log earnings, show what's left of the exemption, warn before crossing it.
-- [ ] Asset limit tracker. PWD caps assets around $100k; RDSP doesn't count. Show where you stand.
+- [x] Asset limit tracker. PWD caps assets around $100k; RDSP doesn't count. Show where you stand.
 - [ ] Payday push without opening the app: a Workers Cron Trigger checks the portal and pushes new messages and the payday reminder (APNs key needed from Joshua).
 
 ### 5.0: one tap, every device

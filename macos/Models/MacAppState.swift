@@ -62,6 +62,10 @@ final class MacAppState {
         dashboard?.earnings
     }
 
+    var assets: MacDashboardData.Assets? {
+        dashboard?.assets
+    }
+
     private let monitor = NWPathMonitor()
     private let monitorQueue = DispatchQueue(label: "com.jt.talli.mac.network")
 

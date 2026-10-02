@@ -34,6 +34,21 @@ struct MacBenefitsView: View {
                         .font(.footnote)
                         .foregroundStyle(isOver ? .red : .secondary)
                 }
+
+                if let assets = appState.assets, let counted = assets.counted, let limit = assets.limit, let left = assets.left {
+                    let cad = FloatingPointFormatStyle<Double>.Currency(code: "CAD").precision(.fractionLength(0))
+                    let isOver = assets.over ?? false
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Assets: \(counted.formatted(cad)) of \(limit.formatted(cad)), \(left.formatted(cad)) left")
+                            .font(.footnote)
+                            .foregroundStyle(isOver ? .red : .secondary)
+                        if let exempt = assets.exempt, exempt > 0 {
+                            Text("RDSP \(exempt.formatted(cad)) not counted")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
             }
             .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)

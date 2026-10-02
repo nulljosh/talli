@@ -82,4 +82,12 @@ t('earnings exemption: this year only, flags going over', () => {
   assert.strictEqual(deriveEarnings(null, new Date(2031, 0, 1)).exemption, null);
 });
 
+t('assets: RDSP excluded, flags over', () => {
+  const { deriveAssets } = require('../src/programs/profiles');
+  const a = deriveAssets({ accounts: [{ name: 'Chequings', balance: 50000, exempt: false }, { name: 'RDSP', balance: 75000, exempt: true }] });
+  assert.deepStrictEqual(a, { counted: 50000, exempt: 75000, limit: 100000, left: 50000, over: false });
+  assert.strictEqual(deriveAssets({ accounts: [{ name: 'Savings', balance: 110000, exempt: false }] }).over, true);
+  assert.deepStrictEqual(deriveAssets(null), { counted: 0, exempt: 0, limit: 100000, left: 100000, over: false });
+});
+
 console.log(`\n${passed} passed, 0 failed`);
