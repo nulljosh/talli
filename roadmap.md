@@ -166,7 +166,7 @@ App Store Connect closed the pre-release train for v3.5.12 (build 139 was reject
 
 ## From Apple Notes (imported 2026-08-10)
 - [ ] iOS avatar is device-local only (`AppState.generateNodeGraphAvatar`, disk-cached PNG) and never syncs with the server's avatar, so iOS and web show different avatars. Real fix needs SVG rendering on iOS (server stores SVG) or a server-side PNG variant, deliberately not built as part of the letter-icon fix.
-- [ ] Refresh `CHEQUE_ISSUE_DATES` in `src/pay-dates.js` when BC publishes the 2027 cheque issue schedule, after 2026-12-16 the app shows "--" for the next payment date until it is added.
+- [x] Refresh `CHEQUE_ISSUE_DATES` in `src/pay-dates.js` when BC publishes the 2027 cheque issue schedule, after 2026-12-16 the app shows "--" for the next payment date until it is added. **2027 added 2026-10-02; refresh again when BC posts 2028 (runs out after 2027-12-22).**
 
 ## Screenshots (2026-08-11)
 - iOS App Store screenshots regenerated via `cd ios && fastlane screenshots`. Two real bugs
@@ -263,11 +263,11 @@ Note: `asc metadata push` prints a full JSON result even when it applied nothing
 a scratch dir and diff; the `actions[].status` field is the only truth.
 
 ## Ingested 2026-10-01
-- [ ] Playwright QA against myselfserve.gov.bc.ca. Confirm Talli syncs completely with it (screenshot notes/attachments/2026-10-01/talli-1.png: 2026 Annual Earnings Exemption balance $10800.00; Oct 21 2026 payment $1535.50 = Support $983.50 + Shelter rent $500.00 + Transportation supplement $52.00; previous payment Sep 23 2026 $1535.50 direct deposit). BLOCKED: needs Joshua's login, do not store credentials.
+- [x] (2026-10-02: live login, 26 messages, stable ids, two-session read sync verified on production) Playwright QA against myselfserve.gov.bc.ca. Confirm Talli syncs completely with it (screenshot notes/attachments/2026-10-01/talli-1.png: 2026 Annual Earnings Exemption balance $10800.00; Oct 21 2026 payment $1535.50 = Support $983.50 + Shelter rent $500.00 + Transportation supplement $52.00; previous payment Sep 23 2026 $1535.50 direct deposit). BLOCKED: needs Joshua's login, do not store credentials.
 
 ## Ingested 2026-10-02
 - [x] Remove the share button. Already gone on web, iOS and macOS since cf1ef23; nothing left to strip.
 - [x] Personal information in Settings should be stored securely, not in a plain text field. SIN, phone and PIN were already Keychain-only; phone is now a masked SecureField too (iOS build green).
 - [x] After typing in the SIN, the keypad cannot be dismissed. Settings now has a keyboard Done button and drag-to-dismiss (iOS build green; macOS has no SIN field, web uses the system keyboard).
 - [x] Home view needs simplifying. "Paid yet" should not sit inline; move it to the top right. Now a compact pill in the payment card's top right (iOS build green; not eyeballed on a simulator yet).
-- [ ] QA messages and confirm they are syncing. Read-messages, parse and pagination tests pass (32/32) and /api/read-messages is live (401 without a session). Still needs a real logged-in check: read a message on iPhone, confirm it shows read on web.
+- [x] (2026-10-02: verified live, and fixed the frozen background refresh) QA messages and confirm they are syncing. Read-messages, parse and pagination tests pass (32/32) and /api/read-messages is live (401 without a session). Still needs a real logged-in check: read a message on iPhone, confirm it shows read on web.

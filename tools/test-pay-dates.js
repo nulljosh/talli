@@ -30,13 +30,13 @@ t('rolls to the next scheduled date the day after an issue date', () => {
 });
 
 t('returns null past the end of the published schedule, never a guessed date', () => {
-  assert.strictEqual(nextPaymentDate(new Date(2026, 11, 17)), null);
-  assert.strictEqual(nextPaymentDate(new Date(2027, 2, 1)), null);
+  assert.strictEqual(nextPaymentDate(new Date(2027, 11, 23)), null);
+  assert.strictEqual(nextPaymentDate(new Date(2028, 2, 1)), null);
 });
 
 t('signals exhaustion so the operator knows to refresh the schedule', () => {
   let warned = 0;
-  nextPaymentDate(new Date(2027, 2, 1), () => { warned++; });
+  nextPaymentDate(new Date(2028, 2, 1), () => { warned++; });
   nextPaymentDate(new Date(2026, 7, 10), () => { warned++; });
   assert.strictEqual(warned, 1);
 });
