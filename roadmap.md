@@ -263,3 +263,6 @@ edited at this time". **The next version bump must push this dir**, which applie
 
 Note: `asc metadata push` prints a full JSON result even when it applied nothing. Always re-pull to
 a scratch dir and diff; the `actions[].status` field is the only truth.
+
+## Ingested 2026-10-01
+- [ ] Playwright QA against myselfserve.gov.bc.ca. Confirm Talli syncs completely with it (screenshot notes/attachments/2026-10-01/talli-1.png: 2026 Annual Earnings Exemption balance $10800.00; Oct 21 2026 payment $1535.50 = Support $983.50 + Shelter rent $500.00 + Transportation supplement $52.00; previous payment Sep 23 2026 $1535.50 direct deposit). BLOCKED: needs Joshua's login, do not store credentials.
