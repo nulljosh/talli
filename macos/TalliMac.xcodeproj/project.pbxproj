@@ -40,6 +40,7 @@
 		EC8B2E6E71DE81EF6AE90BDF /* MacPaymentWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B70B1E59CAC8CFE93C5192 /* MacPaymentWidgetView.swift */; };
 		F4FDF05C00F33D7F703A260E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEEEC581169CEBE335A51EF3 /* Assets.xcassets */; };
 		F70A221F7E7CE17DEFD24A8F /* MacScreenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1777E1F0FD107545870F598B /* MacScreenshot.swift */; };
+		FE0CCA838AA6BF0996DF72CD /* BenefitFinderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35803128BD01A8F7B732D9B /* BenefitFinderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +96,7 @@
 		8BD57939601D50F6E8BA4261 /* TallyMacWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TallyMacWidgets.swift; sourceTree = "<group>"; };
 		8CE4D95EDD23AA9E97925A20 /* MacBenefitsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBenefitsProvider.swift; sourceTree = "<group>"; };
 		A03D46509CD0CB994360A6EE /* MacKeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacKeychainHelper.swift; sourceTree = "<group>"; };
+		A35803128BD01A8F7B732D9B /* BenefitFinderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenefitFinderView.swift; sourceTree = "<group>"; };
 		A3951E529B6F7FA9B74ABE9C /* ExportOptions.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = ExportOptions.plist; sourceTree = "<group>"; };
 		AF4D522BAA69042C54EEA0D3 /* TalliMacUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalliMacUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4671E8BA45907193EDB8BC4 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				11835D1381E8F6883C028F7F /* Talli */,
 				2ED134DA62A66DFB27FEA399 /* UITests-mac */,
 				EFA8EBF78F5183CCF1769CF9 /* Views */,
+				3D285039F000D03C4B4940DA /* Views */,
 				492E05BCAA24E42AAC03DF51 /* widgets-macos */,
 				8B12F9F9BDDCEFD58632185A /* Products */,
 			);
@@ -155,6 +158,15 @@
 				1777E1F0FD107545870F598B /* MacScreenshot.swift */,
 			);
 			path = "UITests-mac";
+			sourceTree = "<group>";
+		};
+		3D285039F000D03C4B4940DA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A35803128BD01A8F7B732D9B /* BenefitFinderView.swift */,
+			);
+			name = Views;
+			path = ../ios/Views;
 			sourceTree = "<group>";
 		};
 		492E05BCAA24E42AAC03DF51 /* widgets-macos */ = {
@@ -406,6 +418,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE0CCA838AA6BF0996DF72CD /* BenefitFinderView.swift in Sources */,
 				A839CE61888A245D80B8D1F0 /* MacAPIClient.swift in Sources */,
 				A1B3992F899C2CC9E4CD2DFC /* MacAppState.swift in Sources */,
 				2549FEFAACF6366B21309CAB /* MacBenefitsView.swift in Sources */,
