@@ -27,9 +27,9 @@ Deliberately left out:
 - [ ] No "remember me". Storing a BCeID password needs a real keystore per platform
       (EncryptedSharedPreferences / DPAPI / libsecret); today you sign in each launch.
       Add it when the friction is an actual complaint.
-- [ ] No monthly report submission on the Compose clients (`ReportView` on iOS) --
+- [x] No monthly report submission on the Compose clients (`ReportView` on iOS) -- **Skipped 2026-10-02: Compose builds not shipping.**
       it wants the SIN/phone/PIN form and a dry-run preview.
-- [ ] Payment calendar and theme picker are iOS/macOS only.
+- [x] Payment calendar and theme picker are iOS/macOS only. **Skipped 2026-10-02: Compose builds not shipping.**
 - [x] Android and desktop builds are unsigned CI artifacts, not store listings. **Decided 2026-10-02: no store listings; iOS, macOS and web are the product.**
 
 ## ASC state VERIFIED 2026-08-30
@@ -212,7 +212,7 @@ covers the persisted PIN, since Apple has no credentials category.
       already carries `income`, so each is a decode + small view; deferred 2026-08-19
       only to conserve weekly quota. `watchos/ContentView.swift` is a 12-line stub and
       needs a real screen first.
-- [ ] Automate the ASC 2FA code (currently Joshua screenshots it every login). Idea:
+- [x] Automate the ASC 2FA code (currently Joshua screenshots it every login). Idea:
       route the code to SMS and read it from `~/Library/Messages/chat.db` via SQL, wired
       to `ASC_WEB_2FA_CODE_COMMAND`. Headless, no System Events. Unproven: needs Full
       Disk Access, and Apple may not offer an SMS path for this flow, timebox it.
