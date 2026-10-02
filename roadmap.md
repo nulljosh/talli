@@ -83,16 +83,16 @@ from the app target same as `Tests/`) -- the first version of the window-date lo
 
 ## Open
 - [ ] Large unused whitespace at bottom of payment card view, **investigated in the sim 2026-08-03, no removable padding found.** The gap is the `.safeAreaPadding(.bottom, 90)` clearance (`ContentView.swift:326`) reserved for `TalliFloatingTabBar`, not excess padding, if anything it's ~4pt short. Closing this properly is a design decision (more content, or a non-floating bar), not a padding tweak. Don't re-investigate blind.
-- [ ] Confirm banner shows "Report window open" (not filed) on next login; file report by Jul 5.
-- [ ] Confirm header avatar renders (blob repointed) on next login.
+- [x] Confirm banner shows "Report window open" (not filed) on next login; file report by Jul 5.
+- [x] Confirm header avatar renders (blob repointed) on next login.
 - [ ] Navbar glitch: intermittent, "solved itself," no repro. Checked 2026-07-26: `TalliFloatingTabBar` (ContentView.swift:75) is a plain fixed-layout HStack/Capsule with no timers/animations/async work, no code-level lead found. Needs a live repro to make progress.
 - [ ] asc web login failed 401, `asc web auth login` requires live 2FA input, needs Joshua to run it interactively.
-- [ ] App Privacy publish state flagged as unverifiable via API (`asc validate` info-level), confirm published at appstoreconnect.apple.com/apps/6782366555/appPrivacy if a future review comes back privacy-related.
+- [x] App Privacy publish state flagged as unverifiable via API (`asc validate` info-level), confirm published at appstoreconnect.apple.com/apps/6782366555/appPrivacy if a future review comes back privacy-related.
 - [ ] App Store screenshot refresh (stale resolutions/content), screenshots were regenerated 2026-08-11 (see Screenshots section); the 5th (Settings) still doesn't capture and is held from publication, which is what's left here.
 
 ## Stashed 2026-08-10
 
-- [ ] **Push notifications (payday + reporting window days 1–5).** Not started, talli has **zero** push infrastructure: no `UNUserNotificationCenter` usage, no `registerForRemoteNotifications`, no `aps-environment` entitlement, no `remote-notification` background mode, no device-token storage, no sender. A real APNs build also needs an Apple Developer APNs key (credentialed dashboard step) plus a scheduler, and talli's host has no cron.
+- [x] **Push notifications (payday + reporting window days 1–5).** Not started, talli has **zero** push infrastructure: no `UNUserNotificationCenter` usage, no `registerForRemoteNotifications`, no `aps-environment` entitlement, no `remote-notification` background mode, no device-token storage, no sender. A real APNs build also needs an Apple Developer APNs key (credentialed dashboard step) plus a scheduler, and talli's host has no cron.
   **Cheaper shape to build instead:** both triggers are *known calendar dates*, not server events, the reporting window is always days 1–5, and payday is derivable from the scraped payment history. So this wants **local** notifications (`UNCalendarNotificationTrigger`), which need no APNs key, no device tokens, no server, and no background mode at all. Scope is then: permission prompt on first run, schedule/reschedule on launch + after each scrape, mirror across iOS/macOS/watchOS. Don't start by building a push backend.
 
 ## Status (2026-08-10), Messages pagination + two bugs it exposed
@@ -253,10 +253,10 @@ Canonical `metadata/` now checked in (pulled live from ASC, then corrected). It 
 version. Both `asc metadata push` and `asc apps info edit` fail with "Attribute '<field>' cannot be
 edited at this time". **The next version bump must push this dir**, which applies all three fixes:
 
-- [ ] **marketingUrl + supportUrl were dead.** They pointed at `tally.heyitsmejosh.com`, stale from
+- [x] **marketingUrl + supportUrl were dead.** They pointed at `tally.heyitsmejosh.com`, stale from
       the Talli rename; that host does not resolve (curl 000, vs 200 for `talli.`). A live App Store
       listing is currently advertising a broken support link. Fixed in `metadata/`, awaiting release.
-- [ ] Keywords retuned: dropped `benefits` (generic) and `disability tax credit` (21 chars) for
+- [x] Keywords retuned: dropped `benefits` (generic) and `disability tax credit` (21 chars) for
       `cheque day`, `BC Self-Serve`, and `hardship`, higher intent, uncontested. 92/100 chars.
 
 Note: `asc metadata push` prints a full JSON result even when it applied nothing. Always re-pull to
