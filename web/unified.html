@@ -281,7 +281,7 @@ function TabBar({tab, setTab, dark, msgBadge}) {
 // ════════════════════════════════════════════════════
 // HOME TAB
 // ════════════════════════════════════════════════════
-function HomeTab({dark, amount, daysUntil, paymentDate, paid, onPaidChange, reportMonths, onSubmitReport, onMarkFiled, pwdApproved}) {
+function HomeTab({dark, amount, yearIncome, daysUntil, paymentDate, paid, onPaidChange, reportMonths, onSubmitReport, onMarkFiled, pwdApproved}) {
   const t = tk(dark);
   const [loaded, setLoaded] = useState(false);
   const [bounce, setBounce] = useState(false);
@@ -432,6 +432,11 @@ function HomeTab({dark, amount, daysUntil, paymentDate, paid, onPaidChange, repo
       <div style={{marginTop:24,animation:'fadeUp 0.45s 0.5s ease both'}}>
         <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:6}}>Monthly amount</div>
         <div style={{fontSize:22,fontWeight:700,letterSpacing:'-1px',color:t.text}}>{amount || '$1,060'}</div>
+        {yearIncome?.yearTotal > 0 && (
+          <div style={{fontSize:12,color:t.mutedMid,marginTop:4}}>
+            ${yearIncome.yearTotal.toLocaleString('en-CA')} this year · ${yearIncome.yearRemaining.toLocaleString('en-CA')} still to come ({yearIncome.paymentsLeft} {yearIncome.paymentsLeft===1?'payday':'paydays'})
+          </div>
+        )}
       </div>
 
       {isPro ? (
@@ -1351,7 +1356,7 @@ function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, av
 // ════════════════════════════════════════════════════
 const TAB_ORDER = ['home','calendar','status','messages'];
 
-function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, onRefresh, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, cgeb, username, onLogout, avatarUrl, onAvatarClick, onAvatarBroken, avatarError, setAvatarError, skn, reportMonths, onMarkFiled, onPwdResubmitted, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
+function Screen({dark, amount, yearIncome, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, onRefresh, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, cgeb, username, onLogout, avatarUrl, onAvatarClick, onAvatarBroken, avatarError, setAvatarError, skn, reportMonths, onMarkFiled, onPwdResubmitted, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
   const t = tk(dark);
   const [tab, setTab] = useState('home');
   const [showSubmit, setShowSubmit] = useState(false);
@@ -1388,7 +1393,7 @@ function Screen({dark, amount, daysUntil, paymentDate, payDateObj, paid, onPaidC
         </button>
       </div>
 
-      {tab==='home'     &&<HomeTab     dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange} reportMonths={reportMonths} onSubmitReport={()=>setShowSubmit(true)} onMarkFiled={onMarkFiled} pwdApproved={pwdApproved}/>}
+      {tab==='home'     &&<HomeTab     dark={dark} amount={amount} yearIncome={yearIncome} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange} reportMonths={reportMonths} onSubmitReport={()=>setShowSubmit(true)} onMarkFiled={onMarkFiled} pwdApproved={pwdApproved}/>}
       {tab==='calendar' &&<CalendarTab dark={dark} payDateObj={payDateObj} amount={amount} daysUntil={daysUntil}/>}
       {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} cgeb={cgeb} skn={skn} onSubmitReport={()=>setShowSubmit(true)} onPwdResubmit={()=>setShowPwdResubmit(true)} reportMonths={reportMonths} username={username} pinSet={pinSet} onSetPin={()=>setShowPinSheet(true)}/>}
       {tab==='messages' &&<MessagesTab dark={dark} messages={messages} readIds={readIds} onRead={onRead} onRefresh={onRefresh}/>}
@@ -1410,6 +1415,7 @@ function App() {
   const [dark,        setDark]        = useState(window.matchMedia('(prefers-color-scheme: dark)').matches);
   const [username,    setUsername]    = useState('');
   const [amount,      setAmount]      = useState(null);
+  const [yearIncome,  setYearIncome]  = useState(null);
   const [daysUntil,   setDaysUntil]   = useState(null);
   const [paymentDate, setPaymentDate] = useState('');
   const [payDateObj,  setPayDateObj]  = useState(null);
@@ -1466,6 +1472,7 @@ function App() {
       // scraping it silently dropped the federal CDB and showed a low monthly total.
       const total = json.uiConfig?.income?.totalMonthly;
       if (total != null) setAmount('$' + total.toLocaleString('en-CA'));
+      setYearIncome(json.uiConfig?.income ?? null);
       else setAmount(prev => prev ?? '$0');
       const dm = raw.match(/(\d{4})\s*\/\s*([A-Z]{3})\s*\/\s*(\d{2})/);
       const _now = new Date(); _now.setHours(0,0,0,0);
@@ -1608,7 +1615,7 @@ function App() {
 
   return (
     <>
-    <Screen dark={dark} amount={amount} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} readIds={readIds} onRead={mergeReadIds} onRefresh={loadData} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} cgeb={cgeb} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} onAvatarBroken={handleAvatarBroken} setAvatarError={setAvatarError} skn={skn} reportMonths={reportMonths} onMarkFiled={handleMarkFiled} onPwdResubmitted={handlePwdResubmitted} pinSet={pinSet} setPinSet={setPinSet} showPinSheet={showPinSheet} setShowPinSheet={setShowPinSheet}/>
+    <Screen dark={dark} amount={amount} yearIncome={yearIncome} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} readIds={readIds} onRead={mergeReadIds} onRefresh={loadData} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} cgeb={cgeb} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} onAvatarBroken={handleAvatarBroken} setAvatarError={setAvatarError} skn={skn} reportMonths={reportMonths} onMarkFiled={handleMarkFiled} onPwdResubmitted={handlePwdResubmitted} pinSet={pinSet} setPinSet={setPinSet} showPinSheet={showPinSheet} setShowPinSheet={setShowPinSheet}/>
     </>
   );
 }

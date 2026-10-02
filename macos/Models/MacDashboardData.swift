@@ -20,6 +20,10 @@ struct MacDashboardData: Codable, Sendable {
         let pwdMonthly: Double
         let cdbMonthly: Double
         let totalMonthly: Double
+        // BC's published paydays this year; optional for older servers.
+        let yearTotal: Double?
+        let yearRemaining: Double?
+        let paymentsLeft: Int?
     }
 
     let paymentAmount: String?

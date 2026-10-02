@@ -277,6 +277,15 @@ private struct DashboardScreen: View {
                     incomeCell(label: "TOTAL", value: appState.moneyText(income.totalMonthly))
                 }
 
+                if let year = income.yearTotal, let left = income.yearRemaining, let n = income.paymentsLeft, year > 0 {
+                    HStack {
+                        Text("This year").foregroundStyle(.secondary)
+                        Spacer()
+                        Text("\(appState.moneyText(year)), \(appState.moneyText(left)) still to come (\(n))").fontWeight(.semibold)
+                    }
+                    .font(.footnote)
+                }
+
                 ForEach(appState.incomeRates, id: \.label) { rate in
                     HStack {
                         Text(rate.label).foregroundStyle(.secondary)

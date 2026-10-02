@@ -20,6 +20,12 @@ struct MacBenefitsView: View {
                     incomeCell("CDB", income.cdbMonthly)
                     incomeCell("Total", income.totalMonthly)
                 }
+                if let year = income.yearTotal, let left = income.yearRemaining, let n = income.paymentsLeft, year > 0 {
+                    let cad = FloatingPointFormatStyle<Double>.Currency(code: "CAD").precision(.fractionLength(0))
+                    Text("\(year.formatted(cad)) this year, \(left.formatted(cad)) still to come (\(n) \(n == 1 ? "payday" : "paydays"))")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
             }
             .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)

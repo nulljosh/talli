@@ -22,6 +22,11 @@ struct DashboardData: Codable, Sendable {
         let pwdMonthly: Double
         let cdbMonthly: Double
         let totalMonthly: Double
+        // Server counts BC's published paydays for the year. Optional: older
+        // servers don't send them.
+        let yearTotal: Double?
+        let yearRemaining: Double?
+        let paymentsLeft: Int?
     }
 
     let paymentAmount: String?

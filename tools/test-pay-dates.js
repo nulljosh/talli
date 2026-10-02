@@ -41,4 +41,12 @@ t('signals exhaustion so the operator knows to refresh the schedule', () => {
   assert.strictEqual(warned, 1);
 });
 
+t('year totals count the published paydays, not 12 x monthly', () => {
+  const { deriveIncome } = require('../src/programs/profiles');
+  const inc = deriveIncome({ monthlyAmount: 1000 }, { monthlyAmount: 100 }, new Date(2026, 9, 2));
+  assert.strictEqual(inc.yearTotal, 1100 * 12);
+  assert.strictEqual(inc.paymentsLeft, 3); // Oct 21, Nov 18, Dec 16
+  assert.strictEqual(inc.yearRemaining, 1100 * 3);
+});
+
 console.log(`\n${passed} passed, 0 failed`);
