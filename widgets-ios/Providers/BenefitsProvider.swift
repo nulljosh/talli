@@ -40,11 +40,22 @@ struct BenefitsProvider: TimelineProvider {
             updated = "--"
         }
 
+        let shared = UserDefaults(suiteName: "group.com.heyitsmejosh.tally")
+        let monthlyIncome: String? = (shared?.object(forKey: "widget_income_total") as? Double).flatMap { total in
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .currency
+            formatter.currencyCode = "CAD"
+            formatter.minimumFractionDigits = 2
+            formatter.maximumFractionDigits = 2
+            return formatter.string(from: NSNumber(value: total))
+        }
+
         return BenefitsEntry(
             date: .now,
             paymentAmount: summary?.payment.total ?? "--",
             supportAmount: summary?.payment.support ?? "--",
             shelterAmount: summary?.payment.shelter ?? "--",
+            monthlyIncome: monthlyIncome,
             lastUpdated: updated,
             isPlaceholder: false
         )

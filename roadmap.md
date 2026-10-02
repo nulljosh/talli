@@ -208,7 +208,7 @@ persisted (`src/api.js:2015`), so they aren't "collected" under Apple's definiti
 covers the persisted PIN, since Apple has no credentials category.
 
 ## From Notes (imported 2026-08-19)
-- [ ] Mirror the same income block to watchOS and both widget targets. The payload
+- [ ] Mirror the same income block to watchOS (iOS widget done 2026-10-02 via App Group). The payload
       already carries `income`, so each is a decode + small view; deferred 2026-08-19
       only to conserve weekly quota. `watchos/ContentView.swift` is a 12-line stub and
       needs a real screen first.

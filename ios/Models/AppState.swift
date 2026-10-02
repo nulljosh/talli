@@ -19,7 +19,18 @@ final class AppState {
     var isAuthenticated = false
     var isLoading = false
     var errorMessage: String?
-    var dashboard: DashboardData?
+    var dashboard: DashboardData? {
+        // The widget only sees /api/summary, which has no per-user profiles, so
+        // the app hands it the server-derived income through the App Group.
+        didSet {
+            let shared = UserDefaults(suiteName: "group.com.heyitsmejosh.tally")
+            if let total = dashboard?.income?.totalMonthly {
+                shared?.set(total, forKey: "widget_income_total")
+            } else if dashboard == nil {
+                shared?.removeObject(forKey: "widget_income_total")
+            }
+        }
+    }
     var isOffline = false
     var selectedTabIndex: Int = 0
     var lastSyncDate: Date? = nil
