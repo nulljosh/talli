@@ -34,6 +34,7 @@
 		4BCA3DBEDCAA96B862C734FA /* TalliMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD291A0A6F3E178AE7DBC14D /* TalliMacApp.swift */; };
 		533777806E5A825E0BB6FB75 /* TalliWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 05C53A51618D2F7455BED586 /* TalliWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		59D75C644E8AF87E3EAA040D /* ServiceRequestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95554CD8FF952B439E481BA4 /* ServiceRequestsView.swift */; };
+		5AE912C79A2126B8E32B1B0F /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 672B870569D2E3A8219AD924 /* BudgetView.swift */; };
 		62E4A3F5916F04C5C1474AA6 /* View+Glass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB0F7DA1B151C354B363FA0 /* View+Glass.swift */; };
 		648A1E6A1C557E43E91DD2AB /* MacKeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D46509CD0CB994360A6EE /* MacKeychainHelper.swift */; };
 		68003AB732B158D919F3BE14 /* RTLTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47FDBC6806E5A115D749928 /* RTLTracking.swift */; };
@@ -102,6 +103,7 @@
 		54336877769FA2F896CFAEAA /* ReconsiderationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReconsiderationView.swift; sourceTree = "<group>"; };
 		5ED7313B160FD0FF894E40D8 /* MacWidgetModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacWidgetModels.swift; sourceTree = "<group>"; };
 		63A17E7510CFCFBFACA72F49 /* Talli.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Talli.entitlements; sourceTree = "<group>"; };
+		672B870569D2E3A8219AD924 /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
 		6CE300DF4D1CB8C872ECF1C6 /* MacDashboardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDashboardData.swift; sourceTree = "<group>"; };
 		712C08E52D3C020E27D13B54 /* MacLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacLoginView.swift; sourceTree = "<group>"; };
 		7B87D84FEC8981517B9093CB /* MacPaymentCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPaymentCalendarView.swift; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				A35803128BD01A8F7B732D9B /* BenefitFinderView.swift */,
+				672B870569D2E3A8219AD924 /* BudgetView.swift */,
 				3957E7C2F9B33E31A48633BD /* HouseholdView.swift */,
 				C12445E704AC6AE4D68DAA67 /* LifeChangeView.swift */,
 				0046C4CA8530BB849F37AAA5 /* MissedPaymentView.swift */,
@@ -455,6 +458,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FE0CCA838AA6BF0996DF72CD /* BenefitFinderView.swift in Sources */,
+				5AE912C79A2126B8E32B1B0F /* BudgetView.swift in Sources */,
 				1623130FC8E0A8FF3C7C74CB /* HouseholdView.swift in Sources */,
 				68757DD630674D89FA11A436 /* LifeChangeView.swift in Sources */,
 				A839CE61888A245D80B8D1F0 /* MacAPIClient.swift in Sources */,

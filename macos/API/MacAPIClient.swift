@@ -147,6 +147,13 @@ final class MacAPIClient: @unchecked Sendable {
         )
     }
 
+    func budget(save: BudgetRequest?) async throws -> Budget {
+        if let save {
+            return try await send(path: "api/budget", method: "POST", body: save, responseType: Budget.self)
+        }
+        return try await send(path: "api/budget", responseType: Budget.self)
+    }
+
     func lifeChange(save: LifeRequest?) async throws -> LifeChange {
         if let save {
             return try await send(path: "api/life", method: "POST", body: save, responseType: LifeChange.self)

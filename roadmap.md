@@ -18,7 +18,7 @@ ASC verified today: iOS 3.5.14 and macOS 3.5.6 READY_FOR_DISTRIBUTION. Revenue w
 ### 9.0: plan ahead
 - [x] (2026-10-02, web/iOS/macOS) What-if: "if I take this job at 20 hours a week", see the exemption, clawback and take-home month by month.
 - [x] (2026-10-02, web/iOS/macOS) Moving out of BC or turning 65: what changes (OAS/GIS hand-off), when, and what to file.
-- [ ] Budget against real paydays: bills land on the calendar next to the money that pays them.
+- [x] (2026-10-02, web/iOS/macOS) Budget against real paydays: bills land on the calendar next to the money that pays them.
 
 ### 10.0: every province
 - [ ] Alberta AISH and Ontario ODSP on the same profile engine; adding a province is a data file, not new code.

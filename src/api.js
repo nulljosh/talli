@@ -17,6 +17,7 @@ const widgetToken = require('./widget-token');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { nextPaymentDate } = require('./pay-dates');
 const helper = require('./programs/helper');
+const { deriveBudget, cleanBudget } = require('./programs/budget');
 const { deriveLife, cleanLife } = require('./programs/lifechange');
 const { deriveWhatIf } = require('./programs/whatif');
 const { deriveHousehold, cleanHousehold, withRentHistory } = require('./programs/household');
@@ -1999,6 +2000,39 @@ async function rememberIncome(req, userId, income) {
   } catch (err) { log('[HELPER] remember income:', err.message); }
   return income;
 }
+
+// Budget against paydays (src/programs/budget.js). What lands per cheque is the PWD and
+// disability benefit amount Talli last showed, plus supplements the person turned on.
+async function budgetFor(userId, saved) {
+  const [pwd, cdb, last, supp] = await Promise.all([
+    loadUserBlob(userId, 'pwd-profile', {}), loadUserBlob(userId, 'cdb-profile', {}),
+    loadUserBlob(userId, 'last-income', null), loadUserBlob(userId, 'supplements-profile', {}),
+  ]);
+  const base = last?.totalMonthly ?? ((pwd?.monthlyAmount ?? DEFAULT_MONTHLY_RATES.pwd) + (cdb?.monthlyAmount ?? DEFAULT_MONTHLY_RATES.cdb));
+  return deriveBudget(saved, { perCheque: base + deriveSupplements(supp).monthly });
+}
+
+app.get('/api/budget', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    res.json(await budgetFor(userId, await loadUserBlob(userId, 'budget-profile', {})));
+  } catch (err) {
+    log('[BUDGET] GET error:', err.message);
+    res.json(deriveBudget({}, { perCheque: 0 }));
+  }
+});
+
+app.post('/api/budget', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    const saved = cleanBudget(req.body);
+    await saveUserBlob(userId, 'budget-profile', saved);
+    res.json(await budgetFor(userId, saved));
+  } catch (err) {
+    log('[BUDGET] POST error:', err.message);
+    res.status(500).json({ error: 'Failed to save bills' });
+  }
+});
 
 // Big changes (src/programs/lifechange.js): turning 65 and moving out of BC. Only a birth
 // month and year and an optional leave date are kept.

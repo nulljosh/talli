@@ -27,6 +27,7 @@ targets:
       - path: ../ios/Views/TrustedHelperView.swift
       - path: ../ios/Views/WhatIfView.swift
       - path: ../ios/Views/LifeChangeView.swift
+      - path: ../ios/Views/BudgetView.swift
       - path: ../ios/Helpers/VaultCrypto.swift
       - path: .
         excludes:

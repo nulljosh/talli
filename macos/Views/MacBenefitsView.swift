@@ -90,6 +90,12 @@ struct MacBenefitsView: View {
                 callToAction
 
                 DisclosureGroup("Money tools") {
+                    DisclosureGroup("Budget against paydays") {
+                        BudgetView { try await MacAPIClient.shared.budget(save: $0) }
+                            .padding(.top, 8)
+                    }
+                    .font(.headline)
+
                     DisclosureGroup("Benefit finder") {
                         BenefitFinderView { try await MacAPIClient.shared.benefitFinder(answers: $0) }
                             .padding(.top, 8)

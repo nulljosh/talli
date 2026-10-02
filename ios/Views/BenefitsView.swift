@@ -16,6 +16,12 @@ struct BenefitsView: View {
                 benefitRow("GST/HST Credit", "\(CRADates.lastKnownGSTQuarterlyText) next \(CRADates.nextGSTPaymentText)", "Automatic")
 
                 DisclosureGroup("Money tools") {
+                    DisclosureGroup("Budget against paydays") {
+                        BudgetView { try await APIClient.shared.budget(save: $0) }
+                            .padding(.top, 8)
+                    }
+                    .font(.headline)
+
                     DisclosureGroup("Benefit finder") {
                         BenefitFinderView { try await APIClient.shared.benefitFinder(answers: $0) }
                             .padding(.top, 8)

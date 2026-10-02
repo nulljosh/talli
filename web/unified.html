@@ -1171,6 +1171,53 @@ function LifeTool({dark}) {
   );
 }
 
+// Budget against paydays: bills by day of the month next to the cheques that pay them. Maths: src/programs/budget.js.
+function BudgetTool({dark}) {
+  const t = tk(dark);
+  const T = window.I18N.t;
+  const [data, setData] = useState(null);
+  const [f, setF] = useState({name:'', amount:'', day:''});
+  const usd = (n) => '$' + Math.round(n).toLocaleString();
+  const short = (d) => new Date(d+'T12:00:00').toLocaleString('en-CA',{month:'short',day:'numeric'});
+  useEffect(() => { fetch('/api/budget', {credentials:'include'}).then(r=>r.json()).then(setData).catch(()=>{}); }, []);
+  if (!data) return <Skel w="100%" h={90} r={12} dark={dark}/>;
+  const save = async (bills) => { try { const r = await fetch('/api/budget', {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({bills})}); if (r.ok) setData(await r.json()); } catch (e) {} };
+  const add = async () => { await save([...data.bills, {name:f.name, amount:+f.amount, day:+f.day, id:'b'+Date.now().toString(36)}]); setF({name:'',amount:'',day:''}); };
+  const label = {fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:14};
+  const card = {padding:'16px 18px',background:t.bg2,borderRadius:12,border:`1px solid ${t.border}`};
+  const input = {boxSizing:'border-box',padding:'9px 10px',borderRadius:8,border:`1px solid ${t.border2}`,background:'transparent',color:t.text,fontSize:13,fontFamily:'inherit',width:'100%'};
+  const ok = f.name.trim() && +f.amount > 0 && +f.day >= 1 && +f.day <= 31;
+  return (
+    <div style={{animation:'fadeIn 0.2s ease both'}}>
+      <div style={label}>{T('Budget against paydays')}</div>
+      <div style={card}>
+        <div style={{fontSize:13,color:t.mutedMid,lineHeight:1.5}}>{T('Add your bills and the day each is due. Talli lines them up against the cheques that pay for them and warns you when one lands before the money does.')}</div>
+        {data.bills.map(b => (
+          <div key={b.id} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 0',borderTop:`1px solid ${t.border}`,marginTop:8,fontSize:13}}>
+            <span style={{color:t.text,fontWeight:600}}>{b.name}</span>
+            <span style={{color:t.mutedMid}}>{usd(b.amount)} {T('on the')} {b.day}{[,'st','nd','rd'][b.day%10]&&![11,12,13].includes(b.day)?[,'st','nd','rd'][b.day%10]:'th'}
+              <button onClick={()=>save(data.bills.filter(x=>x.id!==b.id))} aria-label={T('Remove')} style={{background:'none',border:'none',color:t.muted,fontSize:16,cursor:'pointer',marginInlineStart:6}}>×</button></span>
+          </div>
+        ))}
+        <div style={{display:'grid',gridTemplateColumns:'1.6fr 1fr 0.7fr',gap:6,marginTop:12}}>
+          <input placeholder={T('Rent')} aria-label={T('Bill name')} value={f.name} onChange={e=>setF({...f,name:e.target.value})} style={input} maxLength={30}/>
+          <input inputMode="decimal" placeholder="$" aria-label={T('Amount')} value={f.amount} onChange={e=>setF({...f,amount:e.target.value})} style={input}/>
+          <input inputMode="numeric" placeholder={T('Day')} aria-label={T('Day of the month')} value={f.day} onChange={e=>setF({...f,day:e.target.value})} style={input} maxLength={2}/>
+        </div>
+        <button onClick={add} disabled={!ok} style={{marginTop:10,padding:'8px 15px',borderRadius:100,background:t.accent,color:'#fff',border:'none',fontSize:13,fontWeight:600,fontFamily:'inherit',cursor:'pointer',opacity:ok?1:0.5}}>{T('Add bill')}</button>
+      </div>
+      {data.bills.length>0 && data.periods.map(p => (
+        <div key={p.from} style={{...card,marginTop:10,borderColor:p.left<0?`${t.warning}80`:t.border}}>
+          <div style={{display:'flex',justifyContent:'space-between',fontSize:12,color:t.mutedMid}}><span>{short(p.from)} {T('to')} {short(new Date(new Date(p.to+'T12:00:00').getTime()-86400000).toISOString().slice(0,10))}{p.current?' · '+T('now'):''}</span><span>{usd(p.income)} {T('in')}</span></div>
+          <div style={{fontSize:22,fontWeight:800,letterSpacing:'-0.6px',color:p.left<0?t.warning:t.text,marginTop:4}}>{p.left<0?'-':''}{usd(Math.abs(p.left))} <span style={{fontSize:12,fontWeight:500,color:t.mutedMid,letterSpacing:0}}>{p.left<0?T('short'):T('left')}</span></div>
+          {p.bills.map(b=><div key={b.date+b.id} style={{display:'flex',justifyContent:'space-between',fontSize:12,color:t.mutedMid,padding:'3px 0'}}><span>{short(b.date)} {b.name}</span><span>{usd(b.amount)}</span></div>)}
+        </div>
+      ))}
+      {data.short.length>0 && <div style={{fontSize:12,color:t.warning,fontWeight:600,marginTop:10,lineHeight:1.5}}>{T('One of these periods is short. Ask for a later due date, or call the ministry about a crisis supplement before the bill is late.')}</div>}
+    </div>
+  );
+}
+
 // One quiet line per section; the full section opens on tap. Keeps Status and Calendar short.
 function FoldBox({dark, title, summary, open, setOpen, children}) {
   const t = tk(dark);
@@ -1258,9 +1305,12 @@ function CalendarTab({dark, payDateObj, amount, daysUntil}) {
   const saveSupp = async (next) => {
     try { const r = await fetch('/api/supplements', {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(next)}); if (r.ok) setSupp(await r.json()); } catch (e) {}
   };
+  const [bud, setBud] = useState(null);
+  useEffect(() => { fetch('/api/budget', {credentials:'include'}).then(r=>r.json()).then(setBud).catch(()=>{}); }, []);
   const suppEvents = supp?.derived?.upcoming || [];
   const key = (d) => `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
   const suppDay = (d) => suppEvents.filter(e => e.date === key(d));
+  const billDay = (d) => (bud?.upcoming || []).filter(e => e.date === key(d));
   const go = (d) => { setDir(d>0?'left':'right'); setAnimKey(k=>k+1); setViewMonth(m=>new Date(m.getFullYear(),m.getMonth()+d,1)); };
   const year=viewMonth.getFullYear(), month=viewMonth.getMonth();
   const name=viewMonth.toLocaleString('en-CA',{month:'long',year:'numeric'});
@@ -1300,13 +1350,14 @@ function CalendarTab({dark, payDateObj, amount, daysUntil}) {
           </div>
           <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)'}}>
             {cells.map((d,i)=>{
-              const next=isNextPay(d),past=pastPay(d),tod=isToday_(d),isP=isPast(d),isFilingDay=d&&d>=1&&d<=5,sup=d?suppDay(d):[];
+              const next=isNextPay(d),past=pastPay(d),tod=isToday_(d),isP=isPast(d),isFilingDay=d&&d>=1&&d<=5,sup=d?suppDay(d):[],bil=d?billDay(d):[];
               return (
                 <div key={i} style={{display:'flex',alignItems:'center',justifyContent:'center',height:44}}>
                   <div style={{width:36,height:36,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:2,background:next?t.accent:'transparent',border:next?'none':tod?`1px solid ${t.border2}`:isFilingDay?`1px solid ${t.accent}50`:'none',animation:next?'pulseRing 2.5s ease-out infinite':'none','--pc':'rgba(91,155,213,0.2)',position:'relative'}}>
                     <span style={{fontSize:14,fontWeight:(next||past)?600:400,lineHeight:1,color:d===null?'transparent':next?t.bg:isP&&!past?t.text:t.text,opacity:d===null?0:isP&&!past&&!tod?0.25:1}}>{d}</span>
                     {past&&!next&&<div style={{width:3,height:3,borderRadius:'50%',background:t.success,opacity:0.8,position:'absolute',bottom:5}}/>}
-                    {sup.length>0&&<div title={sup.map(e=>e.name).join(', ')} style={{width:4,height:4,borderRadius:'50%',background:next?t.bg:t.warning,position:'absolute',bottom:3}}/>}
+                    {sup.length>0&&<div title={sup.map(e=>e.name).join(', ')} style={{width:4,height:4,borderRadius:'50%',background:next?t.bg:t.warning,position:'absolute',bottom:3,left:bil.length?'38%':'calc(50% - 2px)'}}/>}
+                    {bil.length>0&&<div title={bil.map(e=>e.name).join(', ')} style={{width:4,height:4,borderRadius:'50%',background:t.error,position:'absolute',bottom:3,left:sup.length?'56%':'calc(50% - 2px)'}}/>}
                   </div>
                 </div>
               );
@@ -1387,6 +1438,10 @@ function CalendarTab({dark, payDateObj, amount, daysUntil}) {
           <div style={{display:'flex',alignItems:'center',gap:5}}>
             <div style={{width:5,height:5,borderRadius:'50%',flexShrink:0,background:t.warning}}/>
             <span style={{fontSize:10,color:t.muted}}>Supplement</span>
+          </div>
+          <div style={{display:'flex',alignItems:'center',gap:5}}>
+            <div style={{width:5,height:5,borderRadius:'50%',flexShrink:0,background:t.error}}/>
+            <span style={{fontSize:10,color:t.muted}}>Bill</span>
           </div>
         </div>
       </div>
@@ -1927,7 +1982,10 @@ function BenniesSection({dark}) {
         </button>
       </div>
       </Fold>
-      <Fold dark={dark} title="Money tools" summary="Benefit finder, RDSP, what if, household">
+      <Fold dark={dark} title="Money tools" summary="Finder, RDSP, what if, household, budget">
+        <FoldTool dark={dark} title="Budget against paydays" url="/api/budget" summarize={d=>d.short.length?'A bill lands before the money does':d.bills.length?d.bills.length+(d.bills.length===1?' bill':' bills')+', '+'$'+Math.round(d.monthlyBills).toLocaleString()+' a month':'Line your bills up with your cheques'}>
+          <BudgetTool dark={dark}/>
+        </FoldTool>
         <FoldTool dark={dark} title="Benefit finder" url="/api/benefit-finder" summarize={d=>d.complete?(d.missingYearly>0?'Up to $'+d.missingYearly.toLocaleString()+' a year you may be missing':'You are getting the big ones'):'Find what you are missing'}>
           <BenefitFinder dark={dark}/>
         </FoldTool>
