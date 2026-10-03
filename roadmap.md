@@ -15,16 +15,6 @@ ASC verified today: iOS 3.5.14 and macOS 3.5.6 READY_FOR_DISTRIBUTION. Revenue w
 ### 4.0: the whole money picture
 - [ ] Payday push without opening the app: a Workers Cron Trigger checks the portal and pushes new messages and the payday reminder (APNs key needed from Joshua).
 
-### 9.0: plan ahead
-- [x] (2026-10-02, web/iOS/macOS) What-if: "if I take this job at 20 hours a week", see the exemption, clawback and take-home month by month.
-- [x] (2026-10-02, web/iOS/macOS) Moving out of BC or turning 65: what changes (OAS/GIS hand-off), when, and what to file.
-- [x] (2026-10-02, web/iOS/macOS) Budget against real paydays: bills land on the calendar next to the money that pays them.
-
-### 10.0: every province
-- [x] (2026-10-02, web/iOS/macOS) Alberta AISH and Ontario ODSP on the same profile engine; adding a province is a data file, not new code.
-- [x] (2026-10-02, web/iOS/macOS) Federal-only mode for anyone on CDB, GST credit and the Canada Dental Benefit without a provincial portal.
-- [x] (2026-10-02, web, public JSON API and docs page) Open data: publish the pay-date and rate tables as a free API other advocates can build on.
-
 ## Full cross-platform -- DONE 2026-08-31
 
 Talli is now a real app on all six platforms: native iOS and macOS (Swift), a
