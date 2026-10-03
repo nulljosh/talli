@@ -517,6 +517,19 @@ const PROGRAMS = [
     link: 'https://www2.gov.bc.ca/gov/content/taxes/sales-taxes/pst/exemptions',
   },
   {
+    id: 'ccb', only: 'federal', group: 'money', name: 'Canada Child Benefit',
+    when: { kids: ['yes'], taxes: ['yes', 'no'] },
+    yearly: null, value: 'Up to $8,157 a year for a child under 6',
+    why: 'You have children at home. It is $6,883 a year for ages 6 to 17, paid monthly and reduced as family income rises. If your child has the Disability Tax Credit there is a top-up too.',
+    how: [
+      'File your taxes every year. The benefit follows automatically once you are set up.',
+      'New baby or new to Canada? Apply in CRA My Account or on the Canada Child Benefit form.',
+      'Tell the CRA when a child moves in or out so the amount stays right.',
+    ],
+    phone: '1-800-387-1193',
+    link: 'https://www.canada.ca/en/revenue-agency/services/child-family-benefits/canada-child-benefit-overview.html',
+  },
+  {
     id: 'advocate', group: 'help', name: 'A free advocate',
     when: {},
     yearly: null, value: 'Someone who does the forms with you',
@@ -529,6 +542,12 @@ const PROGRAMS = [
     link: 'https://disabilityalliancebc.org',
   },
 ];
+
+// Federal-only mode: for anyone without a provincial portal. Only federal programs, and
+// only the questions they need; the BC answers are filled with neutral defaults.
+const FEDERAL_IDS = new Set(['dtc', 'cdb', 'rdsp', 'cppd', 'cwb', 'file_taxes', 'hatc', 'metc', 'med_supplement', 'oas', 'cdcp', 'ccb', 'advocate']);
+const FEDERAL_QUESTIONS = ['disability', 'age', 'dtc', 'rdsp', 'kids', 'work', 'taxes'];
+const FEDERAL_DEFAULTS = { status: ['none'], housing: ['rent'], vehicle: ['no'], needs: [] };
 
 const QUESTION_IDS = new Set(QUESTIONS.map((q) => q.id));
 const OPTION_IDS = Object.fromEntries(QUESTIONS.map((q) => [q.id, new Set(q.options.map((o) => o.id))]));
@@ -559,9 +578,11 @@ function prefill({ pwd, dtc, rdsp, cdb } = {}) {
   return out;
 }
 
-function findBenefits(rawAnswers) {
-  const answers = cleanAnswers(rawAnswers);
-  const questions = QUESTIONS.filter((q) => !(q.skipIf && hits(answers, q.skipIf)));
+function findBenefits(rawAnswers, { scope = 'all' } = {}) {
+  const federal = scope === 'federal';
+  const answers = federal ? { ...FEDERAL_DEFAULTS, ...cleanAnswers(rawAnswers), ...FEDERAL_DEFAULTS } : cleanAnswers(rawAnswers);
+  const pool = QUESTIONS.filter((q) => !federal || FEDERAL_QUESTIONS.includes(q.id));
+  const questions = pool.filter((q) => !(q.skipIf && hits(answers, q.skipIf)));
   // `needs` may be legitimately empty, so it counts as answered once present.
   const complete = questions.every((q) => (q.multi ? answers[q.id] !== undefined : (answers[q.id] || []).length > 0));
   const disabled = (answers.status || []).includes('pwd') || (answers.disability || []).includes('yes');
@@ -569,6 +590,7 @@ function findBenefits(rawAnswers) {
   const have = new Set(answers.have || []);
 
   const results = !complete ? [] : PROGRAMS
+    .filter((p) => (federal ? FEDERAL_IDS.has(p.id) : p.only !== 'federal'))
     .filter((p) => (!p.disabled || disabled) && hits(answers, p.when))
     .map((p) => ({
       id: p.id, group: p.group, name: p.name, value: p.value, yearly: p.yearly ?? null,
@@ -584,6 +606,7 @@ function findBenefits(rawAnswers) {
   const worth = (r) => (r.id === 'pwd' && (answers.status || []).includes('ia') ? 5082 : r.yearly);
   return {
     verified: VERIFIED,
+    scope,
     questions,
     answers,
     complete,

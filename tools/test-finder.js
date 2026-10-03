@@ -68,5 +68,26 @@ test('prefill uses what Talli already knows', () => {
     { status: ['pwd'], dtc: ['yes'], have: ['cdb'] });
 });
 
+test('federal-only mode asks seven questions and shows only federal programs', () => {
+  const q = findBenefits({}, { scope: 'federal' });
+  assert.deepStrictEqual(q.questions.map((x) => x.id), ['disability', 'age', 'dtc', 'rdsp', 'kids', 'work', 'taxes']);
+  const r = findBenefits({ disability: ['yes'], age: ['19to49'], dtc: ['no'], rdsp: ['no'], kids: ['yes'], work: ['now'], taxes: ['yes'] }, { scope: 'federal' });
+  assert.ok(r.complete);
+  for (const id of ['dtc', 'cdb', 'rdsp', 'cwb', 'ccb', 'med_supplement', 'cdcp']) assert.ok(ids(r).includes(id), id);
+  for (const id of ['transport', 'renters_credit', 'ferries', 'parks', 'internet', 'crisis', 'hydro', 'fuel', 'pwd', 'ia', 'kids', 'climate', 'bc_reno']) assert.ok(!ids(r).includes(id), `no ${id}`);
+  assert.ok(r.missingYearly > 0);
+});
+
+test('the federal child benefit only exists in federal mode', () => {
+  const bc = findBenefits({ ...base, status: ['pwd'], kids: ['yes'] });
+  assert.ok(!ids(bc).includes('ccb'));
+  assert.ok(ids(bc).includes('kids'));
+});
+
+test('federal mode ignores a spoofed BC status', () => {
+  const r = findBenefits({ status: ['pwd'], disability: ['yes'], age: ['19to49'], dtc: ['no'], rdsp: ['no'], kids: ['no'], work: ['never'], taxes: ['yes'] }, { scope: 'federal' });
+  assert.ok(!ids(r).includes('transport') && !ids(r).includes('dental'));
+});
+
 console.log(`\nResults: ${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

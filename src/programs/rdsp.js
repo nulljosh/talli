@@ -86,4 +86,4 @@ function deriveRdsp(raw, now = new Date()) {
   };
 }
 
-module.exports = { deriveRdsp, cleanRdsp, BANDS, ENTITLEMENT };
+module.exports = { deriveRdsp, cleanRdsp, BANDS, ENTITLEMENT, LIMITS: { GRANT_LIFETIME, BOND_LIFETIME, CONTRIBUTION_LIFETIME, GRANT_YEARLY_MAX, BOND_YEARLY_MAX, CARRY_YEARS, LAST_AGE } };

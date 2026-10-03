@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open data | Talli</title>
+  <meta name="description" content="Free JSON for BC pay dates, disability assistance rates, earnings limits and federal benefit amounts. No key needed.">
+  <style>
+    :root { color-scheme: light dark; --bg:#fff; --text:#111; --muted:#6b6b6b; --line:#e6e6e6; --card:#f5f5f5; --accent:#5B9BD5; }
+    @media (prefers-color-scheme: dark) { :root { --bg:#0e0e0e; --text:#f2f2f2; --muted:#9a9a9a; --line:#262626; --card:#171717; } }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif; line-height:1.55; }
+    main { max-width:640px; margin:0 auto; padding:40px 20px 64px; }
+    h1 { font-size:34px; letter-spacing:-1px; margin:0 0 8px; }
+    h2 { font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:36px 0 12px; }
+    p { margin:0 0 12px; }
+    .muted { color:var(--muted); font-size:14px; }
+    .ep { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin-bottom:10px; }
+    code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:13px; }
+    .path { font-weight:700; }
+    button { margin-top:8px; padding:7px 14px; border-radius:100px; background:var(--accent); color:#fff; border:none; font:600 13px inherit; font-family:inherit; cursor:pointer; }
+    pre { margin:10px 0 0; max-height:260px; overflow:auto; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:10px 12px; font-size:12px; }
+    a { color:var(--accent); }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Open data</h1>
+  <p>The pay dates and rate tables Talli runs on, as plain JSON. Free to use, no key, works from any website. Built for advocates, caseworkers and anyone making a tool for people on disability assistance.</p>
+  <p class="muted">Every figure links to its official source. Rates change, so check the source before you rely on a number. Updated 2026-10-02.</p>
+
+  <h2>Endpoints</h2>
+  <div class="ep"><div class="path"><code>GET /api/open/pay-dates</code></div><p class="muted">BC income and disability assistance cheque issue dates.</p><button data-url="/api/open/pay-dates">Try it</button></div>
+  <div class="ep"><div class="path"><code>GET /api/open/rates</code></div><p class="muted">BC support and shelter tables by family size, earnings limits, supplements, and federal amounts (Canada Disability Benefit, Canada Child Benefit, RDSP).</p><button data-url="/api/open/rates">Try it</button></div>
+  <div class="ep"><div class="path"><code>GET /api/open/provinces</code></div><p class="muted">British Columbia, Alberta and Ontario programs: what they pay and how earnings are treated.</p><button data-url="/api/open/provinces">Try it</button></div>
+  <div class="ep"><div class="path"><code>GET /api/open/all</code></div><p class="muted">All of it in one file.</p><button data-url="/api/open/all">Try it</button></div>
+
+  <h2>Use it</h2>
+  <div class="ep"><code>curl https://talli.heyitsmejosh.com/api/open/pay-dates</code></div>
+  <div class="ep"><code>fetch('https://talli.heyitsmejosh.com/api/open/rates').then(r =&gt; r.json())</code></div>
+  <p class="muted">Limit: 60 requests a minute per address. Responses are cached for an hour. Want another province added? It is one small data file in <a href="https://github.com/nulljosh/talli/tree/main/data/provinces">data/provinces</a>. Send a pull request.</p>
+  <p class="muted">Talli is not affiliated with the Government of British Columbia.</p>
+</main>
+<script>
+document.querySelectorAll('button[data-url]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var ep = b.parentElement, old = ep.querySelector('pre'); if (old) { old.remove(); return; }
+    fetch(b.dataset.url).then(function (r) { return r.json(); }).then(function (j) {
+      var pre = document.createElement('pre'); pre.textContent = JSON.stringify(j, null, 2); ep.appendChild(pre);
+    }).catch(function () { var pre = document.createElement('pre'); pre.textContent = 'Could not load.'; ep.appendChild(pre); });
+  });
+});
+</script>
+</body>
+</html>

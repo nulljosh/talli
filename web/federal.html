@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Federal benefits check | Talli</title>
+  <meta name="description" content="Seven questions, no account. See the federal benefits you may be missing: Canada Disability Benefit, RDSP, Disability Tax Credit and more.">
+  <style>
+    :root { color-scheme: light dark; --bg:#fff; --text:#111; --muted:#6b6b6b; --line:#e6e6e6; --card:#f5f5f5; --accent:#5B9BD5; }
+    @media (prefers-color-scheme: dark) { :root { --bg:#0e0e0e; --text:#f2f2f2; --muted:#9a9a9a; --line:#262626; --card:#171717; } }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif; line-height:1.5; }
+    main { max-width:430px; margin:0 auto; padding:32px 20px 56px; }
+    h1 { font-size:28px; letter-spacing:-.8px; margin:0 0 6px; }
+    .muted { color:var(--muted); font-size:13px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin-top:14px; }
+    .q { font-size:17px; font-weight:700; letter-spacing:-.3px; }
+    .opt { display:block; width:100%; text-align:start; margin-top:8px; padding:12px 14px; border-radius:10px; border:1px solid var(--line); background:transparent; color:var(--text); font:inherit; font-size:14px; cursor:pointer; }
+    .opt:hover, .opt:focus-visible { border-color:var(--accent); outline:none; }
+    .bar { height:4px; background:var(--line); border-radius:2px; margin-bottom:14px; } .bar i { display:block; height:100%; background:var(--accent); border-radius:2px; }
+    .pill { display:inline-block; padding:8px 15px; border-radius:100px; background:var(--accent); color:#fff; text-decoration:none; font-weight:600; font-size:13px; border:none; cursor:pointer; font-family:inherit; }
+    .ghost { background:transparent; color:var(--muted); border:1px solid var(--line); }
+    .big { font-size:34px; font-weight:800; letter-spacing:-1.2px; line-height:1.15; }
+    details { margin-top:8px; background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 14px; }
+    summary { cursor:pointer; list-style:none; } summary::-webkit-details-marker { display:none; }
+    summary b { display:block; font-size:14px; } summary span { display:block; color:var(--accent); font-size:12px; font-weight:600; margin-top:2px; }
+    ol { margin:8px 0 0; padding-inline-start:18px; font-size:13px; color:var(--muted); } li { margin-bottom:4px; }
+    a { color:var(--accent); }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Federal benefits check</h1>
+  <p class="muted">Seven questions. No account, nothing saved. For anyone without a BC Self-Serve login.</p>
+  <div id="out"></div>
+  <p class="muted" style="margin-top:28px">On BC assistance? <a href="/login">Sign in to Talli</a> for payment dates, your applications and more. Talli is not affiliated with any government.</p>
+</main>
+<script>
+(function () {
+  var out = document.getElementById('out');
+  var answers = {};
+  var state = { questions: [], i: 0 };
+  var el = function (tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  var usd = function (n) { return '$' + Math.round(n).toLocaleString('en-CA'); };
+  var post = function (a) {
+    return fetch('/api/federal-finder', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ answers: a }) }).then(function (r) { if (!r.ok) throw new Error('x'); return r.json(); });
+  };
+  function ask() {
+    var q = state.questions[state.i];
+    var card = el('div', 'card'), bar = el('div', 'bar'), fill = el('i'); fill.style.width = ((state.i + 1) / state.questions.length * 100) + '%'; bar.append(fill);
+    card.append(bar, el('div', 'q', q.text));
+    if (q.hint) card.append(el('div', 'muted', q.hint));
+    q.options.forEach(function (o) {
+      var b = el('button', 'opt', o.label); b.type = 'button';
+      b.addEventListener('click', function () {
+        answers[q.id] = [o.id];
+        if (state.i + 1 < state.questions.length) { state.i++; ask(); } else finish();
+      });
+      card.append(b);
+    });
+    if (state.i > 0) { var back = el('button', 'pill ghost', 'Back'); back.type = 'button'; back.style.marginTop = '12px'; back.addEventListener('click', function () { state.i--; ask(); }); card.append(back); }
+    out.replaceChildren(card);
+  }
+  function finish() {
+    post(answers).then(function (r) {
+      var frag = document.createDocumentFragment();
+      var hero = el('div', 'card');
+      if (r.missingYearly > 0) { hero.append(el('div', 'muted', 'You could be missing up to'), el('div', 'big', usd(r.missingYearly) + ' a year')); }
+      else hero.append(el('div', 'q', 'You are getting the big ones.'));
+      hero.append(el('div', 'muted', r.results.length + ' federal programs to look at. Tap one for the steps.'));
+      frag.append(hero);
+      r.results.forEach(function (p) {
+        var d = el('details'), s = el('summary'); s.append(el('b', null, p.name), el('span', null, p.value)); if (p.first) s.append(el('div', 'muted', p.first));
+        d.append(s, el('p', null, p.why));
+        var ol = el('ol'); p.how.forEach(function (h) { ol.append(el('li', null, h)); }); d.append(ol);
+        var row = el('div'); row.style.marginTop = '12px';
+        if (p.phone) { var tel = el('a', 'pill', 'Call ' + p.phone); tel.href = 'tel:' + p.phone.replace(/\s/g, ''); row.append(tel, document.createTextNode(' ')); }
+        var link = el('a', 'pill ghost', 'Official page'); link.href = p.link; link.target = '_blank'; link.rel = 'noopener noreferrer'; row.append(link);
+        d.append(row); frag.append(d);
+      });
+      var again = el('button', 'pill ghost', 'Start again'); again.type = 'button'; again.style.marginTop = '14px';
+      again.addEventListener('click', function () { answers = {}; state.i = 0; ask(); }); frag.append(again);
+      frag.append(el('p', 'muted', 'Rates checked ' + r.verified + '. This is a guide. Each program makes its own decision.'));
+      out.replaceChildren(frag);
+    }).catch(function () { out.replaceChildren(el('div', 'card', 'Something went wrong. Try again in a moment.')); });
+  }
+  fetch('/api/federal-finder').then(function (r) { return r.json(); }).then(function (d) { state.questions = d.questions; ask(); })
+    .catch(function () { out.replaceChildren(el('div', 'card', 'Could not load the questions.')); });
+})();
+</script>
+</body>
+</html>

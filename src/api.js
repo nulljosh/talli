@@ -17,6 +17,7 @@ const widgetToken = require('./widget-token');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
 const { nextPaymentDate } = require('./pay-dates');
 const helper = require('./programs/helper');
+const { buildOpenData } = require('./programs/open-data');
 const { listProvinces } = require('./programs/provinces');
 const { deriveBudget, cleanBudget } = require('./programs/budget');
 const { deriveLife, cleanLife } = require('./programs/lifechange');
@@ -334,6 +335,36 @@ const allowedOrigins = parseAllowedOrigins(
   process.env.CORS_ORIGINS,
   'http://localhost:3000,http://127.0.0.1:3000,https://talli-production.vercel.app,https://talli.heyitsmejosh.com,https://tally.heyitsmejosh.com'
 );
+
+// Federal-only mode (src/programs/finder.js, scope federal): the federal half of the benefit
+// finder for anyone without a BC Self-Serve account. Public, stores nothing, rate limited.
+const federalLimiter = rateLimit({ windowMs: 60 * 1000, max: 30, message: { error: 'Too many requests' }, standardHeaders: true, legacyHeaders: false });
+app.get('/api/federal-finder', federalLimiter, (req, res) => res.json(findBenefits({}, { scope: 'federal' })));
+app.post('/api/federal-finder', federalLimiter, express.json({ limit: '20kb' }), (req, res) => res.json(findBenefits(req.body?.answers || {}, { scope: 'federal' })));
+
+// Open data (src/programs/open-data.js): the pay-date and rate tables as free JSON. Public, no
+// key, readable from any website, so it is mounted BEFORE the app's CORS allow-list (which would
+// reject other sites). Rate limited per IP; cached for an hour.
+const openLimiter = rateLimit({ windowMs: 60 * 1000, max: 60, message: { error: 'Too many requests' }, standardHeaders: true, legacyHeaders: false });
+const openRouter = express.Router();
+openRouter.use(openLimiter);
+const openRoute = (pick) => (req, res) => {
+  res.set({ 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'public, max-age=3600' });
+  res.json(pick(buildOpenData()));
+};
+const openHeader = (d) => ({ license: d.license, updated: d.updated });
+openRouter.get('/', openRoute((d) => ({ ...openHeader(d), name: d.name, endpoints: {
+  '/api/open/pay-dates': 'BC cheque issue dates',
+  '/api/open/rates': 'BC and federal rate tables and earnings limits',
+  '/api/open/provinces': 'Alberta, Ontario and BC programs, with earnings rules',
+  '/api/open/all': 'Everything in one file',
+} })));
+openRouter.get('/all', openRoute((d) => d));
+openRouter.get('/pay-dates', openRoute((d) => ({ ...openHeader(d), ...d.payDates })));
+openRouter.get('/rates', openRoute((d) => ({ ...openHeader(d), bc: d.bc, federal: d.federal })));
+openRouter.get('/provinces', openRoute((d) => ({ ...openHeader(d), provinces: d.provinces })));
+app.set('trust proxy', 1);
+app.use('/api/open', openRouter);
 
 app.use(cors(createCorsOptionsDelegate(allowedOrigins)));
 
