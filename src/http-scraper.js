@@ -582,6 +582,8 @@ async function executeLogin(username, password) {
     throw new Error(`Homepage ${BASE_URL} returned HTTP ${homeResult.response.status}`);
   }
 
+  if (/\/Offline\b/i.test(homeResult.url)) throw new Error('portal offline');
+
   const signInUrl = parseSignInLink(homeHtml, homeResult.url);
   if (!signInUrl) {
     throw new Error('Sign in link not found');

@@ -109,6 +109,8 @@ const inFlightRefresh = new Set();
 // Debug logging helper
 const log = (...args) => DEBUG && console.log(...args);
 
+const { isDemoLogin, demoResults } = require('./demo');
+
 function deriveUserId(username) {
   return crypto.createHash('sha256').update(username).digest('hex').slice(0, 16);
 }
@@ -126,6 +128,7 @@ function persistAuthCookie(req, res) {
     authenticated: true,
     bceidUsername: req.session.bceidUsername,
     bceidPassword: req.session.bceidPassword,
+    isDemo: req.session.isDemo || false,
     craProfile: req.session.craProfile,
     userId: req.session.userId,
     paidStatus: req.session.paidStatus || null,
@@ -231,6 +234,9 @@ function userFacingLoginError(internalError) {
       msg.includes('login appears to have returned to the login page')) {
     return 'Invalid credentials. Please check your BCeID username and password.';
   }
+  if (msg.includes('portal offline')) {
+    return 'BC My Self Serve is offline for maintenance. Please try again later.';
+  }
   if (msg.includes('session expired')) {
     return 'Session expired. Please sign in again.';
   }
@@ -260,7 +266,7 @@ function safeApiError(error, fallback) {
 
 function isServiceUnavailableError(userFacingMsg) {
   const msg = String(userFacingMsg || '').toLowerCase();
-  return msg.includes('temporarily unavailable') || msg.includes('timed out') || msg.includes('encountered an error');
+  return msg.includes('temporarily unavailable') || msg.includes('offline for maintenance') || msg.includes('timed out') || msg.includes('encountered an error');
 }
 
 // Validate BC Self-Serve credentials with Puppeteer auth + HTTP fallback
@@ -489,6 +495,7 @@ app.use((req, res, next) => {
   req.session.authenticated = true;
   req.session.bceidUsername = payload.bceidUsername;
   req.session.bceidPassword = payload.bceidPassword;
+  req.session.isDemo = !!payload.isDemo;
   req.session.craProfile = payload.craProfile;
   req.session.userId = payload.userId;
   req.session.paidStatus = payload.paidStatus || null;
@@ -608,6 +615,20 @@ app.post('/api/login', loginLimiter, async (req, res) => {
     return res.status(400).json({
       success: false,
       error: 'Username and password required'
+    });
+  }
+
+  if (isDemoLogin(username, password)) {
+    req.session.authenticated = true;
+    req.session.isDemo = true;
+    req.session.bceidUsername = username;
+    req.session.userId = deriveUserId(username);
+    req.session.lastActivity = Date.now();
+    req.session.cookie.maxAge = DEFAULT_SESSION_MAX_AGE_MS;
+    return req.session.save((saveError) => {
+      if (saveError) return res.status(500).json({ success: false, error: 'Failed to create session. Please try again.' });
+      persistAuthCookie(req, res);
+      res.json({ success: true });
     });
   }
 
@@ -1126,7 +1147,7 @@ app.get('/api/summary', async (req, res) => {
 
 // Helper: get decrypted credentials from session
 function getSessionCredentials(req) {
-  if (!req.session || !req.session.authenticated) return null;
+  if (!req.session || !req.session.authenticated || req.session.isDemo) return null;
   const username = req.session.bceidUsername;
   const password = decrypt(req.session.bceidPassword);
   if (!username || !password) return null;
@@ -1179,6 +1200,7 @@ function persistScrape(req, userId, checkResult, result) {
 }
 
 async function fetchOrLoadData(req, { allowLiveScrape = true } = {}) {
+  if (req.session?.isDemo) return { source: 'demo', data: demoResults() };
   const creds = getSessionCredentials(req);
   const userId = req.session?.userId;
 
@@ -2416,6 +2438,9 @@ app.post('/api/avatar', requireAuth, async (req, res) => {
 // Submit monthly report
 let isSubmitting = false;
 app.post('/api/submit-report', scrapeLimiter, requireAuth, async (req, res) => {
+  if (req.session?.isDemo) {
+    return res.json({ success: true, message: 'Demo account: nothing was sent to BC Self-Serve.', preview: 'Demo account: no real report is filed.', submittedAt: new Date().toISOString() });
+  }
   if (isSubmitting) {
     return res.status(429).json({ error: 'Submission already in progress' });
   }
@@ -2477,6 +2502,8 @@ app.get('/api/check', scrapeLimiter, requireAuth, async (req, res) => {
       message: 'Please wait for the current check to complete'
     });
   }
+
+  if (req.session?.isDemo) return res.json({ success: true, data: demoResults() });
 
   isChecking = true;
 
