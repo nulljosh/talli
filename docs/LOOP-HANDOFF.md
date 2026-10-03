@@ -1,8 +1,8 @@
-# Talli loop handoff (2026-10-02, paused)
+# Talli loop handoff (2026-10-02, STOPPED at goal)
 
 ## What the loop is
 
-Roadmap to 10.0 is complete except payday push (APNs key blocked). Keep the UI super simple: every tool is one folded line that opens on tap. Next phase: real-account test with cookie jar (Joshua's login, read-only checks), fresh native build to App Store review (asc workflow, new review notes), real-device checks (reminders, Watch token handoff, vault).
+Roadmap 3.7 to 10.0 complete except payday push (APNs blocked). Version 10.0.0 released: all features shipped, native builds (iPhone/Watch, Mac) archived and valid on TestFlight interny group. Loop stopped at goal reached. Keep the UI super simple: every tool is one folded line that opens on tap.
 
 ## Where things stand
 
@@ -17,10 +17,12 @@ Eighteen releases shipped (roadmap sections 3.7.0 through 3.21.0): report from n
 
 Blocked on Joshua's APNs key for payday push.
 
-## Restart prompt (when resuming)
+## Restart prompt (when resuming from STOPPED)
+
+When 3.6.0 clears App Store review:
 
 ```
-/loop Talli: ship one fresh native build to App Store review (asc workflow, new review notes), run the real-account read-only checks with the cookie jar Joshua made, then real-device checks. Payday push stays blocked on the APNs key. Keep the UI super simple.
+/loop Talli: real-account test with cookie jar (Joshua logs in from .env, reads real cheque, checks household/alert/budget/finder/helper/RDSP/supplements), create 10.0.0 App Store version, attach TestFlight build, write review notes (steps: open app, tap Money tools, tap What If), write App Privacy for vault, submit iPhone and Mac, run read-only checks from asc web UI, real-device checks (reminders, Watch, vault). Payday push blocked on APNs. Keep UI super simple.
 ```
 
 ## Release cadence
