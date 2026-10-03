@@ -1,32 +1,28 @@
-# Talli loop handoff (2026-10-02, live)
+# Talli loop handoff (2026-10-02, paused)
 
 ## What the loop is
 
-Roadmap to 10.0: take the next unchecked item, ship it on web/iOS/macOS, tests green, commit+push, check it off, release as you go. Skip items blocked on Joshua and note them. Keep the UI super simple: every new tool is one folded line that opens on tap. At the end submit one fresh native build to App Store review.
+Roadmap to 10.0 is complete except payday push (APNs key blocked). Keep the UI super simple: every tool is one folded line that opens on tap. Next phase: real-account test with cookie jar (Joshua's login, read-only checks), fresh native build to App Store review (asc workflow, new review notes), real-device checks (reminders, Watch token handoff, vault).
 
 ## Where things stand
 
-Eleven releases shipped (3.7.0-3.16.0): report from notification, Watch app, year-in-review CSV, four languages, benefit finder, RDSP tracker, supplements calendar, missed-payment alert, simplified UI (one-line tool folds), document vault, reconsideration helper (20-day counter, 8-step checklist, draft letter), message replies (draft answers), service requests (crisis supplement, address, rent, missing cheque), household tracker (couples rates, shared earnings limits in 2026), trusted helper (90-day revocable read-only links, token hash, auto-kill). Status tab tools are now all one-line folds. Sections 7.0 and 8.0 complete. Payday push (4.0) remains blocked on Joshua's APNs key.
+Eighteen releases shipped (roadmap sections 3.7.0 through 3.21.0): report from notification, Watch app, year-in-review CSV, four languages, benefit finder, RDSP tracker, supplements calendar, missed-payment alert, simplified UI (one-line folds), document vault, reconsideration helper, message replies, service requests, household tracker, trusted helper, what-if job calculator, simpler Status tab (2064px to 1026px), turning 65 or moving out of BC, budget against paydays, six new entitlements, provinces as data files (Alberta AISH, Ontario ODSP), open data API at /api/open, federal-only mode at /api/federal-finder. Ministry rate tables and earnings limits now live in code. Alberta and Ontario figures checked against public guides and official links, flagged on screen. GitHub tests green. Status tab tools all fold to one-line. Sections 7.0 and 8.0 complete. Payday push (4.0) blocked on Joshua's APNs key. App Store still has 3.6.0 (native features since 3.7.0 not in users' hands).
 
-## Next, in order
+## Next steps
 
-1. What-if job calculator: try "20 hours a week", see exemption, clawback, take-home by month
-2. Moving out of BC or turning 65: what changes (OAS/GIS), when, what to file
-3. Budget against real paydays: bills on calendar next to the money that pays them
-4. Alberta AISH and Ontario ODSP data files and tracking
-5. Federal-only mode for CDB/GST/Dental only users
-6. Open data API: publish pay dates and rate tables
-7. Final UI pass: group Status tools under three themed rows (keeps super simple)
-8. Fresh native build to App Store review
+1. Real-account test: Joshua runs a one-line login (saves cookie jar to scratchpad), read-only checks on real data (household vs cheque, missed-payment alert, budget, finder prefill, helper view). Claude never types BCeID password.
+2. Fresh native build to App Store review: asc workflow, update review notes with exact steps to reach new tools. First native release since 3.6.0.
+3. Real-device checks: reminders firing, Watch token handoff, vault encryption on real phone.
+4. Note: federal-only mode and open data API are web only.
 
-Blocked on Joshua's APNs key.
+Blocked on Joshua's APNs key for payday push.
 
-## Restart prompt
+## Restart prompt (when resuming)
 
 ```
-/loop Talli roadmap to 10.0: in ~/Documents/Code/talli, take the next unchecked roadmap.md item (what-if), ship it on web/iOS/macOS, tests green, commit+push, check it off, release as you go. Skip items blocked on Joshua (APNs key) and note them. QA every item as we go (sims, render checks, real numbers) before checking it off. Keep the UI super simple: every new tool is one folded line that opens on tap. At the end submit one fresh native build to App Store review.
+/loop Talli: ship one fresh native build to App Store review (asc workflow, new review notes), run the real-account read-only checks with the cookie jar Joshua made, then real-device checks. Payday push stays blocked on the APNs key. Keep the UI super simple.
 ```
 
 ## Release cadence
 
-Releases tagged on GitHub when roadmap items ship. Latest: 3.16.0 shipped 2026-10-02. Next: 3.17.0 for what-if, 4.0.0 for payday push once APNs arrives.
+Latest: 3.21.0 shipped 2026-10-02. Next: fresh native build to App Store (all features since 3.7.0 included).
