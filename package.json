@@ -1,6 +1,6 @@
 {
   "name": "talli",
-  "version": "3.21.0",
+  "version": "10.0.0",
   "description": "Talli - BC Self-Serve Portal Scraper - Automated scraping of notifications, messages, payment info, and service requests",
   "main": "src/scraper.js",
   "scripts": {
