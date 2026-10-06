@@ -199,3 +199,6 @@ a scratch dir and diff; the `actions[].status` field is the only truth.
 
 ## Ingested 2026-10-03
 - [ ] Design system. (Note was just the two words "Design system". Build one for Talli, shared tokens like the other apps? Or apply the house one? Clarify scope.)
+
+## Ingested 2026-10-05
+- [ ] Clean up second tab. It's cutting off.
