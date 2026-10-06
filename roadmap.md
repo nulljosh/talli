@@ -201,4 +201,4 @@ a scratch dir and diff; the `actions[].status` field is the only truth.
 - [ ] Design system. (Note was just the two words "Design system". Build one for Talli, shared tokens like the other apps? Or apply the house one? Clarify scope.)
 
 ## Ingested 2026-10-05
-- [ ] Clean up second tab. It's cutting off.
+- [x] Clean up second tab. It's cutting off. (Reports and Benefits shrank the list with .padding(.bottom, 90); now safeAreaInset like Messages/Settings, 2026-10-05, not yet checked on device)
