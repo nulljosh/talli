@@ -47,3 +47,5 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 
 ## Ingested 2026-10-21
 - [x] Why isn't this 1750? It should include CDB. Deposit from PROVINCE OF B.C, $1,535.50 CAD, direct deposit, Oct 20 2026, account balance $1,827.80. Check the expected-amount math includes CDB. (screenshot: notes/attachments/2026-10-21/why-isnt-this-1750-1.png) (Q: is 1750 the expected monthly total in the app?) Resolved: CDB is federal and paid separately by Service Canada; it already arrived. The provincial deposit is PWD only, which is correct.
+
+- On-device Self-Serve login (2026-10-25): today the BCeID password goes through the backend, encrypted in the session cookie, and the server re-logs in on every pull (src/api.js:165). Moving the login and scrape onto the phone would make "Talli never holds your credentials" true, and is the strongest answer to App Review guideline 5.1.1(ix), which otherwise needs an organization developer account for the next update.
