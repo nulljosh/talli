@@ -48,3 +48,6 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 ## Ingested 2026-10-21
 
 - On-device Self-Serve login (2026-10-25): today the BCeID password goes through the backend, encrypted in the session cookie, and the server re-logs in on every pull (src/api.js:165). Moving the login and scrape onto the phone would make "Talli never holds your credentials" true, and is the strongest answer to App Review guideline 5.1.1(ix), which otherwise needs an organization developer account for the next update.
+
+## Ingested 2026-10-27
+- [ ] Animated hero on the App Store: the Talli product page (v4.0.1) opens on a blue animated header with coin stack and calendar. "Animated hero on app store, let's go": do the same App Store cover for the other apps. Related note "AppStore covers" (no body). Screenshot: ~/Documents/Code/notes/attachments/2026-10-27/animated-hero-on-app-store-lets-go-2.png
