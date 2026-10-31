@@ -52,6 +52,5 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 - [ ] Animated hero for the other apps: made for 23 apps with `scripts/store-header.sh` (labs) and uploaded 2026-10-27. 17 sent to App Review 2026-10-28; once each is APPROVED, place it with `_attic/store-headers/place.py --go`. Horula, Atlin, Plaintxt, Scrounge, Airwell and Blackcomb have no live iOS version yet, so theirs go in with the next version.
 
 ## Ingested 2026-10-30
-- [x] README doesn't need links at top, they're already in the GitHub repo. Remove resume links from top of README
 - [ ] Income number shouldn't be stretched, needs matching font
 - [ ] Check version, sync it with git releases, versions and resume badge
