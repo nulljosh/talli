@@ -1,11 +1,7 @@
 <img src="icon.svg" width="80" style="border-radius:18px">
 
-# Talli
-
 ![version](https://img.shields.io/badge/version-v4.0.0-blue)
 ![license](https://img.shields.io/badge/license-Apache%202.0-green)
-
-Live at [talli.jaybulb.com](https://talli.jaybulb.com) · [App Store](https://apps.apple.com/app/talli/id6782366555)
 
 <p align="center">
   <img src="docs/screenshots/ios-home.png" width="220">
