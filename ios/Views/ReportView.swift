@@ -5,6 +5,8 @@ struct ReportView: View {
         static let lastSubmittedKey = "report-last-submitted-at"
     }
 
+    @Environment(AppState.self) private var appState
+
     @State private var sin = ""
     @State private var phone = ""
     @State private var pin = ""
@@ -158,6 +160,7 @@ struct ReportView: View {
                     let submittedDate = parseDate(response.submittedAt) ?? Date()
                     lastSubmittedDate = submittedDate
                     UserDefaults.standard.set(submittedDate, forKey: Constants.lastSubmittedKey)
+                    await appState.markMonthFiled()
                     statusText = response.message ?? "Report submitted successfully."
                     statusIsError = false
                 } else {
@@ -181,5 +184,6 @@ struct ReportView: View {
 #Preview {
     NavigationStack {
         ReportView()
+            .environment(AppState())
     }
 }
