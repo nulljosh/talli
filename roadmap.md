@@ -3,7 +3,6 @@
 Talli is free and stays free. The job is accuracy: what lands, when, and what you are allowed to earn. History lives in git. Store state comes from `asc versions list --app 6782366555`, never from this file.
 
 ## Now (4.0.x)
-- [x] (11-01: Mac 4.0.0 live, v4.0.0 is already Latest) Flip the GitHub 4.0.0 release to Latest once Mac is approved (#62).
 - [ ] Verify the account contribution figures against the real account (#57, Joshua's login).
 - [ ] Joshua's call: delete the dead `src/session-store.js` and `tools/test-session-store.js` (nothing imports them).
 
@@ -53,4 +52,3 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 
 ## Ingested 2026-10-30
 - [ ] Income number shouldn't be stretched, needs matching font (Q 11-01: which screen and platform? No screenshot came with the note, the dashboard needs a sign-in, and nothing in the code uses a stretched width; the one scaling number is incomeCell in ios/ContentView.swift with minimumScaleFactor 0.8)
-- [x] Check version, sync it with git releases, versions and resume badge (11-01: in step at 4.0.0: App Store, latest GitHub release v4.0.0, README badge, package.json; project.yml is 4.0.1 for the next build. Left for Joshua: a stale v10.0.0 pre-release and tag from the old numbering, delete if unwanted)
