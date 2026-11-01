@@ -85,7 +85,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--ring); outline-
 .stage-art { position: absolute; inset: 0; background: none; --fit: 110%; }
 .app { position: relative; max-width: 400px; margin: 0 auto; border-radius: 28px; background: var(--l-bg); color: var(--l-text); text-align: left; overflow: hidden; }
 .app-tabs { display: flex; gap: 2px; margin: var(--sp-4); padding: 2px; border-radius: 999px; background: var(--l-surface); }
-.app-tab { flex: 1; height: 32px; border: 0; border-radius: 999px; background: none; color: var(--l-sub); font: 500 14px var(--font); cursor: pointer; }
+.app-tab { flex: 1; height: 32px; border: 0; border-radius: 999px; background: none; color: color-mix(in srgb, var(--l-sub) 85%, var(--l-text)); /* --l-sub alone is 4.4:1 on the grey tab bar */ font: 500 14px var(--font); cursor: pointer; }
 .app-tab[aria-selected="true"] { background: var(--l-bg); color: var(--l-text); }
 .app-pane { padding: var(--sp-2) var(--sp-5) var(--sp-5); min-height: 300px; display: grid; gap: var(--sp-3); align-content: start; }
 .app-pane[hidden] { display: none; }
