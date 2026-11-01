@@ -2,7 +2,6 @@
    frame down the window, and full-bleed grainy blue bands where the glyphs sit in scanlines like an engraving.
    Colours come from tokens.css (canonical plus Talli's blue). Only the band colours below are landing-only. System font. */
 :root {
-  --money: #2d9e5f;                      /* the $ on the amount, as in the app */
   --band: #2F6FB0;                       /* full-bleed sections, white text on it is 5.2:1 */
   --band-sub: #dbe8f6;
   --band-art: #a9cdef;
@@ -28,7 +27,7 @@
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 .28 0 0 0 -.06'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 @media (prefers-color-scheme: dark) {
-  :root { --money: #4ade80; --band: #1f5390; --band-art: #7fb0e3; --frame: #2F6FB0; --btn: #2F6FB0; }
+  :root { --band: #1f5390; --band-art: #7fb0e3; --frame: #2F6FB0; --btn: #2F6FB0; }
 }
 
 /* Glyph art: each glyph (art/*.svg) is a mask, cut into scanlines and tinted with --band-art */
@@ -81,31 +80,9 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--ring); outline-
 .center .cta { justify-content: center; }
 .fine { margin-top: var(--sp-3); font-size: 13px; line-height: 16px; color: var(--l-sub); }
 
-/* The live Home tab, on the blue stage, with no device around it: the same three tabs as the app */
-.demo-wrap { margin: var(--sp-8) clamp(0px, 3vw, 44px) 0; }
+/* The blue stage behind the open data terminal */
 .stage { position: relative; overflow: hidden; background: var(--grain), var(--band); padding: clamp(24px, 6vw, 96px) var(--sp-4); }
 .stage-art { position: absolute; inset: 0; background: none; --fit: 110%; }
-.app { position: relative; max-width: 400px; margin: 0 auto; border-radius: 28px; background: var(--l-bg); color: var(--l-text); text-align: left; overflow: hidden; }
-.app-tabs { display: flex; gap: 2px; margin: var(--sp-4); padding: 2px; border-radius: 999px; background: var(--l-surface); }
-.app-tab { flex: 1; height: 32px; border: 0; border-radius: 999px; background: none; color: color-mix(in srgb, var(--l-sub) 85%, var(--l-text)); /* --l-sub alone is 4.4:1 on the grey tab bar */ font: 500 14px var(--font); cursor: pointer; }
-.app-tab[aria-selected="true"] { background: var(--l-bg); color: var(--l-text); }
-.app-pane { padding: var(--sp-2) var(--sp-5) var(--sp-5); min-height: 300px; display: grid; gap: var(--sp-3); align-content: start; }
-.app-pane[hidden] { display: none; }
-.app small { display: block; font-size: 13px; line-height: 16px; color: var(--l-sub); text-transform: uppercase; letter-spacing: .06em; }
-/* the amount in the system font, bold, set like the app: a half-size green $ raised to the top of the figures */
-.big { display: flex; align-items: flex-start; gap: var(--sp-1); font: 700 80px/1 var(--font); letter-spacing: -.035em; font-variant-numeric: tabular-nums; }
-.cur { font-size: .5em; line-height: 1; color: var(--money); }
-.one { color: var(--l-sub); }
-.act { height: 48px; border: 0; border-radius: 999px; background: var(--btn); color: #fff; font: 600 17px var(--font); cursor: pointer; margin-top: var(--sp-2); }
-.act[aria-pressed="true"] { background: var(--l-surface); color: var(--l-text); }
-.fold { border-top: 1px solid var(--l-line); padding-top: var(--sp-3); display: flex; justify-content: space-between; font-size: 15px; }
-.fold span:last-child { color: var(--l-sub); font-variant-numeric: tabular-nums; }
-.meter { height: 8px; border-radius: 999px; background: var(--l-surface); overflow: hidden; }
-.meter b { display: block; height: 100%; width: var(--w); background: var(--frame); }
-.msg { border-top: 1px solid var(--l-line); padding-top: var(--sp-3); display: grid; gap: var(--sp-1); }
-.msg b { font-size: 15px; font-weight: 600; }
-.msg span { font-size: 13px; color: var(--l-sub); }
-.demo-hint { margin-top: var(--sp-3); font-size: 13px; color: var(--l-sub); text-align: center; }
 
 /* The blue band: the tally in scanlines over the section head, three feature rows, then ruled cells */
 .band { margin: 0 clamp(0px, 3vw, 44px); background: var(--grain), var(--band); color: #fff; overflow: hidden; }
