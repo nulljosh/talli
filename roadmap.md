@@ -52,3 +52,5 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 
 ## Ingested 2026-10-30
 - [x] (11-01: the amount was Talli Display, a renamed Barlow Condensed; now the bold system font on web, iPhone and Mac, never stretched) Income number shouldn't be stretched, needs matching font (Q 11-01: which screen and platform? No screenshot came with the note, the dashboard needs a sign-in, and nothing in the code uses a stretched width; the one scaling number is incomeCell in ios/ContentView.swift with minimumScaleFactor 0.8)
+
+- [ ] Remove the demo from the landing (Joshua 2026-11-01: it overflows); hero then goes straight to the band
