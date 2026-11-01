@@ -51,9 +51,11 @@ code { font-size: .9em; padding: 2px 6px; border-radius: var(--r-sq); background
 h1, h2, h3, .label { font-family: var(--display); }
 h1, h2, h3 { text-wrap: balance; }
 .mark-i { display: block; width: 56px; height: 56px; margin: 0 auto var(--sp-4); background: var(--frame); -webkit-mask: url(mark.svg) center / contain no-repeat; mask: url(mark.svg) center / contain no-repeat; }
-h1 { font-size: clamp(104px, 17vw, 240px); line-height: .9; font-weight: 100; text-transform: uppercase; letter-spacing: -.01em; }
-h2 { font-size: clamp(48px, 7.4vw, 108px); line-height: .92; font-weight: 100; text-transform: uppercase; letter-spacing: -.005em; }
-h3 { font-size: 28px; line-height: 32px; font-weight: 300; }
+h1 { font-size: clamp(104px, 17vw, 240px); line-height: .9; font-weight: 700; letter-spacing: -.045em; }
+/* the hero leads with the line that sells; the nav already carries the name */
+.hero-h1 { font-size: clamp(40px, 7vw, 104px); line-height: .95; max-width: 1000px; margin: 0 auto; }
+h2 { font-size: clamp(48px, 7.4vw, 108px); line-height: .95; font-weight: 700; letter-spacing: -.035em; }
+h3 { font-size: 28px; line-height: 32px; font-weight: 600; letter-spacing: -.01em; }
 .label { font-size: 13px; line-height: 16px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--l-sub); margin-bottom: var(--sp-4); }
 
 .btn { white-space: nowrap; height: 40px; padding: 0 var(--sp-4); border-radius: var(--r-sq); display: inline-flex; align-items: center; font-family: var(--display); font-weight: 500; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; text-decoration: none; border: 1px solid transparent; transition: background var(--motion), border-color var(--motion); }
@@ -90,9 +92,8 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--ring); outline-
 .app-pane { padding: var(--sp-2) var(--sp-5) var(--sp-5); min-height: 300px; display: grid; gap: var(--sp-3); align-content: start; }
 .app-pane[hidden] { display: none; }
 .app small { display: block; font-size: 13px; line-height: 16px; color: var(--l-sub); text-transform: uppercase; letter-spacing: .06em; }
-/* the amount in Talli Display, set like the app: a half-size green $ raised to the top of the figures */
-@font-face { font-family: 'Talli Display'; src: url(/fonts/TalliDisplay-Semibold.woff2) format('woff2'); font-weight: 600; font-display: swap; }
-.big { display: flex; align-items: flex-start; gap: var(--sp-1); font: 600 88px/72px 'Talli Display', var(--font); }
+/* the amount in the system font, bold, set like the app: a half-size green $ raised to the top of the figures */
+.big { display: flex; align-items: flex-start; gap: var(--sp-1); font: 700 80px/1 var(--font); letter-spacing: -.035em; font-variant-numeric: tabular-nums; }
 .cur { font-size: .5em; line-height: 1; color: var(--money); }
 .one { color: var(--l-sub); }
 .act { height: 48px; border: 0; border-radius: 999px; background: var(--btn); color: #fff; font: 600 17px var(--font); cursor: pointer; margin-top: var(--sp-2); }
@@ -121,7 +122,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--ring); outline-
 .frow .art { aspect-ratio: 3 / 2; background: var(--grain), color-mix(in srgb, #fff 6%, var(--band)); }
 .frow:nth-child(even) .art { order: 2; }
 .frow > div:not(.art) { padding: var(--sp-7) clamp(24px, 6vw, 96px); max-width: 560px; }
-.frow h3 { font-size: clamp(34px, 3.6vw, 52px); line-height: 1; font-weight: 200; }
+.frow h3 { font-size: clamp(34px, 3.6vw, 52px); line-height: 1.02; font-weight: 700; letter-spacing: -.03em; }
 .frow p:last-child { margin-top: var(--sp-4); color: var(--band-sub); }
 .cells { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--band-line); }
 .cell { padding: var(--sp-6) var(--sp-6) var(--sp-7); border-right: 1px solid var(--band-line); border-bottom: 1px solid var(--band-line); }
@@ -152,7 +153,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--ring); outline-
 .plat-row > div { padding: var(--sp-6); border-radius: 4px; border: 1px solid var(--l-line); display: flex; flex-direction: column; align-items: center; gap: var(--sp-2); }
 .plat-row .btn { margin-top: auto; }
 .plat-row small { font-family: var(--display); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--l-sub); }
-.plat-row b { font-family: var(--display); font-weight: 200; font-size: 40px; line-height: 44px; text-transform: uppercase; }
+.plat-row b { font-family: var(--display); font-weight: 700; font-size: 36px; line-height: 44px; letter-spacing: -.03em; }
 .plat-row p { color: var(--l-sub); font-size: 15px; line-height: 22px; margin-bottom: var(--sp-3); }
 
 /* Footer: brand and link columns, the engraved band of Talli's things, one fine line */
@@ -160,7 +161,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--ring); outline-
 .foot-top { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--sp-4); display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--sp-7); text-align: left; }
 .foot-brand { display: grid; gap: var(--sp-2); align-content: start; }
 .foot-brand img { border-radius: var(--r-icon); }
-.foot-brand b { font-family: var(--display); font-weight: 200; font-size: 40px; line-height: 40px; text-transform: uppercase; }
+.foot-brand b { font-family: var(--display); font-weight: 700; font-size: 36px; line-height: 40px; letter-spacing: -.03em; }
 .foot-brand p { color: var(--l-sub); font-size: 15px; }
 .foot-cols { display: flex; flex-wrap: wrap; gap: var(--sp-8); }
 .foot-cols div { display: grid; gap: var(--sp-2); align-content: start; }

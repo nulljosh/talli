@@ -1,4 +1,3 @@
-import CoreText
 import SwiftUI
 #if canImport(UIKit)
 import UIKit
@@ -8,8 +7,8 @@ import AppKit
 private typealias PlatformFont = NSFont
 #endif
 
-/// The Home amount in Talli Display (fonts/TalliDisplay-Semibold.ttf, made by scripts/gen_font.py), shared by
-/// iPhone and Mac. Same rule as the web hero: the figures keep the font's own proportions, as tall as `maxHeight` or
+/// The Home amount in the system font, bold, shared by iPhone and Mac. (It was Talli Display, a renamed Barlow
+/// Condensed, which read as stretched; Joshua asked for a font that matches the rest, 2026-11-01.) Same rule as the web hero: the figures keep the font's own proportions, as tall as `maxHeight` or
 /// as wide as `width` allows, never stretched (big-number heroes are set this way). The $ is half size, green, raised to
 /// the top of the figures, the way prices are set. It breathes slowly unless Reduce Motion is on.
 struct HeroAmountView: View {
@@ -18,24 +17,19 @@ struct HeroAmountView: View {
     let maxHeight: CGFloat
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    static let fontName = "TalliDisplay-Semibold"
-    // Font units per 1000: top of the figures, foot of the comma, the $ top, cap stretch limit, gap after the $.
-    private static let top: CGFloat = 712, box: CGFloat = 805, dollarTop: CGFloat = 788
+    private static func face(_ size: CGFloat) -> PlatformFont { PlatformFont.systemFont(ofSize: size, weight: .bold) }
+    // Font units per 1000, read from the system font: its ascent, the top of the figures (cap height), the foot of the
+    // comma, the $ top; then the stretch limit (never stretched) and the gap after the $.
+    private static let ascent: CGFloat = face(1000).ascender
+    private static let top: CGFloat = face(1000).capHeight
+    private static let box: CGFloat = top + 150, dollarTop: CGFloat = top + 60
     private static let maxStretch: CGFloat = 1, dollarScale: CGFloat = 0.5, gap: CGFloat = 36
     /// Room on each side so the figures never run to the screen edge (points, same 24 as the web).
     static let inset: CGFloat = 24
 
-    /// Registers the bundled font once per process; no Info.plist entry needed.
-    private static let registered: Bool = {
-        guard let url = Bundle.main.url(forResource: fontName, withExtension: "ttf") else { return false }
-        return CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
-    }()
-
     /// Width of `text` in font units at 1000 points.
     private static func units(_ text: String, size: CGFloat = 1000) -> CGFloat {
-        _ = registered
-        let font = PlatformFont(name: fontName, size: size) ?? PlatformFont.systemFont(ofSize: size, weight: .semibold)
-        return (text as NSString).size(withAttributes: [.font: font]).width
+        return (text as NSString).size(withAttributes: [.font: face(size)]).width
     }
 
     /// Point size and vertical stretch for this box.
@@ -52,16 +46,16 @@ struct HeroAmountView: View {
         let u = size / 1000
         HStack(alignment: .firstTextBaseline, spacing: Self.gap * u) {
             Text("$")
-                .font(.custom(Self.fontName, fixedSize: size * Self.dollarScale))
+                .font(.system(size: size * Self.dollarScale, weight: .bold))
                 .foregroundStyle(Color.green)
                 .baselineOffset((Self.top - Self.dollarTop * Self.dollarScale) * u)
             Text(digits)
-                .font(.custom(Self.fontName, fixedSize: size))
+                .font(.system(size: size, weight: .bold))
                 .contentTransition(.numericText())
         }
         .fixedSize()
-        // The text box starts at the font's ascent (1000 units); lift it so the figures' tops meet the frame's top.
-        .offset(y: -(1000 - Self.top) * u)
+        // The text box starts at the font's ascent; lift it so the figures' tops meet the frame's top.
+        .offset(y: -(Self.ascent - Self.top) * u)
         .scaleEffect(x: 1, y: stretch, anchor: .top)
         .frame(height: Self.box * u * stretch, alignment: .top)
         .phaseAnimator(reduceMotion ? [false] : [false, true]) { view, inhale in

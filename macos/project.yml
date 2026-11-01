@@ -31,7 +31,6 @@ targets:
       - path: ../ios/Views/LifeChangeView.swift
       - path: ../ios/Views/BudgetView.swift
       - path: ../ios/Views/HeroAmountView.swift
-      - path: ../fonts/TalliDisplay-Semibold.ttf
       - path: ../ios/Helpers/VaultCrypto.swift
       - path: .
         excludes:

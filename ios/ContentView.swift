@@ -73,73 +73,92 @@ private struct LoginScreen: View {
     @State private var showProvince = false
 
     var body: some View {
-        VStack(spacing: 20) {
-            Spacer()
+        // Scrolls instead of clipping at large text sizes; the spacers still centre it.
+        GeometryReader { geo in
+            ScrollView {
+                VStack(spacing: 20) {
+                    Spacer()
 
-            VStack(spacing: 8) {
-                Image("LaunchIcon")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 72, height: 72)
-                Text("Talli")
-                    .font(.system(size: 42, weight: .bold))
-                Text("Your benefits. No bureaucracy.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
+                    VStack(spacing: 8) {
+                        Image("LaunchIcon")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 72, height: 72)
+                        Text("Talli")
+                            .font(.largeTitle.bold())
+                        Text("Your benefits. No bureaucracy.")
+                            .font(.subheadline)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .foregroundStyle(.secondary)
+                    }
 
-            VStack(alignment: .leading, spacing: 12) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("BCEID USERNAME")
-                        .sectionLabel()
-                    TextField("your.username", text: $username)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                        .padding(.horizontal, 20)
-                        .frame(height: 48)
-                        .background(Color(.secondarySystemGroupedBackground), in: Capsule())
+                    VStack(alignment: .leading, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("BCEID USERNAME")
+                                .sectionLabel()
+                            TextField("your.username", text: $username)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled()
+                                .minimumScaleFactor(0.5)
+                                .padding(.horizontal, 20)
+                                .frame(minHeight: 48)
+                                .background(Color(.secondarySystemGroupedBackground), in: Capsule())
+                        }
+
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("PASSWORD")
+                                .sectionLabel()
+                            SecureField("••••••••", text: $password)
+                                .minimumScaleFactor(0.5)
+                                .padding(.horizontal, 20)
+                                .frame(minHeight: 48)
+                                .background(Color(.secondarySystemGroupedBackground), in: Capsule())
+                        }
+                    }
+
+                    Button {
+                        Task { await appState.login(username: username, password: password) }
+                    } label: {
+                        HStack {
+                            if appState.isLoading { ProgressView() }
+                            Text("Sign In").fontWeight(.semibold)
+                        }
+                        .frame(maxWidth: .infinity, minHeight: 48)
+                    }
+                    .capsuleAction()
+                    .tint(Color.talliBlueDeep)
+                    .disabled(username.isEmpty || password.isEmpty || appState.isLoading)
+
+                    if let error = appState.errorMessage {
+                        Text(error)
+                            .font(.caption)
+                            .foregroundStyle(.red)
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+
+                    Button { showFederal = true } label: {
+                        Text("Federal benefits, no account needed")
+                            .font(.footnote)
+                            .frame(minHeight: 44)
+                            .contentShape(Rectangle())
+                    }
+                    .tint(Color.talliLink)
+                    Button { showProvince = true } label: {
+                        Text("Alberta or Ontario? See your rules")
+                            .font(.footnote)
+                            .frame(minHeight: 44)
+                            .contentShape(Rectangle())
+                    }
+                    .tint(Color.talliLink)
+
+                    Spacer()
                 }
-
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("PASSWORD")
-                        .sectionLabel()
-                    SecureField("••••••••", text: $password)
-                        .padding(.horizontal, 20)
-                        .frame(height: 48)
-                        .background(Color(.secondarySystemGroupedBackground), in: Capsule())
-                }
+                .padding(24)
+                .frame(minHeight: geo.size.height)
             }
-
-            Button {
-                Task { await appState.login(username: username, password: password) }
-            } label: {
-                HStack {
-                    if appState.isLoading { ProgressView() }
-                    Text("Sign In").fontWeight(.semibold)
-                }
-                .frame(maxWidth: .infinity, minHeight: 48)
-            }
-            .capsuleAction()
-            .tint(Color.talliBlue)
-            .disabled(username.isEmpty || password.isEmpty || appState.isLoading)
-
-            if let error = appState.errorMessage {
-                Text(error)
-                    .font(.caption)
-                    .foregroundStyle(.red.opacity(0.9))
-                    .multilineTextAlignment(.center)
-            }
-
-            Button("Federal benefits, no account needed") { showFederal = true }
-                .font(.footnote)
-                .tint(Color.talliBlue)
-            Button("Alberta or Ontario? See your rules") { showProvince = true }
-                .font(.footnote)
-                .tint(Color.talliBlue)
-
-            Spacer()
+            .scrollBounceBehavior(.basedOnSize)
         }
-        .padding(24)
         .background(Color(.systemBackground).ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showFederal) {
@@ -265,7 +284,7 @@ private struct DashboardScreen: View {
         !appState.pwdApproved && Calendar.current.component(.day, from: now) <= 5 && appState.isCurrentMonthFiled
     }
 
-    // Same hero as web and Mac: Talli Display figures up to half the screen tall, the $ small and raised.
+    // Same hero as web and Mac: bold system figures up to half the screen tall, the $ small and raised.
     private var paymentCard: some View {
         VStack(spacing: 8) {
             Text("NEXT PAYMENT")

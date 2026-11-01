@@ -43,8 +43,6 @@ targets:
           - scripts
       # Icon Composer bundle; Xcode builds every icon size from it
       - path: ../Talli.icon
-      # Talli Display, the Home amount's face (scripts/gen_font.py); HeroAmountView registers it at runtime
-      - path: ../fonts/TalliDisplay-Semibold.ttf
     settings:
       base:
         INFOPLIST_FILE: Info.plist

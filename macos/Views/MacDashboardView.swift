@@ -66,7 +66,7 @@ struct MacDashboardView: View {
 
     // MARK: - Payment Card
 
-    // Same hero as the web dashboard: Talli Display figures up to half the window tall, the $ small and raised.
+    // Same hero as the web dashboard: bold system figures up to half the window tall, the $ small and raised.
     private var paymentCard: some View {
         VStack(spacing: 8) {
             Text("NEXT PAYMENT")

@@ -8,7 +8,6 @@
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0d0c0b" media="(prefers-color-scheme: dark)">
   <title>Talli</title>
-  <link rel="preload" href="/fonts/TalliDisplay-Semibold.woff2" as="font" type="font/woff2" crossorigin>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
@@ -26,7 +25,6 @@
     #app-shell {
       width: 100%; height: 100dvh; overflow: hidden;
     }
-    @font-face { font-family:'Talli Display'; src:url('/fonts/TalliDisplay-Semibold.woff2') format('woff2'); font-weight:600; font-display:block; }
     @keyframes countUp   { from { opacity:0; transform:translateY(14px) scale(0.94); } to { opacity:1; transform:translateY(0) scale(1); } }
     /* The amount breathes: a slow swell, about ten breaths a minute. */
     @keyframes breathe   { 0%,100% { transform:scale(1); opacity:1; } 50% { transform:scale(1.025); opacity:0.88; } }
@@ -135,25 +133,17 @@ function nextScheduledPayDate(from) {
   return new Date(from.getFullYear(), from.getMonth() + 1, from.getDate());
 }
 
-// The Home amount in Talli Display (scripts/gen_font.py), drawn as SVG so it fills a box exactly. The figures are up
-// to half the screen tall at the font's own proportions, never stretched: on a phone the width sets the size, with
-// 24px of room each side. The $ is half size and raised to
-// the top of the figures, the way prices are set. Advances are the font's, per 1000 units; the box runs from the
-// top of the figures (-712) to the foot of the comma (+93).
-const TD_ADVANCE = {'0':450,'1':296,'2':451,'3':435,'4':502,'5':437,'6':438,'7':440,'8':434,'9':438,',':199,'.':211};
-const TD_TOP = 712, TD_BOX = 805, TD_STRETCH = 1, TD_DOLLAR = 0.5, TD_GAP = 36;
+// The Home amount in the system font, bold, never stretched (it was a condensed face that read as stretched; Joshua
+// 2026-11-01). Up to half the screen tall; on a phone the width sets the size, with 24px of room each side. The $ is
+// half size, green and raised to the top of the figures, the way prices are set.
 function HeroAmount({digits, t, paid}) {
-  const figures = [...digits].reduce((w, c) => w + (TD_ADVANCE[c] || 450), 0);
-  const lead = Math.round(434 * TD_DOLLAR) + TD_GAP, natural = lead + figures;
-  const h = `min(50vh, calc((100vw - 88px) * ${(TD_BOX * TD_STRETCH / natural).toFixed(4)}))`;
-  const face = {fontFamily:"'Talli Display', -apple-system, BlinkMacSystemFont, sans-serif",fontWeight:600};
+  // ponytail: ~0.62em per tabular figure in SF bold, a bit less for the comma and dot; good enough to size the line.
+  const ems = [...digits].reduce((w, c) => w + (c === ',' || c === '.' ? 0.3 : 0.62), 0) + 0.38;
+  const size = `min(40vh, calc((100vw - 88px) / ${ems.toFixed(3)}))`;
   return (
-    <svg viewBox={`0 -${TD_TOP} ${natural} ${TD_BOX}`} preserveAspectRatio="none" aria-hidden="true"
-      style={{display:'block',height:h,width:`min(100% - 48px, calc(${h} * ${(natural / TD_BOX).toFixed(4)}))`}}>
-      <text x="0" y={-TD_TOP + Math.round(788 * TD_DOLLAR)} style={{...face,fontSize:1000 * TD_DOLLAR}} fill={t.success}>$</text>
-      <text x={lead} y="0" textLength={figures} lengthAdjust="spacingAndGlyphs" style={{...face,fontSize:1000}} fill={t.text}>{digits}</text>
-      {paid && <line x1={lead} y1="-350" x2={natural} y2="-350" stroke={t.muted} strokeWidth="24"/>}
-    </svg>
+    <div aria-hidden="true" style={{display:'flex',alignItems:'flex-start',justifyContent:'center',fontFamily:'-apple-system, BlinkMacSystemFont, "SF Pro Display", Helvetica, sans-serif',fontWeight:700,fontSize:size,lineHeight:1,letterSpacing:'-0.035em',fontVariantNumeric:'tabular-nums',color:t.text,textDecoration:paid ? 'line-through' : 'none',textDecorationColor:t.muted,textDecorationThickness:'0.04em'}}>
+      <span style={{fontSize:'0.5em',lineHeight:1.15,color:t.success,marginRight:'0.04em'}}>$</span>{digits}
+    </div>
   );
 }
 
