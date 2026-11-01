@@ -3,7 +3,7 @@
 Talli is free and stays free. The job is accuracy: what lands, when, and what you are allowed to earn. History lives in git. Store state comes from `asc versions list --app 6782366555`, never from this file.
 
 ## Now (4.0.x)
-- [ ] Flip the GitHub 4.0.0 release to Latest once Mac is approved (#62).
+- [x] (11-01: Mac 4.0.0 live, v4.0.0 is already Latest) Flip the GitHub 4.0.0 release to Latest once Mac is approved (#62).
 - [ ] Verify the account contribution figures against the real account (#57, Joshua's login).
 - [ ] Joshua's call: delete the dead `src/session-store.js` and `tools/test-session-store.js` (nothing imports them).
 
