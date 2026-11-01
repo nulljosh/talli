@@ -17,7 +17,7 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 - [ ] Google Play listing, free.
 
 ## 7.0 More provinces
-- [ ] Province picked at sign-in, rules tested per province like BC. In: "Alberta or Ontario? See your rules" on the iPhone and Mac sign-in screens (next cheque, earnings, reporting, no account). Left: a per-province Home once an AB or ON account source exists.
+- [ ] (blocked: no Alberta or Ontario account source to read from, 2026-11-01) Province picked at sign-in, rules tested per province like BC. In: "Alberta or Ontario? See your rules" on the iPhone and Mac sign-in screens (next cheque, earnings, reporting, no account). Left: a per-province Home once an AB or ON account source exists.
 
 ## 8.0 Reminders that matter
 
