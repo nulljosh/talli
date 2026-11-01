@@ -48,7 +48,7 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 - On-device Self-Serve login (2026-10-25): today the BCeID password goes through the backend, encrypted in the session cookie, and the server re-logs in on every pull (src/api.js:165). Moving the login and scrape onto the phone would make "Talli never holds your credentials" true, and is the strongest answer to App Review guideline 5.1.1(ix), which otherwise needs an organization developer account for the next update.
 
 ## Ingested 2026-10-27
-- [ ] Animated hero for the other apps: made for 23 apps with `scripts/store-header.sh` (labs) and uploaded 2026-10-27. 17 sent to App Review 2026-10-28; once each is APPROVED, place it with `_attic/store-headers/place.py --go`. Horula, Atlin, Plaintxt, Scrounge, Airwell and Blackcomb have no live iOS version yet, so theirs go in with the next version. 2026-11-01: placed on 15 live listings (Epiphany, Echo, Bugle, Melete, Machaon, Pan, Patois, Temida, Kernel, Eponym, Gastown, Nimble, Icelus, Coda, plus Talli before). place.py now skips any video not APPROVED. Left: Bcgd, Hamurapi, Toroid (videos waiting for review, rerun place.py --go once approved) and the six without a live iOS version.
+- [ ] (blocked 11-01: the rest wait on Apple) Animated hero for the other apps. Placed and live on 14: Epiphany, Echo, Bugle, Melete, Machaon, Pan, Patois, Temida, Kernel, Eponym, Gastown, Nimble, Icelus, Coda. Waiting for review: Doorstock, Hamurapi, Toroid. No live iOS version yet, so theirs go in with the next version: Horula, Atlin, Plaintxt, Scrounger, Airwell, Blackcomb. Rerun `_attic/store-headers/place.py --go` once they clear.
 
 ## Ingested 2026-10-30
 
