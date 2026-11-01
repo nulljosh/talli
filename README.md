@@ -1,6 +1,6 @@
 <img src="icon.svg" width="80" style="border-radius:18px">
 
-![version](https://img.shields.io/badge/version-v4.0.0-blue)
+![version](https://img.shields.io/badge/version-v4.0.1-blue)
 ![license](https://img.shields.io/badge/license-Apache%202.0-green)
 
 <p align="center">
