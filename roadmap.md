@@ -52,5 +52,5 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 - [ ] Animated hero for the other apps: made for 23 apps with `scripts/store-header.sh` (labs) and uploaded 2026-10-27. 17 sent to App Review 2026-10-28; once each is APPROVED, place it with `_attic/store-headers/place.py --go`. Horula, Atlin, Plaintxt, Scrounge, Airwell and Blackcomb have no live iOS version yet, so theirs go in with the next version.
 
 ## Ingested 2026-10-30
-- [ ] Income number shouldn't be stretched, needs matching font
+- [ ] Income number shouldn't be stretched, needs matching font (Q 11-01: which screen and platform? No screenshot came with the note, the dashboard needs a sign-in, and nothing in the code uses a stretched width; the one scaling number is incomeCell in ios/ContentView.swift with minimumScaleFactor 0.8)
 - [ ] Check version, sync it with git releases, versions and resume badge
