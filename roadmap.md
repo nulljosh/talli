@@ -12,7 +12,6 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 
 ## 6.0 Android
 - [ ] Ship `kmp/` as a signed APK on the GitHub release, same API, same four tabs.
-- [ ] Google Play listing, free.
 
 ## 7.0 More provinces
 - [ ] (blocked: no Alberta or Ontario account source to read from, 2026-11-01) Province picked at sign-in, rules tested per province like BC. In: "Alberta or Ontario? See your rules" on the iPhone and Mac sign-in screens (next cheque, earnings, reporting, no account). Left: a per-province Home once an AB or ON account source exists.
