@@ -24,7 +24,6 @@ When Mac 4.0.0 is approved, flip the GitHub 4.0.0 release to Latest (#62).
 ## For Joshua
 
 - Check the contribution figures against your real account (#57).
-- Say the word and the dead `src/session-store.js` and `tools/test-session-store.js` get deleted (nothing imports them).
 - Real-device checks only you can do: reminders fire on the day, Watch handoff, vault encryption.
 - Any new App Store submit waits on your yes.
 

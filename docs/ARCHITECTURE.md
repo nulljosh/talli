@@ -53,7 +53,6 @@ Core business logic: scraper, auth, session management, program schemas, data pa
 | `src/parse-messages.js` | Message extraction from scraped HTML. Handles portal's quirky text-node-only markup. Deduplicates, parses dates, counts. Returns message array [{ text, date }]. |
 | `src/programs/` | Program-specific logic: PWD (Persons with Disabilities), RDSP (Registered Disability Savings Plan), CDB (Canada Disability Benefit). Each has profile endpoints (data structure), eligibility rules, status derivation. Generated routes via `registerProfileRoutes()`. |
 | `src/scraper.js` | Session manager, login orchestration, cache layer. Checks if scrape is already in-flight, returns existing promise (locks prevent duplicate concurrent scrapes). |
-| `src/session-store.js` | Unused. An old Upstash Redis store for express-session from the Vercel days; nothing imports it and `@upstash/redis` is not a dependency. Slated for deletion. |
 | `src/pay-dates.js` | Hardcoded BC payment schedule (Wednesday cheque issue dates) and derived payday calculation. nextPaymentDate() looks up schedule. |
 | `src/school-grades.js` | Loads cached school grades from disk (for future feature). |
 | `src/_blob.js` | KV storage abstraction. Wraps Cloudflare Workers KV. Stores dashboard cache, report-status, paid-months, avatar, messages. |
