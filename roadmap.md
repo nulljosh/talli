@@ -6,7 +6,6 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 - [ ] Verify the account contribution figures against the real account (#57, Joshua's login).
 
 ## 5.0 Every platform, every tool
-- [ ] fr, zh and pa strings complete in the String Catalog, checked by a test. fr done; zh and pa have every plain string, the 20 benefit strings marked `review` each need a human or DeepL pass.
 - [ ] Real-device pass: reminders fire on the day, Watch handoff, vault encryption.
 
 ## 6.0 Android

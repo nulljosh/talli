@@ -492,6 +492,18 @@
             "state": "translated",
             "value": "Sans affiliation avec le gouvernement de la Colombie-Britannique."
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "与不列颠哥伦比亚省政府无关。"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਬ੍ਰਿਟਿਸ਼ ਕੋਲੰਬੀਆ ਸਰਕਾਰ ਨਾਲ ਸੰਬੰਧਿਤ ਨਹੀਂ।"
+          }
         }
       }
     },
@@ -774,6 +786,18 @@
             "state": "translated",
             "value": "Dernier montant connu. 4 paiements par an. Tous les crédits de l'ARC ne sont pas affichés."
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最近一次已知金额。每年付款 4 次。未显示所有 CRA 抵免。"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਆਖਰੀ ਜਾਣੀ ਰਕਮ। ਸਾਲ ਵਿੱਚ 4 ਭੁਗਤਾਨ। ਸਾਰੇ CRA ਕ੍ਰੈਡਿਟ ਨਹੀਂ ਦਿਖਾਏ ਗਏ।"
+          }
         }
       }
     },
@@ -897,6 +921,18 @@
             "state": "translated",
             "value": "Fenêtre de déclaration ouverte"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "申报窗口已开放"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਰਿਪੋਰਟ ਵਿੰਡੋ ਖੁੱਲ੍ਹੀ ਹੈ"
+          }
         }
       }
     },
@@ -913,6 +949,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "La fenêtre de déclaration est ouverte — ferme le 5"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "申报窗口已开放，5 日关闭"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਫਾਈਲਿੰਗ ਵਿੰਡੋ ਖੁੱਲ੍ਹੀ ਹੈ, 5 ਤਾਰੀਖ ਨੂੰ ਬੰਦ ਹੁੰਦੀ ਹੈ"
           }
         }
       }
@@ -931,6 +979,18 @@
             "state": "translated",
             "value": "La fenêtre de déclaration est ouverte du 1er au 5 de chaque mois. Soumettez durant cette période."
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每月 1 至 5 日开放申报。请在此期间提交。"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਫਾਈਲਿੰਗ ਵਿੰਡੋ ਹਰ ਮਹੀਨੇ 1 ਤੋਂ 5 ਤਾਰੀਖ ਤੱਕ ਖੁੱਲ੍ਹੀ ਰਹਿੰਦੀ ਹੈ। ਇਸ ਸਮੇਂ ਦੌਰਾਨ ਜਮ੍ਹਾਂ ਕਰੋ।"
+          }
         }
       }
     },
@@ -947,6 +1007,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ferme le 5"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5 日关闭"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5 ਤਾਰੀਖ ਨੂੰ ਬੰਦ"
           }
         }
       }
@@ -965,6 +1037,18 @@
             "state": "translated",
             "value": "Déjà déposé"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已申报"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਪਹਿਲਾਂ ਹੀ ਫਾਈਲ ਕੀਤਾ"
+          }
         }
       }
     },
@@ -981,6 +1065,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rapport déposé ce mois-ci"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本月报告已提交"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਇਸ ਮਹੀਨੇ ਦੀ ਰਿਪੋਰਟ ਫਾਈਲ ਹੋ ਗਈ"
           }
         }
       }
@@ -999,6 +1095,18 @@
             "state": "translated",
             "value": "Ajoutez votre NAS, votre numéro de téléphone et votre NIP dans les paramètres avant de déclarer."
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "申报前请在设置中添加您的社会保险号、电话号码和 PIN。"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਫਾਈਲ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਆਪਣਾ SIN, ਫ਼ੋਨ ਨੰਬਰ ਅਤੇ PIN ਜੋੜੋ।"
+          }
         }
       }
     },
@@ -1016,6 +1124,18 @@
             "state": "translated",
             "value": "Aperçu du rapport"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "预览报告"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਰਿਪੋਰਟ ਦੀ ਝਲਕ"
+          }
         }
       }
     },
@@ -1032,6 +1152,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Soumettre le rapport"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "提交报告"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਰਿਪੋਰਟ ਜਮ੍ਹਾਂ ਕਰੋ"
           }
         }
       }
@@ -1209,6 +1341,18 @@
             "state": "translated",
             "value": "Aide au revenu"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "收入援助"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਆਮਦਨ ਸਹਾਇਤਾ"
+          }
         }
       }
     },
@@ -1225,6 +1369,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Crédit pour la TPS/TVH"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GST/HST 抵免"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GST/HST ਕ੍ਰੈਡਿਟ"
           }
         }
       }
@@ -1243,6 +1399,18 @@
             "state": "translated",
             "value": "Crédit d'impôt pour locataires de la C.-B."
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BC 租户税收抵免"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BC ਕਿਰਾਏਦਾਰ ਟੈਕਸ ਕ੍ਰੈਡਿਟ"
+          }
         }
       }
     },
@@ -1259,6 +1427,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "400 $/an max"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每年最高 400 加元"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸਾਲਾਨਾ ਵੱਧ ਤੋਂ ਵੱਧ $400"
           }
         }
       }
@@ -1277,6 +1457,18 @@
             "state": "translated",
             "value": "Allocation canadienne pour les travailleurs"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "加拿大工人福利"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਕੈਨੇਡਾ ਵਰਕਰਜ਼ ਬੈਨੀਫਿਟ"
+          }
         }
       }
     },
@@ -1293,6 +1485,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "1 633 $/an (personne seule)"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "单身每年 1,633 加元"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਇਕੱਲੇ ਵਿਅਕਤੀ ਲਈ ਸਾਲਾਨਾ $1,633"
           }
         }
       }
@@ -1311,6 +1515,18 @@
             "state": "translated",
             "value": "Régime canadien de soins dentaires"
           }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "加拿大牙科护理计划"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਕੈਨੇਡੀਅਨ ਡੈਂਟਲ ਕੇਅਰ ਪਲਾਨ"
+          }
         }
       }
     },
@@ -1327,6 +1543,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gratuit sous 70 000 $"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "收入低于 7 万加元免费"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "$70K ਤੋਂ ਘੱਟ ਆਮਦਨ ਲਈ ਮੁਫ਼ਤ"
           }
         }
       }
@@ -1821,6 +2049,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Utilisé pour déclarer votre rapport mensuel. Stocké uniquement dans le trousseau de cet appareil."
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "用于提交您的月度报告。仅保存在本设备的钥匙串中。"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੁਹਾਡੀ ਮਹੀਨਾਵਾਰ ਰਿਪੋਰਟ ਫਾਈਲ ਕਰਨ ਲਈ ਵਰਤਿਆ ਜਾਂਦਾ ਹੈ। ਸਿਰਫ਼ ਇਸ ਡਿਵਾਈਸ ਦੀ ਕੀਚੇਨ ਵਿੱਚ ਸਟੋਰ ਕੀਤਾ ਜਾਂਦਾ ਹੈ।"
           }
         }
       }
