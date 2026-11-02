@@ -19,7 +19,7 @@ for (const [, y, body] of read('web/unified.html').matchAll(/(\d{4}):\{([\d:,]+)
 assert.deepStrictEqual(web, want, 'web/unified.html PAY_SCHEDULE');
 
 // widgets: 2026: [0: 21, 1: 25, ...]
-for (const f of ['widgets-ios/Models/WidgetAPI.swift', 'widgets-macos/Models/MacWidgetAPI.swift']) {
+for (const f of ['widgets-ios/Models/WidgetAPI.swift', 'widgets-macos/Models/MacWidgetAPI.swift', 'watchos/Models/PaySchedule.swift']) {
   const got = {};
   for (const [, y, body] of read(f).matchAll(/(\d{4}): \[([\d:, ]+)\]/g))
     got[y] = Object.fromEntries(body.split(',').map((p) => p.split(':').map((x) => Number(x.trim()))));

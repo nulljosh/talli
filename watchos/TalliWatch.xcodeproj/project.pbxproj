@@ -7,37 +7,37 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		244C1C23095889930C2AA7FF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 09CBC1F022B588B039773BAC /* Assets.xcassets */; };
 		2AEA7AA2E9CC5E990E13B2C9 /* WatchModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E030B571DA8767E818B6FF8C /* WatchModels.swift */; };
-		52E266A233C47D119A869D89 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BB9D788EBC974FA512EE6C /* ContentView.swift */; };
 		69388B3D57CAFBF8BF427160 /* PaymentGlance.swift in Sources */ = {isa = PBXBuildFile; fileRef = B283DB2161DC9443E164B5D3 /* PaymentGlance.swift */; };
 		90980628C2C7A26214D0E517 /* MessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20757C432BD6D90E0DDF267B /* MessagesView.swift */; };
 		AAFED37D10B48706CCEA3FCF /* WatchAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE149F270874070C21C023FD /* WatchAPI.swift */; };
-		AB13809A096641A6DBDF3582 /* TallyWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B498219E2A3B3FB3BF389023 /* TallyWatchApp.swift */; };
 		B96D506DA8D48E779E52D9E8 /* BenefitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B03FEF3506A072AB6E871A9 /* BenefitsView.swift */; };
-		BC7186A7F1DAB6CAEE8CB756 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C60DB201F45D83E31CBEED4C /* Assets.xcassets */; };
-		E1E85C7744F06C7B4AFC56AA /* 1-main.png in Resources */ = {isa = PBXBuildFile; fileRef = 547C5557B7FF201673CFDDB5 /* 1-main.png */; };
+		E18D08B376492F94471017E5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F109E0E9F7F38F74EF0D85 /* ContentView.swift */; };
+		E32AF54CFA7FDDF8BDB314F5 /* TallyWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A827D9C6400216FBDA11C4 /* TallyWatchApp.swift */; };
+		EF3A1E9C677709DD42D88F6E /* PaySchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147E3CAAF6E513B776E23E1 /* PaySchedule.swift */; };
 		FE3F22D6A49179DEFA7E97AE /* PhoneSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31D7A2F96237C5C995C3522 /* PhoneSync.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		09CBC1F022B588B039773BAC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		20757C432BD6D90E0DDF267B /* MessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesView.swift; sourceTree = "<group>"; };
 		27EB02C2757EBE4E94313A69 /* TalliWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TalliWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		547C5557B7FF201673CFDDB5 /* 1-main.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1-main.png"; sourceTree = "<group>"; };
-		719C55B4C62BC55C69E70C42 /* Fastfile */ = {isa = PBXFileReference; path = Fastfile; sourceTree = "<group>"; };
+		5147E3CAAF6E513B776E23E1 /* PaySchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaySchedule.swift; sourceTree = "<group>"; };
+		94F109E0E9F7F38F74EF0D85 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		9B03FEF3506A072AB6E871A9 /* BenefitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenefitsView.swift; sourceTree = "<group>"; };
 		B283DB2161DC9443E164B5D3 /* PaymentGlance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentGlance.swift; sourceTree = "<group>"; };
-		B498219E2A3B3FB3BF389023 /* TallyWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TallyWatchApp.swift; sourceTree = "<group>"; };
 		C31D7A2F96237C5C995C3522 /* PhoneSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneSync.swift; sourceTree = "<group>"; };
-		C60DB201F45D83E31CBEED4C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C5A827D9C6400216FBDA11C4 /* TallyWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TallyWatchApp.swift; sourceTree = "<group>"; };
 		E030B571DA8767E818B6FF8C /* WatchModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchModels.swift; sourceTree = "<group>"; };
 		EE149F270874070C21C023FD /* WatchAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchAPI.swift; sourceTree = "<group>"; };
-		F9BB9D788EBC974FA512EE6C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		115296DD6B5FC70D4D03F267 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5147E3CAAF6E513B776E23E1 /* PaySchedule.swift */,
 				C31D7A2F96237C5C995C3522 /* PhoneSync.swift */,
 				EE149F270874070C21C023FD /* WatchAPI.swift */,
 				E030B571DA8767E818B6FF8C /* WatchModels.swift */,
@@ -48,21 +48,13 @@
 		1CE2653A809B993B0C04F7E7 = {
 			isa = PBXGroup;
 			children = (
-				2BDCDDECBFBBEA8480E8E5D1 /* fastlane */,
+				09CBC1F022B588B039773BAC /* Assets.xcassets */,
+				94F109E0E9F7F38F74EF0D85 /* ContentView.swift */,
+				C5A827D9C6400216FBDA11C4 /* TallyWatchApp.swift */,
 				115296DD6B5FC70D4D03F267 /* Models */,
 				EA75598F479E6CC2D563643F /* Views */,
-				BB2E195822D682B4EC71733B /* watchos */,
 				592789682682AE7B6D2C20F3 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		2BDCDDECBFBBEA8480E8E5D1 /* fastlane */ = {
-			isa = PBXGroup;
-			children = (
-				719C55B4C62BC55C69E70C42 /* Fastfile */,
-				9967A34576B8886B4873B9FA /* screenshots */,
-			);
-			path = fastlane;
 			sourceTree = "<group>";
 		};
 		592789682682AE7B6D2C20F3 /* Products */ = {
@@ -71,36 +63,6 @@
 				27EB02C2757EBE4E94313A69 /* TalliWatch.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		9967A34576B8886B4873B9FA /* screenshots */ = {
-			isa = PBXGroup;
-			children = (
-				E482E0CCCA46D56BB55B17CB /* watch */,
-			);
-			path = screenshots;
-			sourceTree = "<group>";
-		};
-		BB2E195822D682B4EC71733B /* watchos */ = {
-			isa = PBXGroup;
-			children = (
-				C60DB201F45D83E31CBEED4C /* Assets.xcassets */,
-				F9BB9D788EBC974FA512EE6C /* ContentView.swift */,
-				B498219E2A3B3FB3BF389023 /* TallyWatchApp.swift */,
-				2BDCDDECBFBBEA8480E8E5D1 /* fastlane */,
-				115296DD6B5FC70D4D03F267 /* Models */,
-				EA75598F479E6CC2D563643F /* Views */,
-			);
-			name = watchos;
-			path = .;
-			sourceTree = "<group>";
-		};
-		E482E0CCCA46D56BB55B17CB /* watch */ = {
-			isa = PBXGroup;
-			children = (
-				547C5557B7FF201673CFDDB5 /* 1-main.png */,
-			);
-			path = watch;
 			sourceTree = "<group>";
 		};
 		EA75598F479E6CC2D563643F /* Views */ = {
@@ -173,8 +135,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1E85C7744F06C7B4AFC56AA /* 1-main.png in Resources */,
-				BC7186A7F1DAB6CAEE8CB756 /* Assets.xcassets in Resources */,
+				244C1C23095889930C2AA7FF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -186,11 +147,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				B96D506DA8D48E779E52D9E8 /* BenefitsView.swift in Sources */,
-				52E266A233C47D119A869D89 /* ContentView.swift in Sources */,
+				E18D08B376492F94471017E5 /* ContentView.swift in Sources */,
 				90980628C2C7A26214D0E517 /* MessagesView.swift in Sources */,
+				EF3A1E9C677709DD42D88F6E /* PaySchedule.swift in Sources */,
 				69388B3D57CAFBF8BF427160 /* PaymentGlance.swift in Sources */,
 				FE3F22D6A49179DEFA7E97AE /* PhoneSync.swift in Sources */,
-				AB13809A096641A6DBDF3582 /* TallyWatchApp.swift in Sources */,
+				E32AF54CFA7FDDF8BDB314F5 /* TallyWatchApp.swift in Sources */,
 				AAFED37D10B48706CCEA3FCF /* WatchAPI.swift in Sources */,
 				2AEA7AA2E9CC5E990E13B2C9 /* WatchModels.swift in Sources */,
 			);

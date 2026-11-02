@@ -14,12 +14,12 @@ targets:
     type: application
     platform: watchOS
     sources:
-      - path: .
-        excludes:
-          - "*.xcodeproj"
-          - "*.yml"
-          - "*.md"
-          - "*.svg"
+      # Listed one by one: `path: .` made xcodegen put Models and fastlane in two groups and the project would not open.
+      - ContentView.swift
+      - TallyWatchApp.swift
+      - Models
+      - Views
+      - Assets.xcassets
     settings:
       INFOPLIST_FILE: ""
       GENERATE_INFOPLIST_FILE: YES

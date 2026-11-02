@@ -8,7 +8,6 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 
 ## 5.0 Every platform, every tool
 - [ ] fr, zh and pa strings complete in the String Catalog, checked by a test. fr done; zh and pa have every plain string, the 20 benefit strings marked `review` each need a human or DeepL pass.
-- [ ] Watch shows the next amount and date with no phone nearby. Built: it calls `/api/summary` with its own token and caches the last result; needs the real-device check below.
 - [ ] Real-device pass: reminders fire on the day, Watch handoff, vault encryption.
 
 ## 6.0 Android

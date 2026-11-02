@@ -101,6 +101,12 @@ struct PaymentGlance: View {
             summary = cached
             isLoading = false
         }
+        // No phone and no network: the date still comes from the published schedule, and a cached date
+        // that has passed rolls forward to the next one. The amount stays the last one we saw.
+        if let next = PaySchedule.next(), summary == nil || summary!.nextDate < next {
+            summary = TalliSummary(paymentAmount: summary?.paymentAmount ?? "--", nextDate: next,
+                                   messages: summary?.messages ?? [], pwdApproved: summary?.pwdApproved ?? false)
+        }
         let token = WatchAPI.shared.apiToken
         guard !token.isEmpty else {
             isLoading = false
