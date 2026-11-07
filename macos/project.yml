@@ -14,39 +14,49 @@ targets:
     platform: macOS
     sources:
       - path: ../ios/Talli/Localizable.xcstrings
+        group: Shared
       - path: ../ios/Helpers/RTLTracking.swift
+        group: Shared
       - path: ../ios/Views/BenefitFinderView.swift
+        group: Shared
       - path: ../ios/Views/ProvinceView.swift
+        group: Shared
       - path: ../ios/API/OfflineCache.swift
+        group: Shared
       - path: ../ios/Views/RdspTrackerView.swift
+        group: Shared
       - path: ../ios/Views/SupplementsView.swift
+        group: Shared
       - path: ../ios/Views/MissedPaymentView.swift
+        group: Shared
       - path: ../ios/Views/VaultView.swift
+        group: Shared
       - path: ../ios/Views/ReconsiderationView.swift
+        group: Shared
       - path: ../ios/Views/ReplyDraftView.swift
+        group: Shared
       - path: ../ios/Views/ServiceRequestsView.swift
+        group: Shared
       - path: ../ios/Views/HouseholdView.swift
+        group: Shared
       - path: ../ios/Views/TrustedHelperView.swift
+        group: Shared
       - path: ../ios/Views/WhatIfView.swift
+        group: Shared
       - path: ../ios/Views/LifeChangeView.swift
+        group: Shared
       - path: ../ios/Views/BudgetView.swift
+        group: Shared
       - path: ../ios/Views/HeroAmountView.swift
+        group: Shared
       - path: ../ios/Helpers/VaultCrypto.swift
-      - path: .
-        excludes:
-          - "*.xcodeproj"
-          - "*.yml"
-          - ".git"
-          - ".gitignore"
-          - "*.md"
-          - "*.app"
-          - "*.pkg"
-          - ".asc"
-          - "fastlane"
-          - UITests-mac
-          - screenshots
-          - scripts
-          - "*.zip"
+        group: Shared
+      - API
+      - Models
+      - Notifications
+      - Views
+      - Assets.xcassets
+      - TalliMacApp.swift
       # Icon Composer bundle; Xcode builds every icon size from it
       - path: ../Talli.icon
     settings:

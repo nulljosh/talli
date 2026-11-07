@@ -15,32 +15,21 @@ targets:
     type: application
     platform: iOS
     sources:
-      - path: .
-        excludes:
-          - "*.md"
-          - "ExportOptions*.plist"
-          - "icon.svg"
-          - "fastlane"
-          - "*.xcodeproj"
-          - "*.yml"
-          - ".git"
-          - ".gitignore"
-          - "README.md"
-          - "CLAUDE.md"
-          - "architecture.svg"
-          - UITests
-          - Tests
-          - fastlane
-          - build
-          - .asc
-          - screenshots
-          - .claude
-          - "*.ipa"
-          - "*.zip"
-          - icon.svg
-          - ExportOptions.plist
-          - ci_scripts
-          - scripts
+      # Listed one by one: a `path: .` source made xcodegen put folders in two groups, which Xcode 27 refuses to open.
+      - API
+      - Helpers
+      - Models
+      - Notifications
+      - Resources
+      - Views
+      - Talli
+      - Assets.xcassets
+      - ContentView.swift
+      - KeychainHelper.swift
+      - PrivacyInfo.xcprivacy
+      - TallyApp.swift
+      - View+Glass.swift
+      - WhatsNewSheet.swift
       # Icon Composer bundle; Xcode builds every icon size from it
       - path: ../Talli.icon
     settings:

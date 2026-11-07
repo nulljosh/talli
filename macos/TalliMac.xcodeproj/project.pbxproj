@@ -8,57 +8,54 @@
 
 /* Begin PBXBuildFile section */
 		0282B5C8EA56EEF919DA487F /* MacBenefitsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE4D95EDD23AA9E97925A20 /* MacBenefitsProvider.swift */; };
-		0407FBFD53DB017B3052008B /* SupplementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B2AD00D857C67843DE6074 /* SupplementsView.swift */; };
-		0A4F2A936FBED3094781D846 /* MacSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9E6A07378DC7743CCC0E4D /* MacSettingsView.swift */; };
-		0BDFE2F644478B6E4DE81162 /* MacDateParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE52B7411BB64FCBF55E718E /* MacDateParsing.swift */; };
-		0D9CD3FBC94EA80A07221C5C /* TalliWidgets-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E6F0CD73F1B533518444D527 /* TalliWidgets-Info.plist */; };
-		0E1D333BEFC2600DACFC16BF /* WhatIfView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE181ECEB1BE3E5FBE2F705D /* WhatIfView.swift */; };
+		07A9B0E0E1C466F977932E80 /* MacMessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FA7959072F830F8EBC320B /* MacMessagesView.swift */; };
 		0EA33B911B3F3779F824707F /* MacMessagesWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C072FBCF9110200380F476B0 /* MacMessagesWidgetView.swift */; };
-		13B60F9180A94A04BA24C25E /* PaydayNotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCBD3343FCF75BB4A28E8744 /* PaydayNotificationScheduler.swift */; };
-		1623130FC8E0A8FF3C7C74CB /* HouseholdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3957E7C2F9B33E31A48633BD /* HouseholdView.swift */; };
-		170DED2AAD7B3037534ED350 /* MacLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712C08E52D3C020E27D13B54 /* MacLoginView.swift */; };
-		18606EA8270968C7308DC823 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4F7775930C1F9FD312750701 /* Localizable.xcstrings */; };
-		190C9A49755892F5842E7855 /* MacMessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB8A17CA2D95C67235E3EB7 /* MacMessagesView.swift */; };
-		1F33700CFE6CC60045C2907B /* MacContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78526D808FDBBD806F7EF05 /* MacContentView.swift */; };
+		1C494B27EB216DC876FE0B01 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 18DFF365F0A8A61B2D84DCEA /* Localizable.xcstrings */; };
 		1FB85B34B74BF2B55A8A09AB /* MacPaymentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04123E4DE54AEC07C172692B /* MacPaymentProvider.swift */; };
-		208D5FDB7E169D6B520AD82D /* VaultCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C99C8A261E7DB1D39095B44 /* VaultCrypto.swift */; };
-		2549FEFAACF6366B21309CAB /* MacBenefitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B92B5AB892DBD4B963F8656 /* MacBenefitsView.swift */; };
-		266F13C9D2C23B68B5E6F504 /* ReplyDraftView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 143469F2CCBEE5C354DFA76E /* ReplyDraftView.swift */; };
-		2B571A9A6058202934D64E5A /* RdspTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7688A8B26D97A128C95FA2 /* RdspTrackerView.swift */; };
-		310EC3E0110AA4099DCDA7D2 /* TrustedHelperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD11C951DE3513CC516BB2B3 /* TrustedHelperView.swift */; };
-		334EA37E0B895B20EF2496BB /* MacPaymentCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B87D84FEC8981517B9093CB /* MacPaymentCalendarView.swift */; };
+		262A22CE6BF93C0383B955DD /* ReplyDraftView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F276790013EC2CE25DF8628 /* ReplyDraftView.swift */; };
+		2BFE7BB853AC5061BC19930A /* BenefitFinderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B6CC9EE695861B514B1B3E /* BenefitFinderView.swift */; };
 		33981909AF9C8FE1F5F103AA /* MacWidgetModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED7313B160FD0FF894E40D8 /* MacWidgetModels.swift */; };
-		37291C624EBCC18BA59688CA /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4671E8BA45907193EDB8BC4 /* MenuBarView.swift */; };
+		37B920D785FAE2470C585861 /* MacLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AC7C0A555EF240070EFFC22 /* MacLoginView.swift */; };
+		3ACBE59547C0062B7CB46C8C /* MacDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94A7ADCDB828F8404CBFA97 /* MacDashboardView.swift */; };
+		3EE5F1D4207EE88D861EF488 /* OfflineCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CDC1BFFFCBA70971A4CB04 /* OfflineCache.swift */; };
 		41FCF257400D1179DE1E25FC /* MacMessagesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830C9DAD4CB8EB0B56C93532 /* MacMessagesProvider.swift */; };
 		42AEB414954D679EA4080840 /* TallyMacWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD57939601D50F6E8BA4261 /* TallyMacWidgets.swift */; };
-		4BCA3DBEDCAA96B862C734FA /* TalliMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD291A0A6F3E178AE7DBC14D /* TalliMacApp.swift */; };
+		50F007C8ED5F7741F41E0EBF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0D4B36439F72AB4BDFA7B53 /* Assets.xcassets */; };
 		533777806E5A825E0BB6FB75 /* TalliWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 05C53A51618D2F7455BED586 /* TalliWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		59D75C644E8AF87E3EAA040D /* ServiceRequestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95554CD8FF952B439E481BA4 /* ServiceRequestsView.swift */; };
-		5AE912C79A2126B8E32B1B0F /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 672B870569D2E3A8219AD924 /* BudgetView.swift */; };
-		62E4A3F5916F04C5C1474AA6 /* View+Glass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB0F7DA1B151C354B363FA0 /* View+Glass.swift */; };
-		648A1E6A1C557E43E91DD2AB /* MacKeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D46509CD0CB994360A6EE /* MacKeychainHelper.swift */; };
-		68003AB732B158D919F3BE14 /* RTLTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47FDBC6806E5A115D749928 /* RTLTracking.swift */; };
-		68757DD630674D89FA11A436 /* LifeChangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12445E704AC6AE4D68DAA67 /* LifeChangeView.swift */; };
-		7977CE05321CF640542D27E8 /* OfflineCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217AF15EBB15DD448AF76CAA /* OfflineCache.swift */; };
-		933437B7B8DE30A8BB87566E /* ProvinceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444811D43CD139384A826977 /* ProvinceView.swift */; };
+		58421D95CCAD405A0E95C5F9 /* View+Glass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A060B11CBCC45C70386C9EC /* View+Glass.swift */; };
+		58D921C73F35B27923D2B8F4 /* MacTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA64B7BB1AB7D3C90C7BB9E /* MacTheme.swift */; };
+		5D2AC14586A465A5B01467E6 /* PaydayNotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B804F5322DFCB122FB9F7F /* PaydayNotificationScheduler.swift */; };
+		67FFF6B3CA44FA20564BBF03 /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC9A210E99291A8C8846278 /* BudgetView.swift */; };
+		6E01B21D34385EA078F51362 /* ServiceRequestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6512C40295B3CCF60359414B /* ServiceRequestsView.swift */; };
+		70A6573C6EDB6CBED8874ABD /* SupplementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBF5DC9265AA483FE918838 /* SupplementsView.swift */; };
+		773C0111E5F2AC6841762448 /* ReconsiderationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67822716BC2BAC92139BD75E /* ReconsiderationView.swift */; };
+		7D738ACB385D7AE4B3199FDF /* HouseholdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E72C03997D1F41B7F549D1D /* HouseholdView.swift */; };
+		80538CA6056F3CFC0D50A2B0 /* TalliMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985D205309269F738B3A691D /* TalliMacApp.swift */; };
+		8F8E736CBF7A0FE0FAB99205 /* VaultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A80FF4A3D3F6435FC39BB6 /* VaultView.swift */; };
+		90BE948600D67C6FA48CE59A /* ProvinceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D030510F08CCF7A53BC96D8 /* ProvinceView.swift */; };
+		91FABDD641A8C4DC1ABAFF72 /* MacDateParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0063D30817D7671F1A44BEBE /* MacDateParsing.swift */; };
 		968B1E3C1D50FB8FCEB0F738 /* MacWidgetAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED469812914B2A45C10F666 /* MacWidgetAPI.swift */; };
-		986E03B04A8F7FCBE7E15610 /* MissedPaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0046C4CA8530BB849F37AAA5 /* MissedPaymentView.swift */; };
-		9BAFF0507C634EDA6EF0F6E2 /* ExportOptions.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3951E529B6F7FA9B74ABE9C /* ExportOptions.plist */; };
-		A1B3992F899C2CC9E4CD2DFC /* MacAppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD19AB31AA4F0A6DD858E063 /* MacAppState.swift */; };
-		A4F29351A1EDEEA85B7B12D7 /* MacDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 253DEBB17503562A3842CF40 /* MacDashboardView.swift */; };
+		96EF9878497D55C2DDFEEA15 /* MacAppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CBD8FE26068852E5F5F68A /* MacAppState.swift */; };
+		9970C0419C5476CCCF1364E1 /* LifeChangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820D2D77B4B42CA704458872 /* LifeChangeView.swift */; };
+		99C634549A03C41B7C5F757A /* RTLTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E712C9FACDF5B1A1667D34D8 /* RTLTracking.swift */; };
+		9CAF1E7229F3BEB15AA70122 /* RdspTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E32F1F139E0300D6FE0DD4 /* RdspTrackerView.swift */; };
+		9F93A9BCE86C393FB4B4F107 /* MacPaymentCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F61C71B237061ADB458603B /* MacPaymentCalendarView.swift */; };
+		9F9A91B6041B0F94E4BD1EBC /* MacDashboardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4930CF3650A5DB9147EC008 /* MacDashboardData.swift */; };
 		A839CE61888A245D80B8D1F0 /* MacAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE374C826B98CFF02FCED84 /* MacAPIClient.swift */; };
-		AD729A551BB19926E28B3FF2 /* VaultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD64342FB49405CC38FC1F7 /* VaultView.swift */; };
 		ADBE475EB7B2A87AEB9C56F5 /* MacBenefitsWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062CBBD651BF3B7840A05137 /* MacBenefitsWidgetView.swift */; };
-		B2B60C9015E6163943DC89CF /* MacTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829CFD35783E267E334AD80F /* MacTheme.swift */; };
-		B884C9F0B1B9912B814147B5 /* MacDashboardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE300DF4D1CB8C872ECF1C6 /* MacDashboardData.swift */; };
-		BDC744FFF1162ECF0623389E /* TalliDisplay-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 209EE4F5C455FD9A9AD18F94 /* TalliDisplay-Semibold.ttf */; };
+		BA754998B3E06F2C78A3736B /* WhatIfView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9D9EB6EE47D57070956E7B /* WhatIfView.swift */; };
 		C1BB49D27DA0F229F5BCB559 /* Talli.icon in Resources */ = {isa = PBXBuildFile; fileRef = 251C0D379D90012F2C004BED /* Talli.icon */; };
+		D412A3951DDD2F429C2AD8B5 /* MissedPaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC836C03A941F59F7F9E7969 /* MissedPaymentView.swift */; };
+		D853CC88E2F2AA414F49A0F4 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157164338A4CCD3BF1A78665 /* MenuBarView.swift */; };
+		E0C62E645C1F0CCA400409BE /* MacBenefitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8F1A38A3AC93D42AAC4788 /* MacBenefitsView.swift */; };
+		E5B9E5B089920073233FBE5A /* VaultCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E0207C5FB90460AD766D6 /* VaultCrypto.swift */; };
+		EA10A4B6274DB876CCD1440F /* TrustedHelperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7D0388D7005934F92B2A2C /* TrustedHelperView.swift */; };
 		EC8B2E6E71DE81EF6AE90BDF /* MacPaymentWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B70B1E59CAC8CFE93C5192 /* MacPaymentWidgetView.swift */; };
-		F4FDF05C00F33D7F703A260E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEEEC581169CEBE335A51EF3 /* Assets.xcassets */; };
+		ED2BAC1574BB8A3955DBAA22 /* MacKeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E81E71FDBE76CCEBE81E8B /* MacKeychainHelper.swift */; };
+		EF8B10E0AA773E76C24C9A80 /* HeroAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEE954016BFE5B3B80576E8 /* HeroAmountView.swift */; };
+		EFAB26E030814FF7E12D8842 /* MacContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7649C882F2163916854457 /* MacContentView.swift */; };
 		F70A221F7E7CE17DEFD24A8F /* MacScreenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1777E1F0FD107545870F598B /* MacScreenshot.swift */; };
-		F8E7098F7259513AA5938E0D /* ReconsiderationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54336877769FA2F896CFAEAA /* ReconsiderationView.swift */; };
-		FD8A8D1A2A57771ED855B2F8 /* HeroAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C04BA39F17A61EF58E09E9 /* HeroAmountView.swift */; };
-		FE0CCA838AA6BF0996DF72CD /* BenefitFinderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35803128BD01A8F7B732D9B /* BenefitFinderView.swift */; };
+		FE54456A85A43D8DA0EA53FE /* MacSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2615E3D7DB09C29DCA9C3FD /* MacSettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,83 +90,60 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0046C4CA8530BB849F37AAA5 /* MissedPaymentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissedPaymentView.swift; sourceTree = "<group>"; };
+		0063D30817D7671F1A44BEBE /* MacDateParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDateParsing.swift; sourceTree = "<group>"; };
 		04123E4DE54AEC07C172692B /* MacPaymentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPaymentProvider.swift; sourceTree = "<group>"; };
 		05C53A51618D2F7455BED586 /* TalliWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TalliWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		05FA7959072F830F8EBC320B /* MacMessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMessagesView.swift; sourceTree = "<group>"; };
 		062CBBD651BF3B7840A05137 /* MacBenefitsWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBenefitsWidgetView.swift; sourceTree = "<group>"; };
-		143469F2CCBEE5C354DFA76E /* ReplyDraftView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyDraftView.swift; sourceTree = "<group>"; };
-		15C04BA39F17A61EF58E09E9 /* HeroAmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroAmountView.swift; sourceTree = "<group>"; };
+		0A060B11CBCC45C70386C9EC /* View+Glass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Glass.swift"; sourceTree = "<group>"; };
+		0B9E0207C5FB90460AD766D6 /* VaultCrypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VaultCrypto.swift; path = ../ios/Helpers/VaultCrypto.swift; sourceTree = "<group>"; };
+		0D030510F08CCF7A53BC96D8 /* ProvinceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProvinceView.swift; path = ../ios/Views/ProvinceView.swift; sourceTree = "<group>"; };
+		0F276790013EC2CE25DF8628 /* ReplyDraftView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ReplyDraftView.swift; path = ../ios/Views/ReplyDraftView.swift; sourceTree = "<group>"; };
+		14B804F5322DFCB122FB9F7F /* PaydayNotificationScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaydayNotificationScheduler.swift; sourceTree = "<group>"; };
+		157164338A4CCD3BF1A78665 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		1777E1F0FD107545870F598B /* MacScreenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacScreenshot.swift; sourceTree = "<group>"; };
-		209EE4F5C455FD9A9AD18F94 /* TalliDisplay-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TalliDisplay-Semibold.ttf"; sourceTree = "<group>"; };
-		217AF15EBB15DD448AF76CAA /* OfflineCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineCache.swift; sourceTree = "<group>"; };
+		18DFF365F0A8A61B2D84DCEA /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; name = Localizable.xcstrings; path = ../ios/Talli/Localizable.xcstrings; sourceTree = "<group>"; };
 		251C0D379D90012F2C004BED /* Talli.icon */ = {isa = PBXFileReference; lastKnownFileType = wrapper.icon; path = Talli.icon; sourceTree = "<group>"; };
-		253DEBB17503562A3842CF40 /* MacDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDashboardView.swift; sourceTree = "<group>"; };
-		2C99C8A261E7DB1D39095B44 /* VaultCrypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultCrypto.swift; sourceTree = "<group>"; };
-		3957E7C2F9B33E31A48633BD /* HouseholdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseholdView.swift; sourceTree = "<group>"; };
-		444811D43CD139384A826977 /* ProvinceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvinceView.swift; sourceTree = "<group>"; };
+		35CDC1BFFFCBA70971A4CB04 /* OfflineCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OfflineCache.swift; path = ../ios/API/OfflineCache.swift; sourceTree = "<group>"; };
+		3CEE954016BFE5B3B80576E8 /* HeroAmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HeroAmountView.swift; path = ../ios/Views/HeroAmountView.swift; sourceTree = "<group>"; };
+		48E32F1F139E0300D6FE0DD4 /* RdspTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RdspTrackerView.swift; path = ../ios/Views/RdspTrackerView.swift; sourceTree = "<group>"; };
+		4AC7C0A555EF240070EFFC22 /* MacLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacLoginView.swift; sourceTree = "<group>"; };
 		4BA58147703D20028DCD974A /* TalliMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TalliMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4ED469812914B2A45C10F666 /* MacWidgetAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacWidgetAPI.swift; sourceTree = "<group>"; };
-		4F7775930C1F9FD312750701 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
-		54336877769FA2F896CFAEAA /* ReconsiderationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReconsiderationView.swift; sourceTree = "<group>"; };
 		5ED7313B160FD0FF894E40D8 /* MacWidgetModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacWidgetModels.swift; sourceTree = "<group>"; };
-		63A17E7510CFCFBFACA72F49 /* Talli.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Talli.entitlements; sourceTree = "<group>"; };
-		672B870569D2E3A8219AD924 /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
-		6CE300DF4D1CB8C872ECF1C6 /* MacDashboardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDashboardData.swift; sourceTree = "<group>"; };
-		712C08E52D3C020E27D13B54 /* MacLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacLoginView.swift; sourceTree = "<group>"; };
-		7B87D84FEC8981517B9093CB /* MacPaymentCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPaymentCalendarView.swift; sourceTree = "<group>"; };
-		7BB0F7DA1B151C354B363FA0 /* View+Glass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Glass.swift"; sourceTree = "<group>"; };
-		829CFD35783E267E334AD80F /* MacTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTheme.swift; sourceTree = "<group>"; };
+		6512C40295B3CCF60359414B /* ServiceRequestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ServiceRequestsView.swift; path = ../ios/Views/ServiceRequestsView.swift; sourceTree = "<group>"; };
+		67822716BC2BAC92139BD75E /* ReconsiderationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ReconsiderationView.swift; path = ../ios/Views/ReconsiderationView.swift; sourceTree = "<group>"; };
+		69E81E71FDBE76CCEBE81E8B /* MacKeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacKeychainHelper.swift; sourceTree = "<group>"; };
+		6B9D9EB6EE47D57070956E7B /* WhatIfView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WhatIfView.swift; path = ../ios/Views/WhatIfView.swift; sourceTree = "<group>"; };
+		77A80FF4A3D3F6435FC39BB6 /* VaultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VaultView.swift; path = ../ios/Views/VaultView.swift; sourceTree = "<group>"; };
+		79CBD8FE26068852E5F5F68A /* MacAppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAppState.swift; sourceTree = "<group>"; };
+		7DA64B7BB1AB7D3C90C7BB9E /* MacTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTheme.swift; sourceTree = "<group>"; };
+		7E8F1A38A3AC93D42AAC4788 /* MacBenefitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBenefitsView.swift; sourceTree = "<group>"; };
+		7FC9A210E99291A8C8846278 /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BudgetView.swift; path = ../ios/Views/BudgetView.swift; sourceTree = "<group>"; };
+		820D2D77B4B42CA704458872 /* LifeChangeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LifeChangeView.swift; path = ../ios/Views/LifeChangeView.swift; sourceTree = "<group>"; };
 		830C9DAD4CB8EB0B56C93532 /* MacMessagesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMessagesProvider.swift; sourceTree = "<group>"; };
 		88B70B1E59CAC8CFE93C5192 /* MacPaymentWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPaymentWidgetView.swift; sourceTree = "<group>"; };
-		8B92B5AB892DBD4B963F8656 /* MacBenefitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBenefitsView.swift; sourceTree = "<group>"; };
+		8BBF5DC9265AA483FE918838 /* SupplementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SupplementsView.swift; path = ../ios/Views/SupplementsView.swift; sourceTree = "<group>"; };
 		8BD57939601D50F6E8BA4261 /* TallyMacWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TallyMacWidgets.swift; sourceTree = "<group>"; };
 		8CE4D95EDD23AA9E97925A20 /* MacBenefitsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBenefitsProvider.swift; sourceTree = "<group>"; };
-		95554CD8FF952B439E481BA4 /* ServiceRequestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceRequestsView.swift; sourceTree = "<group>"; };
-		A03D46509CD0CB994360A6EE /* MacKeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacKeychainHelper.swift; sourceTree = "<group>"; };
-		A35803128BD01A8F7B732D9B /* BenefitFinderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenefitFinderView.swift; sourceTree = "<group>"; };
-		A3951E529B6F7FA9B74ABE9C /* ExportOptions.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = ExportOptions.plist; sourceTree = "<group>"; };
-		AB7688A8B26D97A128C95FA2 /* RdspTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RdspTrackerView.swift; sourceTree = "<group>"; };
+		8E72C03997D1F41B7F549D1D /* HouseholdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HouseholdView.swift; path = ../ios/Views/HouseholdView.swift; sourceTree = "<group>"; };
+		8F61C71B237061ADB458603B /* MacPaymentCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPaymentCalendarView.swift; sourceTree = "<group>"; };
+		985D205309269F738B3A691D /* TalliMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalliMacApp.swift; sourceTree = "<group>"; };
+		9B7D0388D7005934F92B2A2C /* TrustedHelperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TrustedHelperView.swift; path = ../ios/Views/TrustedHelperView.swift; sourceTree = "<group>"; };
+		A0D4B36439F72AB4BDFA7B53 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AF4D522BAA69042C54EEA0D3 /* TalliMacUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalliMacUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		B4671E8BA45907193EDB8BC4 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
-		BD11C951DE3513CC516BB2B3 /* TrustedHelperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustedHelperView.swift; sourceTree = "<group>"; };
-		BE52B7411BB64FCBF55E718E /* MacDateParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDateParsing.swift; sourceTree = "<group>"; };
-		BEE667693AE3B4A55E821898 /* TalliWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TalliWidgets.entitlements; sourceTree = "<group>"; };
-		BEEEC581169CEBE335A51EF3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B2615E3D7DB09C29DCA9C3FD /* MacSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacSettingsView.swift; sourceTree = "<group>"; };
+		B94A7ADCDB828F8404CBFA97 /* MacDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDashboardView.swift; sourceTree = "<group>"; };
 		C072FBCF9110200380F476B0 /* MacMessagesWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMessagesWidgetView.swift; sourceTree = "<group>"; };
-		C12445E704AC6AE4D68DAA67 /* LifeChangeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeChangeView.swift; sourceTree = "<group>"; };
-		C3B2AD00D857C67843DE6074 /* SupplementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementsView.swift; sourceTree = "<group>"; };
-		CD19AB31AA4F0A6DD858E063 /* MacAppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAppState.swift; sourceTree = "<group>"; };
-		CD291A0A6F3E178AE7DBC14D /* TalliMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalliMacApp.swift; sourceTree = "<group>"; };
+		C6B6CC9EE695861B514B1B3E /* BenefitFinderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BenefitFinderView.swift; path = ../ios/Views/BenefitFinderView.swift; sourceTree = "<group>"; };
+		CE7649C882F2163916854457 /* MacContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacContentView.swift; sourceTree = "<group>"; };
 		DDE374C826B98CFF02FCED84 /* MacAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAPIClient.swift; sourceTree = "<group>"; };
-		DFB8A17CA2D95C67235E3EB7 /* MacMessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMessagesView.swift; sourceTree = "<group>"; };
-		E6F0CD73F1B533518444D527 /* TalliWidgets-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "TalliWidgets-Info.plist"; sourceTree = "<group>"; };
-		E78526D808FDBBD806F7EF05 /* MacContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacContentView.swift; sourceTree = "<group>"; };
-		EC9E6A07378DC7743CCC0E4D /* MacSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacSettingsView.swift; sourceTree = "<group>"; };
-		F47FDBC6806E5A115D749928 /* RTLTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTLTracking.swift; sourceTree = "<group>"; };
-		FBD64342FB49405CC38FC1F7 /* VaultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultView.swift; sourceTree = "<group>"; };
-		FCBD3343FCF75BB4A28E8744 /* PaydayNotificationScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaydayNotificationScheduler.swift; sourceTree = "<group>"; };
-		FE181ECEB1BE3E5FBE2F705D /* WhatIfView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatIfView.swift; sourceTree = "<group>"; };
+		E712C9FACDF5B1A1667D34D8 /* RTLTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RTLTracking.swift; path = ../ios/Helpers/RTLTracking.swift; sourceTree = "<group>"; };
+		F4930CF3650A5DB9147EC008 /* MacDashboardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDashboardData.swift; sourceTree = "<group>"; };
+		FC836C03A941F59F7F9E7969 /* MissedPaymentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MissedPaymentView.swift; path = ../ios/Views/MissedPaymentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
-		02A74C1E70FBE792CCFFBB3D /* API */ = {
-			isa = PBXGroup;
-			children = (
-				217AF15EBB15DD448AF76CAA /* OfflineCache.swift */,
-			);
-			name = API;
-			path = ../ios/API;
-			sourceTree = "<group>";
-		};
-		11835D1381E8F6883C028F7F /* Talli */ = {
-			isa = PBXGroup;
-			children = (
-				4F7775930C1F9FD312750701 /* Localizable.xcstrings */,
-			);
-			name = Talli;
-			path = ../ios/Talli;
-			sourceTree = "<group>";
-		};
 		18029B3E75319FDE2D25A635 /* Providers */ = {
 			isa = PBXGroup;
 			children = (
@@ -180,29 +154,17 @@
 			path = Providers;
 			sourceTree = "<group>";
 		};
-		2BF87326ABCB45BC0E0A128F /* fonts */ = {
-			isa = PBXGroup;
-			children = (
-				209EE4F5C455FD9A9AD18F94 /* TalliDisplay-Semibold.ttf */,
-			);
-			name = fonts;
-			path = ../fonts;
-			sourceTree = "<group>";
-		};
 		2C7C8436AFBC9B947CB4B56A = {
 			isa = PBXGroup;
 			children = (
+				A0D4B36439F72AB4BDFA7B53 /* Assets.xcassets */,
+				985D205309269F738B3A691D /* TalliMacApp.swift */,
 				D2F09362310FBA9BC12F44AF /* API */,
-				02A74C1E70FBE792CCFFBB3D /* API */,
-				2BF87326ABCB45BC0E0A128F /* fonts */,
-				BA3254AC0D366A2B19C3603F /* Helpers */,
-				B95C375D38861B1A1EDE2090 /* macos */,
-				78C63CA92784404D8EC46A10 /* Models */,
-				78F55008E85541E57E60C252 /* Notifications */,
+				F43E646ACA7EBF77AD017050 /* Models */,
+				8C4A0361C16E78839B42B575 /* Notifications */,
+				B539B1984E07A1F774572A8C /* Shared */,
 				EA1286BFD66E4C0AFD7AC9D4 /* talli */,
-				11835D1381E8F6883C028F7F /* Talli */,
 				2ED134DA62A66DFB27FEA399 /* UITests-mac */,
-				EFA8EBF78F5183CCF1769CF9 /* Views */,
 				3D285039F000D03C4B4940DA /* Views */,
 				492E05BCAA24E42AAC03DF51 /* widgets-macos */,
 				8B12F9F9BDDCEFD58632185A /* Products */,
@@ -220,24 +182,18 @@
 		3D285039F000D03C4B4940DA /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				A35803128BD01A8F7B732D9B /* BenefitFinderView.swift */,
-				672B870569D2E3A8219AD924 /* BudgetView.swift */,
-				15C04BA39F17A61EF58E09E9 /* HeroAmountView.swift */,
-				3957E7C2F9B33E31A48633BD /* HouseholdView.swift */,
-				C12445E704AC6AE4D68DAA67 /* LifeChangeView.swift */,
-				0046C4CA8530BB849F37AAA5 /* MissedPaymentView.swift */,
-				444811D43CD139384A826977 /* ProvinceView.swift */,
-				AB7688A8B26D97A128C95FA2 /* RdspTrackerView.swift */,
-				54336877769FA2F896CFAEAA /* ReconsiderationView.swift */,
-				143469F2CCBEE5C354DFA76E /* ReplyDraftView.swift */,
-				95554CD8FF952B439E481BA4 /* ServiceRequestsView.swift */,
-				C3B2AD00D857C67843DE6074 /* SupplementsView.swift */,
-				BD11C951DE3513CC516BB2B3 /* TrustedHelperView.swift */,
-				FBD64342FB49405CC38FC1F7 /* VaultView.swift */,
-				FE181ECEB1BE3E5FBE2F705D /* WhatIfView.swift */,
+				7E8F1A38A3AC93D42AAC4788 /* MacBenefitsView.swift */,
+				CE7649C882F2163916854457 /* MacContentView.swift */,
+				B94A7ADCDB828F8404CBFA97 /* MacDashboardView.swift */,
+				4AC7C0A555EF240070EFFC22 /* MacLoginView.swift */,
+				05FA7959072F830F8EBC320B /* MacMessagesView.swift */,
+				8F61C71B237061ADB458603B /* MacPaymentCalendarView.swift */,
+				B2615E3D7DB09C29DCA9C3FD /* MacSettingsView.swift */,
+				7DA64B7BB1AB7D3C90C7BB9E /* MacTheme.swift */,
+				157164338A4CCD3BF1A78665 /* MenuBarView.swift */,
+				0A060B11CBCC45C70386C9EC /* View+Glass.swift */,
 			);
-			name = Views;
-			path = ../ios/Views;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		492E05BCAA24E42AAC03DF51 /* widgets-macos */ = {
@@ -261,25 +217,6 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		78C63CA92784404D8EC46A10 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				CD19AB31AA4F0A6DD858E063 /* MacAppState.swift */,
-				6CE300DF4D1CB8C872ECF1C6 /* MacDashboardData.swift */,
-				BE52B7411BB64FCBF55E718E /* MacDateParsing.swift */,
-				A03D46509CD0CB994360A6EE /* MacKeychainHelper.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		78F55008E85541E57E60C252 /* Notifications */ = {
-			isa = PBXGroup;
-			children = (
-				FCBD3343FCF75BB4A28E8744 /* PaydayNotificationScheduler.swift */,
-			);
-			path = Notifications;
-			sourceTree = "<group>";
-		};
 		8B12F9F9BDDCEFD58632185A /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -290,32 +227,38 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B95C375D38861B1A1EDE2090 /* macos */ = {
+		8C4A0361C16E78839B42B575 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
-				BEEEC581169CEBE335A51EF3 /* Assets.xcassets */,
-				A3951E529B6F7FA9B74ABE9C /* ExportOptions.plist */,
-				63A17E7510CFCFBFACA72F49 /* Talli.entitlements */,
-				CD291A0A6F3E178AE7DBC14D /* TalliMacApp.swift */,
-				E6F0CD73F1B533518444D527 /* TalliWidgets-Info.plist */,
-				BEE667693AE3B4A55E821898 /* TalliWidgets.entitlements */,
-				D2F09362310FBA9BC12F44AF /* API */,
-				78C63CA92784404D8EC46A10 /* Models */,
-				78F55008E85541E57E60C252 /* Notifications */,
-				EFA8EBF78F5183CCF1769CF9 /* Views */,
+				14B804F5322DFCB122FB9F7F /* PaydayNotificationScheduler.swift */,
 			);
-			name = macos;
-			path = .;
+			path = Notifications;
 			sourceTree = "<group>";
 		};
-		BA3254AC0D366A2B19C3603F /* Helpers */ = {
+		B539B1984E07A1F774572A8C /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				F47FDBC6806E5A115D749928 /* RTLTracking.swift */,
-				2C99C8A261E7DB1D39095B44 /* VaultCrypto.swift */,
+				C6B6CC9EE695861B514B1B3E /* BenefitFinderView.swift */,
+				7FC9A210E99291A8C8846278 /* BudgetView.swift */,
+				3CEE954016BFE5B3B80576E8 /* HeroAmountView.swift */,
+				8E72C03997D1F41B7F549D1D /* HouseholdView.swift */,
+				820D2D77B4B42CA704458872 /* LifeChangeView.swift */,
+				18DFF365F0A8A61B2D84DCEA /* Localizable.xcstrings */,
+				FC836C03A941F59F7F9E7969 /* MissedPaymentView.swift */,
+				35CDC1BFFFCBA70971A4CB04 /* OfflineCache.swift */,
+				0D030510F08CCF7A53BC96D8 /* ProvinceView.swift */,
+				48E32F1F139E0300D6FE0DD4 /* RdspTrackerView.swift */,
+				67822716BC2BAC92139BD75E /* ReconsiderationView.swift */,
+				0F276790013EC2CE25DF8628 /* ReplyDraftView.swift */,
+				E712C9FACDF5B1A1667D34D8 /* RTLTracking.swift */,
+				6512C40295B3CCF60359414B /* ServiceRequestsView.swift */,
+				8BBF5DC9265AA483FE918838 /* SupplementsView.swift */,
+				9B7D0388D7005934F92B2A2C /* TrustedHelperView.swift */,
+				0B9E0207C5FB90460AD766D6 /* VaultCrypto.swift */,
+				77A80FF4A3D3F6435FC39BB6 /* VaultView.swift */,
+				6B9D9EB6EE47D57070956E7B /* WhatIfView.swift */,
 			);
-			name = Helpers;
-			path = ../ios/Helpers;
+			name = Shared;
 			sourceTree = "<group>";
 		};
 		BC0BED7F76BF727829B3FE50 /* Views */ = {
@@ -345,21 +288,15 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		EFA8EBF78F5183CCF1769CF9 /* Views */ = {
+		F43E646ACA7EBF77AD017050 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				8B92B5AB892DBD4B963F8656 /* MacBenefitsView.swift */,
-				E78526D808FDBBD806F7EF05 /* MacContentView.swift */,
-				253DEBB17503562A3842CF40 /* MacDashboardView.swift */,
-				712C08E52D3C020E27D13B54 /* MacLoginView.swift */,
-				DFB8A17CA2D95C67235E3EB7 /* MacMessagesView.swift */,
-				7B87D84FEC8981517B9093CB /* MacPaymentCalendarView.swift */,
-				EC9E6A07378DC7743CCC0E4D /* MacSettingsView.swift */,
-				829CFD35783E267E334AD80F /* MacTheme.swift */,
-				B4671E8BA45907193EDB8BC4 /* MenuBarView.swift */,
-				7BB0F7DA1B151C354B363FA0 /* View+Glass.swift */,
+				79CBD8FE26068852E5F5F68A /* MacAppState.swift */,
+				F4930CF3650A5DB9147EC008 /* MacDashboardData.swift */,
+				0063D30817D7671F1A44BEBE /* MacDateParsing.swift */,
+				69E81E71FDBE76CCEBE81E8B /* MacKeychainHelper.swift */,
 			);
-			path = Views;
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -469,12 +406,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4FDF05C00F33D7F703A260E /* Assets.xcassets in Resources */,
-				9BAFF0507C634EDA6EF0F6E2 /* ExportOptions.plist in Resources */,
-				18606EA8270968C7308DC823 /* Localizable.xcstrings in Resources */,
+				50F007C8ED5F7741F41E0EBF /* Assets.xcassets in Resources */,
+				1C494B27EB216DC876FE0B01 /* Localizable.xcstrings in Resources */,
 				C1BB49D27DA0F229F5BCB559 /* Talli.icon in Resources */,
-				BDC744FFF1162ECF0623389E /* TalliDisplay-Semibold.ttf in Resources */,
-				0D9CD3FBC94EA80A07221C5C /* TalliWidgets-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,41 +435,41 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FE0CCA838AA6BF0996DF72CD /* BenefitFinderView.swift in Sources */,
-				5AE912C79A2126B8E32B1B0F /* BudgetView.swift in Sources */,
-				FD8A8D1A2A57771ED855B2F8 /* HeroAmountView.swift in Sources */,
-				1623130FC8E0A8FF3C7C74CB /* HouseholdView.swift in Sources */,
-				68757DD630674D89FA11A436 /* LifeChangeView.swift in Sources */,
+				2BFE7BB853AC5061BC19930A /* BenefitFinderView.swift in Sources */,
+				67FFF6B3CA44FA20564BBF03 /* BudgetView.swift in Sources */,
+				EF8B10E0AA773E76C24C9A80 /* HeroAmountView.swift in Sources */,
+				7D738ACB385D7AE4B3199FDF /* HouseholdView.swift in Sources */,
+				9970C0419C5476CCCF1364E1 /* LifeChangeView.swift in Sources */,
 				A839CE61888A245D80B8D1F0 /* MacAPIClient.swift in Sources */,
-				A1B3992F899C2CC9E4CD2DFC /* MacAppState.swift in Sources */,
-				2549FEFAACF6366B21309CAB /* MacBenefitsView.swift in Sources */,
-				1F33700CFE6CC60045C2907B /* MacContentView.swift in Sources */,
-				B884C9F0B1B9912B814147B5 /* MacDashboardData.swift in Sources */,
-				A4F29351A1EDEEA85B7B12D7 /* MacDashboardView.swift in Sources */,
-				0BDFE2F644478B6E4DE81162 /* MacDateParsing.swift in Sources */,
-				648A1E6A1C557E43E91DD2AB /* MacKeychainHelper.swift in Sources */,
-				170DED2AAD7B3037534ED350 /* MacLoginView.swift in Sources */,
-				190C9A49755892F5842E7855 /* MacMessagesView.swift in Sources */,
-				334EA37E0B895B20EF2496BB /* MacPaymentCalendarView.swift in Sources */,
-				0A4F2A936FBED3094781D846 /* MacSettingsView.swift in Sources */,
-				B2B60C9015E6163943DC89CF /* MacTheme.swift in Sources */,
-				37291C624EBCC18BA59688CA /* MenuBarView.swift in Sources */,
-				986E03B04A8F7FCBE7E15610 /* MissedPaymentView.swift in Sources */,
-				7977CE05321CF640542D27E8 /* OfflineCache.swift in Sources */,
-				13B60F9180A94A04BA24C25E /* PaydayNotificationScheduler.swift in Sources */,
-				933437B7B8DE30A8BB87566E /* ProvinceView.swift in Sources */,
-				68003AB732B158D919F3BE14 /* RTLTracking.swift in Sources */,
-				2B571A9A6058202934D64E5A /* RdspTrackerView.swift in Sources */,
-				F8E7098F7259513AA5938E0D /* ReconsiderationView.swift in Sources */,
-				266F13C9D2C23B68B5E6F504 /* ReplyDraftView.swift in Sources */,
-				59D75C644E8AF87E3EAA040D /* ServiceRequestsView.swift in Sources */,
-				0407FBFD53DB017B3052008B /* SupplementsView.swift in Sources */,
-				4BCA3DBEDCAA96B862C734FA /* TalliMacApp.swift in Sources */,
-				310EC3E0110AA4099DCDA7D2 /* TrustedHelperView.swift in Sources */,
-				208D5FDB7E169D6B520AD82D /* VaultCrypto.swift in Sources */,
-				AD729A551BB19926E28B3FF2 /* VaultView.swift in Sources */,
-				62E4A3F5916F04C5C1474AA6 /* View+Glass.swift in Sources */,
-				0E1D333BEFC2600DACFC16BF /* WhatIfView.swift in Sources */,
+				96EF9878497D55C2DDFEEA15 /* MacAppState.swift in Sources */,
+				E0C62E645C1F0CCA400409BE /* MacBenefitsView.swift in Sources */,
+				EFAB26E030814FF7E12D8842 /* MacContentView.swift in Sources */,
+				9F9A91B6041B0F94E4BD1EBC /* MacDashboardData.swift in Sources */,
+				3ACBE59547C0062B7CB46C8C /* MacDashboardView.swift in Sources */,
+				91FABDD641A8C4DC1ABAFF72 /* MacDateParsing.swift in Sources */,
+				ED2BAC1574BB8A3955DBAA22 /* MacKeychainHelper.swift in Sources */,
+				37B920D785FAE2470C585861 /* MacLoginView.swift in Sources */,
+				07A9B0E0E1C466F977932E80 /* MacMessagesView.swift in Sources */,
+				9F93A9BCE86C393FB4B4F107 /* MacPaymentCalendarView.swift in Sources */,
+				FE54456A85A43D8DA0EA53FE /* MacSettingsView.swift in Sources */,
+				58D921C73F35B27923D2B8F4 /* MacTheme.swift in Sources */,
+				D853CC88E2F2AA414F49A0F4 /* MenuBarView.swift in Sources */,
+				D412A3951DDD2F429C2AD8B5 /* MissedPaymentView.swift in Sources */,
+				3EE5F1D4207EE88D861EF488 /* OfflineCache.swift in Sources */,
+				5D2AC14586A465A5B01467E6 /* PaydayNotificationScheduler.swift in Sources */,
+				90BE948600D67C6FA48CE59A /* ProvinceView.swift in Sources */,
+				99C634549A03C41B7C5F757A /* RTLTracking.swift in Sources */,
+				9CAF1E7229F3BEB15AA70122 /* RdspTrackerView.swift in Sources */,
+				773C0111E5F2AC6841762448 /* ReconsiderationView.swift in Sources */,
+				262A22CE6BF93C0383B955DD /* ReplyDraftView.swift in Sources */,
+				6E01B21D34385EA078F51362 /* ServiceRequestsView.swift in Sources */,
+				70A6573C6EDB6CBED8874ABD /* SupplementsView.swift in Sources */,
+				80538CA6056F3CFC0D50A2B0 /* TalliMacApp.swift in Sources */,
+				EA10A4B6274DB876CCD1440F /* TrustedHelperView.swift in Sources */,
+				E5B9E5B089920073233FBE5A /* VaultCrypto.swift in Sources */,
+				8F8E736CBF7A0FE0FAB99205 /* VaultView.swift in Sources */,
+				58421D95CCAD405A0E95C5F9 /* View+Glass.swift in Sources */,
+				BA754998B3E06F2C78A3736B /* WhatIfView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
