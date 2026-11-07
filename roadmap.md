@@ -48,6 +48,3 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 - [ ] (blocked 11-01: the rest wait on Apple) Animated hero for the other apps. Placed and live on 14: Epiphany, Echo, Bugle, Melete, Machaon, Pan, Patois, Temida, Kernel, Eponym, Gastown, Nimble, Icelus, Coda. Waiting for review: Doorstock, Hamurapi, Toroid. No live iOS version yet, so theirs go in with the next version: Horula, Atlin, Plaintxt, Scrounger, Airwell, Blackcomb. Rerun `_attic/store-headers/place.py --go` once they clear.
 
 ## Ingested 2026-10-30
-
-## Ingested 2026-11-06
-- [ ] Needs custom font (San Francisco based etc). Money font needs to adhere.
