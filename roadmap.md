@@ -49,3 +49,5 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 
 ## Ingested 2026-10-30
 
+## Ingested 2026-11-06
+- [ ] Needs custom font (San Francisco based etc). Money font needs to adhere.
