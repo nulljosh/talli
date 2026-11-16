@@ -1,4 +1,4 @@
-# Talli loop handoff (2026-10-20, evening)
+# Talli loop handoff (2026-11-15, 18:42)
 
 ## What the loop is
 
@@ -6,6 +6,7 @@ Talli is a BC disability benefits tracker on web, iPhone and Mac at talli.jaybul
 
 ## Where things stand
 
+- 4.1 money log is built and live on the web and API. Work earnings and expenses log through /api/money-log on iPhone, Mac and web, with every save checked and cleaned. Home has the earnings limit bar, and expenses ride the tax-time CSV export. iPhone and Mac are not on TestFlight yet.
 - iOS 4.0.1 (header and search videos, six iPhone shots) and Mac 4.0.0 (build 202610201455, with the federal finder link) are both Waiting for Review. iOS 4.0.0 is live. Apple allows 5 open review submissions per app; empty drafts count, so reuse one with `asc review items-add` and `submissions-submit`.
 - The header and search videos come from `launch/make_banner.sh`: Talli's six glyphs in scanlines on the landing blue. `asc asset-library videos upload` prints `videoId`, then `asc localizations placements create` puts it on the localization.
 - Roadmap 8.0, 9.0 and 10.0 are done in code: day-1 and day-4 report reminders, the 80 percent earnings warning, the cheque-landed alert, the printable appointment summary, and offline copies of every API read.
@@ -16,8 +17,9 @@ Talli is a BC disability benefits tracker on web, iPhone and Mac at talli.jaybul
 
 ## Next, in order
 
-1. Accessibility audit fixes: finish the signed-out UI test, then fix what it finds (VoiceOver labels, Dynamic Type at the largest size, contrast).
-2. The 11 to 20 depth band in roadmap.md: benefits checker, RDSP planner, housing and shelter rates, appeals helper, then the accessibility audit per major.
+1. Ship 4.1.0 to TestFlight (iPhone and Mac) and check the money log on a real device (#131).
+2. Accessibility audit fixes: finish the signed-out UI test, then fix what it finds (VoiceOver labels, Dynamic Type at the largest size, contrast).
+3. The 11 to 20 depth band in roadmap.md: benefits checker, RDSP planner, housing and shelter rates, appeals helper, then the accessibility audit per major.
 
 When Mac 4.0.0 is approved, flip the GitHub 4.0.0 release to Latest (#62).
 
