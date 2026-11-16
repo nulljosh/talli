@@ -17,6 +17,7 @@ struct BenefitsView: View {
             }
 
             Section("Money tools") {
+                tool("Money in and out") { MoneyLogView { try await APIClient.shared.moneyLog(save: $0) } }
                 tool("Budget against paydays") { BudgetView { try await APIClient.shared.budget(save: $0) } }
                 tool("Benefit finder") { BenefitFinderView { try await APIClient.shared.benefitFinder(answers: $0) } }
                 tool("RDSP grants and bonds") { RdspTrackerView { try await APIClient.shared.rdspTracker(patch: $0) } }

@@ -44,6 +44,7 @@
 		A839CE61888A245D80B8D1F0 /* MacAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE374C826B98CFF02FCED84 /* MacAPIClient.swift */; };
 		ADBE475EB7B2A87AEB9C56F5 /* MacBenefitsWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062CBBD651BF3B7840A05137 /* MacBenefitsWidgetView.swift */; };
 		BA754998B3E06F2C78A3736B /* WhatIfView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9D9EB6EE47D57070956E7B /* WhatIfView.swift */; };
+		BD5F06B0F345041058A17DB5 /* MoneyLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F55197E858DBDE48C650A6B /* MoneyLogView.swift */; };
 		C1BB49D27DA0F229F5BCB559 /* Talli.icon in Resources */ = {isa = PBXBuildFile; fileRef = 251C0D379D90012F2C004BED /* Talli.icon */; };
 		D412A3951DDD2F429C2AD8B5 /* MissedPaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC836C03A941F59F7F9E7969 /* MissedPaymentView.swift */; };
 		D853CC88E2F2AA414F49A0F4 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157164338A4CCD3BF1A78665 /* MenuBarView.swift */; };
@@ -111,6 +112,7 @@
 		4BA58147703D20028DCD974A /* TalliMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TalliMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4ED469812914B2A45C10F666 /* MacWidgetAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacWidgetAPI.swift; sourceTree = "<group>"; };
 		5ED7313B160FD0FF894E40D8 /* MacWidgetModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacWidgetModels.swift; sourceTree = "<group>"; };
+		5F55197E858DBDE48C650A6B /* MoneyLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MoneyLogView.swift; path = ../ios/Views/MoneyLogView.swift; sourceTree = "<group>"; };
 		6512C40295B3CCF60359414B /* ServiceRequestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ServiceRequestsView.swift; path = ../ios/Views/ServiceRequestsView.swift; sourceTree = "<group>"; };
 		67822716BC2BAC92139BD75E /* ReconsiderationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ReconsiderationView.swift; path = ../ios/Views/ReconsiderationView.swift; sourceTree = "<group>"; };
 		69E81E71FDBE76CCEBE81E8B /* MacKeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacKeychainHelper.swift; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 				820D2D77B4B42CA704458872 /* LifeChangeView.swift */,
 				18DFF365F0A8A61B2D84DCEA /* Localizable.xcstrings */,
 				FC836C03A941F59F7F9E7969 /* MissedPaymentView.swift */,
+				5F55197E858DBDE48C650A6B /* MoneyLogView.swift */,
 				35CDC1BFFFCBA70971A4CB04 /* OfflineCache.swift */,
 				0D030510F08CCF7A53BC96D8 /* ProvinceView.swift */,
 				48E32F1F139E0300D6FE0DD4 /* RdspTrackerView.swift */,
@@ -455,6 +458,7 @@
 				58D921C73F35B27923D2B8F4 /* MacTheme.swift in Sources */,
 				D853CC88E2F2AA414F49A0F4 /* MenuBarView.swift in Sources */,
 				D412A3951DDD2F429C2AD8B5 /* MissedPaymentView.swift in Sources */,
+				BD5F06B0F345041058A17DB5 /* MoneyLogView.swift in Sources */,
 				3EE5F1D4207EE88D861EF488 /* OfflineCache.swift in Sources */,
 				5D2AC14586A465A5B01467E6 /* PaydayNotificationScheduler.swift in Sources */,
 				90BE948600D67C6FA48CE59A /* ProvinceView.swift in Sources */,

@@ -91,6 +91,7 @@ const PROFILE_PROGRAMS = [
     jurisdiction: 'BC',
     validStatuses: ['tracking'],
     defaults: { status: 'tracking', entries: [], notes: '' },
+    clean: { entries: (raw) => cleanEntries(raw) },
   },
   {
     id: 'assets',
@@ -155,7 +156,7 @@ function deriveIncome(pwdProfile, cdbProfile, now = new Date(), cgebProfile = nu
 // Year in review: every payment, credit and logged earning for one calendar year,
 // for tax time. In January it reviews the year that just ended; otherwise the
 // year so far. Only dates already passed count, so it is what actually landed.
-function deriveYearReview({ pwd, cdb, cgeb, earnings, portalPwd = null }, now = new Date()) {
+function deriveYearReview({ pwd, cdb, cgeb, earnings, expenses = null, portalPwd = null }, now = new Date()) {
   const year = now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear();
   const today = isoDay(now);
   const income = deriveIncome(pwd, cdb, new Date(year, 6, 1), cgeb, portalPwd);
@@ -165,15 +166,31 @@ function deriveYearReview({ pwd, cdb, cgeb, earnings, portalPwd = null }, now = 
     { date, what: 'Canada Disability Benefit', amount: income.cdbMonthly },
   ]).filter((p) => p.amount);
   const credits = creditSchedule(cgeb, year).filter((p) => landed(p.date)).map((p) => ({ ...p, what: 'GST/HST credit' }));
-  const work = (earnings?.entries || []).filter((e) => landed(e.date))
-    .map((e) => ({ date: e.date, what: 'Work earnings', amount: Number(e.amount) || 0 }));
-  const items = [...benefits, ...credits, ...work].sort((a, b) => a.date.localeCompare(b.date));
+  // Logged entries count on the day they are logged, so today's expense is in today's export.
+  const logged = (list, label, sign) => cleanEntries(list?.entries)
+    .filter((e) => e.date.startsWith(String(year)) && e.date <= today)
+    .map((e) => ({ date: e.date, what: e.note ? `${label}: ${e.note}` : label, amount: sign * e.amount }));
+  const work = logged(earnings, 'Work earnings', 1);
+  const spent = logged(expenses, 'Expense', -1);
+  const coming = [...benefits, ...credits, ...work];
   return {
     year,
     complete: year < now.getFullYear(),
-    items,
-    totals: { benefits: sum(benefits), credits: sum(credits), earnings: sum(work), all: sum(items) },
+    items: [...coming, ...spent].sort((a, b) => a.date.localeCompare(b.date)),
+    totals: { benefits: sum(benefits), credits: sum(credits), earnings: sum(work), expenses: -sum(spent) || 0, all: sum(coming) },
   };
+}
+
+// Logged money, in (work earnings) or out (expenses): {date, amount, note}. The profile POST
+// stores what a client sends, so every save and read goes through here: real dates, amounts
+// over 0 and up to $100,000, short notes with nothing a spreadsheet would run as a formula.
+const MAX_ENTRIES = 500;
+function cleanEntries(raw) {
+  return (Array.isArray(raw) ? raw : []).slice(-MAX_ENTRIES).map((e) => ({
+    date: /^\d{4}-\d{2}-\d{2}$/.test(e?.date) && !isNaN(Date.parse(e.date)) ? e.date : '',
+    amount: Math.round(Number(e?.amount) * 100) / 100,
+    note: String(e?.note ?? '').replace(/[\u0000-\u001f<>"]/g, '').trim().replace(/^[=+\-@]+/, '').trim().slice(0, 40),
+  })).filter((e) => e.date && e.amount > 0 && e.amount <= 100000);
 }
 
 // BC's annual earnings exemption on PWD: earn up to this in a calendar year and
@@ -186,9 +203,9 @@ const EARNINGS_EXEMPTION = { 2026: { single: 16200, couple_one: 23400, couple_bo
 // exemption (the native apps decode it as a number; a boolean here blanked their whole dashboard).
 function deriveEarnings(earningsProfile, now = new Date(), household = 'single') {
   const year = now.getFullYear();
-  const earned = Math.round((earningsProfile?.entries || [])
-    .filter((e) => String(e.date).startsWith(String(year)))
-    .reduce((a, e) => a + (Number(e.amount) || 0), 0) * 100) / 100;
+  const earned = Math.round(cleanEntries(earningsProfile?.entries)
+    .filter((e) => e.date.startsWith(String(year)))
+    .reduce((a, e) => a + e.amount, 0) * 100) / 100;
   const exemption = EARNINGS_EXEMPTION[year]?.[household] ?? null;
   return { year, earned, exemption, left: exemption == null ? null : Math.max(0, exemption - earned), over: exemption == null ? null : Math.max(0, Math.round((earned - exemption) * 100) / 100) };
 }
@@ -212,4 +229,4 @@ function deriveAssets(assetsProfile) {
 // The cheque as people read it: "$1,260" for whole dollars, "$1,735.50" with cents (never "$1,735.5").
 const moneyText = (n) => '$' + n.toLocaleString('en-CA', { minimumFractionDigits: Number.isInteger(n) ? 0 : 2, maximumFractionDigits: 2 });
 
-module.exports = { moneyText, PROFILE_PROGRAMS, DEFAULT_MONTHLY_RATES, deriveIncome, deriveYearReview, deriveEarnings, EARNINGS_EXEMPTION, ASSET_LIMIT, deriveAssets };
+module.exports = { moneyText, PROFILE_PROGRAMS, DEFAULT_MONTHLY_RATES, deriveIncome, deriveYearReview, deriveEarnings, cleanEntries, EARNINGS_EXEMPTION, ASSET_LIMIT, deriveAssets };

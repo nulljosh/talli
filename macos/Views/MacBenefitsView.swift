@@ -161,6 +161,7 @@ struct MacBenefitsView: View {
     private var tools: [Tool] {
         let api = MacAPIClient.shared
         return [
+            Tool(title: "Money in and out", symbol: "list.bullet.rectangle", view: AnyView(MoneyLogView { try await api.moneyLog(save: $0) })),
             Tool(title: "Budget against paydays", symbol: "chart.bar", view: AnyView(BudgetView { try await api.budget(save: $0) })),
             Tool(title: "Benefit finder", symbol: "magnifyingglass", view: AnyView(BenefitFinderView { try await api.benefitFinder(answers: $0) })),
             Tool(title: "RDSP grants and bonds", symbol: "banknote", view: AnyView(RdspTrackerView { try await api.rdspTracker(patch: $0) })),

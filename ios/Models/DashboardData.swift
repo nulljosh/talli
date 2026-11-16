@@ -47,6 +47,7 @@ struct DashboardData: Codable, Sendable {
             let benefits: Double
             let credits: Double
             let earnings: Double
+            let expenses: Double?
             let all: Double
         }
         let year: Int

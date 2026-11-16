@@ -102,7 +102,7 @@ t('year review: January looks back at the full last year', () => {
     earnings: { entries: [{ date: '2026-03-01', amount: 400 }, { date: '2027-01-02', amount: 99 }] } }, new Date(2027, 0, 10));
   assert.strictEqual(r.year, 2026);
   assert.strictEqual(r.complete, true);
-  assert.deepStrictEqual(r.totals, { benefits: 1100 * 12, credits: 200, earnings: 400, all: 1100 * 12 + 600 });
+  assert.deepStrictEqual(r.totals, { benefits: 1100 * 12, credits: 200, earnings: 400, expenses: 0, all: 1100 * 12 + 600 });
   assert.strictEqual(r.items[0].date <= r.items[r.items.length - 1].date, true);
 });
 

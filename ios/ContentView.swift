@@ -349,14 +349,8 @@ private struct DashboardScreen: View {
                     .font(.footnote)
                 }
 
-                if let earnings = appState.earnings, let exemption = earnings.exemption, exemption > 0, let earned = earnings.earned, let left = earnings.left, let y = earnings.year {
-                    let isOver = (earnings.over ?? 0) > 0
-                    HStack {
-                        Text("Work earnings \(y)").foregroundStyle(.secondary)
-                        Spacer()
-                        Text("\(appState.moneyText(earned)) of \(appState.moneyText(exemption)), \(appState.moneyText(left)) left").fontWeight(.semibold).foregroundStyle(isOver ? .red : .primary)
-                    }
-                    .font(.footnote)
+                if let earnings = appState.earnings, let exemption = earnings.exemption, exemption > 0, let earned = earnings.earned, let y = earnings.year {
+                    EarningsLimitBar(year: y, earned: earned, exemption: exemption, over: earnings.over ?? 0)
                 }
 
                 if let assets = appState.assets, let counted = assets.counted, let limit = assets.limit, let left = assets.left {
@@ -379,7 +373,7 @@ private struct DashboardScreen: View {
                         Text(appState.moneyText(review.totals.all)).fontWeight(.semibold)
                     }
                     .font(.footnote)
-                    Text("\(appState.moneyText(review.totals.benefits)) benefits, \(appState.moneyText(review.totals.credits)) credits, \(appState.moneyText(review.totals.earnings)) work earnings")
+                    Text("\(appState.moneyText(review.totals.benefits)) benefits, \(appState.moneyText(review.totals.credits)) credits, \(appState.moneyText(review.totals.earnings)) work earnings\((review.totals.expenses ?? 0) > 0 ? ", \(appState.moneyText(review.totals.expenses ?? 0)) spent" : "")")
                         .font(.caption).foregroundStyle(.secondary)
                     ShareLink(item: review.csvFile()) {
                         Label("Export for tax time", systemImage: "square.and.arrow.up")

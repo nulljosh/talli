@@ -2,9 +2,9 @@ import SwiftUI
 
 private let whatsNewVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
 private let whatsNewBullets = [
-    "A simpler Home: your next payment fills the screen and the rest sits under Details",
-    "Three tabs: Home, Status and Messages",
-    "A cleaner app icon",
+    "A bar on Home shows how much of your yearly earnings limit you have used",
+    "Log money in and out under Status, Money in and out",
+    "Expenses now come with your tax-time export",
 ]
 
 struct WhatsNewSheet: View {

@@ -5,14 +5,9 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 ## Now (4.0.x)
 - [ ] Verify the account contribution figures against the real account (#57, Joshua's login).
 
-## 4.1 Money log (next)
-Already shipped: PWD, CDB, GST credit, RDSP grants and bonds, the $16,200 limit (`EARNINGS_EXEMPTION`), the report reminder ("closes on the 5th"), an over-limit warning, and the year review CSV. The gaps:
-- [ ] Exemption progress bar on Home: `ProgressView(value: earned, total: exemption)` under the "Work earnings" row (`ios/ContentView.swift:352`), red past the limit; same bar in `web/unified.html:637`.
-- [ ] Add work earnings on iPhone and Mac. Only the web can (`web/unified.html:2597`, GET then POST `/api/earnings-profile`); native copies that call.
-- [ ] Expense log: one more entry in `PROFILE_PROGRAMS` (`expenses-profile`, entries of date, amount, note). The generic routes serve it, so no new endpoint.
-- [ ] Validate entries on save. The profile POST (`src/api.js:1938`) stores `entries` as sent; cap the count, clamp amounts and strip notes the way `cleanBudget` does, for earnings and expenses both.
-- [ ] Tax export: `deriveYearReview` adds expenses to `items` as negative amounts. Clients build the CSV from those items, so the export picks them up with no client change; totals gain an `expenses` line.
-- [ ] Test: expense totals, the bar fraction, the CSV columns, and a junk-entries save.
+## 4.1 Money log
+Built 2026-11-15: earnings limit bar on Home (iPhone, web) and in the new "Money in and out" tool (iPhone, Mac), earnings and expenses logged on every platform through `/api/money-log`, entries cleaned on every save (`cleanEntries`), expenses in the tax-time CSV. Test: `tools/test-money-log.js`.
+- [ ] Ship 4.1.0 to TestFlight (iPhone and Mac) and check the tool on a real device.
 Skipped: receipts, categories, bank import. Entries are read-modify-write, so two devices saving at once can drop one; move to append-only if that ever bites.
 
 ## 5.0 Every platform, every tool

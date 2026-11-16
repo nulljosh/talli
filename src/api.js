@@ -31,7 +31,7 @@ const { deriveMissedPayment } = require('./programs/missed');
 const { deriveSupplements, cleanSupplements } = require('./programs/supplements');
 const { deriveRdsp, cleanRdsp } = require('./programs/rdsp');
 const { findBenefits, prefill: prefillFinder } = require('./programs/finder');
-const { moneyText, PROFILE_PROGRAMS, DEFAULT_MONTHLY_RATES, deriveIncome, deriveEarnings, deriveAssets, deriveYearReview } = require('./programs/profiles');
+const { moneyText, PROFILE_PROGRAMS, DEFAULT_MONTHLY_RATES, deriveIncome, deriveEarnings, deriveAssets, deriveYearReview, cleanEntries } = require('./programs/profiles');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -1306,6 +1306,7 @@ app.get('/api/latest', requireAuth, async (req, res) => {
     const cdbProfile = await loadUserBlob(userId, 'cdb-profile', { status: 'approved' }).catch(() => ({ status: 'approved' }));
     const cgebProfile = await loadUserBlob(userId, 'cgeb-profile', { status: 'pending' }).catch(() => ({ status: 'pending' }));
     const earningsProfile = await loadUserBlob(userId, 'earnings-profile', null).catch(() => null);
+    const expensesProfile = await loadUserBlob(userId, 'expenses-profile', null).catch(() => null);
     const uiConfig = {
       // the official cheque issue date (src/pay-dates.js), so the dashboard never guesses
       nextDate: nextPaymentDate(new Date()),
@@ -1326,13 +1327,13 @@ app.get('/api/latest', requireAuth, async (req, res) => {
       income: await rememberIncome(req, userId, deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile)),
       earnings: deriveEarnings(earningsProfile, new Date(), (await loadUserBlob(userId, 'household-profile', {}).catch(() => ({}))).type || 'single'),
       assets: deriveAssets(await loadUserBlob(userId, 'assets-profile', null).catch(() => null)),
-      yearReview: deriveYearReview({ pwd: pwdProfile, cdb: cdbProfile, cgeb: cgebProfile, earnings: earningsProfile }),
+      yearReview: deriveYearReview({ pwd: pwdProfile, cdb: cdbProfile, cgeb: cgebProfile, earnings: earningsProfile, expenses: expensesProfile }),
     };
 
     const result = await fetchOrLoadData(req);
     if (result) {
       uiConfig.income = deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile, portalPwd(result.data));
-      uiConfig.yearReview = deriveYearReview({ pwd: pwdProfile, cdb: cdbProfile, cgeb: cgebProfile, earnings: earningsProfile, portalPwd: portalPwd(result.data) });
+      uiConfig.yearReview = deriveYearReview({ pwd: pwdProfile, cdb: cdbProfile, cgeb: cgebProfile, earnings: earningsProfile, expenses: expensesProfile, portalPwd: portalPwd(result.data) });
       return res.json({ file: result.source, data: result.data, uiConfig });
     }
 
@@ -1945,7 +1946,7 @@ function registerProfileRoutes(program) {
       const existing = await loadUserBlob(userId, route, { status: defaults.status });
       const data = { ...existing, ...(status !== undefined && { status }) };
       for (const field of fields) {
-        if (req.body?.[field] !== undefined) data[field] = req.body[field];
+        if (req.body?.[field] !== undefined) data[field] = program.clean?.[field] ? program.clean[field](req.body[field]) : req.body[field];
       }
       await saveUserBlob(userId, route, data);
       res.json(data);
@@ -2112,6 +2113,49 @@ app.post('/api/budget', requireAuth, async (req, res) => {
   } catch (err) {
     log('[BUDGET] POST error:', err.message);
     res.status(500).json({ error: 'Failed to save bills' });
+  }
+});
+
+// Money log: work earnings in, expenses out, this year's earnings limit, and the year review
+// the tax-time export is built from. Earnings live in the same earnings-profile blob the web
+// form and the limit read, so nothing is typed twice. Only the cached portal read, never a scrape.
+async function moneyLogFor(req, userId) {
+  const [earnings, expenses, household, pwd, cdb, cgeb, cached] = await Promise.all([
+    loadUserBlob(userId, 'earnings-profile', null), loadUserBlob(userId, 'expenses-profile', null),
+    loadUserBlob(userId, 'household-profile', {}), loadUserBlob(userId, 'pwd-profile', {}),
+    loadUserBlob(userId, 'cdb-profile', {}), loadUserBlob(userId, 'cgeb-profile', null),
+    fetchOrLoadData(req, { allowLiveScrape: false }).catch(() => null),
+  ]);
+  return {
+    earnings: cleanEntries(earnings?.entries),
+    expenses: cleanEntries(expenses?.entries),
+    summary: deriveEarnings(earnings, new Date(), household?.type || 'single'),
+    review: deriveYearReview({ pwd, cdb, cgeb, earnings, expenses, portalPwd: portalPwd(cached?.data) }),
+  };
+}
+
+app.get('/api/money-log', requireAuth, async (req, res) => {
+  try {
+    res.json(await moneyLogFor(req, req.session?.userId));
+  } catch (err) {
+    log('[MONEYLOG] GET error:', err.message);
+    res.status(500).json({ error: 'Failed to load the money log' });
+  }
+});
+
+// Body: {earnings?: [...], expenses?: [...]}, each the whole list. A missing key is left alone.
+app.post('/api/money-log', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    for (const [key, route] of [['earnings', 'earnings-profile'], ['expenses', 'expenses-profile']]) {
+      if (req.body?.[key] === undefined) continue;
+      const existing = await loadUserBlob(userId, route, { status: 'tracking' });
+      await saveUserBlob(userId, route, { ...existing, entries: cleanEntries(req.body[key]) });
+    }
+    res.json(await moneyLogFor(req, userId));
+  } catch (err) {
+    log('[MONEYLOG] POST error:', err.message);
+    res.status(500).json({ error: 'Failed to save the money log' });
   }
 });
 
@@ -2675,7 +2719,8 @@ app.get('/api/mobile', requireAuth, async (req, res) => {
     const earningsProfile = await loadUserBlob(userId, 'earnings-profile', null).catch(() => null);
     const earnings = deriveEarnings(earningsProfile, new Date(), (await loadUserBlob(userId, 'household-profile', {}).catch(() => ({}))).type || 'single');
     const assets = deriveAssets(await loadUserBlob(userId, 'assets-profile', null).catch(() => null));
-    const yearReview = deriveYearReview({ pwd: pwdProfile, cdb: cdbProfile, cgeb: cgebProfile, earnings: earningsProfile, portalPwd: portalPwd(result?.data) });
+    const expensesProfile = await loadUserBlob(userId, 'expenses-profile', null).catch(() => null);
+    const yearReview = deriveYearReview({ pwd: pwdProfile, cdb: cdbProfile, cgeb: cgebProfile, earnings: earningsProfile, expenses: expensesProfile, portalPwd: portalPwd(result?.data) });
     res.json(extractMobileData(result?.data || null, await rememberIncome(req, userId, deriveIncome(pwdProfile, cdbProfile, new Date(), cgebProfile, portalPwd(result?.data))), earnings, assets, yearReview));
   } catch (error) {
     console.error('[API] /api/mobile error:', error);

@@ -340,6 +340,8 @@ function TabBar({tab, setTab, dark, msgBadge, holds}) {
 function EarningsForm({earnings, onAddEntry, t}) {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [amount, setAmount] = useState('');
+  const [note, setNote] = useState('');
+  const [spent, setSpent] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -347,8 +349,9 @@ function EarningsForm({earnings, onAddEntry, t}) {
     if (!date || !amount) return;
     setLoading(true);
     try {
-      await onAddEntry(date, amount);
+      await onAddEntry(date, amount, note, spent);
       setAmount('');
+      setNote('');
       setDate(new Date().toISOString().split('T')[0]);
     } finally {
       setLoading(false);
@@ -356,7 +359,14 @@ function EarningsForm({earnings, onAddEntry, t}) {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{display:'flex',gap:8,alignItems:'flex-end'}}>
+    <form onSubmit={handleSubmit} style={{display:'flex',gap:8,alignItems:'flex-end',flexWrap:'wrap'}}>
+      <div style={{flex:'1 1 100%'}}>
+        <label style={{fontSize:11,fontWeight:600,color:t.muted,display:'block',marginBottom:4}}>Kind</label>
+        <select value={spent ? 'out' : 'in'} onChange={e=>setSpent(e.target.value==='out')} style={{width:'100%',padding:'8px 10px',fontSize:14,borderRadius:8,border:`1px solid ${t.border}`,background:t.bg2,color:t.text,fontFamily:'inherit'}}>
+          <option value="in">Earned (counts toward the limit)</option>
+          <option value="out">Spent (an expense)</option>
+        </select>
+      </div>
       <div style={{flex:1}}>
         <label style={{fontSize:11,fontWeight:600,color:t.muted,display:'block',marginBottom:4}}>Date</label>
         <input type="date" value={date} onChange={e=>setDate(e.target.value)} style={{width:'100%',padding:'8px 10px',fontSize:14,borderRadius:8,border:`1px solid ${t.border}`,background:t.bg2,color:t.text,fontFamily:'inherit'}} required/>
@@ -364,6 +374,10 @@ function EarningsForm({earnings, onAddEntry, t}) {
       <div style={{flex:1}}>
         <label style={{fontSize:11,fontWeight:600,color:t.muted,display:'block',marginBottom:4}}>Amount</label>
         <input type="number" step="0.01" value={amount} onChange={e=>setAmount(e.target.value)} placeholder="0.00" style={{width:'100%',padding:'8px 10px',fontSize:14,borderRadius:8,border:`1px solid ${t.border}`,background:t.bg2,color:t.text,fontFamily:'inherit'}} required/>
+      </div>
+      <div style={{flex:1}}>
+        <label style={{fontSize:11,fontWeight:600,color:t.muted,display:'block',marginBottom:4}}>Note</label>
+        <input type="text" maxLength={40} value={note} onChange={e=>setNote(e.target.value)} placeholder={spent ? 'Bus pass' : 'Cafe shift'} style={{width:'100%',padding:'8px 10px',fontSize:14,borderRadius:8,border:`1px solid ${t.border}`,background:t.bg2,color:t.text,fontFamily:'inherit'}}/>
       </div>
       <button type="submit" disabled={loading} style={{padding:'8px 16px',fontSize:14,fontWeight:600,borderRadius:8,border:'none',background:t.accent,color:'#000',cursor:'pointer',opacity:loading?0.6:1}}>Add</button>
     </form>
@@ -636,7 +650,10 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
         )}
         {earnings?.exemption > 0 && (
           <div style={{fontSize:12,color:earnings.over > 0 ? t.warning : t.mutedMid,marginTop:4}}>
-            Work earnings {earnings.year}: ${earnings.earned.toLocaleString('en-CA')} of ${earnings.exemption.toLocaleString('en-CA')}, ${earnings.left.toLocaleString('en-CA')} left
+            Work earnings {earnings.year}: ${earnings.earned.toLocaleString('en-CA')} of ${earnings.exemption.toLocaleString('en-CA')}, {earnings.over > 0 ? `$${earnings.over.toLocaleString('en-CA')} over` : `$${earnings.left.toLocaleString('en-CA')} left`}
+            <div role="progressbar" aria-label="Earnings limit used" aria-valuemin={0} aria-valuemax={earnings.exemption} aria-valuenow={Math.min(earnings.earned, earnings.exemption)} style={{height:6,borderRadius:3,background:t.border,marginTop:4,overflow:'hidden'}}>
+              <div style={{height:'100%',width:`${Math.min(100, earnings.earned / earnings.exemption * 100)}%`,background:earnings.over > 0 ? t.warning : t.accent}}/>
+            </div>
           </div>
         )}
         {assets?.counted >= 0 && (
@@ -651,7 +668,7 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
           <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:6}}>{yearReview.year} in review{yearReview.complete ? '' : ' so far'}</div>
           <div style={{fontSize:22,fontWeight:700,letterSpacing:'-1px',color:t.text}}>${yearReview.totals.all.toLocaleString('en-CA')}</div>
           <div style={{fontSize:12,color:t.mutedMid,marginTop:4}}>
-            ${yearReview.totals.benefits.toLocaleString('en-CA')} benefits, ${yearReview.totals.credits.toLocaleString('en-CA')} credits, ${yearReview.totals.earnings.toLocaleString('en-CA')} work earnings
+            ${yearReview.totals.benefits.toLocaleString('en-CA')} benefits, ${yearReview.totals.credits.toLocaleString('en-CA')} credits, ${yearReview.totals.earnings.toLocaleString('en-CA')} work earnings{yearReview.totals.expenses > 0 && `, $${yearReview.totals.expenses.toLocaleString('en-CA')} spent`}
           </div>
           <button onClick={()=>downloadYearReview(yearReview)} style={{marginTop:10,padding:'6px 14px',borderRadius:100,border:`1px solid ${t.border}`,background:'none',cursor:'pointer',fontSize:13,fontWeight:500,color:t.text,fontFamily:'inherit'}}>Download for tax time (CSV)</button>
         </div>
@@ -659,7 +676,7 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
 
       {earnings?.exemption > 0 && (
         <div style={{marginTop:24,animation:'fadeUp 0.45s 0.5s ease both'}}>
-          <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:12}}>Add work earnings</div>
+          <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:12}}>Add money in or out</div>
           <EarningsForm earnings={earnings} onAddEntry={onAddEarnings} t={t}/>
         </div>
       )}
@@ -2592,11 +2609,15 @@ function App() {
     } catch(e){}
   };
 
-  const handleAddEarningsEntry = async (date, amount) => {
+  const handleAddEarningsEntry = async (date, amount, note = '', spent = false) => {
     try {
-      const existing = await fetch('/api/earnings-profile',{credentials:'include'}).then(r=>r.json()).catch(()=>({entries:[]}));
-      const entries = [...(existing.entries || []), {date, amount: parseFloat(amount)}];
-      await fetch('/api/earnings-profile',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({entries})});
+      // The whole list is sent back, so never save on top of a failed read: that would wipe it.
+      const res = await fetch('/api/money-log',{credentials:'include'});
+      const log = res.ok ? await res.json() : null;
+      const key = spent ? 'expenses' : 'earnings';
+      if (!Array.isArray(log?.[key])) throw new Error('money log did not load');
+      const body = {[key]: [...(log[key] || []), {date, amount: parseFloat(amount), note}]};
+      await fetch('/api/money-log',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
       loadData();
     } catch(e){console.error('Failed to add earnings entry',e);}
   };

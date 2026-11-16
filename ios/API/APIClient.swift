@@ -222,6 +222,13 @@ final class APIClient: @unchecked Sendable {
         )
     }
 
+    func moneyLog(save: MoneyLogRequest?) async throws -> MoneyLog {
+        if let save {
+            return try await send(path: "api/money-log", method: "POST", body: save, responseType: MoneyLog.self)
+        }
+        return try await send(path: "api/money-log", responseType: MoneyLog.self)
+    }
+
     func budget(save: BudgetRequest?) async throws -> Budget {
         if let save {
             return try await send(path: "api/budget", method: "POST", body: save, responseType: Budget.self)

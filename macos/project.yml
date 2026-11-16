@@ -6,7 +6,7 @@ options:
 settings:
   DEVELOPMENT_TEAM: QMM486NPYC
   SWIFT_VERSION: "6.0"
-  MARKETING_VERSION: "4.0.0"
+  MARKETING_VERSION: "4.1.0"
   CURRENT_PROJECT_VERSION: "202610021704"
 targets:
   TalliMac:
@@ -46,6 +46,8 @@ targets:
       - path: ../ios/Views/LifeChangeView.swift
         group: Shared
       - path: ../ios/Views/BudgetView.swift
+        group: Shared
+      - path: ../ios/Views/MoneyLogView.swift
         group: Shared
       - path: ../ios/Views/HeroAmountView.swift
         group: Shared
