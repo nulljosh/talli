@@ -11,7 +11,7 @@ Already shipped: PWD, CDB, GST credit, RDSP grants and bonds, the $16,200 limit 
 - [ ] Add work earnings on iPhone and Mac. Only the web can (`web/unified.html:2597`, GET then POST `/api/earnings-profile`); native copies that call.
 - [ ] Expense log: one more entry in `PROFILE_PROGRAMS` (`expenses-profile`, entries of date, amount, note). The generic routes serve it, so no new endpoint.
 - [ ] Validate entries on save. The profile POST (`src/api.js:1938`) stores `entries` as sent; cap the count, clamp amounts and strip notes the way `cleanBudget` does, for earnings and expenses both.
-- [ ] Tax export: `deriveYearReview` takes expenses too, and `csvFile()` becomes Date, What, In, Out. The server builds it, so every client gets it.
+- [ ] Tax export: `deriveYearReview` adds expenses to `items` as negative amounts. Clients build the CSV from those items, so the export picks them up with no client change; totals gain an `expenses` line.
 - [ ] Test: expense totals, the bar fraction, the CSV columns, and a junk-entries save.
 Skipped: receipts, categories, bank import. Entries are read-modify-write, so two devices saving at once can drop one; move to append-only if that ever bites.
 
