@@ -4,6 +4,10 @@ import SwiftUI
 extension Color {
     static let appleBlue = Color(red: 0, green: 0.44, blue: 0.89)
     static let talliBlue = Color(hex: "5B9BD5")
+    /// Brand blue for text and fills that need 4.5:1 against white (brand/tokens.css).
+    static let talliBlueDeep = Color(hex: "2F6FB0")
+    /// Link text: deep blue on light, brand blue on dark, so it reads at 4.5:1 either way.
+    static let talliLink = Color(UIColor { $0.userInterfaceStyle == .dark ? UIColor(hex: "5B9BD5") : UIColor(hex: "2F6FB0") })
     static let gradeRed = Color.red
 
     init(hex: String) {
@@ -32,9 +36,10 @@ extension UIColor {
 extension View {
     func sectionLabel() -> some View {
         self
-            .font(.system(size: 11, weight: .semibold))
+            .font(.caption2.weight(.semibold))
             .ltrTracking(1.5)
             .textCase(.uppercase)
             .foregroundStyle(.secondary)
+            .fixedSize(horizontal: false, vertical: true)
     }
 }

@@ -6,14 +6,14 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 - [ ] Verify the account contribution figures against the real account (#57, Joshua's login).
 
 ## 4.1 Money log (next)
-Most of this already ships: PWD, CDB, GST credit and RDSP grants and bonds are tracked (`src/programs/profiles.js`, `rdsp.js`), the $16,200 exemption is in `EARNINGS_EXEMPTION`, the reporting window and 4th-of-month nudge fire (`PaydayNotificationScheduler.swift`), and the year review exports a CSV. The gaps:
-- [ ] Exemption progress bar on Home, all platforms: `ProgressView(value: earned, total: exemption)` under the "Work earnings" row (`ios/ContentView.swift:352`), red past the limit; same bar in `web/unified.html:637`.
-- [ ] Add work earnings on iPhone and Mac. Only the web has the form (`EarningsForm`); native reads `earnings` but cannot write it. Reuse the existing earnings-profile route.
-- [ ] Income and expense log: one list of dated entries (amount, note, in or out), stored as a new `ledger` user blob beside `earnings-profile`. Work-earning entries feed the exemption so nothing is typed twice.
-- [ ] Tax-time export: extend `YearReview.csvFile()` to include the ledger (Date, What, In, Out) so one CSV covers benefits, credits, earnings and expenses.
-- [ ] Report reminder copy says "due on the 5th" and names the month being reported.
-- [ ] Test: ledger sums, the exemption bar fraction, and the CSV columns.
-Skipped: receipts, categories, bank import. Add when someone asks.
+Already shipped: PWD, CDB, GST credit, RDSP grants and bonds, the $16,200 limit (`EARNINGS_EXEMPTION`), the report reminder ("closes on the 5th"), an over-limit warning, and the year review CSV. The gaps:
+- [ ] Exemption progress bar on Home: `ProgressView(value: earned, total: exemption)` under the "Work earnings" row (`ios/ContentView.swift:352`), red past the limit; same bar in `web/unified.html:637`.
+- [ ] Add work earnings on iPhone and Mac. Only the web can (`web/unified.html:2597`, GET then POST `/api/earnings-profile`); native copies that call.
+- [ ] Expense log: one more entry in `PROFILE_PROGRAMS` (`expenses-profile`, entries of date, amount, note). The generic routes serve it, so no new endpoint.
+- [ ] Validate entries on save. The profile POST (`src/api.js:1938`) stores `entries` as sent; cap the count, clamp amounts and strip notes the way `cleanBudget` does, for earnings and expenses both.
+- [ ] Tax export: `deriveYearReview` takes expenses too, and `csvFile()` becomes Date, What, In, Out. The server builds it, so every client gets it.
+- [ ] Test: expense totals, the bar fraction, the CSV columns, and a junk-entries save.
+Skipped: receipts, categories, bank import. Entries are read-modify-write, so two devices saving at once can drop one; move to append-only if that ever bites.
 
 ## 5.0 Every platform, every tool
 - [ ] fr, zh and pa strings complete in the String Catalog, checked by a test. fr done; zh and pa have every plain string, the 20 benefit strings marked `review` each need a human or DeepL pass.
