@@ -53,3 +53,9 @@ Skipped: receipts, categories, bank import. Entries are read-modify-write, so tw
 - [ ] (blocked 11-01: the rest wait on Apple) Animated hero for the other apps. Placed and live on 14: Epiphany, Echo, Bugle, Melete, Machaon, Pan, Patois, Temida, Kernel, Eponym, Gastown, Nimble, Icelus, Coda. Waiting for review: Doorstock, Hamurapi, Toroid. No live iOS version yet, so theirs go in with the next version: Horula, Atlin, Plaintxt, Scrounger, Airwell, Blackcomb. Rerun `_attic/store-headers/place.py --go` once they clear.
 
 ## Ingested 2026-10-30
+
+## Ingested 2026-11-18
+- [ ] UI still too complicated. Money is a weird font and too big; the view should be simple with no scrolling (notes/attachments/2026-11-18/22310-1.png).
+- [ ] Status tab is too complicated/noisy; shouldn't require scrolling (notes/attachments/2026-11-18/22310-3.png).
+- [ ] Messages: what's with them, can we interact with them? What's with the thumbnails (initials avatars)? (notes/attachments/2026-11-18/22310-2.png)
+- [ ] Settings: replace the Greek god avatar with a theme matching the project. Appearance goes at the bottom. Account name is redundant, show it once.
