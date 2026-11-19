@@ -295,8 +295,8 @@ private struct DashboardScreen: View {
 
             HeroAmountView(
                 digits: appState.paymentAmountText.replacingOccurrences(of: ".00", with: "").replacingOccurrences(of: "$", with: ""),
-                width: max(0, viewport.width - 40),
-                maxHeight: viewport.height * 0.5
+                width: max(0, viewport.width - 40) * 0.6,
+                maxHeight: viewport.height * 0.2
             )
             .padding(.bottom, 8)
 

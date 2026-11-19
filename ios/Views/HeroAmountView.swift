@@ -17,7 +17,18 @@ struct HeroAmountView: View {
     let maxHeight: CGFloat
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    private static func face(_ size: CGFloat) -> PlatformFont { PlatformFont.systemFont(ofSize: size, weight: .bold) }
+    /// SF Pro Rounded bold, the Home amount's face (Joshua asked for a better custom font 2026-11-19).
+    private static func roundedBold(_ size: CGFloat) -> PlatformFont {
+        let base = PlatformFont.systemFont(ofSize: size, weight: .bold)
+        #if canImport(UIKit)
+        guard let d = base.fontDescriptor.withDesign(.rounded) else { return base }
+        return UIFont(descriptor: d, size: size)
+        #else
+        guard let d = base.fontDescriptor.withDesign(.rounded) else { return base }
+        return NSFont(descriptor: d, size: size) ?? base
+        #endif
+    }
+    private static func face(_ size: CGFloat) -> PlatformFont { roundedBold(size) }
     // Font units per 1000, read from the system font: its ascent, the top of the figures (cap height), the foot of the
     // comma, the $ top; then the stretch limit (never stretched) and the gap after the $.
     private static let ascent: CGFloat = face(1000).ascender
@@ -46,11 +57,11 @@ struct HeroAmountView: View {
         let u = size / 1000
         HStack(alignment: .firstTextBaseline, spacing: Self.gap * u) {
             Text("$")
-                .font(.system(size: size * Self.dollarScale, weight: .bold))
+                .font(.system(size: size * Self.dollarScale, weight: .bold, design: .rounded))
                 .foregroundStyle(Color.green)
                 .baselineOffset((Self.top - Self.dollarTop * Self.dollarScale) * u)
             Text(digits)
-                .font(.system(size: size, weight: .bold))
+                .font(.system(size: size, weight: .bold, design: .rounded))
                 .contentTransition(.numericText())
         }
         .fixedSize()
