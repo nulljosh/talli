@@ -284,7 +284,7 @@ private struct DashboardScreen: View {
         !appState.pwdApproved && Calendar.current.component(.day, from: now) <= 5 && appState.isCurrentMonthFiled
     }
 
-    // Same hero as web and Mac: bold system figures up to half the screen tall, the $ small and raised.
+    // Same hero as web and Mac: SF Pro Rounded bold, 56pt at most, the $ small and raised.
     private var paymentCard: some View {
         VStack(spacing: 8) {
             Text("NEXT PAYMENT")

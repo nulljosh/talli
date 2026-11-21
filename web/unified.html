@@ -139,7 +139,7 @@ function nextScheduledPayDate(from) {
 function HeroAmount({digits, t, paid}) {
   // ponytail: ~0.62em per tabular figure in SF bold, a bit less for the comma and dot; good enough to size the line.
   const ems = [...digits].reduce((w, c) => w + (c === ',' || c === '.' ? 0.3 : 0.62), 0) + 0.38;
-  const size = `min(18vh, calc((60vw - 53px) / ${ems.toFixed(3)}))`;
+  const size = `min(56px, 18vh, calc((60vw - 53px) / ${ems.toFixed(3)}))`;  // 56px at most, like iPhone and Mac (Joshua 2026-11-20)
   return (
     <div aria-hidden="true" style={{display:'flex',alignItems:'flex-start',justifyContent:'center',fontFamily:'ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, Helvetica, sans-serif',fontWeight:700,fontSize:size,lineHeight:1,letterSpacing:'-0.035em',fontVariantNumeric:'tabular-nums',color:t.text,textDecoration:paid ? 'line-through' : 'none',textDecorationColor:t.muted,textDecorationThickness:'0.04em'}}>
       <span style={{fontSize:'0.5em',lineHeight:1.15,color:t.success,marginRight:'0.04em'}}>$</span>{digits}

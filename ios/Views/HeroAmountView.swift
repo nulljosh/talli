@@ -35,6 +35,8 @@ struct HeroAmountView: View {
     private static let top: CGFloat = face(1000).capHeight
     private static let box: CGFloat = top + 150, dollarTop: CGFloat = top + 60
     private static let maxStretch: CGFloat = 1, dollarScale: CGFloat = 0.5, gap: CGFloat = 36
+    /// Normal size, not screen-filling (Joshua 2026-11-20); same 56 as the web.
+    static let maxSize: CGFloat = 56
     /// Room on each side so the figures never run to the screen edge (points, same 24 as the web).
     static let inset: CGFloat = 24
 
@@ -46,7 +48,7 @@ struct HeroAmountView: View {
     /// Point size and vertical stretch for this box.
     static func layout(digits: String, width: CGFloat, maxHeight: CGFloat) -> (size: CGFloat, stretch: CGFloat) {
         let natural = units("$", size: 1000 * dollarScale) + gap + units(digits)
-        let byHeight = maxHeight / box * 1000
+        let byHeight = min(maxHeight / box * 1000, maxSize)
         let byWidth = max(0, width - 2 * inset) / natural * 1000
         if byHeight <= byWidth { return (byHeight, 1) }
         return (byWidth, min(byHeight / byWidth, maxStretch))
