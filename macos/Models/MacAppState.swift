@@ -182,9 +182,8 @@ final class MacAppState: ObservableObject {
             }
             // Slow path: full login against BC Self-Serve
             await login(username: credentials.username, password: credentials.password, store: false)
-        } else if dashboard == nil {
-            errorMessage = "Sign in to load your dashboard."
         }
+        // No saved login: the sign-in screen already says what to do, so no red error before a first try.
     }
 
     func login(username: String, password: String, store: Bool = true) async {
