@@ -1,5 +1,6 @@
 import SwiftUI
 
+@MainActor
 struct ReportView: View {
     private enum Constants {
         static let lastSubmittedKey = "report-last-submitted-at"

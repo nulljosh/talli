@@ -1,7 +1,8 @@
 import SwiftUI
 
+@MainActor
 struct MacMessagesView: View {
-    @Environment(MacAppState.self) private var appState
+    @EnvironmentObject private var appState: MacAppState
 
     var body: some View {
         ScrollView {

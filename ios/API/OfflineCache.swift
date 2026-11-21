@@ -5,8 +5,13 @@ import Foundation
 // Caches, wiped on sign-out. Shared by iPhone and Mac (macos/project.yml).
 enum OfflineCache {
     // ponytail: var only so the self-check can point it at a temp folder.
+    #if compiler(>=5.10)
     nonisolated(unsafe) static var directory: URL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
         .appendingPathComponent("talli-offline", isDirectory: true)
+    #else // Xcode 15 (macOS 13) builds
+    static var directory: URL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+        .appendingPathComponent("talli-offline", isDirectory: true)
+    #endif
 
     /// Only reads are kept, and never anything that carries a token.
     static func file(for request: URLRequest) -> URL? {

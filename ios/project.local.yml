@@ -5,12 +5,19 @@ options:
   projectFormat: xcode15_0
 settings:
   SWIFT_VERSION: "5.0"
-  SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
 targets:
   Talli:
     settings:
       base:
         PRODUCT_NAME: Talli
+        ASSETCATALOG_COMPILER_APPICON_NAME: ""  # Talli.icon (Icon Composer) needs Xcode 26
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+  TalliWidgetsExtension:
+    settings:
+      SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+  TalliWatch:
+    settings:
+      SUPPORTED_PLATFORMS: "watchos watchsimulator"
   TalliTests:
     settings:
       base:

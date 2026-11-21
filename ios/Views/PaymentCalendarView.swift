@@ -1,5 +1,6 @@
 import SwiftUI
 
+@MainActor
 struct PaymentCalendarView: View {
     let paymentDate: Date?
     var today: Date = Date()

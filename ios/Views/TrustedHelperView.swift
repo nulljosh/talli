@@ -30,6 +30,7 @@ struct TrustedHelperAPI: Sendable {
     let remove: @Sendable (_ id: String) async throws -> Void
 }
 
+@MainActor
 struct TrustedHelperView: View {
     let api: TrustedHelperAPI
     /// Where the helper page lives; the token path is appended to it.

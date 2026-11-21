@@ -16,6 +16,7 @@ struct ServiceRequests: Codable, Sendable {
     let requests: [Request]
 }
 
+@MainActor
 struct ServiceRequestsView: View {
     let fetch: () async throws -> ServiceRequests
 

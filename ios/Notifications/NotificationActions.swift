@@ -2,7 +2,7 @@ import UserNotifications
 import Foundation
 
 @MainActor
-final class NotificationActions: NSObject, @preconcurrency UNUserNotificationCenterDelegate {
+final class NotificationActions: NSObject {
     static let shared = NotificationActions()
 
     private override init() {
@@ -79,3 +79,10 @@ final class NotificationActions: NSObject, @preconcurrency UNUserNotificationCen
         center.add(request) { _ in }
     }
 }
+
+// The conformance sits in an extension so Xcode 15 (Swift 5.9, no @preconcurrency here) builds too.
+#if compiler(>=6.0)
+extension NotificationActions: @preconcurrency UNUserNotificationCenterDelegate {}
+#else
+extension NotificationActions: UNUserNotificationCenterDelegate {}
+#endif

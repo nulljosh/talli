@@ -81,6 +81,7 @@ enum SupplementReminders {
     }
 }
 
+@MainActor
 struct SupplementsView: View {
     let fetch: (_ save: SupplementsRequest?) async throws -> Supplements
 

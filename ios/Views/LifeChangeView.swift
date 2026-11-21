@@ -48,6 +48,7 @@ private let monthKey: DateFormatter = {
     return f
 }()
 
+@MainActor
 struct LifeChangeView: View {
     let fetch: (_ save: LifeRequest?) async throws -> LifeChange
 

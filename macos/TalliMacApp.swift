@@ -2,7 +2,7 @@ import SwiftUI
 
 @main
 struct TalliMacApp: App {
-    @State private var appState = MacAppState()
+    @StateObject private var appState = MacAppState()
     @AppStorage("app_theme") private var rawTheme = "system"
     /// UI tests pick light or dark through the environment; AppleInterfaceStyle does not reach SwiftUI.
     private var theme: String { ProcessInfo.processInfo.environment["UITEST_APPEARANCE"] ?? rawTheme }
@@ -10,7 +10,7 @@ struct TalliMacApp: App {
     var body: some Scene {
         WindowGroup {
             MacContentView()
-                .environment(appState)
+                .environmentObject(appState)
                 .preferredColorScheme(theme == "dark" ? .dark : theme == "light" ? .light : nil)
                 .task {
                     guard !(ProcessInfo.processInfo.environment["UITEST_SNAPSHOT"] != nil) else { return }
@@ -23,7 +23,7 @@ struct TalliMacApp: App {
 
         MenuBarExtra("Talli", systemImage: "chart.bar.doc.horizontal") {
             MenuBarView()
-                .environment(appState)
+                .environmentObject(appState)
         }
     }
 }

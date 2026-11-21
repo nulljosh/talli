@@ -291,7 +291,7 @@ final class AppState {
 
     func syncAvatar() async {
         guard isAuthenticated else { return }
-        // The server gives every user a Greek-god portrait, so there is always a URL to load.
+        // The server gives every user a civil-servant avatar, so there is always a URL to load.
         guard let profile = try? await APIClient.shared.getProfile() else { return }
         await loadAvatar(from: profile.avatarUrl)
     }
@@ -354,7 +354,7 @@ final class AppState {
 
     func bootstrap() async {
         // Store shots show a real portrait, fetched the same way a signed-in user's is.
-        if Self.isSnapshot { await loadAvatar(from: "/avatars/07-zeus-bearded.png"); return }
+        if Self.isSnapshot { await loadAvatar(from: "/avatars/07-front-counter.png"); return }
         // Optimistic: show cached dashboard immediately while session check runs
         if storedCredentials != nil, dashboard != nil {
             isAuthenticated = true
@@ -567,9 +567,8 @@ final class AppState {
 
     private func startNetworkMonitoring() {
         monitor.pathUpdateHandler = { [weak self] path in
-            Task { @MainActor in
-                self?.isOffline = path.status != .satisfied
-            }
+            let offline = path.status != .satisfied
+            Task { @MainActor [weak self] in self?.isOffline = offline }
         }
         monitor.start(queue: monitorQueue)
     }

@@ -6,8 +6,7 @@ struct MacMessagesWidget: Widget {
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: MacMessagesProvider()) { entry in
-            MacMessagesWidgetView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
+            MacMessagesWidgetView(entry: entry).widgetBackground()
         }
         .configurationDisplayName("Messages")
         .description("Unread messages and service requests from BC Self-Serve.")
@@ -145,4 +144,11 @@ extension Color {
     static let macBcBlue = Color(red: 0/255, green: 51/255, blue: 102/255)
     /// #38B0DE - BC Gov accent
     static let macBcAccent = Color(red: 56/255, green: 176/255, blue: 222/255)
+}
+
+private extension View {
+    /// macOS 14 wants a container background; macOS 13 draws its own (the app runs on Ventura too).
+    @ViewBuilder func widgetBackground() -> some View {
+        if #available(macOS 14.0, *) { containerBackground(.fill.tertiary, for: .widget) } else { padding() }
+    }
 }

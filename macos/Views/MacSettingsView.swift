@@ -1,11 +1,12 @@
 import SwiftUI
 import UserNotifications
 
+@MainActor
 struct MacSettingsView: View {
     @AppStorage("app_theme") private var rawTheme = "system"
     @AppStorage("notifications_payday_enabled") private var paydayNotificationsEnabled = true
     @AppStorage("notifications_reporting_window_enabled") private var reportingWindowNotificationsEnabled = true
-    @Environment(MacAppState.self) private var appState
+    @EnvironmentObject private var appState: MacAppState
 
     var body: some View {
         ScrollView {
@@ -38,6 +39,7 @@ struct MacSettingsView: View {
     }
 }
 
+@MainActor
 private struct AccountCard: View {
     let username: String
     let signOut: () -> Void
@@ -58,6 +60,7 @@ private struct AccountCard: View {
     }
 }
 
+@MainActor
 private struct NotificationsCard: View {
     @Binding var paydayEnabled: Bool
     @Binding var reportingWindowEnabled: Bool
@@ -71,15 +74,15 @@ private struct NotificationsCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Toggle("Payday Reminder", isOn: $paydayEnabled)
-                .onChange(of: paydayEnabled) { _, on in
+                .onChange(of: paydayEnabled) { on in
                     if !on { cancel(PaydayNotificationScheduler.paydayId) }
                 }
             Toggle("Reporting Window Reminder", isOn: $reportingWindowEnabled)
-                .onChange(of: reportingWindowEnabled) { _, on in
+                .onChange(of: reportingWindowEnabled) { on in
                     if !on { cancel(PaydayNotificationScheduler.reportingWindowId); cancel(PaydayNotificationScheduler.reportNudgeId) }
                 }
             Toggle("Earnings Limit Warning", isOn: $earningsEnabled)
-                .onChange(of: earningsEnabled) { _, on in
+                .onChange(of: earningsEnabled) { on in
                     if !on { cancel(PaydayNotificationScheduler.earningsId) }
                 }
         }
@@ -87,6 +90,7 @@ private struct NotificationsCard: View {
     }
 }
 
+@MainActor
 private struct AppearancePicker: View {
     @Binding var rawTheme: String
     private let options = [("light", "Light"), ("dark", "Dark"), ("system", "System")]

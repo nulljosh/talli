@@ -41,6 +41,7 @@ private let isoDay: DateFormatter = {
     return f
 }()
 
+@MainActor
 struct BudgetView: View {
     let fetch: (_ save: BudgetRequest?) async throws -> Budget
 

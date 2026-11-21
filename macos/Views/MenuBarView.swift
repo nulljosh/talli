@@ -1,7 +1,8 @@
 import SwiftUI
 
+@MainActor
 struct MenuBarView: View {
-    @Environment(MacAppState.self) private var appState
+    @EnvironmentObject private var appState: MacAppState
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {

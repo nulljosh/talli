@@ -1,5 +1,6 @@
 import SwiftUI
 
+@MainActor
 struct SplashView: View {
     var body: some View {
         VStack(spacing: 20) {

@@ -2,7 +2,11 @@ import Foundation
 
 struct MacWidgetAPI {
     static let baseURL = "https://talli.jaybulb.com"
+    #if compiler(>=5.10)
     private nonisolated(unsafe) static let defaults = UserDefaults(suiteName: "group.com.heyitsmejosh.tally")
+    #else // Xcode 15 (macOS 13) builds
+    private static let defaults = UserDefaults(suiteName: "group.com.heyitsmejosh.tally")
+    #endif
 
     private static var session: URLSession {
         let config = URLSessionConfiguration.default

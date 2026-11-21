@@ -43,6 +43,7 @@ struct RdspTrackerRequest: Codable, Sendable {
 
 private let rdspBands = [("low", "Under $38,237"), ("mid", "$38,237 to $117,045"), ("high", "Over $117,045")]
 
+@MainActor
 struct RdspTrackerView: View {
     let fetch: (_ patch: RdspTrackerRequest?) async throws -> RdspTracker
 
@@ -113,9 +114,10 @@ struct RdspTrackerView: View {
                         Text(label)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(10)
-                            .background(RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(band == id ? Color.accentColor.opacity(0.12) : .clear)
-                                .strokeBorder(band == id ? Color.accentColor : Color.secondary.opacity(0.25)))
+                            .background(ZStack {
+                                RoundedRectangle(cornerRadius: 10, style: .continuous).fill(band == id ? Color.accentColor.opacity(0.12) : .clear)
+                                RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(band == id ? Color.accentColor : Color.secondary.opacity(0.25))
+                                })
                     }
                     .buttonStyle(.plain)
                 }

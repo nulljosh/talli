@@ -2,6 +2,7 @@ import SwiftUI
 import UserNotifications
 
 @main
+@MainActor
 struct TalliApp: App {
     @State private var appState = AppState()
     @AppStorage("app_theme") private var rawTheme = "system"

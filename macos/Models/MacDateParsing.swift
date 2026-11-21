@@ -1,7 +1,11 @@
 import Foundation
 
 enum MacDateParsing {
+    #if compiler(>=5.10)
     nonisolated(unsafe) private static let isoFormatter = ISO8601DateFormatter()
+    #else // Xcode 15 (macOS 13) builds
+    private static let isoFormatter = ISO8601DateFormatter()
+    #endif
     private static let fallbackFormatters: [DateFormatter] = {
         let formats = [
             "yyyy-MM-dd'T'HH:mm:ss.SSSZ",

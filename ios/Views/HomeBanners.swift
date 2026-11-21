@@ -2,6 +2,7 @@ import SwiftUI
 
 // The thin banners above the Home amount: offline, stale sync, the reporting window and a filed report.
 
+@MainActor
 struct OfflineBanner: View {
     var body: some View {
         HStack {
@@ -14,6 +15,7 @@ struct OfflineBanner: View {
     }
 }
 
+@MainActor
 struct StaleSyncBanner: View {
     @Environment(AppState.self) private var appState
 
@@ -34,6 +36,7 @@ struct StaleSyncBanner: View {
     }
 }
 
+@MainActor
 struct ReportingWindowBanner: View {
     @Environment(AppState.self) private var appState
 
@@ -63,6 +66,7 @@ struct ReportingWindowBanner: View {
     }
 }
 
+@MainActor
 struct ReportFiledBanner: View {
     var body: some View {
         HStack(spacing: 10) {

@@ -41,6 +41,7 @@ private let monthKey: DateFormatter = {
     return f
 }()
 
+@MainActor
 struct WhatIfView: View {
     let run: (_ request: WhatIfRequest) async throws -> WhatIf
 

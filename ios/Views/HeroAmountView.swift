@@ -11,6 +11,7 @@ private typealias PlatformFont = NSFont
 /// Condensed, which read as stretched; Joshua asked for a font that matches the rest, 2026-11-01.) Same rule as the web hero: the figures keep the font's own proportions, as tall as `maxHeight` or
 /// as wide as `width` allows, never stretched (big-number heroes are set this way). The $ is half size, green, raised to
 /// the top of the figures, the way prices are set. It breathes slowly unless Reduce Motion is on.
+@MainActor
 struct HeroAmountView: View {
     let digits: String
     let width: CGFloat
@@ -71,11 +72,23 @@ struct HeroAmountView: View {
         .offset(y: -(Self.ascent - Self.top) * u)
         .scaleEffect(x: 1, y: stretch, anchor: .top)
         .frame(height: Self.box * u * stretch, alignment: .top)
-        .phaseAnimator(reduceMotion ? [false] : [false, true]) { view, inhale in
-            view.scaleEffect(inhale ? 1.025 : 1).opacity(inhale ? 0.88 : 1)
-        } animation: { _ in .easeInOut(duration: 3) }
+        .modifier(Breathe(enabled: !reduceMotion))
         .frame(maxWidth: .infinity)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("$" + digits)
+    }
+}
+
+/// The slow breath on the amount. `phaseAnimator` is iOS 17 / macOS 14; on Ventura the amount stays still.
+private struct Breathe: ViewModifier {
+    let enabled: Bool
+    func body(content: Content) -> some View {
+        if #available(iOS 17, macOS 14, *) {
+            content.phaseAnimator(enabled ? [false, true] : [false]) { view, inhale in
+                view.scaleEffect(inhale ? 1.025 : 1).opacity(inhale ? 0.88 : 1)
+            } animation: { _ in .easeInOut(duration: 3) }
+        } else {
+            content
+        }
     }
 }

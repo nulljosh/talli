@@ -59,6 +59,7 @@ enum MissedPaymentReminders {
     }
 }
 
+@MainActor
 struct MissedPaymentView: View {
     let fetch: () async throws -> MissedPayment
     /// Marks the cheque for this month key (YYYY-MM) as received.

@@ -7,6 +7,7 @@ private let whatsNewBullets = [
     "Expenses now come with your tax-time export",
 ]
 
+@MainActor
 struct WhatsNewSheet: View {
     @AppStorage("whats_new_seen_version") private var seenVersion = ""
     @State private var isPresented = false
@@ -53,6 +54,6 @@ struct WhatsNewSheet: View {
 }
 
 private struct SheetHeightKey: PreferenceKey {
-    nonisolated(unsafe) static var defaultValue: CGFloat = 220
+    static let defaultValue: CGFloat = 220
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = nextValue() }
 }

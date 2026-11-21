@@ -36,6 +36,7 @@ struct HouseholdRequest: Codable, Sendable {
 
 private let householdTypes = [("single", "Just me"), ("couple_one", "Couple, one of us on PWD"), ("couple_both", "Couple, both on PWD"), ("single_parent", "Single parent")]
 
+@MainActor
 struct HouseholdView: View {
     let fetch: (_ save: HouseholdRequest?) async throws -> Household
 
@@ -91,9 +92,10 @@ struct HouseholdView: View {
                         Text(LocalizedStringKey(label))
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(10)
-                            .background(RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(type == id ? Color.accentColor.opacity(0.12) : .clear)
-                                .strokeBorder(type == id ? Color.accentColor : Color.secondary.opacity(0.25)))
+                            .background(ZStack {
+                                RoundedRectangle(cornerRadius: 10, style: .continuous).fill(type == id ? Color.accentColor.opacity(0.12) : .clear)
+                                RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(type == id ? Color.accentColor : Color.secondary.opacity(0.25))
+                                })
                     }
                     .buttonStyle(.plain)
                 }

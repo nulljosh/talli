@@ -1,5 +1,6 @@
 import SwiftUI
 
+@MainActor
 struct StatusView: View {
     @Environment(AppState.self) private var appState
 

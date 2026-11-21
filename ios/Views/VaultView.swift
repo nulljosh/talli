@@ -47,6 +47,7 @@ struct VaultAPI: Sendable {
 private let vaultCategories = [("pwd", "PWD letter"), ("medical", "Medical report"), ("id", "ID"), ("lease", "Lease"), ("other", "Other")]
 private let vaultMaxBytes = 5 * 1024 * 1024
 
+@MainActor
 struct VaultView: View {
     let api: VaultAPI
 

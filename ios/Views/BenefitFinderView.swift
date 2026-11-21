@@ -42,6 +42,7 @@ struct BenefitFinderRequest: Codable, Sendable { let answers: [String: [String]]
 
 private let finderGroups = [("crisis", "Help this week"), ("money", "Money to claim"), ("savings", "Free and cheaper"), ("help", "People who help")]
 
+@MainActor
 struct BenefitFinderView: View {
     /// nil answers loads what the server has; non nil saves and returns results.
     let fetch: (_ answers: [String: [String]]?) async throws -> BenefitFinder
@@ -131,9 +132,10 @@ struct BenefitFinderView: View {
                     Text(o.label)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(12)
-                        .background(RoundedRectangle(cornerRadius: 10, style: .continuous)
-                            .fill(on ? Color.accentColor.opacity(0.12) : .clear)
-                            .strokeBorder(on ? Color.accentColor : Color.secondary.opacity(0.25)))
+                        .background(ZStack {
+                            RoundedRectangle(cornerRadius: 10, style: .continuous).fill(on ? Color.accentColor.opacity(0.12) : .clear)
+                            RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(on ? Color.accentColor : Color.secondary.opacity(0.25))
+                            })
                 }
                 .buttonStyle(.plain)
             }

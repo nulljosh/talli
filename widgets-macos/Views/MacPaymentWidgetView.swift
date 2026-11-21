@@ -6,8 +6,7 @@ struct MacPaymentWidget: Widget {
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: MacPaymentProvider()) { entry in
-            MacPaymentWidgetView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
+            MacPaymentWidgetView(entry: entry).widgetBackground()
         }
         .configurationDisplayName("Next Payment")
         .description("Countdown to your next payment.")
@@ -180,5 +179,12 @@ struct MacPaymentWidgetView: View {
                     .foregroundStyle(.secondary)
             }
         }
+    }
+}
+
+private extension View {
+    /// macOS 14 wants a container background; macOS 13 draws its own (the app runs on Ventura too).
+    @ViewBuilder func widgetBackground() -> some View {
+        if #available(macOS 14.0, *) { containerBackground(.fill.tertiary, for: .widget) } else { padding() }
     }
 }

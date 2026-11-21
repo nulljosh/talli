@@ -24,6 +24,7 @@ struct ProvinceList: Codable, Sendable {
     let provinces: [Province]
 }
 
+@MainActor
 struct ProvinceView: View {
     let fetch: () async throws -> ProvinceList
 

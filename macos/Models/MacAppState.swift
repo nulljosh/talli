@@ -1,22 +1,22 @@
+import Combine
 import Foundation
-import Observation
 import Network
 import WidgetKit
 
-@Observable
+/// ObservableObject (not @Observable) so the Mac app runs on macOS 13 Ventura.
 @MainActor
-final class MacAppState {
+final class MacAppState: ObservableObject {
     private enum Constants {
         static let dashboardCacheKey = "cached-dashboard-data"
         static let lastSyncKey = "last-sync-date"
         static let appGroup = "group.com.heyitsmejosh.tally"
     }
 
-    var isAuthenticated = false
-    var username = ""
-    var isLoading = false
-    var errorMessage: String?
-    var dashboard: MacDashboardData? {
+    @Published var isAuthenticated = false
+    @Published var username = ""
+    @Published var isLoading = false
+    @Published var errorMessage: String?
+    @Published var dashboard: MacDashboardData? {
         didSet {
             let shared = UserDefaults(suiteName: Constants.appGroup)
             if let total = dashboard?.income?.totalMonthly {
@@ -26,11 +26,11 @@ final class MacAppState {
             }
         }
     }
-    var isOffline = false
-    var selectedSection: AppSection = .dashboard
-    var reportMonths: [String: String] = [:]
-    var pwdApproved: Bool = false
-    var lastSyncDate: Date? = UserDefaults.standard.object(forKey: Constants.lastSyncKey) as? Date
+    @Published var isOffline = false
+    @Published var selectedSection: AppSection = .dashboard
+    @Published var reportMonths: [String: String] = [:]
+    @Published var pwdApproved: Bool = false
+    @Published var lastSyncDate: Date? = UserDefaults.standard.object(forKey: Constants.lastSyncKey) as? Date
 
     /// Hours after which a successful scrape is old enough to surface quietly.
     private static let staleSyncHours = 24.0
@@ -328,9 +328,8 @@ final class MacAppState {
 
     private func startNetworkMonitoring() {
         monitor.pathUpdateHandler = { [weak self] path in
-            Task { @MainActor in
-                self?.isOffline = path.status != .satisfied
-            }
+            let offline = path.status != .satisfied
+            Task { @MainActor [weak self] in self?.isOffline = offline }
         }
         monitor.start(queue: monitorQueue)
     }

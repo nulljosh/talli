@@ -6,8 +6,7 @@ struct MacBenefitsWidget: Widget {
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: MacBenefitsProvider()) { entry in
-            MacBenefitsWidgetView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
+            MacBenefitsWidgetView(entry: entry).widgetBackground()
         }
         .configurationDisplayName("Benefits")
         .description("What you're owed, at a glance.")
@@ -171,5 +170,12 @@ struct MacBenefitsWidgetView: View {
                 .font(.subheadline.bold().monospacedDigit())
         }
         .padding(.vertical, 4)
+    }
+}
+
+private extension View {
+    /// macOS 14 wants a container background; macOS 13 draws its own (the app runs on Ventura too).
+    @ViewBuilder func widgetBackground() -> some View {
+        if #available(macOS 14.0, *) { containerBackground(.fill.tertiary, for: .widget) } else { padding() }
     }
 }

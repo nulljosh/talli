@@ -7,6 +7,7 @@ private func formattedMessageDate(_ raw: String) -> String {
     return f.localizedString(for: date, relativeTo: Date())
 }
 
+@MainActor
 struct MessagesView: View {
     @Environment(AppState.self) private var appState
     @State private var expanded: String? = nil
@@ -57,6 +58,7 @@ struct MessagesView: View {
     }
 }
 
+@MainActor
 private struct MessageRow: View {
     let message: DashboardData.StatusMessage
     let isRead: Bool

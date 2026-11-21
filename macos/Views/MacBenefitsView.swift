@@ -1,7 +1,8 @@
 import SwiftUI
 
+@MainActor
 struct MacBenefitsView: View {
-    @Environment(MacAppState.self) private var appState
+    @EnvironmentObject private var appState: MacAppState
 
     /// This person's actual monthly income, above the static rate catalogue below.
     /// The catalogue is reference material; this is real data, and it must match

@@ -1,7 +1,8 @@
 import SwiftUI
 
+@MainActor
 struct MacContentView: View {
-    @Environment(MacAppState.self) private var appState
+    @EnvironmentObject private var appState: MacAppState
 
     var body: some View {
         Group {
@@ -14,12 +15,11 @@ struct MacContentView: View {
     }
 }
 
+@MainActor
 private struct AuthenticatedShell: View {
-    @Environment(MacAppState.self) private var appState
+    @EnvironmentObject private var appState: MacAppState
 
     var body: some View {
-        @Bindable var state = appState
-
         // A floating glass nav bar, the same four tabs as the web and iPhone. Cmd-1 to 4 switch.
         NavigationStack {
             detailView
@@ -85,6 +85,7 @@ private struct AuthenticatedShell: View {
     }
 }
 
+@MainActor
 private struct ErrorBanner: View {
     let message: String
     let onDismiss: () -> Void

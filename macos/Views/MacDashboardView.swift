@@ -1,7 +1,8 @@
 import SwiftUI
 
+@MainActor
 struct MacDashboardView: View {
-    @Environment(MacAppState.self) private var appState
+    @EnvironmentObject private var appState: MacAppState
     @State private var showDetails = false
     /// The window's content size, for the hero; set by the GeometryReader around the scroll view.
     @State private var viewport: CGSize = .zero
@@ -40,7 +41,7 @@ struct MacDashboardView: View {
                     .capsuleAction(prominent: false)
                 }
                 .frame(maxHeight: .infinity)
-                .containerRelativeFrame(.vertical) { length, _ in length - 48 }
+                .modifier(FillsViewport(height: viewport.height))
 
                 if showDetails {
                     VStack(spacing: 16) {
@@ -60,7 +61,7 @@ struct MacDashboardView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
         .onAppear { viewport = geo.size }
-        .onChange(of: geo.size) { _, size in viewport = size }
+        .onChange(of: geo.size) { size in viewport = size }
         }
     }
 
@@ -209,5 +210,17 @@ struct MacDashboardView: View {
         .padding(.vertical, 12)
         .padding(.horizontal, 16)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+    }
+}
+
+/// The hero block fills the window less 48 points. `containerRelativeFrame` is macOS 14; Ventura uses the measured size.
+private struct FillsViewport: ViewModifier {
+    let height: CGFloat
+    func body(content: Content) -> some View {
+        if #available(macOS 14, *) {
+            content.containerRelativeFrame(.vertical) { length, _ in length - 48 }
+        } else {
+            content.frame(height: max(0, height - 48))
+        }
     }
 }

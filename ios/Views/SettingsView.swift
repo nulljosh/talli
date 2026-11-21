@@ -1,6 +1,7 @@
 import SwiftUI
 import UserNotifications
 
+@MainActor
 struct SettingsView: View {
     @Environment(AppState.self) private var appState
     @AppStorage("app_theme") private var rawTheme = "system"
@@ -107,6 +108,7 @@ struct SettingsView: View {
 
 /// Report identity fields. Moved here from ReportView so the values are entered once
 /// in Settings and reused by every monthly submission.
+@MainActor
 private struct PersonalInfoSection: View {
     @State private var sin = ""
     @State private var phone = ""
@@ -190,6 +192,7 @@ private struct PersonalInfoSection: View {
     }
 }
 
+@MainActor
 private struct AppearancePicker: View {
     @Binding var rawTheme: String
     private let options = [("light", "Light"), ("dark", "Dark"), ("system", "System")]

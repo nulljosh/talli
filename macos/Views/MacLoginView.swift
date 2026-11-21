@@ -1,7 +1,8 @@
 import SwiftUI
 
+@MainActor
 struct MacLoginView: View {
-    @Environment(MacAppState.self) private var appState
+    @EnvironmentObject private var appState: MacAppState
     @State private var username = ""
     @State private var password = ""
     @State private var showFederal = false

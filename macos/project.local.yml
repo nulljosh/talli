@@ -1,0 +1,13 @@
+# Local build on Xcode 15.2 (macOS 13): older project format and Swift 5 mode. Not used by CI.
+# Writes TalliMacLocal.xcodeproj (git-ignored), so the tracked TalliMac.xcodeproj stays untouched.
+name: TalliMacLocal
+include:
+  - project.yml
+options:
+  projectFormat: xcode15_0
+settings:
+  SWIFT_VERSION: "5.0"
+targets:
+  TalliWidgets:
+    settings:
+      PRODUCT_NAME: TalliWidgets

@@ -44,6 +44,7 @@ private let isoDay: DateFormatter = {
     return f
 }()
 
+@MainActor
 struct MoneyLogView: View {
     let fetch: (_ save: MoneyLogRequest?) async throws -> MoneyLog
 
@@ -162,6 +163,7 @@ struct MoneyLogView: View {
 }
 
 /// How much of the yearly earnings limit is used. Red once past it; the amount over comes off assistance.
+@MainActor
 struct EarningsLimitBar: View {
     let year: Int
     let earned: Double

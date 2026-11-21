@@ -1,6 +1,7 @@
 import SwiftUI
 import UIKit
 
+@MainActor
 struct ContentView: View {
     @Environment(AppState.self) private var appState
     @State private var showSplash = true
@@ -31,6 +32,7 @@ struct ContentView: View {
     }
 }
 
+@MainActor
 private struct AuthenticatedTabShell: View {
     @Environment(AppState.self) private var appState
 
@@ -65,6 +67,7 @@ private struct AuthenticatedTabShell: View {
     }
 }
 
+@MainActor
 private struct LoginScreen: View {
     @Environment(AppState.self) private var appState
     @State private var username = ""
@@ -180,6 +183,7 @@ private struct LoginScreen: View {
     }
 }
 
+@MainActor
 private struct TimelineCard: View {
     let title: String
     let steps: [(label: String, date: String, done: Bool)]
@@ -214,6 +218,7 @@ private struct TimelineCard: View {
     }
 }
 
+@MainActor
 private struct DashboardScreen: View {
     @Environment(AppState.self) private var appState
     @State private var now = Date()

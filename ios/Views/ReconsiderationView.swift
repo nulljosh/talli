@@ -32,6 +32,7 @@ private let isoDay: DateFormatter = {
     return f
 }()
 
+@MainActor
 struct ReconsiderationView: View {
     let fetch: (_ received: String?) async throws -> Reconsideration
 

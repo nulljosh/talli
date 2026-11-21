@@ -16,6 +16,7 @@ struct MessageReply: Codable, Sendable {
 
 struct MessageReplyRequest: Codable, Sendable { let text: String }
 
+@MainActor
 struct ReplyDraftView: View {
     let text: String
     let fetch: (_ text: String) async throws -> MessageReply
