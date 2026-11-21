@@ -4,7 +4,7 @@ The iPhone app. Versions live in App Store Connect, not here. The repo rules in 
 
 ## Rules
 - Portrait only. System font everywhere; the Home amount is SF Pro Rounded bold, 56pt at most (`Views/HeroAmountView.swift`, shared with Mac).
-- Four tabs: Home, Status, Messages, Settings. Each tab owns its NavigationStack. No avatar button; the avatar (a Greek-god portrait from the server) sits in Settings.
+- Four tabs: Home, Status, Messages, Settings. Each tab owns its NavigationStack. No avatar button; the avatar (a drawn civil servant from the server) sits in Settings.
 - Accent is `Color.talliBlue` (#5B9BD5). Cards use `Color(.secondarySystemGroupedBackground)` on the grouped background, radius 20. Liquid Glass on 26+ via `View+Glass.swift`.
 - Session cookies live in `HTTPCookieStorage.shared`; a 401 asks the person to sign in again.
 - `DashboardData` decodes each block with `try?`, so one bad field never blanks Home.

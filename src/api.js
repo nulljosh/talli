@@ -2455,13 +2455,13 @@ app.post('/api/benefit-finder', requireAuth, async (req, res) => {
   }
 });
 
-// Avatar -- a Greek-god portrait from web/avatars, picked per user (src/avatar.js).
+// Avatar -- a civil-servant illustration from web/avatars, picked per user (src/avatar.js).
 // Avatars saved before this were random node graphs in the blob store; they get replaced once.
 async function ensureAvatar(userId, profile) {
-  if (profile.avatarUrl && profile.avatarStyle === 'portrait') return profile.avatarUrl;
+  if (profile.avatarUrl && profile.avatarStyle === 'civil-servant') return profile.avatarUrl;
   const stale = profile.avatarUrl && profile.avatarUrl.startsWith('/api/blob/') ? profile.avatarUrl : null;
   profile.avatarUrl = avatarFor(userId, profile.avatarSeed || 0);
-  profile.avatarStyle = 'portrait';
+  profile.avatarStyle = 'civil-servant'; // 'portrait' (Greek busts, removed 2026-11-20) is re-picked
   profile.avatarUpdatedAt = new Date().toISOString();
   await saveUserBlob(userId, 'profile', profile);
   // Delete the old blob only after the new URL is durably saved.

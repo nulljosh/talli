@@ -177,7 +177,7 @@ Test suite covering scraper, parsing, date logic, payment dates, message parsing
 
 | File | What it owns |
 |---|---|
-| `src/avatar.js` | Picks each user's portrait: 24 public domain Greek sculpture photos plus mirrors, hashed by user, stepped by Refresh. |
+| `src/avatar.js` | Picks each user's avatar: 24 drawn civil servants (`scripts/gen_avatars.py`), hashed by user, stepped by Refresh. |
 | `web/avatars/` | The 48 portraits, dithered into the landing blues. `CREDITS.md` names every source and license. |
 
 ## Commercial
@@ -199,7 +199,7 @@ Test suite covering scraper, parsing, date logic, payment dates, message parsing
 
 ## Storage & Sync
 
-- **KV (Cloudflare Workers)**: Dashboard cache (per user), report-status (filed months), paid-months (history), avatars (generated Greek-god busts), messages read-state
+- **KV (Cloudflare Workers)**: Dashboard cache (per user), report-status (filed months), paid-months (history), avatars (drawn civil servants), messages read-state
 - **Keychain**: Credentials (username, password), report secrets (SIN, PIN, phone)
 - **UserDefaults (iOS/macOS)**: Theme preference, last sync date, paid status (pre-migration data), app-group shared defaults for widget access
 - **Widget App Group**: Shared UserDefaults (group.com.heyitsmejosh.talli) for widget↔app data sync
