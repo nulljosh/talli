@@ -54,3 +54,4 @@ macos/TalliWidgets-Info.plist
 .DS_Store
 !web/avatars/*.png
 launch/banner/
+macos/TalliMacLocal.xcodeproj/

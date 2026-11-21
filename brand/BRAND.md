@@ -13,20 +13,27 @@ One bold flat white glyph on an accent gradient tile. No text, no outline, no em
 ## Colour
 | Role | Value |
 |---|---|
-| Accent | `#2F6FB0` |
-| Gradient top | `#5B9BD5` |
+| Accent | `#5B9BD5` (Talli blue) |
+| Accent on light text | `#2F6FB0` (5.2:1) |
+| Gradient | `#5B9BD5` to `#2F6FB0` |
+| Money | `#2d9e5f` light, `#4ade80` dark (the $ only) |
 | Text | `#1d1d1f` light, `#f5f5f7` dark |
 | Background | `#ffffff` light, `#000000` dark |
 | Surface | `#f5f5f7` light, `#1c1c1e` dark |
+| Raised | `#ebebeb` light, `#2c2c2e` dark |
+
+Cool greys only. No warm or beige neutrals.
 
 The accent is for actions, links and the icon. Never brown, beige, purple or teal.
 
 ## Type
-The system font: `-apple-system, BlinkMacSystemFont, "SF Pro Text", Lato, "Helvetica Neue", Helvetica, Arial, sans-serif`. Scale 34/41 bold, 22/28, 17/24, 15/20, 13/18.
+The system font: `-apple-system, BlinkMacSystemFont, "SF Pro Text", Lato, "Helvetica Neue", Helvetica, Arial, sans-serif`. Scale 34/41 bold, 22/28, 17/24, 15/20, 13/18. No webfonts.
+
+The one exception is the Home amount: SF Pro Rounded bold (`ui-rounded` on the web, `.rounded` design on Apple), proportional figures, 56 points at most, with the $ at half size, green and raised.
 
 ## Space and shape
 - Space on the 8 point grid: 4, 8, 12, 16, 24, 32, 48. Side margin 20. Reading column 680.
-- Radii: cards 28, grouped lists 20, controls fully round, icon 22 percent.
+- Radii: cards and grouped lists 20, fields 12, controls fully round, icon 22 percent.
 - Controls are 48 points tall capsules, one height in a row. Focus is a 4 point ring at 30 percent accent.
 - Motion is 0.2 s ease and honours reduced motion.
 

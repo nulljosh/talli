@@ -4,33 +4,33 @@ How Talli makes money. The company plan is `REVENUE.md` in the Code root; the le
 
 ## Price and rail
 
-Free on iPhone, Mac, watch and the web (ASC 6782366555). The web has a one-time $1 upgrade through Stripe. A $1 Stripe sale pays about $0.67 after fees.
+Free on iPhone, Mac, watch and the web (ASC 6782366555). The $1 web upgrade was removed on 2026-11-20 (a $1 Stripe sale paid about $0.67 after fees, and a paywall on payment history did not fit a benefits app).
 
 ## What is actually sold
 
-The web upgrade, one dollar, once. The tracker itself is free everywhere. The tracker signs in to BC Self-Serve with the person's own login, and BCeID locks after a few wrong passwords. That risk is about the login, not the price.
+Nothing. The tracker is free everywhere. The tracker signs in to BC Self-Serve with the person's own login, and BCeID locks after a few wrong passwords. That risk is about the login, not the price.
 
 ## Who pays and why
 
-Nobody has to. Talli helps people claim disability and income assistance. The upgrade is for someone who wants more than the free tracker, and it costs one dollar, once.
+Nobody. Talli helps people claim disability and income assistance.
 
 ## Cost to serve
 
-No paid AI. The Worker runs on Cloudflare with KV storage. The BC Self-Serve login is plain HTTP, with no paid service behind it. Stripe is the only paid service, and it takes its fee per sale.
+No paid AI. The Worker runs on Cloudflare with KV storage. The BC Self-Serve login is plain HTTP, with no paid service behind it. No paid service.
 
 ## Where we are
 
-- Root CLAUDE.md gotchas (undated): Stripe is live on the web for Talli.
+- 2026-11-20: the $1 web upgrade is gone. The Stripe routes stay on the server, unused, until removed.
 - Talli CLAUDE.md (undated): free on iOS, macOS, watchOS and the web.
 - Revenue: no verified number (the App Store Connect key cannot read sales yet).
 
 ## Role in the company plan
 
-Free on purpose. GTM.md lists it as a disability tool, free on purpose, with a web upgrade. It is trust, not revenue. The no-ads and no-tracking rules in REVENUE.md show most clearly here.
+Free on purpose. GTM.md lists it as a disability tool, free on purpose. It is trust, not revenue. The no-ads and no-tracking rules in REVENUE.md show most clearly here.
 
 ## Next
 
-None. Talli stays free, and the Stripe upgrade stays as it is.
+None. Talli stays free.
 
 ## Million, billion, trillion
 

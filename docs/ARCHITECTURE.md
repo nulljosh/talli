@@ -161,14 +161,11 @@ Test suite covering scraper, parsing, date logic, payment dates, message parsing
 | `tools/test-avatar.js` | Every avatar file exists, the same user always gets the same face, regenerate always changes it, users spread over the set. |
 | `tools/test-cli.js` | bin/talli.js views from good, partial, missing and garbage summaries, and the TUI frame at two terminal sizes. |
 
-## Talli Display (the Home amount's face)
+## The Home amount
 | File | What it does |
 |------|-------------|
-| `scripts/gen_font.py` | Builds Talli Display: Barlow Condensed SemiBold (OFL) renamed, figures respaced to be proportional. `--check` also proves the web advance table matches the font. Run with `uv run --with fonttools --with brotli`. |
-| `web/fonts/TalliDisplay-Semibold.woff2` | The web copy, loaded by `@font-face` and preloaded in `web/unified.html`. |
-| `fonts/TalliDisplay-Semibold.ttf` | The Apple copy, bundled by `ios/project.yml` and `macos/project.yml` and registered at runtime. |
-| `ios/Views/HeroAmountView.swift` | The Home amount on iPhone and Mac: figures up to half the screen tall at their own proportions (never stretched), 24 points of room each side, a small raised green $, a slow breath (off with Reduce Motion). The web `HeroAmount` draws the same thing as SVG. |
-| `tools/test-font.js` | Both font files exist, are named Talli Display, ship with the OFL, and are wired into the page and both Xcode projects. |
+| `ios/Views/HeroAmountView.swift` | The Home amount on iPhone and Mac: SF Pro Rounded bold, 56 points at most, never stretched, 24 points of room each side, a small raised green $, a slow breath (off with Reduce Motion). The web `HeroAmount` in `web/unified.html` draws the same thing in `ui-rounded`. |
+| `tools/test-font.js` | No webfont or bundled font comes back: the system face only. |
 
 ## Terminal
 

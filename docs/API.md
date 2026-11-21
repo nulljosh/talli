@@ -68,8 +68,8 @@ CDNs are blocked.
 
 | Route | Method | Auth | Notes |
 |---|---|---|---|
-| `/api/stripe-status` | GET | auth | Subscription state |
-| `/api/stripe-checkout` | POST | auth | Creates a Checkout session |
+| `/api/stripe-status` | GET | auth | Upgrade state (unused since Talli went fully free, 2026-11-20) |
+| `/api/stripe-checkout` | POST | auth | Checkout session (unused since 2026-11-20) |
 | `/api/stripe-webhook` | POST | — | Signature-verified. Not for client use |
 | `/api/legal` | POST | auth | Submit a legal-assistance description |
 | `/api/health` | GET | — | Liveness |

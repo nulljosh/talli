@@ -22,9 +22,9 @@ right even offline, and the `talli` CLI can show it with no account at all.
 
 ## What sits on top
 
-- **Home**: the next amount in Talli Display, a custom face (renamed OFL Barlow Condensed with proportional
-  figures, `scripts/gen_font.py`). It fills up to half the screen and breathes slowly, unless Reduce Motion is on.
-  Under it: "tomorrow" or "in 18 days", Mark as paid, and a Paydays calendar with the next six cheque days.
+- **Home**: the next amount in SF Pro Rounded bold, proportional figures, 56 points at most. It breathes slowly,
+  unless Reduce Motion is on. Under it: "tomorrow" or "in 18 days", Mark as paid, and a compact payday card with
+  the month and the next three cheque days. Totals fold under Details; money entry lives in Status.
 - **Status**: PWD and CDB count as approved by default, with no button to press. The tools open as rows: a budget
   set against paydays, a benefit finder, RDSP grants, what a job would do to the cheque, and more.
 - **Messages**: read state lives in Workers KV, so a message read on the phone is read on the Mac too.
@@ -56,4 +56,4 @@ shoot every tab in light and dark.
 
 ---
 
-Apache License 2.0. Copyright 2026 Joshua Trommel. Talli Display is under the SIL Open Font License.
+Apache License 2.0. Copyright 2026 Joshua Trommel.

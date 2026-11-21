@@ -14,13 +14,14 @@ Talli answers that for people on BC income assistance. It reads BC Self-Serve fo
 
 Free. Always.
 
-## Three tabs
+## Four tabs
 
-- **Home**: the next payment, big, with the days left. Everything else sits under Details.
-- **Status**: PWD, RDSP and CDB, and the benefits you can claim.
-- **Messages**: your Self-Serve messages, newest first, on every device.
+- **Home**: the next payment in SF Pro Rounded, the days left, Mark as paid and the next paydays. Totals sit under Details.
+- **Status**: PWD, RDSP and CDB, and the tools: log money, budget, benefit finder, RDSP, what if, household and more.
+- **Messages**: your Self-Serve messages, newest first, read state shared across devices.
+- **Settings**: account, avatar, language, theme.
 
-iPhone, Mac, Apple Watch and web. English, French, Chinese and Punjabi.
+iPhone, Mac (macOS 13 and up), Apple Watch, and the web, which installs on Android. English, French, Chinese and Punjabi.
 
 ## Run
 
@@ -29,6 +30,8 @@ npm install && npm start
 ```
 
 Open http://localhost:3000. Copy `.env.example` to `.env`. Runs on Cloudflare Workers; deploy with `npm run deploy`.
+
+Apple apps: `xcodegen` then open `ios/Talli.xcodeproj` or `macos/TalliMac.xcodeproj`. On Xcode 15 (macOS 13), generate from `project.local.yml` instead (`xcodegen generate --spec project.local.yml`).
 
 ## Terminal
 
@@ -48,4 +51,4 @@ talli tui           # full screen, the amount centred; r refreshes, q quits
 
 ## License
 
-Apache License 2.0. Copyright 2026 Joshua Trommel. The Talli Display font is under the SIL Open Font License (`fonts/OFL.txt`).
+Apache License 2.0. Copyright 2026 Joshua Trommel.
