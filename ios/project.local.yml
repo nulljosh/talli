@@ -1,0 +1,21 @@
+# Local build on Xcode 15.2 (macOS 13): older project format and Swift 5 mode. Not used by CI.
+include:
+  - project.yml
+options:
+  projectFormat: xcode15_0
+settings:
+  SWIFT_VERSION: "5.0"
+  SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+targets:
+  Talli:
+    settings:
+      base:
+        PRODUCT_NAME: Talli
+  TalliTests:
+    settings:
+      base:
+        PRODUCT_NAME: TalliTests
+  TalliUITests:
+    settings:
+      base:
+        PRODUCT_NAME: TalliUITests

@@ -525,55 +525,9 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, assets, daysUn
   const t = tk(dark);
   const [loaded, setLoaded] = useState(false);
   const [bounce, setBounce] = useState(false);
-  const [isPro, setIsPro] = useState(false);
-  const [unlocking, setUnlocking] = useState(false);
-  const [checkoutError, setCheckoutError] = useState('');
-  const [confirmingPayment, setConfirmingPayment] = useState(() => new URLSearchParams(window.location.search).get('pro') === '1');
   useEffect(() => {
     if (amount !== null && daysUntil !== null) { const id=setTimeout(()=>setLoaded(true),300); return ()=>clearTimeout(id); }
   }, [amount, daysUntil]);
-  useEffect(() => {
-    let cancelled = false;
-    let timer;
-    let attempts = 0;
-    const returningFromCheckout = new URLSearchParams(window.location.search).get('pro') === '1';
-    const check = async () => {
-      try {
-        const response = await fetch('/api/stripe-status', { credentials: 'include', cache: 'no-store' });
-        if (!response.ok) throw new Error('Status unavailable');
-        const data = await response.json();
-        if (cancelled) return;
-        setIsPro(Boolean(data.isPro));
-        if (data.isPro) {
-          setConfirmingPayment(false);
-          setCheckoutError('');
-          if (returningFromCheckout) {
-            const url = new URL(window.location.href);
-            url.searchParams.delete('pro');
-            window.history.replaceState(window.history.state, '', url);
-          }
-          return;
-        }
-      } catch { /* Retry briefly while the payment webhook arrives. */ }
-      if (cancelled || !returningFromCheckout) return;
-      if (++attempts < 8) timer = setTimeout(check, 2000);
-      else setCheckoutError('Payment confirmation is taking longer than usual. Refresh shortly to check again. Please do not pay again.');
-    };
-    check();
-    return () => { cancelled = true; clearTimeout(timer); };
-  }, []);
-  const unlockPro = async () => {
-    setUnlocking(true);
-    setCheckoutError('');
-    try {
-      const res = await fetch('/api/stripe-checkout', { method: 'POST', credentials: 'include' });
-      const data = await res.json();
-      if (!res.ok || !data.url) throw new Error('Checkout is unavailable. Please try again.');
-      window.location.href = data.url;
-    } catch {
-      setCheckoutError('Checkout is unavailable. Please try again.');
-    } finally { setUnlocking(false); }
-  };
   // Hold the amount to blur it (screenshots, shoulder surfers); remembered on this device.
   const [hidden, setHidden] = useState(() => { try { return localStorage.getItem('talliHideAmount') === '1'; } catch { return false; } });
   const holdAmount = useRef(null);
@@ -710,8 +664,8 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, assets, daysUn
         </div>
       )}
 
-      {isPro ? (
-        <>
+      {/* Talli is free: payment history is open to everyone (Joshua 2026-11-20). */}
+      <div>
           {/* Stats row */}
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:1,marginTop:24,animation:'fadeUp 0.45s 0.5s ease both'}}>
             {[
@@ -744,17 +698,7 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, assets, daysUn
               })}
             </div>
           </div>
-        </>
-      ) : (
-        <div style={{marginTop:24,padding:'16px',border:`1px solid ${t.border}`,borderRadius:10,animation:'fadeUp 0.45s 0.5s ease both'}}>
-          <div style={{fontSize:13,fontWeight:600,color:t.text,marginBottom:4}}>Full payment history</div>
-          <div style={{fontSize:12,color:t.muted,marginBottom:12}}>Year-to-date total + recent payments chart.</div>
-          <button onClick={unlockPro} disabled={unlocking || confirmingPayment} style={{padding:'8px 16px',borderRadius:100,background:t.accent,color:'#fff',border:'none',fontSize:12,fontWeight:600,fontFamily:'inherit',cursor:unlocking||confirmingPayment?'default':'pointer',opacity:unlocking||confirmingPayment?0.6:1}}>
-            {confirmingPayment ? 'Confirming payment...' : unlocking ? 'Loading...' : 'Unlock — $1'}
-          </button>
-          {checkoutError && <p role="alert" style={{fontSize:12,color:t.text,marginTop:10}}>{checkoutError}</p>}
-        </div>
-      )}
+      </div>
       </details>
 
     </div>
