@@ -30,6 +30,15 @@
     @keyframes breathe   { 0%,100% { transform:scale(1); opacity:1; } 50% { transform:scale(1.025); opacity:0.88; } }
     @media (prefers-reduced-motion: reduce) { .hero-amount { animation:none !important; } }
     .home-details>summary::-webkit-details-marker{display:none}
+    /* Details: one centred column like the calendar, each part a grouped card (radius 20, 16 inside, 12 between). */
+    .home-details{width:100%;max-width:560px;margin:32px auto 0}
+    .home-details>summary{justify-content:space-between;padding:0 16px;min-height:48px !important;border-radius:20px;background:var(--card);color:var(--text) !important;font-size:15px !important;font-weight:500}
+    .home-details>summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg) translateY(-2px);transition:transform .2s}
+    .home-details[open]>summary::after{transform:rotate(225deg) translateY(-2px)}
+    .home-details>div{margin-top:12px !important;padding:16px !important;border-radius:20px !important;border:none !important;background:var(--card)}
+    .talli-form input:not([type=checkbox]),.talli-form select{height:48px;padding:0 12px !important;border-radius:12px !important;font-size:15px !important;-webkit-appearance:none;appearance:none;box-sizing:border-box}
+    .talli-form select{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%) !important;background-position:calc(100% - 18px) 21px,calc(100% - 13px) 21px !important;background-size:5px 5px !important;background-repeat:no-repeat !important}
+    .talli-form button,.home-details>div>button{height:48px;border-radius:100px !important;padding:0 24px !important;font-size:15px !important}
     @keyframes fadeUp    { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
     @keyframes fadeIn    { from { opacity:0; } to { opacity:1; } }
     @keyframes skelPulse { 0%,100%{opacity:1} 50%{opacity:0.45} }
@@ -141,7 +150,7 @@ function HeroAmount({digits, t, paid}) {
   const ems = [...digits].reduce((w, c) => w + (c === ',' || c === '.' ? 0.3 : 0.62), 0) + 0.38;
   const size = `min(56px, 18vh, calc((60vw - 53px) / ${ems.toFixed(3)}))`;  // 56px at most, like iPhone and Mac (Joshua 2026-11-20)
   return (
-    <div aria-hidden="true" style={{display:'flex',alignItems:'flex-start',justifyContent:'center',fontFamily:'ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, Helvetica, sans-serif',fontWeight:700,fontSize:size,lineHeight:1,letterSpacing:'-0.035em',fontVariantNumeric:'tabular-nums',color:t.text,textDecoration:paid ? 'line-through' : 'none',textDecorationColor:t.muted,textDecorationThickness:'0.04em'}}>
+    <div aria-hidden="true" style={{display:'flex',alignItems:'flex-start',justifyContent:'center',fontFamily:'ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, Helvetica, sans-serif',fontWeight:700,fontSize:size,lineHeight:1,letterSpacing:'-0.02em',fontVariantNumeric:'proportional-nums',color:t.text,textDecoration:paid ? 'line-through' : 'none',textDecorationColor:t.muted,textDecorationThickness:'0.04em'}}>
       <span style={{fontSize:'0.5em',lineHeight:1.15,color:t.success,marginRight:'0.04em'}}>$</span>{digits}
     </div>
   );
@@ -174,31 +183,30 @@ function PaydayCalendar({dark}) {
   const y = view.getFullYear(), m = view.getMonth();
   const payDay = PAY_SCHEDULE[y]?.[m];
   const cells = [...Array(new Date(y, m, 1).getDay()).fill(null), ...Array.from({length: new Date(y, m + 1, 0).getDate()}, (_, i) => i + 1)];
-  const arrow = {width:48,height:48,border:'none',background:'none',cursor:'pointer',color:t.muted,fontSize:24,lineHeight:1,fontFamily:'inherit',WebkitTapHighlightColor:'transparent'};
+  const arrow = {width:44,height:44,border:'none',background:'none',cursor:'pointer',color:t.muted,fontSize:24,lineHeight:1,fontFamily:'inherit',WebkitTapHighlightColor:'transparent'};
   return (
-    <div style={{marginTop:48}}>
-      <div style={{fontSize:13,fontWeight:600,letterSpacing:'0.08em',textTransform:'uppercase',color:t.muted,textAlign:'center'}}>Paydays</div>
-      <div style={{display:'flex',alignItems:'center',marginTop:8}}>
+    <div style={{marginTop:32,maxWidth:360,marginLeft:'auto',marginRight:'auto',padding:'8px 16px 16px',borderRadius:20,background:t.bg2}}>
+      <div style={{display:'flex',alignItems:'center'}}>
         <button aria-label="Previous month" onClick={()=>setView(new Date(y, m - 1, 1))} style={arrow}>‹</button>
-        <div style={{flex:1,textAlign:'center',fontSize:17,fontWeight:600,color:t.text}}>{view.toLocaleString('en-CA',{month:'long',year:'numeric'})}</div>
+        <div style={{flex:1,textAlign:'center',fontSize:15,fontWeight:600,color:t.text}}>{view.toLocaleString('en-CA',{month:'long',year:'numeric'})}</div>
         <button aria-label="Next month" onClick={()=>setView(new Date(y, m + 1, 1))} style={arrow}>›</button>
       </div>
       <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',textAlign:'center',marginTop:8}}>
-        {['S','M','T','W','T','F','S'].map((d,i)=><div key={'h'+i} style={{fontSize:13,color:t.muted,paddingBottom:8}}>{d}</div>)}
+        {['S','M','T','W','T','F','S'].map((d,i)=><div key={'h'+i} style={{fontSize:11,fontWeight:600,color:t.muted,paddingBottom:4}}>{d}</div>)}
         {cells.map((d,i)=>{
           const pay = d === payDay, date = d && new Date(y, m, d), tod = d && date.getTime() === today.getTime();
           return (
-            <div key={i} style={{height:44,display:'flex',alignItems:'center',justifyContent:'center'}}>
-              {d && <div aria-label={pay ? 'Payday' : undefined} style={{width:36,height:36,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',fontSize:15,fontWeight:pay?600:400,background:pay?t.accent:'transparent',color:pay?'#fff':t.text,boxShadow:tod&&!pay?`inset 0 0 0 1px ${t.muted}`:'none',opacity:date<today&&!pay?.35:1}}>{d}</div>}
+            <div key={i} style={{height:36,display:'flex',alignItems:'center',justifyContent:'center'}}>
+              {d && <div aria-label={pay ? 'Payday' : undefined} style={{width:30,height:30,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,fontWeight:pay?600:400,background:pay?t.accent:'transparent',color:pay?'#fff':t.text,boxShadow:tod&&!pay?`inset 0 0 0 1px ${t.muted}`:'none',opacity:date<today&&!pay?.35:1}}>{d}</div>}
             </div>
           );
         })}
       </div>
-      <div style={{marginTop:16}}>
-        {next.map((d,i)=>(
-          <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',minHeight:48,borderTop:i?`1px solid ${t.border}`:'none',fontSize:15}}>
+      <div style={{marginTop:8}}>
+        {next.slice(1,4).map((d,i)=>(
+          <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',minHeight:44,borderTop:`1px solid ${t.border}`,fontSize:15}}>
             <span style={{color:t.text}}>{d.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'})}</span>
-            <span style={{color:i===0?t.accent:t.muted}}>{whenText(d, today)}</span>
+            <span style={{color:t.mutedMid}}>{whenText(d, today)}</span>
           </div>
         ))}
       </div>
@@ -359,27 +367,27 @@ function EarningsForm({earnings, onAddEntry, t}) {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{display:'flex',gap:8,alignItems:'flex-end',flexWrap:'wrap'}}>
+    <form className="talli-form" onSubmit={handleSubmit} style={{display:'flex',gap:12,alignItems:'flex-end',flexWrap:'wrap','--muted':t.mutedMid}}>
       <div style={{flex:'1 1 100%'}}>
-        <label style={{fontSize:11,fontWeight:600,color:t.muted,display:'block',marginBottom:4}}>Kind</label>
+        <label style={{fontSize:13,fontWeight:500,color:t.mutedMid,display:'block',marginBottom:4}}>Kind</label>
         <select value={spent ? 'out' : 'in'} onChange={e=>setSpent(e.target.value==='out')} style={{width:'100%',padding:'8px 10px',fontSize:14,borderRadius:8,border:`1px solid ${t.border}`,background:t.bg2,color:t.text,fontFamily:'inherit'}}>
           <option value="in">Earned (counts toward the limit)</option>
           <option value="out">Spent (an expense)</option>
         </select>
       </div>
-      <div style={{flex:1}}>
-        <label style={{fontSize:11,fontWeight:600,color:t.muted,display:'block',marginBottom:4}}>Date</label>
+      <div style={{flex:'1 1 40%'}}>
+        <label style={{fontSize:13,fontWeight:500,color:t.mutedMid,display:'block',marginBottom:4}}>Date</label>
         <input type="date" value={date} onChange={e=>setDate(e.target.value)} style={{width:'100%',padding:'8px 10px',fontSize:14,borderRadius:8,border:`1px solid ${t.border}`,background:t.bg2,color:t.text,fontFamily:'inherit'}} required/>
       </div>
-      <div style={{flex:1}}>
-        <label style={{fontSize:11,fontWeight:600,color:t.muted,display:'block',marginBottom:4}}>Amount</label>
+      <div style={{flex:'1 1 40%'}}>
+        <label style={{fontSize:13,fontWeight:500,color:t.mutedMid,display:'block',marginBottom:4}}>Amount</label>
         <input type="number" step="0.01" value={amount} onChange={e=>setAmount(e.target.value)} placeholder="0.00" style={{width:'100%',padding:'8px 10px',fontSize:14,borderRadius:8,border:`1px solid ${t.border}`,background:t.bg2,color:t.text,fontFamily:'inherit'}} required/>
       </div>
-      <div style={{flex:1}}>
-        <label style={{fontSize:11,fontWeight:600,color:t.muted,display:'block',marginBottom:4}}>Note</label>
+      <div style={{flex:'1 1 100%'}}>
+        <label style={{fontSize:13,fontWeight:500,color:t.mutedMid,display:'block',marginBottom:4}}>Note</label>
         <input type="text" maxLength={40} value={note} onChange={e=>setNote(e.target.value)} placeholder={spent ? 'Bus pass' : 'Cafe shift'} style={{width:'100%',padding:'8px 10px',fontSize:14,borderRadius:8,border:`1px solid ${t.border}`,background:t.bg2,color:t.text,fontFamily:'inherit'}}/>
       </div>
-      <button type="submit" disabled={loading} style={{padding:'8px 16px',fontSize:14,fontWeight:600,borderRadius:8,border:'none',background:t.accent,color:'#000',cursor:'pointer',opacity:loading?0.6:1}}>Add</button>
+      <button type="submit" disabled={loading} style={{flex:'1 1 100%',fontWeight:600,border:'none',background:t.accent,color:'#fff',cursor:'pointer',opacity:loading?0.6:1}}>Add</button>
     </form>
   );
 }
@@ -395,6 +403,34 @@ function downloadYearReview(review) {
   a.download = `talli-${review.year}.csv`;
   a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+}
+
+// Money log writes, shared by the Status tool. Home reloads its totals on 'talli:reload'.
+async function addMoneyEntry(date, amount, note = '', spent = false) {
+  // The whole list is sent back, so never save on top of a failed read: that would wipe it.
+  const res = await fetch('/api/money-log',{credentials:'include'});
+  const log = res.ok ? await res.json() : null;
+  const key = spent ? 'expenses' : 'earnings';
+  if (!Array.isArray(log?.[key])) throw new Error('money log did not load');
+  const body = {[key]: [...(log[key] || []), {date, amount: parseFloat(amount), note}]};
+  await fetch('/api/money-log',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  window.dispatchEvent(new Event('talli:reload'));
+}
+async function addAssetAccount(name, balance, exempt) {
+  const existing = await fetch('/api/assets-profile',{credentials:'include'}).then(r=>r.json()).catch(()=>({accounts:[]}));
+  const accounts = [...(existing.accounts || []), {name, balance: parseFloat(balance), exempt}];
+  await fetch('/api/assets-profile',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({accounts})});
+  window.dispatchEvent(new Event('talli:reload'));
+}
+function MoneyLogTool({dark}) {
+  const t = tk(dark);
+  const head = {fontSize:15,fontWeight:600,color:t.text,marginBottom:12};
+  return (
+    <div style={{display:'flex',flexDirection:'column',gap:32}}>
+      <div><div style={head}>Earnings or an expense</div><EarningsForm onAddEntry={addMoneyEntry} t={t}/></div>
+      <div><div style={head}>An asset account</div><AssetsForm onAddAccount={addAssetAccount} t={t}/></div>
+    </div>
+  );
 }
 
 function AssetsForm({assets, onAddAccount, t}) {
@@ -418,13 +454,13 @@ function AssetsForm({assets, onAddAccount, t}) {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{display:'flex',flexDirection:'column',gap:12}}>
+    <form className="talli-form" onSubmit={handleSubmit} style={{display:'flex',flexDirection:'column',gap:12,'--muted':t.mutedMid}}>
       <div>
-        <label style={{fontSize:11,fontWeight:600,color:t.muted,display:'block',marginBottom:4}}>Account name</label>
+        <label style={{fontSize:13,fontWeight:500,color:t.mutedMid,display:'block',marginBottom:4}}>Account name</label>
         <input type="text" value={name} onChange={e=>setName(e.target.value)} placeholder="Chequings" style={{width:'100%',padding:'8px 10px',fontSize:14,borderRadius:8,border:`1px solid ${t.border}`,background:t.bg2,color:t.text,fontFamily:'inherit'}} required/>
       </div>
       <div>
-        <label style={{fontSize:11,fontWeight:600,color:t.muted,display:'block',marginBottom:4}}>Balance</label>
+        <label style={{fontSize:13,fontWeight:500,color:t.mutedMid,display:'block',marginBottom:4}}>Balance</label>
         <input type="number" step="0.01" value={balance} onChange={e=>setBalance(e.target.value)} placeholder="0.00" style={{width:'100%',padding:'8px 10px',fontSize:14,borderRadius:8,border:`1px solid ${t.border}`,background:t.bg2,color:t.text,fontFamily:'inherit'}} required/>
       </div>
       <label style={{fontSize:12,display:'flex',gap:8,alignItems:'center',cursor:'pointer'}}>
@@ -485,7 +521,7 @@ function MissedPayment({dark, onPaidChange}) {
   );
 }
 
-function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings, assets, onAddAssets, daysUntil, paymentDate, paid, onPaidChange, reportMonths, onSubmitReport, onMarkFiled, pwdApproved}) {
+function HomeTab({dark, amount, yearIncome, yearReview, earnings, assets, daysUntil, paymentDate, paid, onPaidChange, reportMonths, onSubmitReport, onMarkFiled, pwdApproved}) {
   const t = tk(dark);
   const [loaded, setLoaded] = useState(false);
   const [bounce, setBounce] = useState(false);
@@ -614,19 +650,19 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
       <div style={{width:'100%',maxWidth:560,margin:'0 auto'}}>
       {/* Progress bar */}
       <div style={{marginTop:32,animation:'fadeUp 0.45s 0.26s ease both'}}>
-        <div style={{height:1.5,background:t.border,borderRadius:2,position:'relative'}}>
+        <div style={{height:4,background:t.border2,borderRadius:2,position:'relative'}}>
           <div style={{position:'absolute',left:0,top:0,height:'100%',borderRadius:2,width:`${pct}%`,background:t.accent,transition:'width 1.1s cubic-bezier(0.4,0,0.2,1)'}}/>
-          <div style={{position:'absolute',right:-3,top:-3,width:7,height:7,borderRadius:'50%',background:urgent?t.warning:t.text}}/>
+          <div style={{position:'absolute',right:-2,top:-2,width:8,height:8,borderRadius:'50%',background:urgent?t.warning:t.text}}/>
         </div>
         <div style={{display:'flex',justifyContent:'space-between',marginTop:8}}>
-          <span style={{fontSize:11,color:t.muted}}>last payment</span>
-          <span style={{fontSize:11,color:urgent?t.warning:t.muted,fontWeight:urgent?600:400}}>{isToday?'today':`${daysUntil}d`}</span>
+          <span style={{fontSize:13,color:t.mutedMid}}>last payment</span>
+          <span style={{fontSize:13,color:urgent?t.warning:t.mutedMid,fontWeight:urgent?600:400}}>{isToday?'today':`${daysUntil}d`}</span>
         </div>
       </div>
 
       {/* Paid toggle */}
       <div style={{marginTop:32,textAlign:'center',animation:'fadeUp 0.45s 0.34s ease both'}}>
-        <button onClick={handlePaid} style={{display:'inline-flex',alignItems:'center',gap:8,minHeight:48,padding:'0 24px',borderRadius:100,border:`1px solid ${paid?t.success:t.border}`,background:'none',cursor:'pointer',fontSize:13,fontWeight:500,color:paid?t.success:t.muted,fontFamily:'inherit',transform:bounce?'scale(1.15)':'scale(1)',transition:'transform 0.3s cubic-bezier(0.34,1.56,0.64,1),border-color 0.2s,color 0.2s',WebkitTapHighlightColor:'transparent'}}>
+        <button onClick={handlePaid} style={{display:'inline-flex',alignItems:'center',gap:8,minHeight:48,padding:'0 24px',borderRadius:100,border:`1px solid ${paid?t.success:t.border2}`,background:t.bg2,cursor:'pointer',fontSize:15,fontWeight:500,color:paid?t.success:t.text,fontFamily:'inherit',transform:bounce?'scale(1.15)':'scale(1)',transition:'transform 0.3s cubic-bezier(0.34,1.56,0.64,1),border-color 0.2s,color 0.2s',WebkitTapHighlightColor:'transparent'}}>
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
             {paid?<><circle cx="7" cy="7" r="6.5" stroke="currentColor"/><path d="M4 7l2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></>:<circle cx="7" cy="7" r="6.5" stroke="currentColor" strokeDasharray="2 2"/>}
           </svg>
@@ -637,7 +673,7 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
       <PaydayCalendar dark={dark}/>
       </div>
       </div>
-      <details className="home-details" style={{marginTop:0}}>
+      <details className="home-details" style={{'--card':t.bg2,'--text':t.text,'--muted':t.mutedMid}}>
         <summary style={{minHeight:44,display:'flex',alignItems:'center',cursor:'pointer',fontSize:13,color:t.muted,listStyle:'none',WebkitTapHighlightColor:'transparent'}}>Details</summary>
       {/* Monthly amount -- always visible */}
       <div style={{marginTop:24,animation:'fadeUp 0.45s 0.5s ease both'}}>
@@ -671,20 +707,6 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
             ${yearReview.totals.benefits.toLocaleString('en-CA')} benefits, ${yearReview.totals.credits.toLocaleString('en-CA')} credits, ${yearReview.totals.earnings.toLocaleString('en-CA')} work earnings{yearReview.totals.expenses > 0 && `, $${yearReview.totals.expenses.toLocaleString('en-CA')} spent`}
           </div>
           <button onClick={()=>downloadYearReview(yearReview)} style={{marginTop:10,padding:'6px 14px',borderRadius:100,border:`1px solid ${t.border}`,background:'none',cursor:'pointer',fontSize:13,fontWeight:500,color:t.text,fontFamily:'inherit'}}>Download for tax time (CSV)</button>
-        </div>
-      )}
-
-      {earnings?.exemption > 0 && (
-        <div style={{marginTop:24,animation:'fadeUp 0.45s 0.5s ease both'}}>
-          <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:12}}>Add money in or out</div>
-          <EarningsForm earnings={earnings} onAddEntry={onAddEarnings} t={t}/>
-        </div>
-      )}
-
-      {assets?.limit > 0 && (
-        <div style={{marginTop:24,animation:'fadeUp 0.45s 0.5s ease both'}}>
-          <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:12}}>Add asset account</div>
-          <AssetsForm assets={assets} onAddAccount={onAddAssets} t={t}/>
         </div>
       )}
 
@@ -1912,7 +1934,10 @@ function BenniesSection({dark, yearIncome}) {
         </button>
       </div>
       </Fold>
-      <Fold dark={dark} title="Money tools" summary="Finder, RDSP, what if, household, budget">
+      <Fold dark={dark} title="Money tools" summary="Log money, budget, finder, RDSP, what if, household">
+        <FoldTool dark={dark} title="Log money in or out" url="/api/money-log" summarize={d=>{const n=(d.earnings||[]).length+(d.expenses||[]).length;return n?n+(n===1?' entry':' entries')+' logged':'Work earnings, expenses and accounts';}}>
+          <MoneyLogTool dark={dark}/>
+        </FoldTool>
         <FoldTool dark={dark} title="Budget against paydays" url="/api/budget" summarize={d=>d.short.length?'A bill lands before the money does':d.bills.length?d.bills.length+(d.bills.length===1?' bill':' bills')+', '+'$'+Math.round(d.monthlyBills).toLocaleString()+' a month':'Line your bills up with your cheques'}>
           <BudgetTool dark={dark}/>
         </FoldTool>
@@ -2344,7 +2369,7 @@ function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, av
 const TAB_ORDER = ['home','status','messages','settings'];
 const urlParam = (k) => new URLSearchParams(window.location.search).get(k);
 
-function Screen({dark, amount, yearIncome, yearReview, earnings, onAddEarnings, assets, onAddAssets, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, onRefresh, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, cgeb, username, onLogout, avatarUrl, onAvatarClick, onAvatarBroken, avatarError, setAvatarError, skn, reportMonths, onMarkFiled, onPwdResubmitted, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
+function Screen({dark, amount, yearIncome, yearReview, earnings, assets, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, onRefresh, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, cgeb, username, onLogout, avatarUrl, onAvatarClick, onAvatarBroken, avatarError, setAvatarError, skn, reportMonths, onMarkFiled, onPwdResubmitted, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
   const t = tk(dark);
   const [tab, setTab] = useState(() => TAB_ORDER.includes(urlParam('tab')) ? urlParam('tab') : 'home');
   const [showSubmit, setShowSubmit] = useState(false);
@@ -2384,7 +2409,7 @@ function Screen({dark, amount, yearIncome, yearReview, earnings, onAddEarnings, 
     <div style={{position:'relative',display:'flex',flexDirection:'column',height:'100%',width:'100%',background:t.bg,color:t.text}} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       <div style={{height:'max(env(safe-area-inset-top,0px),16px)',flexShrink:0}}/>
 
-      {tab==='home'     &&<HomeTab     dark={dark} amount={amount} yearIncome={yearIncome} yearReview={yearReview} earnings={earnings} onAddEarnings={onAddEarnings} assets={assets} onAddAssets={onAddAssets} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange} reportMonths={reportMonths} onSubmitReport={()=>setShowSubmit(true)} onMarkFiled={onMarkFiled} pwdApproved={pwdApproved}/>}
+      {tab==='home'     &&<HomeTab     dark={dark} amount={amount} yearIncome={yearIncome} yearReview={yearReview} earnings={earnings} assets={assets} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange} reportMonths={reportMonths} onSubmitReport={()=>setShowSubmit(true)} onMarkFiled={onMarkFiled} pwdApproved={pwdApproved}/>}
       {tab==='status'   &&<StatusTab   dark={dark} yearIncome={yearIncome} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} cgeb={cgeb} skn={skn} onSubmitReport={()=>setShowSubmit(true)} onPwdResubmit={()=>setShowPwdResubmit(true)} reportMonths={reportMonths} username={username} pinSet={pinSet} onSetPin={()=>setShowPinSheet(true)}/>}
       {tab==='messages' &&<MessagesTab dark={dark} messages={messages} readIds={readIds} onRead={onRead} onRefresh={onRefresh}/>}
       {tab==='settings' &&<SettingsTab dark={dark} username={username} avatarUrl={avatarUrl} onAvatarBroken={onAvatarBroken} onAvatarRefresh={doRefresh} refreshing={refreshing} avatarError={avatarError} setAvatarError={setAvatarError} onLogout={onLogout}/>}
@@ -2609,31 +2634,16 @@ function App() {
     } catch(e){}
   };
 
-  const handleAddEarningsEntry = async (date, amount, note = '', spent = false) => {
-    try {
-      // The whole list is sent back, so never save on top of a failed read: that would wipe it.
-      const res = await fetch('/api/money-log',{credentials:'include'});
-      const log = res.ok ? await res.json() : null;
-      const key = spent ? 'expenses' : 'earnings';
-      if (!Array.isArray(log?.[key])) throw new Error('money log did not load');
-      const body = {[key]: [...(log[key] || []), {date, amount: parseFloat(amount), note}]};
-      await fetch('/api/money-log',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-      loadData();
-    } catch(e){console.error('Failed to add earnings entry',e);}
-  };
-
-  const handleAddAccountsAsset = async (name, balance, exempt) => {
-    try {
-      const existing = await fetch('/api/assets-profile',{credentials:'include'}).then(r=>r.json()).catch(()=>({accounts:[]}));
-      const accounts = [...(existing.accounts || []), {name, balance: parseFloat(balance), exempt}];
-      await fetch('/api/assets-profile',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({accounts})});
-      loadData();
-    } catch(e){console.error('Failed to add asset account',e);}
-  };
+  // Tools that write money data (Status, Money tools) ask Home to reload its totals.
+  useEffect(() => {
+    const reload = () => loadData();
+    window.addEventListener('talli:reload', reload);
+    return () => window.removeEventListener('talli:reload', reload);
+  }, [loadData]);
 
   return (
     <>
-    <Screen dark={dark} amount={amount} yearIncome={yearIncome} yearReview={yearReview} earnings={earnings} onAddEarnings={handleAddEarningsEntry} assets={assets} onAddAssets={handleAddAccountsAsset} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} readIds={readIds} onRead={mergeReadIds} onRefresh={loadData} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} cgeb={cgeb} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} onAvatarBroken={handleAvatarBroken} setAvatarError={setAvatarError} skn={skn} reportMonths={reportMonths} onMarkFiled={handleMarkFiled} onPwdResubmitted={handlePwdResubmitted} pinSet={pinSet} setPinSet={setPinSet} showPinSheet={showPinSheet} setShowPinSheet={setShowPinSheet}/>
+    <Screen dark={dark} amount={amount} yearIncome={yearIncome} yearReview={yearReview} earnings={earnings} assets={assets} daysUntil={daysUntil} paymentDate={paymentDate} payDateObj={payDateObj} paid={paid} onPaidChange={handlePaidChange} messages={messages} readIds={readIds} onRead={mergeReadIds} onRefresh={loadData} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} cgeb={cgeb} username={username} onLogout={handleLogout} avatarUrl={avatarUrl} onAvatarClick={handleAvatarClick} onAvatarBroken={handleAvatarBroken} setAvatarError={setAvatarError} skn={skn} reportMonths={reportMonths} onMarkFiled={handleMarkFiled} onPwdResubmitted={handlePwdResubmitted} pinSet={pinSet} setPinSet={setPinSet} showPinSheet={showPinSheet} setShowPinSheet={setShowPinSheet}/>
     </>
   );
 }
