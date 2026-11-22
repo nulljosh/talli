@@ -220,7 +220,7 @@ a:focus-visible, button:focus-visible { outline: 4px solid var(--ring); outline-
   .hero { padding-top: var(--sp-8); }
   /* on a phone the panel sits below the copy, never under it */
   .hero-copy { padding-top: var(--sp-6); }
-  .hero-demo .app:first-child { transform: translateY(62%); }
+  .hero-demo { opacity: 1; padding: 0 20px; } .hero-demo .app:first-child { transform: translateY(34%); }   /* the Home card shows its number, not just its tabs */
   .hero-h1, h2 { font-size: 40px; line-height: 44px; letter-spacing: 0; }
   .band-copy h2 { font-size: 48px; line-height: 52px; letter-spacing: -.003em; }
   .band-copy { margin-top: 0; padding-bottom: var(--sp-7); }
