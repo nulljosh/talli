@@ -43,7 +43,9 @@
 /* Halftone paintings (art/*.png): the dot mask fills the box, no scanlines */
 /* App screenshots in the art boxes: a phone peeking up from the bottom */
 .shot::before { display: none; }
-.shot img { position: absolute; left: 50%; top: 12%; width: 50%; height: auto; translate: -50% 0; border-radius: 30px; box-shadow: 0 24px 64px rgb(0 0 0 / .35); }
+.shot img { position: absolute; left: 50%; top: 12%; width: 50%; height: auto; translate: -50% 0; border-radius: 34px; border: 7px solid #0b0b0d;
+  box-shadow: 0 0 0 1.5px rgb(255 255 255 / .18), 0 28px 70px rgb(0 0 0 / .45); }   /* a dark bezel so the light screens read as phones */
+.frow:nth-child(2) .shot img { top: 30%; }   /* Messages: the list is short, show its top and let the tile cut the empty rest */
 .pic::before { -webkit-mask: var(--img) center / cover no-repeat; mask: var(--img) center / cover no-repeat; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
