@@ -113,7 +113,7 @@ a:focus-visible, button:focus-visible { outline: 4px solid var(--ring); outline-
 .app-pane .msg.in { opacity: 1; transform: none; }
 .app-pane .msg b { font-size: 14px; font-weight: 600; color: var(--l-text); } .app-pane .msg span { font-size: 12px; color: var(--l-sub); }
 @media (prefers-color-scheme: dark) { .hero { --money: #4ade80; } }
-@media (max-width: 1180px) { .hero-demo { grid-template-columns: minmax(0, 340px); justify-content: center; opacity: .6; } .hero-demo .app:not(:first-child) { display: none; } .hero-demo .app:first-child { transform: translateY(22%); } .hero-copy { align-self: start; padding-top: 12vh; } }
+@media (max-width: 1399px) { .hero-demo { grid-template-columns: minmax(0, 340px); justify-content: center; opacity: .6; } .hero-demo .app:not(:first-child) { display: none; } .hero-demo .app:first-child { transform: translateY(22%); } .hero-copy { align-self: start; padding-top: 3vh; } }
 .hero-copy .eyebrow { margin-bottom: var(--sp-4); }
 /* intro copy: 21 px, the most a paragraph gets */
 .lead, .body { text-wrap: pretty; max-width: 692px; font-size: 21px; line-height: 28px; letter-spacing: .011em; color: var(--l-sub); }
