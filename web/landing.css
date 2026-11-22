@@ -41,10 +41,9 @@
   mask: var(--img) center / var(--fit, 46%) no-repeat, var(--scan); mask-composite: intersect;
 }
 /* Halftone paintings (art/*.png): the dot mask fills the box, no scanlines */
-/* App screenshots in the art boxes: a phone peeking up from the bottom, the Mac app across the band */
+/* App screenshots in the art boxes: a phone peeking up from the bottom */
 .shot::before { display: none; }
 .shot img { position: absolute; left: 50%; top: 12%; width: 50%; height: auto; translate: -50% 0; border-radius: 30px; box-shadow: 0 24px 64px rgb(0 0 0 / .35); }
-.band-art.shot img { top: 10%; width: min(84%, 1100px); border-radius: 14px; }
 .pic::before { -webkit-mask: var(--img) center / cover no-repeat; mask: var(--img) center / cover no-repeat; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
