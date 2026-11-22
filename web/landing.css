@@ -215,6 +215,7 @@ a:focus-visible, button:focus-visible { outline: 4px solid var(--ring); outline-
 @media (max-width: 734px) {
   .nav-links, .nav-get { display: none; }
   .term { padding: var(--sp-4); }
+  .prod-art { aspect-ratio: 5 / 2; --fit: 30%; border-radius: var(--r-inner); }   /* glyph tiles: a banner on a phone, not a square block */
   .term pre { font-size: 11.5px; line-height: 18px; white-space: pre-wrap; overflow-wrap: anywhere; }  /* no sideways scroll on a phone */
   .hero { padding-top: var(--sp-8); }
   /* on a phone the panel sits below the copy, never under it */
