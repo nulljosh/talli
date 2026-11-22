@@ -89,7 +89,7 @@ a:focus-visible, button:focus-visible { outline: 4px solid var(--ring); outline-
 /* The app behind the hero (Joshua 2026-11-01): three live panels, faded into the page, parallax in landing.js. */
 .hero { position: relative; isolation: isolate; overflow: hidden; min-height: calc(100svh - 56px); display: grid; align-items: center; --money: #2d9e5f; }
 .hero-copy { position: relative; z-index: 2; will-change: transform, opacity; }
-.hero::before { content: ""; position: absolute; z-index: 1; inset: 0; pointer-events: none; background: radial-gradient(ellipse 34% 44% at 50% 50%, var(--hero-bg) 60%, transparent 100%); }
+.hero::before { content: ""; position: absolute; z-index: 1; inset: 0; pointer-events: none; background: radial-gradient(ellipse 40% 48% at 50% 50%, var(--hero-bg) 25%, transparent 100%); }
 /* the hero warms into the blue band below instead of ending on a hard black edge */
 .hero { --hero-bg: color-mix(in srgb, var(--band) 16%, var(--l-bg)); background: linear-gradient(var(--hero-bg), color-mix(in srgb, var(--band) 40%, var(--l-bg)) 75%, var(--band)); }
 .hero::after { content: ""; position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; height: 45%; pointer-events: none; background: linear-gradient(transparent, color-mix(in srgb, var(--band) 40%, transparent) 55%, var(--band)); }
