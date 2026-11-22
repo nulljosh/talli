@@ -1710,7 +1710,12 @@ app.get('/api/blob/*splat', requireAuth, async (req, res) => {
     // Express 5 gives a named wildcard as an array of path segments.
     const splat = req.params.splat;
     const key = (Array.isArray(splat) ? splat.join('/') : String(splat || ''));
-    const found = key && (await blob.getWithMeta(key));
+    // Only the caller's own files: without this any signed-in user could read any key
+    // (another user's legacy talli-cache/<userId>/ results, the old shared chequecheck cache).
+    const uid = req.session?.userId;
+    const own = uid && !key.includes('..') && [`${blobPrefix(uid)}/`, `talli-cache/${uid}/`].some((p) => key.startsWith(p));
+    if (!own) return res.status(404).json({ error: 'Not found' });
+    const found = await blob.getWithMeta(key);
     if (!found) return res.status(404).json({ error: 'Not found' });
     res.setHeader('Content-Type', found.contentType);
     res.setHeader('Cache-Control', 'private, max-age=300');
