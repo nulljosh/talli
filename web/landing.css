@@ -243,3 +243,10 @@ a:focus-visible, button:focus-visible { outline: 4px solid var(--ring); outline-
   .js .reveal { opacity: 1; transform: none; transition: none; }
   .btn, .nav-links a, .nav-get { transition: none; }
 }
+
+/* Real screens over the platform row: phone, Mac, phone */
+.shots { display: flex; justify-content: center; align-items: flex-end; gap: var(--sp-5); margin: var(--sp-8) auto var(--sp-7); }
+.shot img { display: block; width: 100%; height: auto; border: 1px solid var(--l-line); box-shadow: 0 24px 60px rgba(0,0,0,.1); }
+.shot.phone { width: 200px; } .shot.phone img { border-radius: 28px; }
+.shot.mac { width: 520px; } .shot.mac img { border-radius: 12px; }
+@media (max-width: 760px) { .shots { gap: var(--sp-3); } .shot.mac { display: none; } .shot.phone { width: 44%; } }
