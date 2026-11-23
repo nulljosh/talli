@@ -59,3 +59,16 @@ Skipped: receipts, categories, bank import. Entries are read-modify-write, so tw
 - [ ] Status tab is too complicated/noisy; shouldn't require scrolling (notes/attachments/2026-11-18/22310-3.png).
 - [ ] Messages: what's with them, can we interact with them? What's with the thumbnails (initials avatars)? (notes/attachments/2026-11-18/22310-2.png)
 - [ ] Settings: replace the Greek god avatar with a theme matching the project. Appearance goes at the bottom. Account name is redundant, show it once.
+
+## Ingested 2026-11-23
+
+- [ ] **Talli**: macOS app still behind
+  - It still has the enormous text
+  - And the weird font.
+- [ ] **Talli**: Needs GitHub release refresh
+  - And git version and tag bump
+- [ ] **Talli**: Landing page needs redesign
+  - No vignette it’s covering text
+  - And no Greek god screenshots
+  - There should be app screenshots in the landing page.
+  - Screenshots (not yet read): `notes/attachments/2026-11-23/22876-1.png`, `notes/attachments/2026-11-23/22876-2.png`
