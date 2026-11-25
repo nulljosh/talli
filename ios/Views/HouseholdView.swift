@@ -156,7 +156,7 @@ struct HouseholdView: View {
             }
             card {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("WORK EARNINGS").font(.system(size: 10, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
+                    Text("WORK EARNINGS").font(.system(.caption2, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
                     if let ex = d.earningsExemption {
                         Text("You can earn \(ex.formatted(money)) this year before your payment drops." + (d.shared ? " The limit is shared by the two of you, so log both of your earnings." : ""))
                             .font(.footnote)
@@ -168,7 +168,7 @@ struct HouseholdView: View {
             if !d.history.isEmpty {
                 card {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("RENT CHANGES").font(.system(size: 10, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
+                        Text("RENT CHANGES").font(.system(.caption2, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
                         ForEach(d.history.reversed().prefix(5)) { h in line(h.date, h.rent.formatted(money)) }
                         Text("When your rent changes, update it here and tell the ministry.").font(.caption).foregroundStyle(.secondary)
                     }

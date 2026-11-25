@@ -39,10 +39,10 @@ struct ServiceRequestsView: View {
                     .buttonStyle(.plain)
                     if open == r.id {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("HAVE READY").font(.system(size: 10, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
+                            Text("HAVE READY").font(.system(.caption2, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
                             ForEach(Array(r.ready.enumerated()), id: \.offset) { _, line in Text("• \(line)").font(.footnote).foregroundStyle(.secondary) }
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("WHAT TO SAY").font(.system(size: 10, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
+                                Text("WHAT TO SAY").font(.system(.caption2, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
                                 Text(r.say).font(.footnote).textSelection(.enabled)
                                 ShareLink(item: r.say) { Label("Copy or send", systemImage: "square.and.arrow.up") }.font(.caption)
                             }

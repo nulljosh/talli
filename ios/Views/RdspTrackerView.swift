@@ -143,7 +143,7 @@ struct RdspTrackerView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     if d.eligible {
                         Text("Still on the table this year").font(.footnote).foregroundStyle(.secondary)
-                        Text(d.missing.formatted(cad)).font(.system(size: 30, weight: .bold)).contentTransition(.numericText())
+                        Text(d.missing.formatted(cad)).font(.system(.largeTitle, weight: .bold)).contentTransition(.numericText())
                         Text("\(d.grantLeft.formatted(cad)) grant + \(d.bondLeft.formatted(cad)) bond." + (d.putToMax > 0 ? " Put in \(d.putToMax.formatted(cad)) to get the whole grant." : ""))
                             .font(.footnote).foregroundStyle(.secondary)
                         if d.carry.years > 0, d.carry.grant > 0 || d.carry.bond > 0 {
@@ -169,7 +169,7 @@ struct RdspTrackerView: View {
             }
             card {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("WHAT YOUR STATEMENTS SHOW").font(.system(size: 10, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
+                    Text("WHAT YOUR STATEMENTS SHOW").font(.system(.caption2, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
                     if d.entries.isEmpty {
                         Text("Add each year from your RDSP statement: what you put in, the grant and the bond.")
                             .font(.footnote).foregroundStyle(.secondary)

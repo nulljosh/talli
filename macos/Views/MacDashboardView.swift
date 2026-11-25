@@ -71,7 +71,7 @@ struct MacDashboardView: View {
     private var paymentCard: some View {
         VStack(spacing: 8) {
             Text("NEXT PAYMENT")
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(.body, weight: .semibold))
                 .foregroundStyle(.secondary)
                 .ltrTracking(0.5)
                 .padding(.bottom, 8)
@@ -83,12 +83,12 @@ struct MacDashboardView: View {
             )
 
             Text(appState.countdownText)
-                .font(.system(size: 22, weight: .semibold))
+                .font(.system(.title, weight: .semibold))
                 .foregroundStyle(Color.bcLight)
                 .padding(.top, 16)
 
             Text(appState.nextPaymentDateText)
-                .font(.system(size: 15))
+                .font(.title3)
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
@@ -113,7 +113,7 @@ struct MacDashboardView: View {
                 Image(systemName: "envelope.fill")
                     .foregroundStyle(Color.bcPrimary)
                 Text("Recent messages")
-                    .font(.system(size: 17, weight: .semibold))
+                    .font(.system(.title2, weight: .semibold))
                 Spacer()
                 Text("\(appState.statusMessages.count) total")
                     .font(.caption)

@@ -46,14 +46,14 @@ struct MacPaymentCalendarView: View {
             LazyVGrid(columns: columns, spacing: 4) {
                 ForEach(Array(weekdaySymbols.enumerated()), id: \.offset) { _, symbol in
                     Text(symbol)
-                        .font(.system(size: 10, weight: .medium))
+                        .font(.system(.caption, weight: .medium))
                         .foregroundStyle(.secondary)
                 }
 
                 ForEach(Array(daysInMonth.enumerated()), id: \.offset) { _, cell in
                     if let day = cell.day {
                         Text("\(day)")
-                            .font(.system(size: 11))
+                            .font(.subheadline)
                             .fontWeight(cell.isPaymentDay ? .bold : .regular)
                             .frame(width: 24, height: 24)
                             .background {

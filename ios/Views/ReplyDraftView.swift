@@ -37,7 +37,7 @@ struct ReplyDraftView: View {
 
             if open, let d = draft {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(d.label.uppercased()).font(.system(size: 10, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
+                    Text(d.label.uppercased()).font(.system(.caption2, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
                     Text(d.asks).font(.footnote)
                     Text(d.reply).font(.footnote).textSelection(.enabled)
                         .padding(10)

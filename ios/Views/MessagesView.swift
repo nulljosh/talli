@@ -81,7 +81,7 @@ private struct MessageRow: View {
                         .fill(isRead ? Color(.tertiarySystemFill) : Color.talliBlue)
                         .frame(width: 38, height: 38)
                     Text(initials)
-                        .font(.system(size: 13, weight: .bold))
+                        .font(.system(.footnote, weight: .bold))
                         .foregroundStyle(isRead ? Color.secondary : Color.white)
                     if !isRead {
                         Circle()
@@ -96,13 +96,13 @@ private struct MessageRow: View {
                         HStack(spacing: 4) {
                             if message.actionRequired {
                                 Text("!")
-                                    .font(.system(size: 13, weight: .bold))
+                                    .font(.system(.footnote, weight: .bold))
                                     .foregroundStyle(.white)
                                     .frame(width: 16, height: 16)
                                     .background(Circle().fill(Color.red))
                             }
                             Text(message.text)
-                                .font(.system(size: 14, weight: isRead ? .regular : .semibold))
+                                .font(.system(.subheadline, weight: isRead ? .regular : .semibold))
                                 .foregroundStyle(Color.primary)
                                 .lineLimit(isExpanded ? nil : 2)
                         }

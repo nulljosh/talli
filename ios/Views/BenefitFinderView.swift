@@ -158,7 +158,7 @@ struct BenefitFinderView: View {
                 if d.missingYearly > 0 {
                     Text("You could be missing up to").font(.footnote).foregroundStyle(.secondary)
                     Text("\(d.missingYearly.formatted(.currency(code: "CAD").precision(.fractionLength(0)))) a year")
-                        .font(.system(size: 30, weight: .bold)).contentTransition(.numericText())
+                        .font(.system(.largeTitle, weight: .bold)).contentTransition(.numericText())
                 } else {
                     Text("You are getting the big ones.").font(.headline)
                 }
@@ -175,7 +175,7 @@ struct BenefitFinderView: View {
                 if !rows.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(title.uppercased())
-                            .font(.system(size: 11, weight: .semibold))
+                            .font(.system(.caption2, weight: .semibold))
                             .ltrTracking(1.5)
                             .foregroundStyle(group == "crisis" ? Color.accentColor : .secondary)
                         ForEach(rows) { r in row(r) }
@@ -226,7 +226,7 @@ struct BenefitFinderView: View {
                     }
                     if let say = r.say {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("WHAT TO SAY").font(.system(size: 10, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
+                            Text("WHAT TO SAY").font(.system(.caption2, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
                             Text(say).font(.footnote).textSelection(.enabled)
                         }
                         .padding(10)

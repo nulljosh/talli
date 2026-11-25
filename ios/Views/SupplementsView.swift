@@ -94,7 +94,7 @@ struct SupplementsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text("SUPPLEMENTS").font(.system(size: 11, weight: .semibold)).foregroundStyle(.secondary).ltrTracking(1.5)
+                Text("SUPPLEMENTS").font(.system(.caption2, weight: .semibold)).foregroundStyle(.secondary).ltrTracking(1.5)
                 Spacer()
                 Button(managing ? "Done" : "Manage") { withAnimation(.easeOut(duration: 0.2)) { managing.toggle() } }.font(.footnote)
             }

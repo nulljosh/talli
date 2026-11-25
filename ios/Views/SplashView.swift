@@ -2,6 +2,8 @@ import SwiftUI
 
 @MainActor
 struct SplashView: View {
+    @ScaledMetric(relativeTo: .largeTitle) private var titleSize: CGFloat = 44
+
     var body: some View {
         VStack(spacing: 20) {
             // Sized against the container rather than a fixed 88pt so the mark
@@ -12,11 +14,11 @@ struct SplashView: View {
                 .containerRelativeFrame(.horizontal) { width, _ in width * 0.42 }
 
             Text("Talli")
-                .font(.system(size: 44, weight: .bold))
+                .font(.system(size: titleSize, weight: .bold))
                 .foregroundStyle(.primary)
 
             Text("Your benefits. No bureaucracy.")
-                .font(.system(size: 17))
+                .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
                 .containerRelativeFrame(.horizontal) { width, _ in width * 0.8 }

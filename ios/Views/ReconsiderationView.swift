@@ -91,7 +91,7 @@ struct ReconsiderationView: View {
                         Text("Call Disability Alliance BC on \(d.phone). They can tell you if a late request or a new application is your best move.")
                             .font(.footnote).foregroundStyle(.secondary)
                     } else {
-                        Text(d.status == "today" ? "Today" : "\(d.left)").font(.system(size: 34, weight: .bold)).foregroundStyle(tone)
+                        Text(d.status == "today" ? "Today" : "\(d.left)").font(.system(.largeTitle, weight: .bold)).foregroundStyle(tone)
                         Text(d.status == "today" ? "is the last day to hand it in" : "business days left to ask for reconsideration").font(.subheadline)
                         Text("Deadline \(deadline)").font(.footnote).foregroundStyle(.secondary)
                     }
@@ -99,7 +99,7 @@ struct ReconsiderationView: View {
             }
             card {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("WHAT TO DO").font(.system(size: 10, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
+                    Text("WHAT TO DO").font(.system(.caption2, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
                     ForEach(Array(d.steps.enumerated()), id: \.offset) { i, s in
                         Text("\(i + 1). \(s)").font(.footnote).foregroundStyle(.secondary)
                     }
@@ -108,7 +108,7 @@ struct ReconsiderationView: View {
             }
             card {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("DRAFT LETTER").font(.system(size: 10, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
+                    Text("DRAFT LETTER").font(.system(.caption2, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
                     Text(d.draft).font(.footnote).textSelection(.enabled)
                     ShareLink(item: d.draft) { Label("Copy or send the letter", systemImage: "square.and.arrow.up") }.font(.footnote)
                 }

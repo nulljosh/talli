@@ -124,7 +124,7 @@ struct WhatIfView: View {
             card {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Over 12 months you earn \(earned.formatted(money)) and keep").font(.footnote).foregroundStyle(.secondary)
-                    Text(keep.formatted(money)).font(.system(size: 32, weight: .bold)).contentTransition(.numericText())
+                    Text(keep.formatted(money)).font(.system(.largeTitle, weight: .bold)).contentTransition(.numericText())
                     if r.monthlyRule == true, let row = rows.first {
                         Text(row.reduction > 0 ? "Each month your assistance is cut by \(row.reduction.formatted(money)), leaving \(row.assistance.formatted(money))." : "You stay under the first limit, so your assistance does not change.")
                             .font(.footnote)

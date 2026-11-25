@@ -158,10 +158,10 @@ struct LifeChangeView: View {
     private func guide(steps: [String], say: String, phone: String, links: [LifeChange.Link]) -> some View {
         card {
             VStack(alignment: .leading, spacing: 8) {
-                Text("WHAT TO DO").font(.system(size: 10, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
+                Text("WHAT TO DO").font(.system(.caption2, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
                 ForEach(Array(steps.enumerated()), id: \.offset) { i, s in Text("\(i + 1). \(s)").font(.footnote).foregroundStyle(.secondary) }
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("WHAT TO SAY").font(.system(size: 10, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
+                    Text("WHAT TO SAY").font(.system(.caption2, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
                     Text(say).font(.footnote).textSelection(.enabled)
                     ShareLink(item: say) { Label("Copy or send", systemImage: "square.and.arrow.up") }.font(.caption)
                 }

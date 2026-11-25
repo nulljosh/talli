@@ -12,7 +12,7 @@ struct MacBenefitsView: View {
         if let income = appState.dashboard?.income {
             VStack(alignment: .leading, spacing: 12) {
                 Text("YOUR MONTHLY INCOME")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(.body, weight: .semibold))
                     .ltrTracking(0.5)
                     .foregroundStyle(.secondary)
 
@@ -24,7 +24,7 @@ struct MacBenefitsView: View {
                 if let year = income.yearTotal, let left = income.yearRemaining, let n = income.paymentsLeft, year > 0 {
                     let cad = FloatingPointFormatStyle<Double>.Currency(code: "CAD").precision(.fractionLength(0))
                     Text("\(year.formatted(cad)) this year at today's rate: \((year - left).formatted(cad)) in, \(left.formatted(cad)) to come")
-                        .font(.system(size: 13))
+                        .font(.body)
                         .foregroundStyle(.secondary)
                 }
 
@@ -32,7 +32,7 @@ struct MacBenefitsView: View {
                     let cad = FloatingPointFormatStyle<Double>.Currency(code: "CAD").precision(.fractionLength(0))
                     let isOver = (earnings.over ?? 0) > 0
                     Text("Work earnings \(y): \(earned.formatted(cad)) of \(exemption.formatted(cad)), \(left.formatted(cad)) left")
-                        .font(.system(size: 13))
+                        .font(.body)
                         .foregroundStyle(isOver ? .red : .secondary)
                 }
 
@@ -41,11 +41,11 @@ struct MacBenefitsView: View {
                     let isOver = assets.over ?? false
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Assets: \(counted.formatted(cad)) of \(limit.formatted(cad)), \(left.formatted(cad)) left")
-                            .font(.system(size: 13))
+                            .font(.body)
                             .foregroundStyle(isOver ? .red : .secondary)
                         if let exempt = assets.exempt, exempt > 0 {
                             Text("RDSP \(exempt.formatted(cad)) not counted")
-                                .font(.system(size: 13))
+                                .font(.body)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -55,14 +55,14 @@ struct MacBenefitsView: View {
                     let cad = FloatingPointFormatStyle<Double>.Currency(code: "CAD").precision(.fractionLength(0))
                     VStack(alignment: .leading, spacing: 4) {
                         Text("\(String(review.year))\(review.complete ? "" : " so far"): \(review.totals.all.formatted(cad))")
-                            .font(.system(size: 13))
+                            .font(.body)
                         Text("\(review.totals.benefits.formatted(cad)) benefits, \(review.totals.credits.formatted(cad)) credits, \(review.totals.earnings.formatted(cad)) work earnings")
-                            .font(.system(size: 13))
+                            .font(.body)
                             .foregroundStyle(.secondary)
                         ShareLink(item: review.csvFile()) {
                             Label("Export for tax time", systemImage: "square.and.arrow.up")
                         }
-                        .font(.system(size: 13))
+                        .font(.body)
                     }
                 }
             }
@@ -73,10 +73,10 @@ struct MacBenefitsView: View {
     private func incomeCell(_ label: String, _ amount: Double) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(label)
-                .font(.system(size: 13))
+                .font(.body)
                 .foregroundStyle(.secondary)
             Text(amount.formatted(.currency(code: "CAD").precision(.fractionLength(0))))
-                .font(.system(size: 22, weight: .semibold))
+                .font(.system(.title, weight: .semibold))
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -101,8 +101,8 @@ struct MacBenefitsView: View {
                         ForEach(Array(applyRows.enumerated()), id: \.offset) { i, row in
                             if i > 0 { Divider().padding(.leading, 16) }
                             VStack(alignment: .leading, spacing: 4) {
-                                Text(row.0).font(.system(size: 15, weight: .semibold))
-                                Text(row.1).font(.system(size: 13)).foregroundStyle(.secondary)
+                                Text(row.0).font(.system(.title3, weight: .semibold))
+                                Text(row.1).font(.body).foregroundStyle(.secondary)
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.vertical, 12)
@@ -126,17 +126,17 @@ struct MacBenefitsView: View {
     private var statusCard: some View {
         HStack(spacing: 16) {
             Image(systemName: "checkmark")
-                .font(.system(size: 17, weight: .bold))
+                .font(.system(.title2, weight: .bold))
                 .foregroundStyle(.white)
                 .frame(width: 40, height: 40)
                 .background(Color.bcPrimary, in: Circle())
             VStack(alignment: .leading, spacing: 4) {
-                Text("Active, receiving benefits").font(.system(size: 17, weight: .semibold))
-                Text("PWD approved · CDB approved").font(.system(size: 15)).foregroundStyle(.secondary)
+                Text("Active, receiving benefits").font(.system(.title2, weight: .semibold))
+                Text("PWD approved · CDB approved").font(.title3).foregroundStyle(.secondary)
             }
             Spacer(minLength: 8)
             Text("Approved")
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(.body, weight: .semibold))
                 .foregroundStyle(Color.bcPrimary)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 4)
@@ -148,8 +148,8 @@ struct MacBenefitsView: View {
     private func section(_ title: LocalizedStringKey, note: LocalizedStringKey? = nil, @ViewBuilder content: () -> some View) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             VStack(alignment: .leading, spacing: 4) {
-                Text(title).font(.system(size: 22, weight: .semibold))
-                if let note { Text(note).font(.system(size: 15)).foregroundStyle(.secondary) }
+                Text(title).font(.system(.title, weight: .semibold))
+                if let note { Text(note).font(.title3).foregroundStyle(.secondary) }
             }
             .padding(.bottom, 4)
             content()
@@ -192,13 +192,13 @@ struct MacBenefitsView: View {
                 } label: {
                     HStack(spacing: 12) {
                         Image(systemName: tool.symbol)
-                            .font(.system(size: 15))
+                            .font(.title3)
                             .foregroundStyle(Color.bcPrimary)
                             .frame(width: 20)
-                        Text(tool.title).font(.system(size: 15))
+                        Text(tool.title).font(.title3)
                         Spacer(minLength: 8)
                         Image(systemName: "chevron.right")
-                            .font(.system(size: 13, weight: .semibold))
+                            .font(.system(.body, weight: .semibold))
                             .foregroundStyle(.tertiary)
                     }
                     .padding(.vertical, 12)
@@ -231,9 +231,9 @@ struct MacBenefitsView: View {
     private func benefitCard(_ b: Benefit) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Text(b.title).font(.system(size: 17, weight: .semibold))
+                Text(b.title).font(.system(.title2, weight: .semibold))
                 Spacer(minLength: 8)
-                Text(b.kind).font(.system(size: 13)).foregroundStyle(.secondary)
+                Text(b.kind).font(.body).foregroundStyle(.secondary)
             }
             VStack(spacing: 8) {
                 ForEach(b.rows, id: \.0) { row in
@@ -242,11 +242,11 @@ struct MacBenefitsView: View {
                         Spacer(minLength: 8)
                         Text(row.1).fontWeight(.medium)
                     }
-                    .font(.system(size: 15))
+                    .font(.title3)
                 }
             }
             Text(b.note)
-                .font(.system(size: 13))
+                .font(.body)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
         }

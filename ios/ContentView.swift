@@ -191,7 +191,7 @@ private struct TimelineCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(title)
-                .font(.system(size: 11, weight: .semibold))
+                .font(.system(.caption2, weight: .semibold))
                 .ltrTracking(1.5)
                 .foregroundStyle(.secondary)
 
@@ -293,7 +293,7 @@ private struct DashboardScreen: View {
     private var paymentCard: some View {
         VStack(spacing: 8) {
             Text("NEXT PAYMENT")
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(.footnote, weight: .semibold))
                 .ltrTracking(1.5)
                 .foregroundStyle(.secondary)
                 .padding(.bottom, 8)
@@ -313,7 +313,7 @@ private struct DashboardScreen: View {
                     default: Text("in \(days) days")
                     }
                 }
-                .font(.system(size: 34, weight: .semibold))
+                .font(.system(.largeTitle, weight: .semibold))
                 .foregroundStyle(Color.talliBlue)
             }
 
@@ -414,11 +414,11 @@ private struct DashboardScreen: View {
     private func incomeCell(label: String, value: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(label)
-                .font(.system(size: 10, weight: .semibold))
+                .font(.system(.caption2, weight: .semibold))
                 .ltrTracking(1.2)
                 .foregroundStyle(.secondary)
             Text(value)
-                .font(.system(size: 16, weight: .semibold))
+                .font(.system(.callout, weight: .semibold))
                 .minimumScaleFactor(0.8)
                 .lineLimit(1)
         }

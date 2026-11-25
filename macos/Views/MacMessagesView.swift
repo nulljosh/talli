@@ -26,12 +26,12 @@ struct MacMessagesView: View {
     private func messageRow(_ message: MacDashboardData.StatusMessage) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(message.text)
-                .font(.system(size: 17))
+                .font(.title2)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             if let ts = message.timestamp, let date = MacDateParsing.parse(ts) {
                 Text(date.formatted(date: .abbreviated, time: .omitted))
-                    .font(.system(size: 13))
+                    .font(.body)
                     .foregroundStyle(.secondary)
             }
 
@@ -47,7 +47,7 @@ struct MacMessagesView: View {
                 .font(.system(size: 34, weight: .light))
                 .foregroundStyle(.secondary)
             Text("No messages")
-                .font(.system(size: 15))
+                .font(.title3)
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)

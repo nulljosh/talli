@@ -110,7 +110,7 @@ struct MissedPaymentView: View {
                         Text("\(i + 1). \(s)").font(.footnote).foregroundStyle(.secondary)
                     }
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("WHAT TO SAY").font(.system(size: 10, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
+                        Text("WHAT TO SAY").font(.system(.caption2, weight: .bold)).foregroundStyle(.secondary).ltrTracking(1)
                         Text(m.say).font(.footnote).textSelection(.enabled)
                     }
                     .padding(10)
